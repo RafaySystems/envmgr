@@ -6,7 +6,6 @@ variable "email_tag" {
 variable "aws_cloud_provider_name" {
   description = "cloud credentials name"
   default = "aws-cloud-creds-1"
-  sensitive = true
 }
 
 variable "aws_cloud_provider_access_key" {
