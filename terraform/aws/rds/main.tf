@@ -15,7 +15,7 @@ module "vpc" {
 
   name                 = "${var.name}-vpc"
   cidr                 = "10.0.0.0/16" // can be externalized as input var
-  azs                  = data.aws_availability_zones.available.names
+  azs                  = ["${var.region}a", "${var.region}b", "${var.region}c"]
   public_subnets       = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   enable_dns_hostnames = true
   enable_dns_support   = true
