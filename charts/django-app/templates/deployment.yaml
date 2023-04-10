@@ -1,3 +1,4 @@
+{{ if .Values.db.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -42,6 +43,7 @@ spec:
         persistentVolumeClaim:
           claimName: postgres-data
 ---
+{{ end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -88,6 +90,7 @@ spec:
         persistentVolumeClaim:
           claimName: static-volume
 ---
+{{ if .Values.redis.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -119,6 +122,7 @@ spec:
         resources: {}
       restartPolicy: Always
 ---
+{{ end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

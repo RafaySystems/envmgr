@@ -1,4 +1,5 @@
 db:
+  enabled: false
   db:
     env:
       postgresDb: postgres
@@ -54,6 +55,7 @@ pvc:
   staticVolume:
     storageRequest: 100Mi
 redis:
+  enabled: false
   ports:
   - name: "6379"
     port: 6379
@@ -101,3 +103,5 @@ worker:
     image:
       repository: akash3/django-worker
       tag: "1.0"
+networkPolicy:
+  enabled: false
