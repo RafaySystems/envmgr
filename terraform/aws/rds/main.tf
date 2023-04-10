@@ -6,8 +6,6 @@ provider "aws" {
   region = var.region
 }
 
-data "aws_availability_zones" "available" {}
-
 // can be externalized as a shared / static resource
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
@@ -22,7 +20,7 @@ module "vpc" {
 
   tags = {
     name = var.name
-    email = "nirav.parikh@rafay.co"
+    email = var.email
     env = "dev"
   }
 }
@@ -33,7 +31,7 @@ resource "aws_db_subnet_group" "subnet" {
 
   tags = {
     name = var.name
-    email = "nirav.parikh@rafay.co"
+    email = var.email
     env = "dev"
   }
 }
@@ -58,7 +56,7 @@ resource "aws_security_group" "rds" {
 
   tags = {
     name = var.name
-    email = "nirav.parikh@rafay.co"
+    email = var.email
     env = "dev"
   }
 }
@@ -78,7 +76,7 @@ resource "aws_db_instance" "db" {
 
   tags = {
     name = var.name
-    email = "nirav.parikh@rafay.co"
+    email = var.email
     env = "dev"
   }
 }

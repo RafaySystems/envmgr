@@ -17,3 +17,7 @@ variable "name" {
     default = "nirav-envmgr-rds"
     description = "RDS resource name"
 }
+
+variable "email" {
+  description = "Email tag to be added while creating the resource"
+}
