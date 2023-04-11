@@ -9,9 +9,9 @@ db:
       repository: postgres
       tag: 13.0-alpine
   ports:
-  - name: "5432"
-    port: 5432
-    targetPort: 5432
+    - name: "5432"
+      port: 5432
+      targetPort: 5432
   replicas: 1
   type: ClusterIP
 kubernetesClusterDomain: cluster.local
@@ -21,9 +21,9 @@ nginx:
       repository: nginx
       tag: 1.23-alpine
   ports:
-  - name: "80"
-    port: 80
-    targetPort: 80
+    - name: "80"
+      port: 80
+      targetPort: 80
   replicas: 1
   type: ClusterIP
 nginxConfig:
@@ -57,9 +57,9 @@ pvc:
 redis:
   enabled: true
   ports:
-  - name: "6379"
-    port: 6379
-    targetPort: 6379
+    - name: "6379"
+      port: 6379
+      targetPort: 6379
   redis:
     image:
       repository: redis
@@ -68,41 +68,40 @@ redis:
   type: ClusterIP
 server:
   ports:
-  - name: "8000"
-    port: 8000
-    targetPort: 8000
+    - name: "8000"
+      port: 8000
+      targetPort: 8000
   replicas: 1
   server:
     env:
-      celeryBrokerUrl: redis://redis:6379/0
-      celeryResultBackend: redis://redis:6379/0
+      celeryBrokerUrl: 'redis://$(#environment["aws-ec-private"].configuration_endpoint_address)/0'
+      celeryResultBackend: 'redis://$(#environment["aws-ec-private"].configuration_endpoint_address)/0'
       debug: "True"
       djangoDb: postgresql
-      postgresHost: '$(#environment["aws-rds"].rds_hostname)'
+      postgresHost: '$(#environment["aws-rds-private"].rds_hostname)'
       postgresName: postgres
-      postgresPassword: postgresdbpassword
-      postgresPort: '$(#environment["aws-rds"].rds_port)'
-      postgresUser: '$(#environment["aws-rds"].rds_username)'
+      postgresPassword: '$(#environment["aws-rds-private"].rds_password)'
+      postgresPort: '$(#environment["aws-rds-private"].rds_port)'
+      postgresUser: '$(#environment["aws-rds-private"].rds_username)'
     image:
       repository: eaasunittest/django-server
-      tag: "1.0"
+      tag: latest
   type: ClusterIP
 worker:
   replicas: 1
   worker:
     env:
-      celeryBrokerUrl: redis://redis:6379/0
-      celeryResultBackend: redis://redis:6379/0
+      celeryBrokerUrl: 'redis://$(#environment["aws-ec-private"].configuration_endpoint_address)/0'
+      celeryResultBackend: 'redis://$(#environment["aws-ec-private"].configuration_endpoint_address)/0'
       debug: "True"
       djangoDb: postgresql
-      postgresHost: '$(#environment["aws-rds"].rds_hostname)'
+      postgresHost: '$(#environment["aws-rds-private"].rds_hostname)'
       postgresName: postgres
-      postgresPassword: postgresdbpassword
-      postgresPort: '$(#environment["aws-rds"].rds_port)'
-      postgresUser: '$(#environment["aws-rds"].rds_username)'
+      postgresPassword: '$(#environment["aws-rds-private"].rds_password)'
+      postgresPort: '$(#environment["aws-rds-private"].rds_port)'
+      postgresUser: '$(#environment["aws-rds-private"].rds_username)'
     image:
       repository: eaasunittest/django-worker
-      tag: "1.0"
+      tag: latest
 networkPolicy:
   enabled: false
-

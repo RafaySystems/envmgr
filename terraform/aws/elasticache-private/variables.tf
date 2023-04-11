@@ -12,7 +12,6 @@ variable "email" {
   description = "Email tag to be added while creating the resource"
 }
 
-
 variable "vpc_name" {
   description = "vpc name"
 }
