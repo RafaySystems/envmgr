@@ -84,7 +84,7 @@ server:
       postgresPort: '$(#environment["aws-rds"].rds_port)'
       postgresUser: '$(#environment["aws-rds"].rds_username)'
     image:
-      repository: akash3/django-server
+      repository: eaasunittest/django-server
       tag: "1.0"
   type: ClusterIP
 worker:
@@ -101,7 +101,7 @@ worker:
       postgresPort: '$(#environment["aws-rds"].rds_port)'
       postgresUser: '$(#environment["aws-rds"].rds_username)'
     image:
-      repository: akash3/django-worker
+      repository: eaasunittest/django-worker
       tag: "1.0"
 networkPolicy:
   enabled: false

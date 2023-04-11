@@ -248,7 +248,7 @@ spec:
               value: "5432"
             - name: POSTGRES_USER
               value: postgres
-          image: akash3/django-server:1.0
+          image: eaasunittest/django-server
           name: server
           ports:
             - containerPort: 8000
@@ -329,7 +329,7 @@ spec:
               value: "5432"
             - name: POSTGRES_USER
               value: postgres
-          image: akash3/django-worker:1.0
+          image: eaasunittest/django-worker
           name: worker
           resources: {}
           volumeMounts:
