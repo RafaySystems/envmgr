@@ -16,6 +16,5 @@ provider "rafay" {
 
 variable "rafay_config_file" {
   description = "rafay provider config file for authentication"
-  default     = "rafay.conf"
-  sensitive   = true
+  default     = "/opt/rafay/rctl.conf"
 }

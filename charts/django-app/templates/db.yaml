@@ -1,0 +1,16 @@
+{{ if .Values.db.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  labels:
+    service: db
+  {{- include "django-app.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.db.type }}
+  selector:
+    service: db
+  {{- include "django-app.selectorLabels" . | nindent 4 }}
+  ports:
+	{{- .Values.db.ports | toYaml | nindent 2 -}}
+{{ end }}
