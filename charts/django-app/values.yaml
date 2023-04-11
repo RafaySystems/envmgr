@@ -26,7 +26,6 @@ nginx:
     targetPort: 80
   replicas: 1
   type: ClusterIP
-ingressHost: 'envmgr-app1.dev.rafay-edge.net'
 nginxConfig:
   nginxConf: |-
     server {
@@ -86,7 +85,7 @@ server:
       postgresUser: postgres
     image:
       repository: eaasunittest/django-server
-      tag: "1.0"
+      tag: latest
   type: ClusterIP
 worker:
   replicas: 1
@@ -103,6 +102,6 @@ worker:
       postgresUser: postgres
     image:
       repository: eaasunittest/django-worker
-      tag: "1.0"
+      tag: latest
 networkPolicy:
   enabled: false
