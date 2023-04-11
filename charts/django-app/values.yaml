@@ -26,6 +26,7 @@ nginx:
     targetPort: 80
   replicas: 1
   type: ClusterIP
+ingressHost: 'envmgr-app1.dev.rafay-edge.net'
 nginxConfig:
   nginxConf: |-
     server {

@@ -18,8 +18,8 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
     }
     spec {
       type           = "eks"
-      blueprint      = "minimal"
-      blueprint_version = "Latest"
+      blueprint      = "with-ingress"
+      blueprint_version = "v1"
       cloud_provider = rafay_cloud_credential.aws_creds.name
       cni_provider   = "aws-cni"
       proxy_config   = {}
