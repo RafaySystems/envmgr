@@ -2,6 +2,8 @@
 **/.terraform/*
 **/.infracost/*
 
+*.local.tfvars
+
 # .tfstate files
 *.tfstate
 *.tfstate.*
