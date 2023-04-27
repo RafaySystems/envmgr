@@ -36,6 +36,25 @@ resource "rafay_workload" "workload" {
         values_paths {
           name = var.workload_helm_chart_values_path
         }
+        options {
+          set_string = [
+            "workloadName=${var.workload_name}",
+            "projectName=${var.workload_project}",
+            "environmentName=${var.workload_env}",
+            "server.server.env.celeryBrokerUrl=redis://${var.redis_config_endpoint}:6379/0",
+            "server.server.env.celeryResultBackend=redis://${var.redis_config_endpoint}:6379/0",
+            "server.server.env.postgresHost=${var.postgres_host}",
+            "server.server.env.postgresPassword=${var.postgres_password}",
+            "server.server.env.postgresUser=${var.postgres_username}",
+            "server.server.env.postgresPort=${var.postgres_port}",
+            "worker.worker.env.celeryBrokerUrl=redis://${var.redis_config_endpoint}:6379/0",
+            "worker.worker.env.celeryResultBackend=redis://${var.redis_config_endpoint}:6379/0",
+            "worker.worker.env.postgresHost=${var.postgres_host}",
+            "worker.worker.env.postgresPassword=${var.postgres_password}",
+            "worker.worker.env.postgresUser=${var.postgres_username}",
+            "worker.worker.env.postgresPort=${var.postgres_port}",
+          ]
+        }
         repository = var.workload_helm_gitrepo
         revision   = var.workload_helm_gitrepo_revision
       }

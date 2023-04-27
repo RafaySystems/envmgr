@@ -127,12 +127,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: server
-  annotations:
-    envmgmt.io/workload: {{ .Values.workloadName }}
-    envmgmt.io/project: {{ .Values.projectName }}
-    envmgmt.io/environment: {{ .Values.environmentName }}
   labels:
-    envmgmt.io/workload-type: {{ .Values.workloadType }}
     service: server
   {{- include "django-app.labels" . | nindent 4 }}
 spec:
@@ -190,12 +185,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: worker
-  annotations:
-    envmgmt.io/workload: {{ .Values.workloadName }}
-    envmgmt.io/project: {{ .Values.projectName }}
-    envmgmt.io/environment: {{ .Values.environmentName }}
   labels:
-    envmgmt.io/workload-type: {{ .Values.workloadType }}
     service: worker
   {{- include "django-app.labels" . | nindent 4 }}
 spec:

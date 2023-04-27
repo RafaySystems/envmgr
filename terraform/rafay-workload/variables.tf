@@ -15,6 +15,11 @@ variable "workload_project" {
   default = "testproject"
 }
 
+variable "workload_env" {
+  description = "name of the env"
+  default = "testenv"
+}
+
 variable "cluster_name" {
   description = "cluster namespace"
   default = "cluster-1"
@@ -34,6 +39,26 @@ variable "workload_helm_chart_path" {
 
 variable "workload_helm_chart_values_path" {
   default = "django-app-values.yaml"
+}
+
+variable "postgres_host" {
+  default = "postgres"
+}
+
+variable "postgres_port" {
+  default = "5432"
+}
+
+variable "postgres_username" {
+  default = "postgres"
+}
+
+variable "postgres_password" {
+  default = "postgres"
+}
+
+variable "redis_config_endpoint" {
+  default = "redis"
 }
 
 
