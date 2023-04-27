@@ -55,7 +55,7 @@ pvc:
   staticVolume:
     storageRequest: 100Mi
 redis:
-  enabled: true
+  enabled: false
   ports:
     - name: "6379"
       port: 6379
@@ -74,15 +74,15 @@ server:
   replicas: 1
   server:
     env:
-      celeryBrokerUrl: 'redis://$(#environment["aws-ec-private"].configuration_endpoint_address)/0'
-      celeryResultBackend: 'redis://$(#environment["aws-ec-private"].configuration_endpoint_address)/0'
+      celeryBrokerUrl: 'redis://$(#environment["ec-resoource-tmpl"].configuration_endpoint_address):6379/0'
+      celeryResultBackend: 'redis://$(#environment["ec-resoource-tmpl"].configuration_endpoint_address):6379/0'
       debug: "True"
       djangoDb: postgresql
-      postgresHost: '$(#environment["aws-rds-private"].rds_hostname)'
+      postgresHost: '$(#environment["rds-resource-tmpl"].rds_hostname)'
       postgresName: postgres
-      postgresPassword: '$(#environment["aws-rds-private"].rds_password)'
-      postgresPort: '$(#environment["aws-rds-private"].rds_port)'
-      postgresUser: '$(#environment["aws-rds-private"].rds_username)'
+      postgresPassword: '$(#environment["rds-resource-tmpl"].rds_password)'
+      postgresPort: '$(#environment["rds-resource-tmpl"].rds_port)'
+      postgresUser: '$(#environment["rds-resource-tmpl"].rds_username)'
     image:
       repository: eaasunittest/django-server
       tag: latest
@@ -91,15 +91,15 @@ worker:
   replicas: 1
   worker:
     env:
-      celeryBrokerUrl: 'redis://$(#environment["aws-ec-private"].configuration_endpoint_address)/0'
-      celeryResultBackend: 'redis://$(#environment["aws-ec-private"].configuration_endpoint_address)/0'
+      celeryBrokerUrl: 'redis://$(#environment["ec-resoource-tmpl"].configuration_endpoint_address):6379/0'
+      celeryResultBackend: 'redis://$(#environment["ec-resoource-tmpl"].configuration_endpoint_address):6379/0'
       debug: "True"
       djangoDb: postgresql
-      postgresHost: '$(#environment["aws-rds-private"].rds_hostname)'
+      postgresHost: '$(#environment["rds-resource-tmpl"].rds_hostname)'
       postgresName: postgres
-      postgresPassword: '$(#environment["aws-rds-private"].rds_password)'
-      postgresPort: '$(#environment["aws-rds-private"].rds_port)'
-      postgresUser: '$(#environment["aws-rds-private"].rds_username)'
+      postgresPassword: '$(#environment["rds-resource-tmpl"].rds_password)'
+      postgresPort: '$(#environment["rds-resource-tmpl"].rds_port)'
+      postgresUser: '$(#environment["rds-resource-tmpl"].rds_username)'
     image:
       repository: eaasunittest/django-worker
       tag: latest
