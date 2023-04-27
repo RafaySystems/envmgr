@@ -5,8 +5,15 @@ terraform {
       version = "= 1.1.5"
       source = "registry.terraform.io/RafaySystems/rafay"
     }
+    local = {
+      source = "hashicorp/local"
+      version = "2.4.0"
+    }
   }
   required_version = "= 1.4.4"
+}
+
+provider "local" {
 }
 
 provider "rafay" {
