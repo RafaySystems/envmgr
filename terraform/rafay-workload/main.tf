@@ -41,9 +41,6 @@ resource "rafay_workload" "workload" {
       }
       options {
         set_string = [
-          "workloadName=${var.workload_name}",
-          "projectName=${var.workload_project}",
-          "environmentName=${var.workload_env}",
           "server.server.env.celeryBrokerUrl=redis://${var.redis_config_endpoint}:6379/0",
           "server.server.env.celeryResultBackend=redis://${var.redis_config_endpoint}:6379/0",
           "server.server.env.postgresHost=${var.postgres_host}",

@@ -15,11 +15,6 @@ variable "workload_project" {
   default = "testproject"
 }
 
-variable "workload_env" {
-  description = "name of the env"
-  default = "testenv"
-}
-
 variable "cluster_name" {
   description = "cluster namespace"
   default = "cluster-1"
