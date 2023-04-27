@@ -18,7 +18,7 @@ data "aws_subnet_ids" "selected" {
 data "aws_vpc" "selected" {
   filter {
     name = "tag:Name"
-    values = ["${var.vpc_name}"]
+    values = ["rafay-${var.vpc_name}-cluster/VPC"]
   }
 }
 
