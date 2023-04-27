@@ -1,3 +1,7 @@
+workloadType: EnvironmentSpecific
+workloadName: env-test-v4
+projectName: avinash
+environmentName: env-test-v4
 db:
   enabled: false
   db:
