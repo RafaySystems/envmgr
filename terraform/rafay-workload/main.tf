@@ -35,7 +35,7 @@ resource "rafay_workload" "workload" {
           name = "file://django-app-0.1.0.tgz"
         }
         values_paths {
-          name = "file://values.yaml"
+          name = "file://${local_file.values.filename}"
         }
       }
 #      options {
