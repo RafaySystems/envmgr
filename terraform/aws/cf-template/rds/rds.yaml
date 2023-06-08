@@ -64,13 +64,12 @@ Resources:
           Value: kutumba@rafay.co
         - Key: env
           Value: cs-demo
-    DeletionPolicy: Snapshot
     UpdateReplacePolicy: Snapshot
 
   DBEC2SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: !Join ["-", [webapp-db-security-group, !Ref EnvironmentType]]
+      GroupName: !Join ["-", [!Ref DBInstanceIdentifier, !Ref EnvironmentType]]
       GroupDescription: Allow postgres inbound traffic
       SecurityGroupIngress:
         - IpProtocol: tcp

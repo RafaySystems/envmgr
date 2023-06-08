@@ -5,3 +5,4 @@ variable "stack_name" {}
 variable "availability_zone" {}
 variable "environment" {}
 variable "db_password" {}
+variable "rds_name" {}
