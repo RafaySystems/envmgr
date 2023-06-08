@@ -1,0 +1,87 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  AvailabilityZone:
+    Type: AWS::EC2::AvailabilityZone::Name
+  EnvironmentType:
+    Description: "Specify the Environment type of the stack."
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - test
+      - prod
+  DBInstanceIdentifier:
+    Type: String
+    Default: "webapp-db"
+  DBUsername:
+    NoEcho: "true"
+    Description: Username for Postgresql database access
+    Type: String
+    MinLength: "1"
+    MaxLength: "16"
+    AllowedPattern: "[a-zA-Z][a-zA-Z0-9]*"
+    ConstraintDescription: Must begin with a letter and contain only alphanumeric characters.
+    Default: "postgres"
+  DBPassword:
+    NoEcho: "true"
+    Description: Password Postgresql database access
+    Type: String
+    MinLength: "8"
+    MaxLength: "41"
+    AllowedPattern: "[a-zA-Z0-9]*"
+    ConstraintDescription: Must contain only alphanumeric characters.
+
+Mappings:
+  EnvironmentToInstanceType:
+    dev:
+      InstanceType: db.t3.micro
+    test:
+      InstanceType: db.t3.small
+    prod:
+      InstanceType: db.t3.medium
+
+Resources:
+  WebAppDatabase:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: !Ref DBInstanceIdentifier
+      VPCSecurityGroups:
+        - !GetAtt DBEC2SecurityGroup.GroupId
+      AllocatedStorage: "5"
+      DBInstanceClass:
+        !FindInMap [
+          EnvironmentToInstanceType,
+          !Ref EnvironmentType,
+          InstanceType,
+        ]
+      Engine: postgres
+      MasterUsername: !Ref DBUsername
+      MasterUserPassword: !Ref DBPassword
+      Tags:
+        - Key: Name
+          Value: !Join ["-", [webapp-rds, !Ref EnvironmentType]]
+        - Key: email
+          Value: kutumba@rafay.co
+        - Key: env
+          Value: cs-demo
+    DeletionPolicy: Snapshot
+    UpdateReplacePolicy: Snapshot
+
+  DBEC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Join ["-", [webapp-db-security-group, !Ref EnvironmentType]]
+      GroupDescription: Allow postgres inbound traffic
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 10.0.0.0/8
+      Tags:
+        - Key: Name
+          Value: !Join ["-", [webapp-db-security-group, !Ref EnvironmentType]]
+
+Outputs:
+  WebAppDatabaseEndpoint:
+    Description: "Connection endpoint for the database"
+    Value: !GetAtt WebAppDatabase.Endpoint.Address
