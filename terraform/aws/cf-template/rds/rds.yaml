@@ -82,5 +82,5 @@ Resources:
 
 Outputs:
   WebAppDatabaseEndpoint:
-    Description: "RDS Connection endpoint for the database"
+    Description: "RDSConnection endpoint for the database"
     Value: !GetAtt WebAppDatabase.Endpoint.Address
