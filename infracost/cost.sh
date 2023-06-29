@@ -1,4 +1,3 @@
-env
 cd /tmp
 curl -H "X-Engine-Helper-Token:$DOWNLOAD_TOKEN" -o ./job.tar.zst $DOWNLOAD_URL
 unzstd ./job.tar.zst
