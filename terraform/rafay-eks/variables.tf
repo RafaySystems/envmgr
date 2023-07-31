@@ -55,6 +55,15 @@ variable "eks_cluster_node_instance_type" {
   default = "t3.medium"
 }
 
+variable "eks_cluster_blueprint" {
+  description = "cluster blueprint"
+  default = "minimal"
+}
+
+variable "eks_cluster_blueprint_version" {
+  description = "cluster blueprint version"
+}
+
 variable "eks_cluster_public_access" {
   description = "public access"
   default = true
