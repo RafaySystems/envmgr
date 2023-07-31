@@ -62,6 +62,7 @@ variable "eks_cluster_blueprint" {
 
 variable "eks_cluster_blueprint_version" {
   description = "cluster blueprint version"
+  default = ""
 }
 
 variable "eks_cluster_public_access" {
