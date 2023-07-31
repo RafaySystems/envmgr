@@ -19,6 +19,7 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
     spec {
       type           = "eks"
       blueprint      = var.eks_cluster_blueprint
+      blueprint_version = var.eks_cluster_blueprint_version
       cloud_provider = rafay_cloud_credential.aws_creds.name
       cni_provider   = "aws-cni"
       proxy_config   = {}
