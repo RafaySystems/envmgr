@@ -5,7 +5,7 @@ provider "aws" {
 // can be externalized as a shared / static resource
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "2.77.0"
+  version = "5.1.1"
 
   name                 = "${var.cluster_id}-vpc"
   cidr                 = "10.0.0.0/16" // can be externalized as input var
