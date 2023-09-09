@@ -4,7 +4,7 @@ vnet_name = "km-em-test"
 vnet_address_space = ["10.0.0.0/8"]
 
 k8s_subnet_name = "km-em-test-subnet"
-k8s_subnet_address = ["10.0.0.0/16"]
+k8s_subnet_address = ["10.10.0.0/16"]
 
 project = "infra"
 cluster_name = "km-em-aks1"
