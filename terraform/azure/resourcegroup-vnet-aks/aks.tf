@@ -35,7 +35,7 @@ resource "rafay_aks_cluster" "aks-cluster" {
             api_server_access_profile {
               enable_private_cluster = true
               enable_private_cluster_public_fqdn = false
-              private_dns_zone  = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/privateDnsZones/{dnsZoneName}"
+              #private_dns_zone  = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/privateDnsZones/{dnsZoneName}"
             }
             dns_prefix          = var.cluster_name
             enable_rbac        = true
