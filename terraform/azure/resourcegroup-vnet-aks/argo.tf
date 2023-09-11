@@ -1,9 +1,17 @@
+resource "rafay_download_kubeconfig" "kubeconfig" {
+  cluster            = var.cluster_name
+  output_folder_path = "/tmp"
+  filename           = "kubeconfig"
+  depends_on = [rafay_aks_cluster.aks-cluster]
+}
+
+
 resource null_resource setup-argo {
  triggers = {
     cluster_name     = var.cluster_name
   }
 
-  depends_on = [rafay_download_kubeconfig.tfkubeconfig]
+  depends_on = [rafay_download_kubeconfig.kubeconfig]
 
 
   provisioner "local-exec" {
