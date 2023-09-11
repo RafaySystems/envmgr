@@ -56,3 +56,23 @@ variable "k8s_version" {
 variable "vm_size" {
   type = string
 }
+
+variable "app_namespace" {
+  type = string
+}
+
+variable "app_name" {
+  type = string
+}
+
+variable "argo_server" {
+  type = string
+}
+
+variable "argo_username" {
+  type = string
+}
+
+variable "argo_password" {
+  type = string
+}
