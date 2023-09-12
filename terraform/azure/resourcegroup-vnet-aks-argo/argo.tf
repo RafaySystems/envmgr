@@ -31,9 +31,9 @@ resource null_resource setup-argo {
     }
   }
 
-  /*provisioner "local-exec" {
+  provisioner "local-exec" {
     when    = destroy
     interpreter = ["/bin/bash","-c"]
     command = "./scripts/delete_argo.sh ${self.triggers.cluster_name} ${self.triggers.app_name} ${self.triggers.argocd_server} ${self.triggers.argocd_username} ${self.triggers.argocd_password}"
-  }*/
+  }
 }
