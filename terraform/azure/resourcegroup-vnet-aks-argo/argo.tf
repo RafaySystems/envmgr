@@ -9,10 +9,10 @@ resource "rafay_download_kubeconfig" "kubeconfig" {
 resource null_resource setup-argo {
  triggers = {
     cluster_name     = var.cluster_name
-    APP_NAME           = var.app_name
-    ARGOCD_SERVER      = var.argo_server
-    ARGOCD_USERNAME    = var.argo_username
-    ARGOCD_PASSWORD    = var.argo_password
+    app_name           = var.app_name
+    argocd_server      = var.argo_server
+    argocd_username    = var.argo_username
+    argocd_password    = var.argo_password
   }
 
   depends_on = [rafay_download_kubeconfig.kubeconfig]
@@ -34,6 +34,6 @@ resource null_resource setup-argo {
   provisioner "local-exec" {
     when    = destroy
     interpreter = ["/bin/bash","-c"]
-    command = "./scripts/delete_argo.sh ${self.triggers.cluster_name} ${self.triggers.APP_NAME} ${self.triggers.ARGOCD_SERVER} ${self.triggers.ARGOCD_USERNAME} ${self.triggers.ARGOCD_PASSWORD}"
+    command = "./scripts/delete_argo.sh ${self.triggers.cluster_name} ${self.triggers.app_name} ${self.triggers.argocd_server} ${self.triggers.argocd_username} ${self.triggers.argocd_password}"
   }
 }
