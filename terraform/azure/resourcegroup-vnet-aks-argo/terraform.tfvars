@@ -6,7 +6,7 @@ vnet_address_space = ["10.0.0.0/8"]
 k8s_subnet_name = "km-em-test-subnet"
 k8s_subnet_address = ["10.10.0.0/16"]
 
-project = "infra"
+project = "azure-env"
 cluster_name = "km-em-aks1"
 blueprint_name = "aks-standard-bp"
 blueprint_version = "v1"
