@@ -1,3 +1,8 @@
+CLUSTER_NAME=$1
+APP_NAME=$2
+ARGOCD_SERVER=$3
+ARGOCD_USERNAME=$4
+ARGOCD_PASSWORD=$5
 cd /tmp
 wget -q https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 chmod +x argocd-linux-amd64
