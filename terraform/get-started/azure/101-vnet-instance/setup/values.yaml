@@ -1,0 +1,16 @@
+projectName: UPDATE_EXISTING_PROJECT_NAME
+agentName: gitops-agent
+repoName: gitops-repo
+usernName: UPDATE_REPO_USERNAME
+token: UPDATE_REPO_TOKEN
+endPoint: UPDATE_REPO_ENDPOINT
+branch: UPDATE_REPO_BRANCH
+path: terraform/get-started/azure/101-vnet-instance/rafay-resources
+version: v1
+ConfigContext: azure
+ResourceTemplate: azure-vnet-vm-rs-tmpl
+EnvironmentTemplate: azure-vnet-vm-env-tmpl
+Environment: azure-vnet-vm-env
+tfRepoPath: terraform/get-started/azure/101-vnet-instance/terraform
+azureLocation: centralindia
+azureResourceGroup: example-rs
