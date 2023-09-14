@@ -1,0 +1,9 @@
+apiVersion: gitops.k8smgmt.io/v3
+kind: Agent
+metadata:
+  name: gitops-agent-tim-eaas
+  project: tim-eaas
+spec:
+  active: true
+  type: Docker
+  version: r1.29.0

@@ -1,0 +1,42 @@
+apiVersion: gitops.k8smgmt.io/v3
+kind: Pipeline
+metadata:
+  name: system-sync-tim-eaas
+  project: tim-eaas
+spec:
+  active: true
+  stages:
+  - config:
+      destinationRepo:
+        path:
+          name: terraform/get-started/azure/101-vnet-instance/rafay-resources
+        repository: gitops-repo-tim-eaas
+        revision: get-started
+      gitToSystemSync: true
+      includedResources:
+      - name: Environment
+      - name: EnvironmentTemplate
+      - name: ConfigContext
+      - name: Agent
+      - name: Repository
+      - name: Resource
+      - name: ResourceTemplate
+      - name: Pipeline
+      sourceRepo:
+        path:
+          name: terraform/get-started/azure/101-vnet-instance/rafay-resources
+        repository: gitops-repo-tim-eaas
+        revision: get-started
+      systemToGitSync: true
+    name: sync
+    type: SystemSync
+  triggers:
+  - config:
+      repo:
+        paths:
+        - name: terraform/get-started/azure/101-vnet-instance/rafay-resources
+        provider: Github
+        repository: gitops-repo-tim-eaas
+        revision: get-started
+    name: eaas-trigger
+    type: Webhook

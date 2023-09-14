@@ -1,0 +1,15 @@
+apiVersion: integrations.k8smgmt.io/v3
+kind: Repository
+metadata:
+  name: gitops-repo-tim-eaas
+  project: tim-eaas
+spec:
+  agents:
+  - name: gitops-agent-tim-eaas
+  credentials:
+    password: sealed://credentials.password
+    username: timrafay
+  endpoint: https://github.com/timrafay/envmgr-demo-timrafay.git
+  secret:
+    name: file://artifacts/gitops-repo-tim-eaas/sealed-secret.yaml
+  type: Git
