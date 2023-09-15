@@ -1,0 +1,13 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ConfigContext
+metadata:
+  name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  envs:
+  - key: GOOGLE_CREDENTIALS
+    value: get-started.json
+  files:
+  - data: IFVQREFURV9FTkNPREVEX0dDUF9DUkVERU5USUFMUwo=
+    name: get-started.json

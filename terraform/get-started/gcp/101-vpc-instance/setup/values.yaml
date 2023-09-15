@@ -1,0 +1,16 @@
+projectName: UPDATE_EXISTING_PROJECT_NAME
+agentName: gitops-agent
+repoName: gitops-repo
+usernName: UPDATE_REPO_USERNAME
+token: UPDATE_REPO_TOKEN
+endPoint: UPDATE_REPO_ENDPOINT
+branch: UPDATE_REPO_BRANCH
+path: rafay-resources
+version: v1
+ConfigContext: gcp
+ResourceTemplate: gcp-vnet-vm-rs-tmpl
+EnvironmentTemplate: gcp-vnet-vm-env-tmpl
+Environment: gcp-vnet-vm-env
+tfRepoPath: gcp/
+gcpProjectID: UPDATE_PROJECT_ID
+gcpRegion: us-central1
