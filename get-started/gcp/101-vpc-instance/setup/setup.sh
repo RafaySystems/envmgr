@@ -106,15 +106,15 @@ rm -rf relayConfigData-$agentId.json docker-compose-$agentId.yaml
 ##Download agent config files
 rctl get agent -p $project ${spec_array[1]} -o json --v3 | \
  jq -r -c '.status.extra.files[] | select ( .name == "relayConfigData-'$agentId'.json" ) | .data'| \
- base64 -d >> relayConfigData-$agentId.json
+ base64 -d >> $HOME/relayConfigData-$agentId.json
 
 rctl get agent -p $project ${spec_array[1]} -o json --v3 \
 | jq -r -c '.status.extra.files[] | select ( .name == "docker-compose-'$agentId'.yaml" ) | .data' | \
-base64 -d >> docker-compose-$agentId.yaml
+base64 -d >> $HOME/docker-compose-$agentId.yaml
 
 
 ##Run docker-compose
-if ! docker-compose -f docker-compose-$agentId.yaml up -d ; then
+if ! docker-compose -f $HOME/docker-compose-$agentId.yaml up -d ; then
    printf -- "\033[31m ERROR: Failed to deploy agent  - FAILED \033[0m\n";
    exit
 else
@@ -140,7 +140,6 @@ do
     fi
 done
 
-rm -rf relayConfigData-$agentId.json docker-compose-$agentId.yaml
 ##Create Repository
 if ! rctl apply -f $PWD/spec/${spec_array[2]}.yaml ; then
     printf -- "\033[31m ERROR: Failed to create repository  - FAILED \033[0m\n";
