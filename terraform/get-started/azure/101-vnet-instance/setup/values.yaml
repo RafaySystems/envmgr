@@ -5,7 +5,7 @@ usernName: UPDATE_REPO_USERNAME
 token: UPDATE_REPO_TOKEN
 endPoint: UPDATE_REPO_ENDPOINT
 branch: UPDATE_REPO_BRANCH
-path: terraform/get-started/azure/101-vnet-instance/rafay-resources
+path: rafay-resources
 version: v1
 ConfigContext: azure
 ResourceTemplate: azure-vnet-vm-rs-tmpl
