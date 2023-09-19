@@ -176,7 +176,7 @@ cp $PWD/spec/${spec_array[5]}.yaml  ../rafay-resources/projects/$project/resourc
 mkdir -p ../../../../rafay-resources/projects/$project/environmenttemplates
 cp $PWD/spec/${spec_array[6]}.yaml  ../rafay-resources/projects/$project/environmenttemplates/
 mkdir -p ../../../../rafay-resources/projects/$project/environments
-cp $PWD/spec/${spec_array[7]}.yaml  ../rafay-resources/projects/$project/environme
+cp $PWD/spec/${spec_array[7]}.yaml  ../rafay-resources/projects/$project/environments/
 
 rm -rf $PWD/spec
 
