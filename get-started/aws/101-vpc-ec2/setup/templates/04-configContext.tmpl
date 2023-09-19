@@ -8,6 +8,8 @@ metadata:
 spec:
   envs:
   - key: AWS_SECRET_ACCESS_KEY
+    sensitive: true
     value: UPDATE_VALUE
-  - key: ARM_TENANT_ID
-    value: AWS_ACCESS_KEY_ID
+  - key: AWS_ACCESS_KEY_ID
+    sensitive: true
+    value: UPDATE_VALUE
