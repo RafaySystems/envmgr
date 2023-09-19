@@ -1,0 +1,10 @@
+
+apiVersion: eaas.envmgmt.io/v1
+kind: Environment
+metadata:
+  name: aws-vnet-vm-env-env
+  project: env
+spec:
+  template:
+    name: aws-vnet-vm-env-tmpl-env
+    version: v1

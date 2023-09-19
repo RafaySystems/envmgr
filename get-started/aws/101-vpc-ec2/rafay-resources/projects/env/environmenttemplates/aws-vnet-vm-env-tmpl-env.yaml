@@ -1,0 +1,14 @@
+
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  name: aws-vnet-vm-env-tmpl-env
+  project: env
+spec:
+  resources:
+  - kind: resourcetemplate
+    name: aws-vnet-vm-rs-tmpl-env
+    resourceOptions:
+      version: v1
+    type: dynamic
+  version: v1
