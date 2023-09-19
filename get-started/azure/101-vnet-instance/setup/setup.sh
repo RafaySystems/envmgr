@@ -31,6 +31,7 @@ function manual_steps() {
   \033[36m Run git push \033[0m\n - \
   \033[36m Update configContext with credentials\033[0m\n - \
   \033[36m Publish Environment\033[0m\n\ "
+  exit 0
 }
 
 function test_eaas() {
@@ -53,6 +54,7 @@ token=`cat $PWD/values.yaml | awk '/token/ {print $2}'`
 endpoint=`cat $PWD/values.yaml | awk '/endPoint/ {print $2}' | awk -F// '{print $2}'`
 branch=`cat $PWD/values.yaml | awk '/branch/ {print $2}'`
 
+
 ##Generate Spec files based on available templates.
 for i in templates/*.tmpl
 do
@@ -74,6 +76,15 @@ do
 
   fi
 done
+
+
+if ! git restore $PWD/values.yaml; then
+    printf -- "\033[31m ERROR: Failed to restore values.yaml- FAILED \033[0m\n";
+    exit
+else
+    printf -- "\033[32m Info: Restored values.yaml - SUCCESS \033[0m\n";
+fi
+printf -- "\033[32m Info: Restore Values.yaml - SUCCESS \033[0m\n";
 
 ##Create Secret Sealer to encrypt sensitive data(i.e password)
 if ! rctl apply -f $PWD/spec/${spec_array[0]}.yaml ; then
@@ -130,6 +141,7 @@ do
     if [ $STATUS_ITERATIONS -ge 25 ];
     then
       break
+      exit 0
     fi
     STATUS_ITERATIONS=$((STATUS_ITERATIONS+1))
     agentStatus=`rctl get agent -p $project ${spec_array[1]} -o json --v3 | jq .status.conditionType | tr -d '"'`
@@ -160,6 +172,7 @@ printf -- "\033[33m Info: Wait for 30s for Rafay to write-back to repo - WAITING
 sleep 30
 #Run git pull to get folder structure created by Rafay
 #Create Pipeline
+git config pull.rebase false
 if ! git pull https://$userName:$token@$endpoint $branch; then
     printf -- "\033[31m ERROR: git pull - FAILED \033[0m\n";
     exit
@@ -178,14 +191,6 @@ mkdir -p ../../../../rafay-resources/projects/$project/environments
 cp $PWD/spec/${spec_array[7]}.yaml  ../../../../rafay-resources/projects/$project/environments/
 
 rm -rf $PWD/spec
-
-if ! git restore $PWD/values.yaml; then
-    printf -- "\033[31m ERROR: Failed to restore values.yaml- FAILED \033[0m\n";
-    exit
-else
-    printf -- "\033[32m Info: Restored values.yaml - SUCCESS \033[0m\n";
-fi
-printf -- "\033[32m Info: Cleanup - SUCCESS \033[0m\n";
 sleep 5
 
 rctl get trigger -p $project  eaas-trigger -o json | jq .status.extra.webHook
