@@ -8,9 +8,9 @@ repoName: gitops-repo
 usernName: UPDATE_REPO_USERNAME
 ##Token to access repository
 token: UPDATE_REPO_TOKEN
-##Repository endponint
+##Repository url
 endPoint: UPDATE_REPO_ENDPOINT
-##Repository branch name
+##Repository revision/branch name
 branch: UPDATE_REPO_BRANCH
 ## Repository path for Rafay to write back configuration.
 path: rafay-resources

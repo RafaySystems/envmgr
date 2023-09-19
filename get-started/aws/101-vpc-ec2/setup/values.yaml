@@ -8,9 +8,9 @@ repoName: eaas-repo
 usernName: UPDATE_REPO_USERNAME
 ##Token to access repository
 token: UPDATE_REPO_TOKEN
-##Repository endponint
+##Repository url
 endPoint: UPDATE_REPO_ENDPOINT
-##Repository branch name
+##Repository revision/branch name
 branch: UPDATE_REPO_BRANCH
 ## Repository path for Rafay to write back configuration.
 path: rafay-resources
@@ -22,11 +22,11 @@ version: v1
 ConfigContext: aws
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
-ResourceTemplate: aws-vnet-vm-rs-tmpl
+ResourceTemplate: aws-vpc-ec2-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
-EnvironmentTemplate: aws-vnet-vm-env-tmpl
-Environment: aws-vnet-vm-env
+EnvironmentTemplate: aws-vpc-ec2-env-tmpl
+Environment: aws-vpc-ec2-env
 ## Terraform code path 
 tfRepoPath: get-started/aws/101-vpc-ec2/terraform
 awsRegion: us-west-2
