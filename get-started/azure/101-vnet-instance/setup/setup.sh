@@ -172,7 +172,6 @@ printf -- "\033[33m Info: Wait for 30s for Rafay to write-back to repo - WAITING
 sleep 30
 #Run git pull to get folder structure created by Rafay
 #Create Pipeline
-git config pull.rebase false
 if ! git pull https://$userName:$token@$endpoint $branch; then
     printf -- "\033[31m ERROR: git pull - FAILED \033[0m\n";
     exit
