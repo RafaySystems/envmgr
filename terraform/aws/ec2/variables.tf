@@ -22,8 +22,3 @@ variable "name" {
   description = "name to pass to Name tag"
   default = "envmgr-ec2-infra-provisioner"
 }
-
-variable "instance2_name" {
-  description = "name to pass to Name tag"
-  default = "envmgr-ec2-infra-provisioner"
-}
