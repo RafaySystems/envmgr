@@ -1,1 +1,1 @@
-# envmgr-demo
+# envmgr resources
