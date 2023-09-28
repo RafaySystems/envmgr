@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: nginx-config
-  labels:
-  {{- include "django-app.labels" . | nindent 4 }}
-data:
-  nginx.conf: {{ .Values.nginxConfig.nginxConf | toYaml | indent 1 }}
