@@ -1,0 +1,21 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+Config context:
+kind: ConfigContext
+metadata:
+  name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  envs:
+  - key: ARM_CLIENT_ID
+    sensitive: true
+    value: UPDATE_VALUE
+  - key: ARM_TENANT_ID
+    sensitive: true
+    value: UPDATE_VALUE
+  - key: ARM_SUBSCRIPTION_ID
+    sensitive: true
+    value: UPDATE_VALUE
+  - key: ARM_CLIENT_SECRET
+    sensitive: true
+    value: UPDATE_VALUE

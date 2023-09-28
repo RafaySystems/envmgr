@@ -1,0 +1,15 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+Config context:
+kind: ConfigContext
+metadata:
+  name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  envs:
+  - key: AWS_ACCESS_KEY_ID
+    sensitive: true
+    value: UPDATE_VALUE
+  - key: AWS_SECRET_ACCESS_KEY
+    sensitive: true
+    value: UPDATE_VALUE

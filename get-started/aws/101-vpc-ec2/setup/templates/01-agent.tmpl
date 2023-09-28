@@ -1,0 +1,9 @@
+{{ $glbCtx := . }}
+apiVersion: gitops.k8smgmt.io/v3
+kind: Agent
+metadata:
+  name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  active: true
+  type: Docker
