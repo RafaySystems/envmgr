@@ -4,7 +4,6 @@ module "ec2_instance" {
   name = "em-ec2-${var.prefix}"
 
   instance_type          = var.instance_type
-  #vpc_security_group_ids = ["sg-12345678"]
   subnet_id              = var.subnet_id
 
   tags = {
