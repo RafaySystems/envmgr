@@ -29,7 +29,7 @@ EnvironmentTemplate: gcp-vnet-vm-env-tmpl
 ## Environment Manager environment Name
 Environment: gcp-vnet-vm-env
 ## Terraform code path 
-tfRepoPath: get-started/gcp/101-vpc-instance/terraform
+tfRepoPath: terraform/gcp/101-vpc-instance/terraform
 ## GCP Project ID
 gcpProjectID: UPDATE_PROJECT_ID
 ## GCP Region
