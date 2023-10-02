@@ -29,7 +29,7 @@ VPCResourceTemplate: aws-vpc-rs-tmpl
 EnvironmentTemplate: aws-ecs-vpc-env-tmpl
 Environment: aws-ecs-vpc-env
 ## Terraform code path 
-ECStfRepoPath: get-started/aws/101-vpc-ecs/terraform/ecs
-VPCtfRepoPath: get-started/aws/101-vpc-ecs/terraform/vpc
+ECStfRepoPath: terraform/aws/101-vpc-ecs/terraform/ecs
+VPCtfRepoPath: terraform/aws/101-vpc-ecs/terraform/vpc
 awsRegion: us-west-2
 vpcName: em-gs-vpc
