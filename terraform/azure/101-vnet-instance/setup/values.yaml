@@ -29,7 +29,7 @@ EnvironmentTemplate: azure-vnet-vm-env-tmpl
 ## Environment Manager environment Name
 Environment: azure-vnet-vm-env
 ## Terraform code path 
-tfRepoPath: get-started/azure/101-vnet-instance/terraform
+tfRepoPath: terraform/azure/101-vnet-instance/terraform
 ## Azure resource group name
 azureResourceGroup: example-rs
 ## Azure Location
