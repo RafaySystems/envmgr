@@ -1,0 +1,51 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.ECSResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.ECStfRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: vpc_name
+    options:
+      description: Name of the VPC
+      override:
+        type: allowed
+    value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.vpc_name.value)$
+    valueType: expression
+  - name: vpc_id
+    options:
+      description: ID of the VPC
+      override:
+        type: allowed
+    value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.vpc_id.value)$
+    valueType: expression
+  - name: aws_region
+    options:
+      description: AWS Region
+      override:
+        type: allowed
+    value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.region.value)$
+    valueType: expression
+  - name: subnet_id
+    options:
+      description: Subnet ID for ECS Service
+      override:
+        type: allowed
+    value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.public_subnets.value[0])$
+    valueType: expression
+  version: {{ $glbCtx.version }}

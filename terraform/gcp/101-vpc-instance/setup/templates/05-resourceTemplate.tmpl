@@ -1,0 +1,44 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.ResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: region
+    options:
+      override:
+        type: allowed
+      required: true
+    value: {{ $glbCtx.gcpRegion }}
+    valueType: text
+  - name: zone
+    options:
+      override:
+        type: allowed
+      required: true
+    value: {{ $glbCtx.gcpRegion }}-a
+    valueType: text
+  - name: project_id
+    options:
+      override:
+        type: allowed
+      required: true
+    value: {{ $glbCtx.gcpProjectID }}
+    valueType: text
+  version: {{ $glbCtx.version }}
