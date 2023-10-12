@@ -62,7 +62,7 @@ variable "eks_cluster_node_instance_type" {
 
 variable "eks_cluster_public_access" {
   description = "public access"
-  default = true
+  default = false
 }
 
 variable "eks_public_subnets" {
@@ -71,4 +71,14 @@ variable "eks_public_subnets" {
 
 variable "eks_private_subnets" {
     description = "private subnets"
+}
+
+variable "blueprint" {
+    description = "standard cluster blueprint"
+    default = "eks-standard-bp"
+}
+
+variable "blueprint_version" {
+    description = "standard cluster blueprint version"
+    default = "v1"
 }

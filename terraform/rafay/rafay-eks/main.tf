@@ -17,8 +17,9 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
       project = var.eks_cluster_project
     }
     spec {
-      type           = "eks"
-      blueprint      = "default"
+      type              = "eks"
+      blueprint         = var.blueprint
+      blueprint_version = var.blueprint_version
       cloud_provider = var.aws_cloud_credentials
       cni_provider   = "aws-cni"
       proxy_config   = {}
@@ -38,41 +39,7 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
     }
     iam {
       with_oidc = true
-      service_accounts {
-        metadata {
-          name = "test-irsa"
-          namespace = "yaml1"
-        }
-        attach_policy = <<EOF
-        {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": "ec2:Describe*",
-              "Resource": "*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": "ec2:AttachVolume",
-              "Resource": "*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": "ec2:DetachVolume",
-              "Resource": "*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": ["elasticloadbalancing:*"],
-              "Resource": ["*"]
-            }
-          ]
-        }
-        EOF
-      }
     }
-
 
     vpc {
       subnets {
