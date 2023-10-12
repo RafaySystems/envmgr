@@ -13,7 +13,7 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
   cluster {
     kind = "Cluster"
     metadata {
-      name    = var.eks_cluster_name
+      name    = "${var.eks_cluster_name}"-eks
       project = var.eks_cluster_project
     }
     spec {
@@ -29,7 +29,7 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
     apiversion = "rafay.io/v1alpha5"
     kind       = "ClusterConfig"
     metadata {
-      name    = var.eks_cluster_name
+      name    = "${var.eks_cluster_name}"-eks
       region  = var.eks_cluster_region
       version = var.eks_cluster_version
       tags = {

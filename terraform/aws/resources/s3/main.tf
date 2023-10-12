@@ -5,7 +5,7 @@ provider "aws" {
 module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
-  bucket = var.bucketname
+  bucket = "${var.bucketname}"-s3
   acl    = "private"
 
   control_object_ownership = true
@@ -14,11 +14,10 @@ module "s3_bucket" {
   versioning = {
     enabled = true
   }
-  
+
     tags = {
     name = var.name
     email = var.email
     env = "dev"
   }
 }
-
