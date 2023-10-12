@@ -1,7 +1,7 @@
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "${var.vpc_name}"-vpc
+  name = "${var.vpc_name}-vpc"
   cidr = var.vpc_cidr
 
   azs             = ["${var.aws_region}a", "${var.aws_region}b", "${var.aws_region}c"]
@@ -13,6 +13,6 @@ module "vpc" {
   one_nat_gateway_per_az = false
 
   tags = {
-    Name = "${var.vpc_name}"-vpc
+    Name = "${var.vpc_name}-vpc"
   }
 }

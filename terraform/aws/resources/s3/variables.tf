@@ -15,5 +15,5 @@ variable "email" {
 
 variable "name" {
   description = "Creators name tag to be added while creating the resource"
-    default = "test namr"
+    default = "demo user"
 }
