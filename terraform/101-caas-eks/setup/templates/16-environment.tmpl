@@ -3,7 +3,7 @@ apiVersion: eaas.envmgmt.io/v1
 kind: Environment
 metadata:
   name: {{ $glbCtx.Environment }}-{{ $glbCtx.projectName }}
-  project: {{ $glbCtx.projectName }
+  project: {{ $glbCtx.projectName }}
 spec:
   template:
     name: {{ $glbCtx.EnvironmentTemplate }}-{{ $glbCtx.projectName }}
