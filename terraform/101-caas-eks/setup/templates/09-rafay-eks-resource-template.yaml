@@ -1,0 +1,59 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  description: Updated variables
+  name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.EKStfRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: managed_nodegroups
+    options:
+      override:
+        type: allowed
+      required: true
+    value: |-
+      {
+        "ng-1" = {
+          ng_name         = "infra-terraform"
+          node_count      = 2
+          node_max_count  = 3
+          node_min_count  = 1
+          k8s_version     = "1.26"
+          instance_type   = "t3.large"
+        }
+      }
+    valueType: hcl
+  - name: cluster_tags
+    options:
+      override:
+        type: allowed
+      required: true
+    value: |-
+      {
+          "email" = "email@rafay.co"
+          "env"    = "dev"
+          "orchestrator" = "rafay"
+      }
+    valueType: hcl
+  - name: base_blueprint_name
+    options:
+      override:
+        type: notallowed
+      required: true
+    value: minimal
+    valueType: text
+  version: {{ $glbCtx.version }}
