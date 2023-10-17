@@ -21,7 +21,6 @@ version: v1
 ## https://docs.rafay.dev/env_manager/templates/contexts/
 RafayConfigContext: rafay
 AWSConfigContext: aws
-
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
 ProjectResourceTemplate: rafay-project-rs-tmpl
@@ -33,23 +32,20 @@ EKSCloudCredentialResourceTemplate: rafay-EKSCloudCredential-rs-tmpl
 AddonResourceTemplate: rafay-addon-rs-tmpl
 BlueprintResourceTemplate: rafay-blueprint-rs-tmpl
 EKSResourceTemplate: rafay-eks-rs-tmpl
-
-
-
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
-EnvironmentTemplate: aws-ecs-vpc-env-tmpl
-Environment: aws-ecs-vpc-env
+EnvironmentTemplate: caas-eks-env-tmpl
+Environment: caas-eks-env
 ## Terraform code path 
-ProjecttfRepoPath: terraform/aws/101-vpc-ecs/terraform/ecs
-GrouptfRepoPath: 
-GroupAssociationtfRepoPath:
-RepositorytfRepoPath: 
-NamespacetfRepoPath: 
-EKSCloudCredentialtfRepoPath:
-AddontfRepoPath: 
-BlueprinttfRepoPath: 
-EKStfRepoPath: 
+ProjecttfRepoPath: terraform/101-caas-eks/terraform/project
+GrouptfRepoPath: terraform/101-caas-eks/terraform/group
+GroupAssociationtfRepoPath:terraform/101-caas-eks/terraform/group-association
+RepositorytfRepoPath: terraform/101-caas-eks/terraform/repositories
+NamespacetfRepoPath: terraform/101-caas-eks/terraform/namespace
+EKSCloudCredentialtfRepoPath: terraform/101-caas-eks/terraform/cloud-credentials-eks
+AddontfRepoPath: terraform/101-caas-eks/terraform/addon
+BlueprinttfRepoPath: terraform/101-caas-eks/terraform/blueprints
+EKStfRepoPath: terraform/101-caas-eks/terraform/eks
 
 
 
