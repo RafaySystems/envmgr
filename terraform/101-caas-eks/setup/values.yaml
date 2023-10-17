@@ -39,7 +39,7 @@ Environment: caas-eks-env
 ## Terraform code path 
 ProjecttfRepoPath: terraform/101-caas-eks/terraform/project
 GrouptfRepoPath: terraform/101-caas-eks/terraform/group
-GroupAssociationtfRepoPath:terraform/101-caas-eks/terraform/group-association
+GroupAssociationtfRepoPath: terraform/101-caas-eks/terraform/group-association
 RepositorytfRepoPath: terraform/101-caas-eks/terraform/repositories
 NamespacetfRepoPath: terraform/101-caas-eks/terraform/namespace
 EKSCloudCredentialtfRepoPath: terraform/101-caas-eks/terraform/cloud-credentials-eks
