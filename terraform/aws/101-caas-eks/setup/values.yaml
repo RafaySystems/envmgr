@@ -28,7 +28,7 @@ GroupResourceTemplate: rafay-group-rs-tmpl
 GroupAssociationResourceTemplate: rafay-group-association-rs-tmpl
 RepositoryResourceTemplate: rafay-repository-rs-tmpl
 NamespaceResourceTemplate: rafay-namespace-rs-tmpl
-EKSCloudCredentialResourceTemplate: rafay-EKSCloudCredential-rs-tmpl
+EKSCloudCredentialResourceTemplate: rafay-ekscloudcredential-rs-tmpl
 AddonResourceTemplate: rafay-addon-rs-tmpl
 BlueprintResourceTemplate: rafay-blueprint-rs-tmpl
 EKSResourceTemplate: rafay-eks-rs-tmpl
