@@ -3,8 +3,8 @@ apiVersion: eaas.envmgmt.io/v1
 kind: ResourceTemplate
 metadata:
   description: Added Public Repositories
-  name: rafay-repositories-resource-template
-  project: eaas
+  name: {{ $glbCtx.RepositoryResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
 spec:
   agents:
   - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
