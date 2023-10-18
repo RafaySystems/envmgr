@@ -59,7 +59,7 @@ for i in templates/*.tmpl
 do
   ##filename based on user's input (values.yaml)
   fName="$(rctl apply -t $i --values $PWD/values.yaml \
-           --test-template | grep -A1 metadata | awk  '/name/ {print $2}')" 
+           --test-template | grep -A3 metadata | awk  '/name/ {print $2}')" 
 
   ##Remove existing file
   rm -rf $PWD/spec/$fName.yaml
