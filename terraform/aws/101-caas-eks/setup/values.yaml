@@ -37,15 +37,15 @@ EKSResourceTemplate: rafay-eks-rs-tmpl
 EnvironmentTemplate: caas-eks-env-tmpl
 Environment: caas-eks-env
 ## Terraform code path 
-ProjecttfRepoPath: terraform/101-caas-eks/terraform/project
-GrouptfRepoPath: terraform/101-caas-eks/terraform/group
-GroupAssociationtfRepoPath: terraform/101-caas-eks/terraform/group-association
-RepositorytfRepoPath: terraform/101-caas-eks/terraform/repositories
-NamespacetfRepoPath: terraform/101-caas-eks/terraform/namespace
-EKSCloudCredentialtfRepoPath: terraform/101-caas-eks/terraform/cloud-credentials-eks
-AddontfRepoPath: terraform/101-caas-eks/terraform/addon
-BlueprinttfRepoPath: terraform/101-caas-eks/terraform/blueprints
-EKStfRepoPath: terraform/101-caas-eks/terraform/eks
+ProjecttfRepoPath: terraform/aws/101-caas-eks/terraform/project
+GrouptfRepoPath: terraform/aws/101-caas-eks/terraform/group
+GroupAssociationtfRepoPath: terraform/aws/101-caas-eks/terraform/group-association
+RepositorytfRepoPath: terraform/aws/101-caas-eks/terraform/repositories
+NamespacetfRepoPath: terraform/aws/101-caas-eks/terraform/namespace
+EKSCloudCredentialtfRepoPath: terraform/aws/101-caas-eks/terraform/cloud-credentials-eks
+AddontfRepoPath: terraform/aws/101-caas-eks/terraform/addon
+BlueprinttfRepoPath: terraform/aws/101-caas-eks/terraform/blueprints
+EKStfRepoPath: terraform/aws/101-caas-eks/terraform/eks
 
 
 
