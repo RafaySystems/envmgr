@@ -193,8 +193,8 @@ cp $PWD/spec/${spec_array[13]}.yaml  ../../../../rafay-resources/projects/$proje
 cp $PWD/spec/${spec_array[14]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
 mkdir -p ../../../../rafay-resources/projects/$project/environmenttemplates
 cp $PWD/spec/${spec_array[15]}.yaml  ../../../../rafay-resources/projects/$project/environmenttemplates/
-mkdir -p ../../../../rafay-resources/projects/$project/environments
-cp $PWD/spec/${spec_array[16]}.yaml  ../../../../rafay-resources/projects/$project/environments/
+#mkdir -p ../../../../rafay-resources/projects/$project/environments
+#cp $PWD/spec/${spec_array[16]}.yaml  ../../../../rafay-resources/projects/$project/environments/
 
 rm -rf $PWD/spec
 
