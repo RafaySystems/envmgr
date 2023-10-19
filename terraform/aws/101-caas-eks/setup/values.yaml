@@ -46,11 +46,3 @@ EKSCloudCredentialtfRepoPath: terraform/aws/101-caas-eks/terraform/cloud-credent
 AddontfRepoPath: terraform/aws/101-caas-eks/terraform/addon
 BlueprinttfRepoPath: terraform/aws/101-caas-eks/terraform/blueprints
 EKStfRepoPath: terraform/aws/101-caas-eks/terraform/eks
-
-
-
-
-
-
-NewProject: caas-Project1
-NewGroup: caas-group1

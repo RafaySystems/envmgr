@@ -24,6 +24,7 @@ spec:
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.GroupResourceTemplate }}-{{ $glbCtx.projectName }}
+	- name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.GroupAssociationResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
@@ -53,6 +54,7 @@ spec:
   - dependsOn:
     - name: {{ $glbCtx.RepositoryResourceTemplate }}-{{ $glbCtx.projectName }}
     - name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.AddonResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
@@ -60,6 +62,8 @@ spec:
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.AddonResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.BlueprintResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
@@ -67,6 +71,9 @@ spec:
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.BlueprintResourceTemplate }}-{{ $glbCtx.projectName }}
+	- name: {{ $glbCtx.AddonResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
+	- name: {{ $glbCtx.EKSCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
@@ -120,7 +127,7 @@ spec:
       override:
         type: allowed
       required: true
-    value: "1.25"
+    value: "1.27"
     valueType: text
   - name: cluster_location
     options:
@@ -183,7 +190,7 @@ spec:
           node_count      = 1
           node_max_count  = 3
           node_min_count  = 1
-          k8s_version     = "1.26"
+          k8s_version     = "1.27"
           instance_type   = "t3.large"
         }
       }
