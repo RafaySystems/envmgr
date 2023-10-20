@@ -24,7 +24,7 @@ spec:
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.GroupResourceTemplate }}-{{ $glbCtx.projectName }}
-	- name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.GroupAssociationResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
@@ -71,9 +71,9 @@ spec:
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.BlueprintResourceTemplate }}-{{ $glbCtx.projectName }}
-	- name: {{ $glbCtx.AddonResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.AddonResourceTemplate }}-{{ $glbCtx.projectName }}
     - name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
-	- name: {{ $glbCtx.EKSCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.EKSCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
