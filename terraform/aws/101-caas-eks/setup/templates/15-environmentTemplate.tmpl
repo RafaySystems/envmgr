@@ -166,16 +166,6 @@ spec:
              file_path     = "file://./artifacts/cert-manager/custom_values.yaml"
              depends_on    = []
         }
-        "addon2" = {
-             name          = "ingress-nginx"
-             namespace     = "ingress-nginx"
-             addon_version = "v1.3.1"
-             chart_name    = "ingress-nginx"
-             chart_version = "4.2.5"
-             repository    = "nginx-controller"
-             file_path     = null
-             depends_on    = ["cert-manager"]
-        }
       }
     valueType: hcl
   - name: managed_nodegroups
