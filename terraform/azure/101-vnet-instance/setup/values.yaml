@@ -27,7 +27,7 @@ ResourceTemplate: azure-vnet-vm-rs-tmpl
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 EnvironmentTemplate: azure-vnet-vm-env-tmpl
 ## Environment Manager environment Name
-Environment: azure-vnet-vm-env
+#Environment: azure-vnet-vm-env
 ## Terraform code path 
 tfRepoPath: terraform/azure/101-vnet-instance/terraform
 ## Azure resource group name
