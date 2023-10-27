@@ -25,18 +25,20 @@ function check_rctl_initialize () {
 }
 
 function manual_steps() {
-    printf -- "\n\n\033[36m Info: Run Following Step manullay..\n \033[0m\n - \
+    printf -- "\n\n\033[36m Info: Run Following Step manually..\n \033[0m\n - \
   \033[36m Setup webhook in Github using above info \033[0m \033[0m\n - \
   \033[36m Remove repo token from the values.yaml \033[0m\n - \
   \033[36m Run git push \033[0m\n - \
-  \033[36m Update configContext with credentials\033[0m\n - \
+  \033[36m Update Context resources in controller UI with credentials\033[0m\n - \
+  \033[36m Create Environment resource using existing Environment Template\033[0m\n - \
   \033[36m Publish Environment\033[0m\n\ "
   exit 0
 }
 
 function test_eaas() {
-    printf -- "\n\n\033[36m Info: Run Following Step manullay..\n \033[0m\n - \
-  \033[36m Update configContext with credentials\033[0m\n - \
+    printf -- "\n\n\033[36m Info: Run Following Step manually..\n \033[0m\n - \
+  \033[36m Update Context resources in controller UI with credentials\033[0m\n - \
+  \033[36m Create Environment resource using existing Environment Template\033[0m\n - \
   \033[36m Publish Environment\033[0m\n\ "
 }
 
@@ -186,8 +188,8 @@ mkdir -p ../../../../rafay-resources/projects/$project/resourcetemplates
 cp $PWD/spec/${spec_array[5]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
 mkdir -p ../../../../rafay-resources/projects/$project/environmenttemplates
 cp $PWD/spec/${spec_array[6]}.yaml  ../../../../rafay-resources/projects/$project/environmenttemplates/
-mkdir -p ../../../../rafay-resources/projects/$project/environments
-cp $PWD/spec/${spec_array[7]}.yaml  ../../../../rafay-resources/projects/$project/environments/
+#mkdir -p ../../../../rafay-resources/projects/$project/environments
+#cp $PWD/spec/${spec_array[7]}.yaml  ../../../../rafay-resources/projects/$project/environments/
 
 rm -rf $PWD/spec
 sleep 5
