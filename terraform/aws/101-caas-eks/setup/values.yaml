@@ -35,7 +35,6 @@ EKSResourceTemplate: rafay-eks-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 EnvironmentTemplate: caas-eks-env-tmpl
-Environment: caas-eks-env
 ## Terraform code path 
 ProjecttfRepoPath: terraform/aws/101-caas-eks/terraform/project
 GrouptfRepoPath: terraform/aws/101-caas-eks/terraform/group
