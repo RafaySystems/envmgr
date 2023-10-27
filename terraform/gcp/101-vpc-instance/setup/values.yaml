@@ -27,7 +27,7 @@ ResourceTemplate: gcp-vnet-vm-rs-tmpl
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 EnvironmentTemplate: gcp-vnet-vm-env-tmpl
 ## Environment Manager environment Name
-Environment: gcp-vnet-vm-env
+#Environment: gcp-vnet-vm-env
 ## Terraform code path 
 tfRepoPath: terraform/gcp/101-vpc-instance/terraform
 ## GCP Project ID
