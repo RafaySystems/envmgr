@@ -56,13 +56,12 @@ token=`cat $PWD/values.yaml | awk '/token/ {print $2}'`
 endpoint=`cat $PWD/values.yaml | awk '/endPoint/ {print $2}' | awk -F// '{print $2}'`
 branch=`cat $PWD/values.yaml | awk '/branch/ {print $2}'`
 
-
 ##Generate Spec files based on available templates.
 for i in templates/*.tmpl
 do
   ##filename based on user's input (values.yaml)
   fName="$(rctl apply -t $i --values $PWD/values.yaml \
-           --test-template | grep -A1 metadata | awk  '/name/ {print $2}')" 
+           --test-template | grep -A3 metadata | awk  '/name/ {print $2}')" 
 
   ##Remove existing file
   rm -rf $PWD/spec/$fName.yaml
@@ -78,7 +77,6 @@ do
 
   fi
 done
-
 
 if ! git restore $PWD/values.yaml; then
     printf -- "\033[31m ERROR: Failed to restore values.yaml- FAILED \033[0m\n";
@@ -183,15 +181,25 @@ fi
 
 ##Move eaas service under rafay-resource folder.
 mkdir -p ../../../../rafay-resources/projects/$project/configcontexts
-cp $PWD/spec/${spec_array[4]}.yaml  ../../../../rafay-resources/projects/$project/configcontexts/
+cp $PWD/spec/${spec_array[4]}.yaml  ../../../..//rafay-resources/projects/$project/configcontexts/
+cp $PWD/spec/${spec_array[5]}.yaml  ../../../..//rafay-resources/projects/$project/configcontexts/
 mkdir -p ../../../../rafay-resources/projects/$project/resourcetemplates
-cp $PWD/spec/${spec_array[5]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
+cp $PWD/spec/${spec_array[6]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
+cp $PWD/spec/${spec_array[7]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
+cp $PWD/spec/${spec_array[8]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
+cp $PWD/spec/${spec_array[9]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
+cp $PWD/spec/${spec_array[10]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
+cp $PWD/spec/${spec_array[11]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
+cp $PWD/spec/${spec_array[12]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
+cp $PWD/spec/${spec_array[13]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
+cp $PWD/spec/${spec_array[14]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
 mkdir -p ../../../../rafay-resources/projects/$project/environmenttemplates
-cp $PWD/spec/${spec_array[6]}.yaml  ../../../../rafay-resources/projects/$project/environmenttemplates/
+cp $PWD/spec/${spec_array[15]}.yaml  ../../../../rafay-resources/projects/$project/environmenttemplates/
 #mkdir -p ../../../../rafay-resources/projects/$project/environments
-#cp $PWD/spec/${spec_array[7]}.yaml  ../../../../rafay-resources/projects/$project/environments/
+#cp $PWD/spec/${spec_array[16]}.yaml  ../../../../rafay-resources/projects/$project/environments/
 
 rm -rf $PWD/spec
+
 sleep 5
 
 rctl get trigger -p $project  eaas-trigger -o json | jq .status.extra.webHook

@@ -26,7 +26,7 @@ ResourceTemplate: aws-vpc-ec2-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 EnvironmentTemplate: aws-vpc-ec2-env-tmpl
-Environment: aws-vpc-ec2-env
+#Environment: aws-vpc-ec2-env
 ## Terraform code path 
 tfRepoPath: terraform/aws/101-vpc-ec2/terraform
 awsRegion: us-west-2
