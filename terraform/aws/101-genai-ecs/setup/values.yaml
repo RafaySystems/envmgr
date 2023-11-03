@@ -31,4 +31,4 @@ EnvironmentTemplate: ecs-genai-env-tmpl
 ## Terraform code path 
 tfRepoPathVPC: terraform/aws/101-genai-ecs/terraform/vpc
 tfRepoPathGenAI: terraform/aws/101-genai-ecs/terraform/genai
-awsRegion: us-west-1
+awsRegion: us-east-1
