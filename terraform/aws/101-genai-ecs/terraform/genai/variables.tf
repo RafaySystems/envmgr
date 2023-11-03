@@ -23,7 +23,7 @@ variable "container_name" {
   type        = string
 }
 variable "image_location" {
-  default     = "public.ecr.aws/rafay-dev/genai:latest"
+  default     = "public.ecr.aws/rafay-dev/gen-ai-sample-chat-app"
   description = "Container Image location"
   type        = string
 }
@@ -33,7 +33,7 @@ variable "environment" {
   type        = string
 }
 variable "container_port" {
-  default     = "80"
+  default     = "8000"
   description = "Container Port"
   type        = number
 }
