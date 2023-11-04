@@ -1,0 +1,61 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathEKS }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: aws_cloud_provider_access_key
+    options:
+      override:
+        type: allowed
+      sensitive: true
+    value: ""
+    valueType: text
+  - name: aws_cloud_provider_secret_key
+    options:
+      override:
+        type: allowed
+      sensitive: true
+    value: ""
+    valueType: text
+  - name: eks_cluster_project
+    options:
+      override:
+        type: allowed
+    value: {{ $glbCtx.projectName }}
+    valueType: text
+  - name: eks_cluster_name
+    options:
+      override:
+        type: allowed
+    value: {{ $glbCtx.EKSClusterName }}
+    valueType: text
+  - name: eks_public_subnets
+    options:
+      override:
+        type: allowed
+    value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.public_subnets.value)$
+    valueType: expression
+  - name: eks_private_subnets
+    options:
+      override:
+        type: allowed
+    value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.private_subnets.value)$
+    valueType: expression
+  version: {{ $glbCtx.version }}
