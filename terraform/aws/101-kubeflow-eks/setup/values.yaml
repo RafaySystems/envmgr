@@ -35,3 +35,4 @@ tfRepoPathVPC: terraform/aws/101-kubeflow-eks/terraform/vpc
 tfRepoPathEKS: terraform/aws/101-kubeflow-eks/terraform/eks
 tfRepoPathKubeflow: terraform/aws/101-kubeflow-eks/terraform/kubeflow
 awsRegion: us-west-2
+EKSClusterName: kubeflow-eks-cluster
