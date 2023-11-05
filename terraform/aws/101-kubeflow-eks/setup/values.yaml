@@ -28,8 +28,8 @@ EKSResourceTemplate: aws-eks-rs-tmpl
 KubeflowResourceTemplate: kubeflow-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
-EnvironmentTemplate: ecs-genai-env-tmpl
-#Environment: ecs-genai-env
+EnvironmentTemplate: eks-kubeflow-env-tmpl
+#Environment: eks-kubelow-env
 ## Terraform code path 
 tfRepoPathVPC: terraform/aws/101-kubeflow-eks/terraform/vpc
 tfRepoPathEKS: terraform/aws/101-kubeflow-eks/terraform/eks
