@@ -20,7 +20,7 @@ spec:
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}
-	- name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.KubeflowResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
