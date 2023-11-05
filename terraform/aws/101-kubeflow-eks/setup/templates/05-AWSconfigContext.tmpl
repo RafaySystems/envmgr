@@ -6,23 +6,14 @@ metadata:
   name: {{ $glbCtx.AWSConfigContext }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
 spec:
+  envs:
+  - key: AWS_ACCESS_KEY_ID
+    sensitive: true
+    value: UPDATE_VALUE
+  - key: AWS_SECRET_ACCESS_KEY
+    sensitive: true
+    value: UPDATE_VALUE
   variables:
-  - name: rolearn
-    options:
-      override:
-        type: allowed
-      required: true
-      sensitive: true
-    value: UPDATE_VALUE
-    valueType: text
-  - name: externalid
-    options:
-      override:
-        type: allowed
-      required: true
-      sensitive: true
-    value: UPDATE_VALUE
-    valueType: text
   - name: aws_cloud_provider_access_key
     options:
       override:
