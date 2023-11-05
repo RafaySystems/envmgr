@@ -1,19 +1,4 @@
-output "vpc_name" {
-  value = module.vpc.name
+output "eks_cluster_name" {
+  value = rafay_eks_cluster.ekscluster-basic.cluster[0].metadata[0].name
 }
 
-output "vpc_id" {
-  value = module.vpc.vpc_id
-}
-
-output "private_subnets" {
-  value = module.vpc.private_subnets
-}
-
-output "public_subnets" {
-  value = module.vpc.public_subnets
-}
-
-output "region" {
-  value = var.aws_region
-}

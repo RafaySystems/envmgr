@@ -9,6 +9,7 @@ spec:
   - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
   contexts:
   - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  - name: {{ $glbCtx.AWSConfigContext }}-{{ $glbCtx.projectName }}
   provider: terraform
   providerOptions:
     terraform:
@@ -20,20 +21,6 @@ spec:
     directoryPath: {{ $glbCtx.tfRepoPathEKS }}
     name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
   variables:
-  - name: aws_cloud_provider_access_key
-    options:
-      override:
-        type: allowed
-      sensitive: true
-    value: ""
-    valueType: text
-  - name: aws_cloud_provider_secret_key
-    options:
-      override:
-        type: allowed
-      sensitive: true
-    value: ""
-    valueType: text
   - name: eks_cluster_project
     options:
       override:
