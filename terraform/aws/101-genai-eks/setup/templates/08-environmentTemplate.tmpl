@@ -1,0 +1,29 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  name: {{ $glbCtx.EnvironmentTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  resources:
+  - kind: resourcetemplate
+    name: {{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.KubeflowResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  version: {{ $glbCtx.version }}
