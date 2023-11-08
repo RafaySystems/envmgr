@@ -4,10 +4,12 @@ resource "aws_ecs_service" "main" {
  cluster                            = aws_ecs_cluster.cluster.id
  task_definition                    = aws_ecs_task_definition.main.arn
  desired_count                      = 1
- deployment_minimum_healthy_percent = 50
+ deployment_minimum_healthy_percent = 0
  deployment_maximum_percent         = 100
  launch_type                        = "FARGATE"
  scheduling_strategy                = "REPLICA"
+
+force_new_deployment = true
  
  network_configuration {
    security_groups  = [ aws_security_group.ecs_tasks.id ]
@@ -16,11 +18,15 @@ resource "aws_ecs_service" "main" {
  }
  
  lifecycle {
-   ignore_changes = [task_definition, desired_count]
+   ignore_changes = [desired_count]
  }
 }
 
-resource "time_sleep" "wait_30_seconds" {
+resource "time_sleep" "wait_60_seconds" {
   depends_on      = [aws_ecs_service.main]
-  create_duration = "30s"
+  create_duration = "60s"
+
+  triggers = {
+    task_arn = aws_ecs_task_definition.main.arn
+  }
 }

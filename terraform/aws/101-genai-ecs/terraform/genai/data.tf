@@ -6,7 +6,7 @@ data "aws_vpc" "app-vpc" {
 }
 # Public IP of the ECS Service.
 data "aws_network_interface" "ip" {
-  depends_on = [time_sleep.wait_30_seconds]
+  depends_on = [time_sleep.wait_60_seconds]
   filter {
     name   = "subnet-id"
     values = var.public_subnet_id
