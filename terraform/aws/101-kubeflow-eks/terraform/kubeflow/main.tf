@@ -17,12 +17,17 @@ resource "null_resource" "kubeflow_install" {
   }
 }
 
+resource "time_sleep" "wait_30_seconds" {
+  depends_on      = [null_resource.kubeflow_install]
+  create_duration = "30s"
+}
+
 resource "null_resource" "get_kubeflow_ip" {
   triggers  =  { always_run = "${timestamp()}" }
   provisioner "local-exec" {
     command = "./kubectl get svc kubeflow-ui-loadbalancer -n kubeflow --kubeconfig=/tmp/kubeconfig | awk -F' ' '{print $4}' | tail -1 | tr -d '\n' >> /tmp/kubeflow_ip.txt"
   }
-  depends_on = [null_resource.kubeflow_install]
+  depends_on = [time_sleep.wait_30_seconds]
 }
 
 data "local_file" "kubeflow-ip" {
