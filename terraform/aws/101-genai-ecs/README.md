@@ -4,6 +4,8 @@ This is a reference design and implementation of an environment template to prov
 
 The ECS cluster is configured to use the "Fargate Launch Type Model" which makes the environment extremely simple and cost effective. AWS Fargate allows Amazon ECS to run containers without having to manage servers or clusters of Amazon EC2 instances. With Fargate, you no longer have to provision, configure, or scale clusters of virtual machines to run containers. This removes the need to choose server types, decide when to scale your clusters, or optimize cluster packing.
 
+![Architecture](architecture.png)
+
 [Learn](https://docs.rafay.co/refarch/genai/ecs/overview/) more about this template. 
 
 ## Contributing
