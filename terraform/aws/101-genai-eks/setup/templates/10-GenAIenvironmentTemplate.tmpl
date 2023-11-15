@@ -1,0 +1,21 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  name: {{ $glbCtx.GenAIEnvironmentTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  resources:
+  - kind: resourcetemplate
+    name: {{ $glbCtx.GenAIResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  variables:
+  - name: cluster_name
+    options:
+      override:
+        type: allowed
+    value: {{ $glbCtx.EKSClusterName }}
+    valueType: text
+  version: {{ $glbCtx.version }}

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gen-ai-app-example2
+spec:
+  selector:
+    matchLabels:
+      app: gen-ai-app-example2
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gen-ai-app-example2
+    spec:
+      containers:
+      - name: gen-ai-app-example2
+        image: public.ecr.aws/rafay-dev/gen-ai-sample-chat-app
+        ports:
+        - containerPort: 8000
+      serviceAccountName: gen-ai
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gen-ai-app-example2-lb
+spec:
+  selector:
+    app: gen-ai-app-example2
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: LoadBalancer

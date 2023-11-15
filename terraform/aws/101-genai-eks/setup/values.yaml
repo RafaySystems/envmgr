@@ -25,12 +25,15 @@ RafayConfigContext: rafay
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
 VPCResourceTemplate: aws-vpc-rs-tmpl
 EKSResourceTemplate: aws-eks-rs-tmpl
+GenAIResourceTemplate: aws-genai-eks-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
-EnvironmentTemplate: eks-genai-env-tmpl
+InfraEnvironmentTemplate: eks-genai-infra-env-tmpl
+GenAIEnvironmentTemplate: eks-genai-app-env-tmpl
 #Environment: eks-kubelow-env
 ## Terraform code path 
 tfRepoPathVPC: terraform/aws/101-genai-eks/terraform/vpc
 tfRepoPathEKS: terraform/aws/101-genai-eks/terraform/eks
-awsRegion: us-west-2
+tfRepoPathGenAI: terraform/aws/101-genai-eks/terraform/genai
+awsRegion: us-east-1
 EKSClusterName: genai-eks-cluster

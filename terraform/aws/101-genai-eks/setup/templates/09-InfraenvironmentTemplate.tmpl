@@ -2,7 +2,7 @@
 apiVersion: eaas.envmgmt.io/v1
 kind: EnvironmentTemplate
 metadata:
-  name: {{ $glbCtx.EnvironmentTemplate }}-{{ $glbCtx.projectName }}
+  name: {{ $glbCtx.InfraEnvironmentTemplate }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
 spec:
   resources:
