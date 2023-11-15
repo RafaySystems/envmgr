@@ -27,6 +27,12 @@ spec:
         type: allowed
     value: {{ $glbCtx.projectName }}
     valueType: text
+  - name: eks_cluster_region
+    options:
+      override:
+        type: allowed
+    value: {{ $glbCtx.awsRegion }}
+    valueType: text
   - name: eks_cluster_name
     options:
       override:

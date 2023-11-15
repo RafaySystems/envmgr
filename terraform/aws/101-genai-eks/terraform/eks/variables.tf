@@ -35,20 +35,12 @@ variable "eks_cluster_region" {
   default = "us-west-2"
 }
 
-variable "eks_cluster_az" {
-  description = "eks cluster az"
-  default = ["us-west-2a", "us-west-2b"]
-}
 
 variable "eks_cluster_version" {
   description = "eks cluster version"
   default = "1.26"
 }
 
-variable "eks_cluster_node_group_az" {
-  description = "eks cluster node group az"
-  default = ["us-west-2a", "us-west-2b"]
-}
 
 variable "eks_cluster_node_instance_type" {
   description = "node instance type"
