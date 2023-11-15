@@ -12,6 +12,12 @@ spec:
       version: {{ $glbCtx.version }}
     type: dynamic
   variables:
+  - name: project
+    options:
+      override:
+        type: allowed
+    value: {{ $glbCtx.projectName }}
+    valueType: text
   - name: cluster_name
     options:
       override:
