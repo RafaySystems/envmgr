@@ -11,178 +11,23 @@ spec:
   hooks: {}
   resources:
   - kind: resourcetemplate
-    name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
+    name: {{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
       version: {{ $glbCtx.version }}
     type: dynamic
   - dependsOn:
-    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
-    name: {{ $glbCtx.GroupResourceTemplate }}-{{ $glbCtx.projectName }}
+    name: {{ $glbCtx.MKSResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
       version: {{ $glbCtx.version }}
     type: dynamic
   - dependsOn:
-    - name: {{ $glbCtx.GroupResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}
+	- name: {{ $glbCtx.MKSResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
-    name: {{ $glbCtx.GroupAssociationResourceTemplate }}-{{ $glbCtx.projectName }}
+    name: {{ $glbCtx.WorkloadResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
       version: {{ $glbCtx.version }}
     type: dynamic
-  - dependsOn:
-    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
-    kind: resourcetemplate
-    name: {{ $glbCtx.RepositoryResourceTemplate }}-{{ $glbCtx.projectName }}
-    resourceOptions:
-      version: {{ $glbCtx.version }}
-    type: dynamic
-  - dependsOn:
-    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
-    kind: resourcetemplate
-    name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
-    resourceOptions:
-      version: {{ $glbCtx.version }}
-    type: dynamic
-  - dependsOn:
-    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
-    kind: resourcetemplate
-    name: {{ $glbCtx.EKSCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}
-    resourceOptions:
-      version: {{ $glbCtx.version }}
-    type: dynamic
-  - dependsOn:
-    - name: {{ $glbCtx.RepositoryResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
-    kind: resourcetemplate
-    name: {{ $glbCtx.AddonResourceTemplate }}-{{ $glbCtx.projectName }}
-    resourceOptions:
-      version: {{ $glbCtx.version }}
-    type: dynamic
-  - dependsOn:
-    - name: {{ $glbCtx.AddonResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
-    kind: resourcetemplate
-    name: {{ $glbCtx.BlueprintResourceTemplate }}-{{ $glbCtx.projectName }}
-    resourceOptions:
-      version: {{ $glbCtx.version }}
-    type: dynamic
-  - dependsOn:
-    - name: {{ $glbCtx.BlueprintResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.AddonResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.EKSCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}
-    kind: resourcetemplate
-    name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
-    resourceOptions:
-      version: {{ $glbCtx.version }}
-    type: dynamic
-  variables:
-  - name: project
-    options:
-      override:
-        type: allowed
-      required: true
-    value: caas-eks
-    valueType: text
-  - name: group
-    options:
-      override:
-        type: allowed
-      required: true
-    value: caas-eks-admins
-    valueType: text
-  - name: cloud_credentials_name
-    options:
-      override:
-        type: allowed
-      required: true
-    value: caas-eks-cc
-    valueType: text
-  - name: cluster_name
-    options:
-      override:
-        type: allowed
-      required: true
-    value: caas-eks
-    valueType: text
-  - name: blueprint_name
-    options:
-      override:
-        type: allowed
-      required: true
-    value: custom-blueprint
-    valueType: text
-  - name: blueprint_version
-    options:
-      override:
-        type: allowed
-      required: true
-    value: v0
-    valueType: text
-  - name: k8s_version
-    options:
-      override:
-        type: allowed
-      required: true
-    value: "1.27"
-    valueType: text
-  - name: cluster_location
-    options:
-      override:
-        type: allowed
-      required: true
-    value: us-west-2
-    valueType: text
-  - name: base_blueprint
-    options:
-      override:
-        type: allowed
-    value: minimal
-    valueType: text
-  - name: base_blueprint_version
-    options:
-      override:
-        type: allowed
-      required: true
-    value: 1.28.0
-    valueType: text
-  - name: infra_addons
-    options:
-      override:
-        type: allowed
-      required: true
-    value: |-
-      {
-        "addon1" = {
-             name          = "cert-manager"
-             namespace     = "cert-manager"
-             addon_version = "v1.9.1"
-             chart_name    = "cert-manager"
-             chart_version = "v1.12.3"
-             repository    = "cert-manager"
-             file_path     = "file://./artifacts/cert-manager/custom_values.yaml"
-             depends_on    = []
-        }
-      }
-    valueType: hcl
-  - name: managed_nodegroups
-    options:
-      override:
-        type: allowed
-      required: true
-    value: |-
-      {
-        "ng-1" = {
-          ng_name         = "infra-terraform"
-          node_count      = 1
-          node_max_count  = 3
-          node_min_count  = 1
-          k8s_version     = "1.27"
-          instance_type   = "t3.large"
-        }
-      }
-    valueType: hcl
   version: {{ $glbCtx.version }}
