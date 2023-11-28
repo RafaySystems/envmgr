@@ -1,0 +1,41 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  description: Added Public Repositories
+  name: {{ $glbCtx.RepositoryResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.RepositorytfRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: public_repositories
+    options:
+      description: Public Repositories
+      override:
+        type: notallowed
+      required: true
+    value: |-
+      {
+          "nginx-controller" = {
+              type = "Helm"
+              endpoint = "https://kubernetes.github.io/ingress-nginx"
+          }
+          "cert-manager" = {
+              type = "Helm"
+              endpoint = "https://charts.jetstack.io"
+          }
+      }
+    valueType: hcl
+  version: {{ $glbCtx.version }}

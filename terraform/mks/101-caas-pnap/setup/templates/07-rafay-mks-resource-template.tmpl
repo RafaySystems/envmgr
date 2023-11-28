@@ -1,0 +1,79 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  description: Updated variables
+  name: {{ $glbCtx.MKSResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.MKStfRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: cluster_name
+    options:
+      override:
+        type: allowed
+      required: true
+    value: phoenixnap-cluster
+    valueType: text
+  - name: public_ip
+    options:
+      override:
+        type: allowed
+      required: true
+    value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.pnap_server_pubic_ip.value)$
+    valueType: expression
+  - name: project_name
+    options:
+      override:
+        type: allowed
+      required: true
+    value: {{ $glbCtx.projectName }}
+    valueType: expression
+  - name: rafay_location
+    options:
+      override:
+        type: allowed
+      required: true
+    value:  $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.pnap_server_location.value[0])$
+    valueType: expression
+  - name: private_ip
+    options:
+      override:
+        type: allowed
+      required: true
+    value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.private_ip.value)$
+    valueType: expression
+  - name: hostname
+    options:
+      override:
+        type: allowed
+      required: true
+    value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.pnap_server_hostname.value)$
+    valueType: expression
+  - name: server_count
+    options:
+      override:
+        type: allowed
+      required: true
+    value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.total_instances.value)$
+    valueType: expression
+  - name: k8s_version
+    options:
+      description: k8s version
+      override:
+        type: allowed
+    value: 1.27.5
+    valueType: text
+  version: {{ $glbCtx.version }}

@@ -1,0 +1,79 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  description: Updated variables
+  name: {{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.PhoenixNAPConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.PNAPtfRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: cluster_name
+    options:
+      description: Hostname of the server
+      override:
+        type: allowed
+      required: true
+    value: rafay-phoenixnap-server
+    valueType: text
+  - name: type
+    options:
+      description: Server type
+      override:
+        type: allowed
+      required: true
+    value: s1.c1.medium
+    valueType: text
+  - name: os
+    options:
+      description: Operating System of the server
+      override:
+        type: allowed
+      required: true
+    value: ubuntu/focal
+    valueType: text
+  - name: location
+    options:
+      description: Location of the server
+      override:
+        restrictedValues:
+        - PHX
+        - ASH
+        - SGP
+        - NLD
+        - CHI
+        - SEA
+        - AUS
+        type: restricted
+      required: true
+    value: SGP
+    valueType: text
+  - name: total_instances
+    options:
+      description: number of servers
+      override:
+        type: allowed
+      required: true
+    value: "1"
+    valueType: text
+  - name: cidr_block_size
+    options:
+      description: public cidr block size
+      override:
+        type: allowed
+      required: true
+    value: "29"
+    valueType: text
+  version: {{ $glbCtx.version }}
