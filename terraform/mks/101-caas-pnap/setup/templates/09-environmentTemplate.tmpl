@@ -24,7 +24,7 @@ spec:
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}
-	- name: {{ $glbCtx.MKSResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.MKSResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.WorkloadResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
