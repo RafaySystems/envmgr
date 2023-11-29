@@ -25,8 +25,7 @@ resource "rafay_namespace" "namespace" {
         value = var.cluster_name
       }
     }
-  }
-	  resource_quotas {
+    resource_quotas {
 		config_maps = "10"
 		cpu_limits = "4000m"
 		memory_limits = "4096Mi"
@@ -40,6 +39,12 @@ resource "rafay_namespace" "namespace" {
 		services_node_ports = "10"
 		storage_requests = "1Gi"
 	}
+}
+  }
+
+
+resource "rafay_group" "group" {
+  name        = "${local.namespace}-group"
 }
 
 resource "rafay_groupassociation" "groupassociation" {
