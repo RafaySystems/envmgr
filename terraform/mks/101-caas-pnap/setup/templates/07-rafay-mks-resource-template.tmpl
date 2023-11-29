@@ -53,7 +53,7 @@ spec:
       override:
         type: allowed
       required: true
-    value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.private_ip.value)$
+    value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.pnap_server_private_ip.value)$
     valueType: expression
   - name: hostname
     options:
