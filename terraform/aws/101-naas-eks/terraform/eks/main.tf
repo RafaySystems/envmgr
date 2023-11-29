@@ -36,44 +36,6 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
         email = var.email_tag
       }
     }
-    iam {
-      with_oidc = true
-      service_accounts {
-        metadata {
-          name = "test-irsa"
-          namespace = "yaml1"
-        }
-        attach_policy = <<EOF
-        {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": "ec2:Describe*",
-              "Resource": "*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": "ec2:AttachVolume",
-              "Resource": "*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": "ec2:DetachVolume",
-              "Resource": "*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": ["elasticloadbalancing:*"],
-              "Resource": ["*"]
-            }
-          ]
-        }
-        EOF
-      }
-    }
-
-
     vpc {
       subnets {
         dynamic "private" {
