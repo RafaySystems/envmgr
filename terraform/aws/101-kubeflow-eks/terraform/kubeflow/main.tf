@@ -1,9 +1,20 @@
+resource "random_id" "rng" {
+  keepers = {
+    first = "${timestamp()}"
+  }     
+  byte_length = 8
+}
 
+resource "rafay_download_kubeconfig" "tfkubeconfig" {
+  cluster            = var.eks-cluster
+  output_folder_path = "/tmp"
+  filename           = "kubeconfig-${random_id.rng.hex}"
+}
 
 resource "rafay_download_kubeconfig" "tfkubeconfig" {
   cluster            = var.eks_cluster_name
   output_folder_path = "/tmp"
-  filename           = "kubeconfig"
+  filename           = "kubeconfig-${random_id.rng.hex}"
 }
 
 resource "null_resource" "kubeflow_install" {
@@ -13,7 +24,7 @@ resource "null_resource" "kubeflow_install" {
   depends_on = [rafay_download_kubeconfig.tfkubeconfig]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ls /tmp && ./kubectl apply -k \"github.com/kubeflow/pipelines/manifests/kustomize/cluster-scoped-resources?ref=2.0.3\" --kubeconfig=/tmp/kubeconfig && ./kubectl wait --for condition=established --timeout=60s crd/applications.app.k8s.io --kubeconfig=/tmp/kubeconfig  && ./kubectl apply -k \"github.com/kubeflow/pipelines/manifests/kustomize/env/platform-agnostic-pns?ref=2.0.3\" --kubeconfig=/tmp/kubeconfig && ./kubectl expose deployment ml-pipeline-ui --type=LoadBalancer --name=kubeflow-ui-loadbalancer -n kubeflow --kubeconfig=/tmp/kubeconfig "
+    command     = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ls /tmp && ./kubectl apply -k \"github.com/kubeflow/pipelines/manifests/kustomize/cluster-scoped-resources?ref=2.0.3\" --kubeconfig=/tmp/${rafay_download_kubeconfig.tfkubeconfig.filename} && ./kubectl wait --for condition=established --timeout=60s crd/applications.app.k8s.io --kubeconfig=/tmp/${rafay_download_kubeconfig.tfkubeconfig.filename}  && ./kubectl apply -k \"github.com/kubeflow/pipelines/manifests/kustomize/env/platform-agnostic-pns?ref=2.0.3\" --kubeconfig=/tmp/${rafay_download_kubeconfig.tfkubeconfig.filename} && ./kubectl expose deployment ml-pipeline-ui --type=LoadBalancer --name=kubeflow-ui-loadbalancer -n kubeflow --kubeconfig=/tmp/${rafay_download_kubeconfig.tfkubeconfig.filename} "
   }
 }
 
@@ -25,7 +36,7 @@ resource "time_sleep" "wait_30_seconds" {
 resource "null_resource" "get_kubeflow_ip" {
   triggers  =  { always_run = "${timestamp()}" }
   provisioner "local-exec" {
-    command = "./kubectl get svc kubeflow-ui-loadbalancer -n kubeflow --kubeconfig=/tmp/kubeconfig | awk -F' ' '{print $4}' | tail -1 | tr -d '\n' >> /tmp/kubeflow_ip.txt"
+    command = "./kubectl get svc kubeflow-ui-loadbalancer -n kubeflow --kubeconfig=/tmp/${rafay_download_kubeconfig.tfkubeconfig.filename} | awk -F' ' '{print $4}' | tail -1 | tr -d '\n' >> /tmp/kubeflow_ip.txt"
   }
   depends_on = [time_sleep.wait_30_seconds]
 }
