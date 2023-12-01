@@ -26,7 +26,7 @@ spec:
         type: allowed
       required: true
     value: {{ $glbCtx.projectName }}
-    valueType: expression
+    valueType: text
   - name: workload_name
     options:
       override:
@@ -40,12 +40,12 @@ spec:
         type: allowed
       required: true
     value: {{ $glbCtx.projectName }}
-    valueType: expression
+    valueType: text
   - name: cluster_name
     options:
       override:
         type: allowed
       required: true
     value: $(resource."{{ $glbCtx.MKSResourceTemplate }}-{{ $glbCtx.projectName }}".output.cluster_name.value)$
-    valueType: text
+    valueType: expression
   version: {{ $glbCtx.version }}
