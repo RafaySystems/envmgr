@@ -6,12 +6,6 @@ resource "random_id" "rng" {
 }
 
 resource "rafay_download_kubeconfig" "tfkubeconfig" {
-  cluster            = var.eks-cluster
-  output_folder_path = "/tmp"
-  filename           = "kubeconfig-${random_id.rng.hex}"
-}
-
-resource "rafay_download_kubeconfig" "tfkubeconfig" {
   cluster            = var.eks_cluster_name
   output_folder_path = "/tmp"
   filename           = "kubeconfig-${random_id.rng.hex}"
