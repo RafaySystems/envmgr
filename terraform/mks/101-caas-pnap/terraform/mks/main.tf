@@ -28,7 +28,7 @@ resource "null_resource" "mks_cluster" {
   depends_on = [local_file.rafay_mks_cluter_spec]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "./provision.sh"
+    command     = "chmod +x ./provision.sh; ./provision.sh"
     environment = {
       filename = local_file.rafay_mks_cluter_spec.filename
     }
@@ -43,7 +43,7 @@ resource "null_resource" "delete_mks_cluster" {
   provisioner "local-exec" {
     when        = destroy
     interpreter = ["/bin/bash", "-c"]
-    command     = "./delete.sh"
+    command     = "chmod +x ./delete.sh; ./delete.sh"
     environment = {
       CLUSTER = "${self.triggers.name}"
       PROJECT = "${self.triggers.project}"
