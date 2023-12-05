@@ -50,3 +50,16 @@ resource "null_resource" "delete_mks_cluster" {
     }
   }
 }
+
+resource "rafay_group" "group" {
+  name        = "${var.cluster_name}-group"
+}
+
+resource "rafay_groupassociation" "groupassociation" {
+  depends_on = [rafay_group.group]
+  project = "${var.project_name}"
+  group = "${var.cluster_name}-group"
+  namespaces = ["${local.namespace}"]
+  roles = ["CLUSTER_ADMIN"]
+  add_users = ["${var.username}"]
+}

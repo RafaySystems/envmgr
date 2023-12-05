@@ -43,3 +43,8 @@ variable "location_mapping" {
     "AUS" = "dallas-us"
   }
 }
+
+variable "username" {
+  description = "Rafay username"
+  type    = string
+}
