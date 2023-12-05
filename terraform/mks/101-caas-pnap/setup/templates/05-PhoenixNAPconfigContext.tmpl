@@ -1,0 +1,15 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+Config context:
+kind: ConfigContext
+metadata:
+  name: {{ $glbCtx.PhoenixNAPConfigContext }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  envs:
+  - key: PNAP_CLIENT_ID
+    sensitive: true
+    value: UPDATE_VALUE
+  - key: PNAP_CLIENT_SECRET
+    sensitive: true
+    value: UPDATE_VALUE

@@ -1,0 +1,33 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  description: Allowed k8s_version changes
+  name: {{ $glbCtx.EnvironmentTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  hooks: {}
+  resources:
+  - kind: resourcetemplate
+    name: {{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.MKSResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.MKSResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.WorkloadResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  version: {{ $glbCtx.version }}
