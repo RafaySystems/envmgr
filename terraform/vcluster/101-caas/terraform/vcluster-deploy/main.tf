@@ -59,7 +59,7 @@ resource "rafay_workload" "vcluster-workload" {
         values_paths {
           name = "file://${path.module}/${var.filename}"
         }
-        repository = "vcluster-loft"
+        repository = var.repository
         chart_name = lookup(var.default_charts, var.distro)
       }
     }

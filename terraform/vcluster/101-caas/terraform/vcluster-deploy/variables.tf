@@ -38,3 +38,8 @@ variable "distro" {
   default = "k3s"
 
 }
+
+variable "repository" {
+  type    = string
+  default = "rafay-vcluster-loft"
+}
