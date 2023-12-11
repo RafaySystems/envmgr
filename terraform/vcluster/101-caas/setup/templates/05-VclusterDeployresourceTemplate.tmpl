@@ -34,7 +34,7 @@ spec:
       override:
         type: allowed
       required: true
-    value: demo-eks-caas
+    value: {{ $glbCtx.HostClusterName }}
     valueType: text
   - name: bootstrap_data
     options:

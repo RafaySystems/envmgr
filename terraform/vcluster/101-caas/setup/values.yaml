@@ -31,4 +31,4 @@ VclusterEnvironmentTemplate: vcluster-env-tmpl
 ## Terraform code path 
 tfRepoPathDeploy: terraform/vcluster/101-caas/terraform/vcluster-deploy
 tfRepoPathImport: terraform/vcluster/101-caas/terraform/vcluster-import
-
+HostClusterName: UPDATE_HOST_CLUSTER_NAME
