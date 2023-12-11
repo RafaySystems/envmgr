@@ -71,6 +71,6 @@ spec:
         - eks
         type: restricted
       required: true
-    value: k3s
+    value: {{ $glbCtx.vclusterType }}
     valueType: text
   version: {{ $glbCtx.version }}

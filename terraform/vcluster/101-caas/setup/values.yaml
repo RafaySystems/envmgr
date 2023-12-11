@@ -32,3 +32,4 @@ VclusterEnvironmentTemplate: vcluster-env-tmpl
 tfRepoPathDeploy: terraform/vcluster/101-caas/terraform/vcluster-deploy
 tfRepoPathImport: terraform/vcluster/101-caas/terraform/vcluster-import
 HostClusterName: UPDATE_HOST_CLUSTER_NAME
+vclusterType: k3s
