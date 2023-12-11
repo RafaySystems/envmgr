@@ -12,7 +12,7 @@ spec:
       version: {{ $glbCtx.version }}
     type: dynamic
   - dependsOn:
-    - name: {{ $glbCtx.VclusterImportResourceTemplate }}-{{ $glbCtx.projectName }
+    - name: {{ $glbCtx.VclusterImportResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.VclusterDeployResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
