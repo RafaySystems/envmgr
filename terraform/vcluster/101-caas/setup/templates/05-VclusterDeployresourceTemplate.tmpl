@@ -1,0 +1,76 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.VclusterDeployResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathDeploy }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: host_project
+    options:
+      description: Host Project
+      override:
+        type: allowed
+      required: true
+    value: $(environment.project.name)$
+    valueType: text
+  - name: host_cluster_name
+    options:
+      description: Host Cluster
+      override:
+        type: allowed
+      required: true
+    value: demo-eks-caas
+    valueType: text
+  - name: bootstrap_data
+    options:
+      description: vCluster import bootstarp data
+      override:
+        type: allowed
+      required: true
+    value: $(resource."vcluster-import".output.bootstrap.value)$
+    valueType: expression
+  - name: ns_name
+    options:
+      description: vCluster namespace
+      override:
+        type: allowed
+      required: true
+    value: $(environment.name)$
+    valueType: expression
+  - name: cluster_name
+    options:
+      description: vCluster name
+      override:
+        type: allowed
+      required: true
+    value: $(environment.name)$
+    valueType: expression
+  - name: distro
+    options:
+      description: vCluster Distro
+      override:
+        restrictedValues:
+        - k3s
+        - k0s
+        - k8s
+        - eks
+        type: restricted
+      required: true
+    value: k3s
+    valueType: text
+  version: {{ $glbCtx.version }}
