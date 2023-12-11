@@ -42,7 +42,7 @@ spec:
       override:
         type: allowed
       required: true
-    value: $(resource."vcluster-import".output.bootstrap.value)$
+    value: $(resource."{{ $glbCtx.VclusterImportResourceTemplate }}-{{ $glbCtx.projectName }}".output.bootstrap.value)$
     valueType: expression
   - name: ns_name
     options:
