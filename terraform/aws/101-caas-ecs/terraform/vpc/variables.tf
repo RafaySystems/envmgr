@@ -12,5 +12,4 @@ variable "vpc_cidr" {
 
 variable "vpc_name" {
   type    = string
-  default = "example1-vpc"
 }

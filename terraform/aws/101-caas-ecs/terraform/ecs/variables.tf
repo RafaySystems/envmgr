@@ -1,30 +1,24 @@
 variable "region" {
-  default     = "us-east-1"
   description = "AWS region for resources deployment"
   type        = string
 }
 variable "vpc_id" {
-  default     = "Replace with the VPC ID"
   description = "VPC ID"
   type        = string
 }
 variable "public_subnet_id" {
-  default     = ["Replace with the Subnet in which the Fargate should run"]
   description = "Public Subnet ID"
 }
 variable "name" {
-  default     = "app-caas-ecs"
   description = "App Name"
   type        = string
 }
 variable "container_name" {
-  default     = "container-caas-ecs"
   description = "Container Name"
   type        = string
 }
 variable "ecs_task_definition_name" {
     type = string
-    default = "app-task-caas-ecs"
     description = "Task definition name"
 }
 variable "image_location" {
@@ -38,7 +32,6 @@ variable "container_port" {
   type        = number
 }
 variable "environment" {
-  default     = "dev"
   description = "App Environment Name"
   type        = string
 }

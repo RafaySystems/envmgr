@@ -27,4 +27,11 @@ spec:
       required: true
     value: {{ $glbCtx.awsRegion }}
     valueType: text
+  - name: vpc_name
+    options:
+      override:
+        type: allowed
+      required: true
+    value: $(environment.name)$
+    valueType: expression
   version: {{ $glbCtx.version }}
