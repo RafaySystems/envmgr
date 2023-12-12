@@ -41,28 +41,28 @@ spec:
     valueType: expression
   - name: name
     options:
-	  description: App Name
+      description: App Name
       override:
         type: allowed
     value: $(environment.name)$
     valueType: expression
   - name: container_name
     options:
-	  description: Container Name
+      description: Container Name
       override:
         type: allowed
     value: $(environment.name)$
     valueType: expression
   - name: ecs_task_definition_name
     options:
-	  description: Task definition name
+      description: Task definition name
       override:
         type: allowed
     value: $(environment.name)$
     valueType: expression
   - name: environment
     options:
-	  description: App Environment Name
+      description: App Environment Name
       override:
         type: allowed
     value: $(environment.name)$
