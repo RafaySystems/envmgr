@@ -1,0 +1,70 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.ECSResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathECS }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: region
+    options:
+      override:
+        type: allowed
+      required: true
+    value: {{ $glbCtx.awsRegion }}
+    valueType: text
+  - name: vpc_id
+    options:
+      override:
+        type: allowed
+    value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.vpc_id.value)$
+    valueType: expression
+  - name: public_subnet_id
+    options:
+      override:
+        type: allowed
+    value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.public_subnets.value)$
+    valueType: expression
+  - name: name
+    options:
+      description: App Name
+      override:
+        type: allowed
+    value: $(environment.name)$
+    valueType: expression
+  - name: container_name
+    options:
+      description: Container Name
+      override:
+        type: allowed
+    value: $(environment.name)$
+    valueType: expression
+  - name: ecs_task_definition_name
+    options:
+      description: Task definition name
+      override:
+        type: allowed
+    value: $(environment.name)$
+    valueType: expression
+  - name: environment
+    options:
+      description: App Environment Name
+      override:
+        type: allowed
+    value: $(environment.name)$
+    valueType: expression
+  version: {{ $glbCtx.version }}
