@@ -5,6 +5,11 @@ resource "random_id" "rnd" {
   byte_length = 4
 }
 
+locals {
+  # Create a unique name
+  uniquename = "${element(split("@",var.username),0)}-${random_id.rnd.dec}"
+}
+
 resource "local_file" "rafay_mks_cluter_spec" {
   depends_on = [random_id.rnd]
   content = templatefile("${path.module}/templates/rafay-mks.tftpl", {
@@ -52,13 +57,13 @@ resource "null_resource" "delete_mks_cluster" {
 }
 
 resource "rafay_group" "group" {
-  name        = "${var.cluster_name}-group"
+  name        = "${local.uniquename}-group"
 }
 
 resource "rafay_groupassociation" "groupassociation" {
   depends_on = [rafay_group.group]
   project = "${var.project_name}"
-  group = "${var.cluster_name}-group"
+  group = "${local.uniquename}-group"
   roles = ["CLUSTER_ADMIN"]
   add_users = ["${var.username}"]
 }
