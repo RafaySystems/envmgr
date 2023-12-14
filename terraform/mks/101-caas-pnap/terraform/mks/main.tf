@@ -13,7 +13,7 @@ locals {
 resource "local_file" "rafay_mks_cluter_spec" {
   depends_on = [random_id.rnd]
   content = templatefile("${path.module}/templates/rafay-mks.tftpl", {
-    cluster_name   = var.cluster_name
+    cluster_name   = "${local.uniquename}-cluster"
     private_ip     = var.private_ip
     public_ip      = var.public_ip
     hostname       = var.hostname
@@ -22,7 +22,7 @@ resource "local_file" "rafay_mks_cluter_spec" {
     k8s_version    = var.k8s_version
     rafay_location = "${lookup(var.location_mapping, var.rafay_location)}"
   })
-  filename        = "${var.cluster_name}-${random_id.rnd.hex}-rafay-spec.yaml"
+  filename        = "${local.uniquename}-${random_id.rnd.hex}-rafay-spec.yaml"
   file_permission = "0644"
 }
 
@@ -42,7 +42,7 @@ resource "null_resource" "mks_cluster" {
 
 resource "null_resource" "delete_mks_cluster" {
   triggers = {
-    name    = var.cluster_name
+    name    = "${local.uniquename}-cluster"
     project = var.project_name
   }
   provisioner "local-exec" {
