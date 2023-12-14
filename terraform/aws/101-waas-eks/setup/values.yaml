@@ -34,6 +34,6 @@ WorkspaceEnvironmentTemplate: eks-waas-env-tmpl
 ## Terraform code path 
 tfRepoPathVPC: terraform/aws/101-waas-eks/terraform/vpc
 tfRepoPathEKS: terraform/aws/101-waas-eks/terraform/eks
-tfRepoPathNamespace: terraform/aws/101-waas-eks/terraform/workspace
+tfRepoPathWorkspace: terraform/aws/101-waas-eks/terraform/workspace
 awsRegion: us-west-2
 EKSClusterName: waas-eks-cluster
