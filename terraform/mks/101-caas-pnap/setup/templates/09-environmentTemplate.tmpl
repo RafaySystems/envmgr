@@ -30,4 +30,11 @@ spec:
     resourceOptions:
       version: {{ $glbCtx.version }}
     type: dynamic
+  variables:
+  - name: username
+    options:
+      override:
+        type: allowed
+    value: $(trigger.payload.username)$
+    valueType: expression
   version: {{ $glbCtx.version }}
