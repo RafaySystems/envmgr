@@ -19,4 +19,11 @@ spec:
     branch: {{ $glbCtx.branch }}
     directoryPath: {{ $glbCtx.tfRepoPathWorkspace }}
     name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: username
+    options:
+      override:
+        type: allowed
+    value: $(trigger.payload.username)$
+    valueType: expression
   version: {{ $glbCtx.version }}
