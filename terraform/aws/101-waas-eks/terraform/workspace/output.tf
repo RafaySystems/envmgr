@@ -1,6 +1,6 @@
 
 
 output "namepsace" {
-  value =local.namespace
+  value =local.workspace
 }
 
