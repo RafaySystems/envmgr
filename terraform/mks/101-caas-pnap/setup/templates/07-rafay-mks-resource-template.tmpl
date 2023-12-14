@@ -20,13 +20,6 @@ spec:
     directoryPath: {{ $glbCtx.MKStfRepoPath }}
     name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
   variables:
-  - name: cluster_name
-    options:
-      override:
-        type: allowed
-      required: true
-    value: phoenixnap-cluster
-    valueType: text
   - name: public_ip
     options:
       override:
