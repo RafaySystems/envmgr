@@ -1,5 +1,5 @@
 output "cluster_name" {
-  value = var.cluster_name
+  value = "${local.uniquename}-cluster"
 }
 
 output "public_ip" {
