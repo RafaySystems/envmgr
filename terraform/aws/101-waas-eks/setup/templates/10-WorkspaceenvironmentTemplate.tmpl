@@ -24,4 +24,10 @@ spec:
         type: allowed
     value: {{ $glbCtx.EKSClusterName }}
     valueType: text
+  - name: username
+    options:
+      override:
+        type: allowed
+    value: $(trigger.payload.username)$
+    valueType: expression
   version: {{ $glbCtx.version }}
