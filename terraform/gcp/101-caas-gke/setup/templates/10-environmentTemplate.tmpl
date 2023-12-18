@@ -32,7 +32,7 @@ spec:
   - dependsOn:
     - name: {{ $glbCtx.GCPCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
-    name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
+    name: {{ $glbCtx.GKEResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
       version: {{ $glbCtx.version }}
     type: dynamic

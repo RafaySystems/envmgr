@@ -42,7 +42,7 @@ spec:
       override:
         type: allowed
       required: true
-    value: $(resource."rafay-gcp-credentials".output.credentials.value)$
+    value: $(resource."{{ $glbCtx.GCPCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}".output.credentials.value)$
     valueType: expression
   - name: gcp_project
     options:

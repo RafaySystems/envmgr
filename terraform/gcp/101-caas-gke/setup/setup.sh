@@ -188,13 +188,8 @@ cp $PWD/spec/${spec_array[6]}.yaml  ../../../../rafay-resources/projects/$projec
 cp $PWD/spec/${spec_array[7]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
 cp $PWD/spec/${spec_array[8]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
 cp $PWD/spec/${spec_array[9]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
-cp $PWD/spec/${spec_array[10]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
-cp $PWD/spec/${spec_array[11]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
-cp $PWD/spec/${spec_array[12]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
-cp $PWD/spec/${spec_array[13]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
-cp $PWD/spec/${spec_array[14]}.yaml  ../../../../rafay-resources/projects/$project/resourcetemplates/
 mkdir -p ../../../../rafay-resources/projects/$project/environmenttemplates
-cp $PWD/spec/${spec_array[15]}.yaml  ../../../../rafay-resources/projects/$project/environmenttemplates/
+cp $PWD/spec/${spec_array[10]}.yaml  ../../../../rafay-resources/projects/$project/environmenttemplates/
 #mkdir -p ../../../../rafay-resources/projects/$project/environments
 #cp $PWD/spec/${spec_array[16]}.yaml  ../../../../rafay-resources/projects/$project/environments/
 

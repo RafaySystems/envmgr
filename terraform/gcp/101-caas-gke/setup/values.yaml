@@ -20,7 +20,7 @@ version: v1
 ## Environment Manager congifContext Name
 ## https://docs.rafay.dev/env_manager/templates/contexts/
 RafayConfigContext: rafay
-GCPConfigContext: aws
+GCPConfigContext: gcp
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
 ProjectResourceTemplate: rafay-project-rs-tmpl
