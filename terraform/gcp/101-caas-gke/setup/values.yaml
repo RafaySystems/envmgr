@@ -1,0 +1,38 @@
+##Rafay Project name
+projectName: UPDATE_EXISTING_PROJECT_NAME
+##Rafay gitops agent name
+agentName: eaas-agent
+##Rafay respository name
+repoName: eaas-repo
+##Username to access repository
+usernName: UPDATE_REPO_USERNAME
+##Token to access repository
+token: UPDATE_REPO_TOKEN
+##Repository url
+endPoint: UPDATE_REPO_ENDPOINT
+##Repository revision name
+branch: UPDATE_REPO_BRANCH
+## Repository path for Rafay to write back configuration.
+path: rafay-resources
+## Initial Version for Environment Manager resources.
+version: v1
+## https://docs.rafay.dev/env_manager/overview/
+## Environment Manager congifContext Name
+## https://docs.rafay.dev/env_manager/templates/contexts/
+RafayConfigContext: rafay
+GCPConfigContext: aws
+##Environment Manager resourceTemplate Name
+## https://docs.rafay.dev/env_manager/templates/resource_templates/
+ProjectResourceTemplate: rafay-project-rs-tmpl
+GroupAssociationResourceTemplate: rafay-group-association-rs-tmpl
+GCPCloudCredentialResourceTemplate: rafay-gcpcloudcredential-rs-tmpl
+GKEResourceTemplate: rafay-gke-rs-tmpl
+## Environment Manager environmentTemplate Name
+## https://docs.rafay.dev/env_manager/templates/environment_templates/
+EnvironmentTemplate: caas-eks-env-tmpl
+## Terraform code path 
+ProjecttfRepoPath: terraform/gcp/101-caas-gke/terraform/project
+GroupAssociationtfRepoPath: terraform/gcp/101-caas-gke/terraform/group-association
+GCPCloudCredentialtfRepoPath: terraform/gcp/101-caas-gke/terraform/cloud-credentials-gcp
+GKEtfRepoPath: terraform/gcp/101-caas-gke/terraform/gke
+GCPProjectID: UPDATE_GCP_PROJECTID
