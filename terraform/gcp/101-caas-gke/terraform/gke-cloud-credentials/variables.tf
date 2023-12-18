@@ -4,7 +4,7 @@ variable "project_name" {
 
 variable "filename" {
   type    = string
-  default = "demos-credentails.json"
+  default = "gcp-credentails.json"
 }
 
 variable "credentials_name" {
