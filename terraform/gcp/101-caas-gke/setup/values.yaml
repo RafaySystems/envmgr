@@ -29,10 +29,10 @@ GCPCloudCredentialResourceTemplate: rafay-gcpcloudcredential-rs-tmpl
 GKEResourceTemplate: rafay-gke-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
-EnvironmentTemplate: caas-eks-env-tmpl
+EnvironmentTemplate: caas-gke-env-tmpl
 ## Terraform code path 
 ProjecttfRepoPath: terraform/gcp/101-caas-gke/terraform/project
-GroupAssociationtfRepoPath: terraform/gcp/101-caas-gke/terraform/group-association
-GCPCloudCredentialtfRepoPath: terraform/gcp/101-caas-gke/terraform/cloud-credentials-gcp
+GroupAssociationtfRepoPath: terraform/gcp/101-caas-gke/terraform/group
+GCPCloudCredentialtfRepoPath: terraform/gcp/101-caas-gke/terraform/gke-cloud-credentials
 GKEtfRepoPath: terraform/gcp/101-caas-gke/terraform/gke
 GCPProjectID: UPDATE_GCP_PROJECTID
