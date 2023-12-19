@@ -1,0 +1,12 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+Config context:
+kind: ConfigContext
+metadata:
+  name: {{ $glbCtx.GCPConfigContext }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  files:
+  - data: VVBEQVRFX1ZBTFVF
+    name: gcp-credentails.json
+    sensitive: true
