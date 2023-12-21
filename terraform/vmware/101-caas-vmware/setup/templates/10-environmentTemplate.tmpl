@@ -1,0 +1,47 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  name: {{ $glbCtx.EnvironmentTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+ agents:
+ - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  hooks: {}
+  resources:
+  - kind: resourcetemplate
+    name: {{ $glbCtx.GatewayResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.GatewayResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.VSphereCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.VSphereCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.GatewayResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.VMwarevSphereResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.VMwarevSphereResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.WordPressWorkloadResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: v7
+    type: dynamic
+ variables:
+ - name: control_plane_ip
+   options:
+     description :  "10.109.10.1 to 10.109.10.254"
+     override:
+       type: allowed
+   value: YOUR_CONTROL_PLANE_IP
+   valueType: text
+ version: {{ $glbCtx.version }}
