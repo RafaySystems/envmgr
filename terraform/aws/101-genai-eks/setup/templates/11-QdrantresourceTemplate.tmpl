@@ -22,16 +22,16 @@ spec:
   variables:
   - name: qdarnt_helm_version
     options:
-	  description: Qdrant Helm chart version
+      description: Qdrant Helm chart version
       override:
         type: restricted
-		restrictedValues: 
-		- 0.6.1
-    value: {{ $glbCtx.awsRegion }}
+	restrictedValues: 
+	- 0.6.1
+    value: 0.6.1
     valueType: text
   - name: namespace
     options:
-	  description: Name of the namespace
+      description: Name of the namespace
       override:
         type: notallowed
     value: $(environment.name)$
