@@ -1,0 +1,44 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.WordPressWorkloadResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.WordPressWorkloadtfRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: ns_name
+    options:
+      description: Namespace name
+      required: true
+    value: $(environment.project.name)$
+    valueType: expression
+  - name: workload_name
+    value: $(environment.name)$
+    valueType: text
+  - name: project
+    options:
+      description: Project Name
+      required: true
+    value: {{ $glbCtx.projectName }}
+    valueType: expression
+  - name: cluster_name
+    options:
+      description: Cluster name
+      required: true
+    value: $(resource."{{ $glbCtx.VMwarevSphereResourceTemplate }}-{{ $glbCtx.projectName }}".output.cluster_name.value)$
+    valueType: expression
+  version: {{ $glbCtx.version }}
+  versionState: active
