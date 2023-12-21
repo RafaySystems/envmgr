@@ -48,8 +48,8 @@ spec:
     options:
       override:
         type: restricted
-		restrictedValues: 
-		- {{ $glbCtx.EKSClusterName }}
+	restrictedValues: 
+	- {{ $glbCtx.EKSClusterName }}
     value: {{ $glbCtx.EKSClusterName }}
     valueType: text
   version: {{ $glbCtx.version }}
