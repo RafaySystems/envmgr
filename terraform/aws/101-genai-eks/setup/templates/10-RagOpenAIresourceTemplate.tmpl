@@ -21,22 +21,22 @@ spec:
   variables:
   - name: region
     options:
-	  description: AWS region
+      description: AWS region
       override:
         type: allowed
     value: {{ $glbCtx.awsRegion }}
     valueType: text
   - name: secret_name
     options:
-	  description: Name of the Secret to be created in secret manager
+      description: Name of the Secret to be created in secret manager
       override:
         type: notallowed
     value: OPEN_AI_KEY
     valueType: text
   - name: secret_value
     options:
-	  description: OPEN AI API KEY
-	  sensitive: true
+      description: OPEN AI API KEY
+      sensitive: true
       override:
         type: notallowed
     value: $(environment.name)$
