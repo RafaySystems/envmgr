@@ -45,7 +45,7 @@ resource "null_resource" "delete_vsphere_cluster" {
   provisioner "local-exec" {
     when        = destroy
     interpreter = ["/bin/bash", "-c"]
-    command     = "chmod +x delete.sh && ./delete.sh"
+    command     = "chmod +x cluster-delete.sh && ./cluster-delete.sh"
      environment = {
       CLUSTER_NAME = "${self.triggers.name}"
     }
