@@ -1,0 +1,47 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  description: Rafay Group Association Template
+  name: {{ $glbCtx.GroupAssociationResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.GroupAssociationtfRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: project_name
+    options:
+      description: Rafay Project Name
+      override:
+        type: allowed
+      required: true
+    value: $(environment.name)$
+    valueType: expression
+  - name: group
+    options:
+      description: Rafay Group Name
+      override:
+        type: allowed
+      required: true
+    value: $(environment.id)$
+    valueType: expression
+  - name: user
+    options:
+      description: Add user to rafay group for the access
+      override:
+        type: allowed
+      required: true
+    value: $(trigger.payload.username)$
+    valueType: expression
+  version: {{ $glbCtx.version }}
