@@ -1,0 +1,59 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  description: Updated variables
+  name: {{ $glbCtx.VMwarevSphereResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  - name: {{ $glbCtx.VMwarevSphereConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.VMwarevSpheretfRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: project_name
+    options:
+      required: true
+    value: {{ $glbCtx.projectName }}
+    valueType: expression
+  - name: control_plane_ip
+    options:
+      description: Control Plane VIP
+      override:
+        type: allowed
+      required: true
+    value: YOUR_CONTROL_PLANE_IP
+    valueType: text
+  - name: cloud_credentials
+    value: $(resource."{{ $glbCtx.VSphereCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}".output.cloud_credential_name.value)$
+    valueType: expression
+  - name: k8s_version
+    options:
+      description: k8s version(v1.27.3,v1.28.0,v1.26.2,v1.25.2)
+      override:
+        type: allowed
+      required: true
+    value: v1.27.3
+    valueType: text
+  - name: vm_template
+    options:
+      description: vm template name 
+      override:
+        type: allowed
+      required: true
+    value: ubuntu-2204-kube-v1.27.3
+    valueType: text
+  - name: cluster_name
+    value: $(environment.name)$
+    valueType: expression
+  version: {{ $glbCtx.version }}
