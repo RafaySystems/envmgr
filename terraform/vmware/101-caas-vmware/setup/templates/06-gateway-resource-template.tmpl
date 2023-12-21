@@ -1,0 +1,38 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.GatewayResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.VMwarevSphereConfigContext }}-{{ $glbCtx.projectName }}
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.GatewayftRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: gateway_vm_name
+    options:
+      description: Name of the gateway virtual machine to create.
+      override:
+        type: allowed
+      required: true
+    value: $(environment.name)$
+    valueType: expression
+  - name: gateway_name
+    options:
+      description: Name of the gateway resource on rafay platform
+      required: true
+    value: $(environment.name)$
+    valueType: expression
+  version: {{ $glbCtx.version }}
+  versionState: active
