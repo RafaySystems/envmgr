@@ -1,14 +1,22 @@
-terraform {
-  required_providers {
-    vsphere = {
-      source = "hashicorp/vsphere"
-      version = "2.6.1"
-    }
-  }
-}
-provider "vsphere" {
-  user                 = var.vsphere_user
-  password             = var.vsphere_password
-  vsphere_server       = var.vsphere_server
-  allow_unverified_ssl = true
-}
+#!/bin/bash
+
+set -ex
+
+RCTL_FILE="rctl-linux-amd64.tar.bz2"
+RCTL_URL="https://rafay-prod-cli.s3-us-west-2.amazonaws.com/publish/rctl-linux-amd64.tar.bz2"
+
+wget $RCTL_URL
+if [ $? -eq 0 ];
+then
+    echo "[+] Successfully Downloaded RCTL binary"
+fi
+tar -xvf $RCTL_FILE
+
+./rctl delete gateway $GATEWAY_NAME -y
+if [ $? -eq 0 ]; then
+    echo "Successfully deleted $GATEWAY_NAME"
+    exit 0
+else
+    echo "Failed to delete $GATEWAY_NAME"
+    exit 1
+fi
