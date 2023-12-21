@@ -1,0 +1,41 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+Config context:
+kind: ConfigContext
+metadata:
+  name: {{ $glbCtx.VMwarevSphereConfigContext }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  variables:
+  - name: vsphere_resource_pool
+    value: YOUR_RESOURCE_POOL_NAME
+    valueType: text
+  - name: vsphere_compute_cluster
+    value: YOUR_COMPUTE_CLUSTER_NAME
+    valueType: text
+  - name: vsphere_datastore
+    value: YOUR_DATASTORE_NAME
+    valueType: text
+  - name: vsphere_host
+    value: YOUR_HOST_NAME
+    valueType: text
+  - name: vsphere_network
+    value: YOUR_NETWORK_NAME
+    valueType: text
+  - name: rafay_controller_endpoint
+    value: console.rafay.dev
+    valueType: text
+  - name: vsphere_datacenter
+    value: YOUR_ACTUAL_DATACENTER_NAME
+    valueType: text
+  - name: vsphere_server
+    value: YOUR_VCENTER_SERVER_URL
+    valueType: text
+  - name: vsphere_user
+    value: YOUR_VCENTER_USERNAME
+    valueType: text
+  - name: vsphere_password
+    options:
+      sensitive: true
+    value: YOUR_VCENTER_PASSWORD
+    valueType: text
