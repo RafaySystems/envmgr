@@ -1,0 +1,44 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+RagOpenAIResourceTemplate  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.AWSConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathOpenAI }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: region
+    options:
+	  description: AWS region
+      override:
+        type: allowed
+    value: {{ $glbCtx.awsRegion }}
+    valueType: text
+  - name: secret_name
+    options:
+	  description: Name of the Secret to be created in secret manager
+      override:
+        type: notallowed
+    value: OPEN_AI_KEY
+    valueType: text
+  - name: secret_value
+    options:
+	  description: OPEN AI API KEY
+	  sensitive: true
+      override:
+        type: notallowed
+    value: $(environment.name)$
+    valueType: text
+  version: {{ $glbCtx.version }}

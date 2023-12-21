@@ -1,0 +1,44 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.RagBedrockResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.AWSConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathBedrock }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: region
+    options:
+	  description: AWS region for bedrock
+      override:
+        type: allowed
+    value: {{ $glbCtx.awsRegion }}
+    valueType: text
+  - name: service-account-name
+    options:
+	  description: Name of the service account
+      override:
+        type: notallowed
+    value: $(environment.name)$
+    valueType: expression
+  - name: namespace
+    options:
+	  description: Name of the namespace
+      override:
+        type: notallowed
+    value: $(environment.name)$
+    valueType: expression
+  version: {{ $glbCtx.version }}

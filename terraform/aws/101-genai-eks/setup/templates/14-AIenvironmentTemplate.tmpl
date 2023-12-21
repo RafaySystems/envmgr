@@ -1,0 +1,55 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  name: {{ $glbCtx.AIEnvironmentTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  resources:
+  - kind: resourcetemplate
+    name: {{ $glbCtx.GenAIResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - kind: resourcetemplate
+    name: {{ $glbCtx.RagBedrockResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.RagBedrockResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.RagOpenAIResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic	
+  - dependsOn:
+    - name: {{ $glbCtx.RagOpenAIResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.RagQdrantResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic	
+  - dependsOn:
+    - name: {{ $glbCtx.RagQdrantResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.RagAppResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  variables:
+  - name: project
+    options:
+      override:
+        type: allowed
+    value: {{ $glbCtx.projectName }}
+    valueType: text
+  - name: cluster_name
+    options:
+      override:
+        type: restricted
+		restrictedValues: 
+		- {{ $glbCtx.EKSClusterName }}
+    value: {{ $glbCtx.EKSClusterName }}
+    valueType: text
+  version: {{ $glbCtx.version }}
