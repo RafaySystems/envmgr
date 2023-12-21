@@ -1,0 +1,40 @@
+apiVersion: infra.k8smgmt.io/v3
+kind: Cluster
+metadata:
+  name: ${cluster_name}
+  project: ${project_name}
+spec:
+  blueprint:
+    name: default
+    version: latest
+  cloudCredentials: ${cloud_credentials}
+  config:
+    controlPlane:
+      diskGiB: 25
+      machineCount: 1
+      memoryMiB: 8192
+      numCPUs: 2
+      version: ${k8s_version}
+    controlPlaneEndpointIP: ${control_plane_ip}
+    datacenter: ${vsphere_datacenter}
+    datastore: ${vsphere_datastore}
+    network:
+      cni:
+        name: calico
+        version: v3.24.5
+      devices:
+      - networkName: ${vsphere_network}
+      podCidrBlocks:
+      - 192.168.0.0/16
+    nodePools:
+    - diskGiB: 25
+      machineCount: 1
+      memoryMiB: 8192
+      name: default-nodepool
+      numCPUs: 2
+      os: linux
+      version: ${k8s_version}
+      vmTemplate: ${vm_template}
+    resourcePool: ${vsphere_resource_pool}
+    vmTemplate: ${vm_template}
+  type: Vmware_vsphere

@@ -1,0 +1,12 @@
+ingress:
+  enabled: true
+  hostname: ${hostname}
+  path: / 
+service:
+  type: ClusterIP
+wordpressUsername: admin
+wordpressPassword: ${secret}
+mariadb:
+  auth:
+    rootPassword: ${secret}
+    password: ${secret}
