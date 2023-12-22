@@ -82,11 +82,11 @@ provider kubernetes {
     token                  = data.aws_eks_cluster_auth.ephemeral.token
 }
 
-resource "kubernetes_namespace" "aidemo" {
-  metadata {
-    name = var.namespace
-  }
-}
+#resource "kubernetes_namespace" "aidemo" {
+#  metadata {
+#    name = var.namespace
+#  }
+#}
 
 resource "kubernetes_service_account" "bedrock" {
   metadata {
@@ -96,7 +96,7 @@ resource "kubernetes_service_account" "bedrock" {
         "eks.amazonaws.com/role-arn" : aws_iam_role.this.arn
     }
   }
-  depends_on = ["kubernetes_namespace.aidemo"]
+ # depends_on = ["kubernetes_namespace.aidemo"]
 }
 
 
