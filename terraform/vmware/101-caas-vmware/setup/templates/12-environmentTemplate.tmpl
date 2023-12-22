@@ -23,7 +23,7 @@ spec:
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
-  - kind: resourcetemplate
+    kind: resourcetemplate
     name: {{ $glbCtx.GatewayResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
       version: {{ $glbCtx.version }}
