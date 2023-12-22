@@ -4,9 +4,9 @@ This repository serves as a **reference design and implementation** for creating
 
 ## Configuration
 
-In this step, you will set up a values file that will be used by a configuration script.
+In this step, you will set up a values file located inside the `setup` folder. Follow the steps below:
 
-1. Open the `values.yaml` file:
+1. Open the `setup/values.yaml` file:
 
 ```yaml
 project: UPDATE_EXISTING_PROJECT_NAME
@@ -16,8 +16,8 @@ endPoint: UPDATE_REPO_ENDPOINT
 branch: UPDATE_REPO_BRANCH
 ```
 
-1. Replace the placeholder values (UPDATE_EXISTING_PROJECT_NAME, UPDATE_REPO_USERNAME, UPDATE_REPO_TOKEN, UPDATE_REPO_ENDPOINT, UPDATE_REPO_BRANCH) with your specific configuration.
-2. Save the file.
+2. Replace the placeholder values (UPDATE_EXISTING_PROJECT_NAME, UPDATE_REPO_USERNAME, UPDATE_REPO_TOKEN, UPDATE_REPO_ENDPOINT, UPDATE_REPO_BRANCH) with your specific configuration.
+3. Save the file.
 
 
 This values file will be utilized by the configuration script during the setup process. Feel free to adjust any other settings as needed to match your requirements.
