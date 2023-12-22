@@ -24,7 +24,9 @@ spec:
     options:
       description: Qdrant Helm chart version
       override:
-        type: notallowed
+        restrictedValues:
+        - 0.6.1
+        type: restricted
     value: 0.6.1
     valueType: text
   - name: namespace
