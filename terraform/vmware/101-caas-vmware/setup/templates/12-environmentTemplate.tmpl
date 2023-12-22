@@ -5,8 +5,8 @@ metadata:
   name: {{ $glbCtx.EnvironmentTemplate }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
 spec:
- agents:
- - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
   hooks: {}
   resources:
   - kind: resourcetemplate
@@ -50,12 +50,12 @@ spec:
     resourceOptions:
       version: {{ $glbCtx.version }}
     type: dynamic
- variables:
- - name: control_plane_ip
-   options:
-     description : "10.109.10.1 to 10.109.10.254"
-     override:
-       type: allowed
-   value: 10.109.10.213
-   valueType: text
- version: {{ $glbCtx.version }}
+  variables:
+  - name: control_plane_ip
+    options:
+      description : "10.109.10.1 to 10.109.10.254"
+      override:
+        type: allowed
+    value: 10.109.10.213
+    valueType: text
+  version: {{ $glbCtx.version }}
