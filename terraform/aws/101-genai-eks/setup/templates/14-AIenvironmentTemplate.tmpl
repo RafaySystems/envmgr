@@ -10,12 +10,14 @@ spec:
     name: {{ $glbCtx.GenAIResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
       version: {{ $glbCtx.version }}
-    type: dynamic
-  - kind: resourcetemplate
+    type: dynamic	
+  - dependsOn:
+    - name: {{ $glbCtx.GenAIResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
     name: {{ $glbCtx.RagBedrockResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
       version: {{ $glbCtx.version }}
-    type: dynamic
+    type: dynamic	
   - dependsOn:
     - name: {{ $glbCtx.RagBedrockResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
