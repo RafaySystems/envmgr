@@ -1,0 +1,65 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.RagAppResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.AWSConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathApp }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: backend-image
+    options:
+      description: Image used for backend container
+      override:
+        type: allowed
+    value: registry.dev.rafay-edge.net/rafay/rag-backend
+    valueType: text
+  - name: backend-image-tag
+    options:
+      description: Image tag used for backend container
+      override:
+        type: allowed
+    value: v29
+    valueType: text	
+  - name: frontend-image
+    options:
+      description: Image used for frontend container
+      override:
+        type: allowed
+    value: registry.dev.rafay-edge.net/rafay/rag-frontend
+    valueType: text	
+  - name: frontend-image-tag
+    options:
+      description: Image tag used for frontend container
+      override:
+        type: allowed
+    value: v30
+    valueType: text	
+  - name: namespace
+    options:
+      description: Name of the namespace
+      override:
+        type: notallowed
+    value: $(environment.name)$
+    valueType: expression	
+  - name: service-account-name
+    options:
+      description: Name of the service account
+      override:
+        type: notallowed
+    value: $(environment.name)$
+    valueType: expression		
+  version: {{ $glbCtx.version }}

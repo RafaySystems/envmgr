@@ -5,7 +5,7 @@ variable "email_tag" {
 
 variable "aws_cloud_provider_name" {
   description = "cloud credentials name"
-  default = "aws-cloud-creds-1"
+  default = "aws-cloud-creds"
 }
 
 variable "aws_cloud_provider_access_key" {
@@ -22,17 +22,14 @@ variable "aws_cloud_provider_secret_key" {
 
 variable "eks_cluster_name" {
   description = "name of the eks cluster"
-  default = "eks-cluster-1"
 }
 
 variable "eks_cluster_project" {
   description = "name of the project"
-  default = "testproject"
 }
 
 variable "eks_cluster_region" {
   description = "eks cluster region"
-  default = "us-west-2"
 }
 
 
