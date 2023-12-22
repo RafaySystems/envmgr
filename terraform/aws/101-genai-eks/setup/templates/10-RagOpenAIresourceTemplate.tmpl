@@ -2,7 +2,8 @@
 apiVersion: eaas.envmgmt.io/v1
 kind: ResourceTemplate
 metadata:
-RagOpenAIResourceTemplate  project: {{ $glbCtx.projectName }}
+  name: {{ $glbCtx.RagOpenAIResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
 spec:
   agents:
   - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
