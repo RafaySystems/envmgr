@@ -21,3 +21,14 @@ branch: UPDATE_REPO_BRANCH
 
 
 This values file will be utilized by the configuration script during the setup process. Feel free to adjust any other settings as needed to match your requirements.
+
+
+## Assumptions
+
+1. **Access to VMware vSphere Infrastructure:** Ensure that you have access to the VMware vSphere Infrastructure.
+
+2. **Linux Machine for Rafay GitOps Docker Agent:** Access to any Linux machine within VMware vSphere Infrastructure is required to install the Rafay GitOps Docker agent. This agent facilitates connectivity to the vCenter API, enabling the successful execution of Terraform code.
+
+3. **Git Client Installation:** A Git client must be installed on the machine and configured for push/pull operations.
+
+4. **Docker Installation:** Docker needs to be installed on the machine to support the required functionalities.
