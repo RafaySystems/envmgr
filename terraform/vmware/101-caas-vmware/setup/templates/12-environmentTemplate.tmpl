@@ -48,7 +48,7 @@ spec:
     kind: resourcetemplate
     name: {{ $glbCtx.WordPressWorkloadResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
-      version: v7
+      version: {{ $glbCtx.version }}
     type: dynamic
  variables:
  - name: control_plane_ip
