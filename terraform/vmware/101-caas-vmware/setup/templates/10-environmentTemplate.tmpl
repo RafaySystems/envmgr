@@ -10,6 +10,20 @@ spec:
   hooks: {}
   resources:
   - kind: resourcetemplate
+    name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.GroupAssociationResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
+  - kind: resourcetemplate
     name: {{ $glbCtx.GatewayResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
       version: {{ $glbCtx.version }}
@@ -42,6 +56,6 @@ spec:
      description :  "10.109.10.1 to 10.109.10.254"
      override:
        type: allowed
-   value: YOUR_CONTROL_PLANE_IP
+   value: 10.109.10.213
    valueType: text
  version: {{ $glbCtx.version }}
