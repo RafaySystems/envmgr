@@ -19,4 +19,12 @@ spec:
     branch: {{ $glbCtx.branch }}
     directoryPath: {{ $glbCtx.tfRepoPathGenAI }}
     name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: namespace
+    options:
+      description: Name of the namespace
+      override:
+        type: notallowed
+    value: $(environment.name)$
+    valueType: expression
   version: {{ $glbCtx.version }}
