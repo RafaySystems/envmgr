@@ -31,7 +31,7 @@ VMwarevSphereResourceTemplate: rafay-vmware-vsphere-rs-tmpl
 WordPressWorkloadResourceTemplate: rafay-wordpress-ts-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
-EnvironmentTemplate: caas-mks-pnap-env-tmpl
+EnvironmentTemplate: caas-vmware-env-tmpl
 ## Terraform code path 
 ProjecttfRepoPath: terraform/vmware/101-caas-vmware/terraform/project
 GroupAssociationtfRepoPath: terraform/vmware/101-caas-vmware/terraform/group
