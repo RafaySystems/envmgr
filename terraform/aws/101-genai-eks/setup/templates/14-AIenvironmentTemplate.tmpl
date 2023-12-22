@@ -47,9 +47,9 @@ spec:
   - name: cluster_name
     options:
       override:
+        restrictedValues:
+        - {{ $glbCtx.EKSClusterName }}
         type: restricted
-		restrictedValues: 
-		- {{ $glbCtx.EKSClusterName }}
     value: {{ $glbCtx.EKSClusterName }}
     valueType: text
   version: {{ $glbCtx.version }}
