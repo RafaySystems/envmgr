@@ -33,4 +33,4 @@ This values file will be utilized by the configuration script during the setup p
 
 4. **Docker Installation:** Docker needs to be installed on the machine to support the required functionalities.
 
-For a more detailed, step-by-step guide, refer to the (Rafay Documentation)[https://docs.rafay.co/refarch/caas/vmware/101-caas-vmware/overview/]
+For a more detailed, step-by-step guide, refer to the [Rafay Documentation](https://docs.rafay.co/refarch/caas/vmware/101-caas-vmware/overview/)
