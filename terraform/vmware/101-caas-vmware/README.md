@@ -32,3 +32,5 @@ This values file will be utilized by the configuration script during the setup p
 3. **Git Client Installation:** A Git client must be installed on the machine and configured for push/pull operations.
 
 4. **Docker Installation:** Docker needs to be installed on the machine to support the required functionalities.
+
+For a more detailed, step-by-step guide, refer to the (Rafay Documentation)[https://docs.rafay.co/refarch/caas/vmware/101-caas-vmware/overview/]
