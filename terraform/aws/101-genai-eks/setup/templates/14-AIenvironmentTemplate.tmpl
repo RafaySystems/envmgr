@@ -54,12 +54,4 @@ spec:
         type: restricted
     value: {{ $glbCtx.EKSClusterName }}
     valueType: text
-  - name: namespace
-    options:
-      override:
-        restrictedValues:
-        - $(resource."{{ $glbCtx.GenAIResourceTemplate }}-{{ $glbCtx.projectName }}".output.vpc_id.value)$
-        type: restricted
-    value: $(resource."{{ $glbCtx.GenAIResourceTemplate }}-{{ $glbCtx.projectName }}".output.vpc_id.value)$
-    valueType: expression
   version: {{ $glbCtx.version }}
