@@ -7,7 +7,8 @@ resource "random_id" "rnd" {
 
 locals {
   # Create a unique namspace name
-  namespace = "${element(split("@",var.username),0)}-${random_id.rnd.dec}"
+  #namespace = "${element(split("@",var.username),0)}-${random_id.rnd.dec}"
+  namespace = var.namespace
 }
 
 resource "rafay_namespace" "namespace" {
