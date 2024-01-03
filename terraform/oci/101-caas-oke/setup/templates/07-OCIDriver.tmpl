@@ -8,8 +8,8 @@ spec:
   config:
     container:
       envVars:
-        BOOTSTRAP_ENV: sealed://driverconfig.container.envs.BOOTSTRAP_ENV
-        KUBECONFIG_ENV: sealed://driverconfig.container.envs.KUBECONFIG_ENV
+        BOOTSTRAP_ENV: $(resource."{{ $glbCtx.ImportResourceTemplate }}-{{ $glbCtx.projectName }}".output.bootstrap.value)$
+        KUBECONFIG_ENV: $(resource."{{ $glbCtx.OCIOKEResourceTemplate }}-{{ $glbCtx.projectName }}".output.kubeconfig.value)$
       image: registry.dev.rafay-edge.net/oci-cli:0.16
       volumes:
       - mountPath: /root/oke/import
