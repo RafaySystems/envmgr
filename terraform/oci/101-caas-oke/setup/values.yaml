@@ -24,7 +24,7 @@ OCIEnvVarsConfigContext: oci-env-vars
 RafayConfigContext: rafay
 ## https://docs.rafay.dev/env_manager/overview/
 ## Environment Manager Driver Name
-OCIDriver: oci
+OCIDriver: oci-driver
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
 ProjectResourceTemplate: rafay-project
