@@ -1,0 +1,63 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.OCIOKEResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.OCIConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathOCIOKE }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: cluster_name
+    options:
+      description: Cluster Name
+      override:
+        type: allowed
+      required: true
+    value: $(environment.name)$
+    valueType: expression
+  - name: vcn_name
+    options:
+      description: OCI VCN Name
+      override:
+        type: allowed
+      required: true
+    value: $(environment.name)$
+    valueType: expression
+  - name: compartment_id
+    options:
+      description: OCI compartment id
+      override:
+        type: allowed
+      required: true
+    value: ocid1.compartment.oc1..aaaaaaaaep5q2m2ikqcorcw6mo4eo773m3ipywt7xz2mbrlwxymkfbgfqf7a
+    valueType: text
+  - name: image
+    options:
+      description: OKE Node Pool Image
+      override:
+        type: allowed
+      required: true
+    value: ocid1.image.oc1.phx.aaaaaaaaiswndv3bu7sfbcuppneh74kanizrjf6le4nt47c4qnkhrqz2xrga
+    valueType: text
+  - name: k8s_version
+    options:
+      description: OKE K8S Version
+      override:
+        type: allowed
+      required: true
+    value: v1.27.2
+    valueType: text
+  version: {{ $glbCtx.version }}
