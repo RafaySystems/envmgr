@@ -12,7 +12,7 @@ spec:
       version: {{ $glbCtx.version }}
     type: dynamic
   - dependsOn:
-    - name: rafay-project
+    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.GroupResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
