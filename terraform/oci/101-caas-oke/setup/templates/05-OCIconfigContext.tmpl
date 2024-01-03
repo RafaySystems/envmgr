@@ -3,7 +3,7 @@ apiVersion: eaas.envmgmt.io/v1
 Config context:
 kind: ConfigContext
 metadata:
-  name: {{ $glbCtx.AWSConfigContext }}-{{ $glbCtx.projectName }}
+  name: {{ $glbCtx.OCIConfigContext }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
 spec:
   envs:
