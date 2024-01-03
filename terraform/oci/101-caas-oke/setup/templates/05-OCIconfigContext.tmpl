@@ -7,24 +7,24 @@ metadata:
   project: {{ $glbCtx.projectName }}
 spec:
   envs:
-  - key: AWS_ACCESS_KEY_ID
+  - key: TF_VAR_tenancy_ocid
     sensitive: true
     value: UPDATE_VALUE
-  - key: AWS_SECRET_ACCESS_KEY
+  - key: TF_VAR_user_ocid
     sensitive: true
     value: UPDATE_VALUE
-  variables:
-  - name: aws_cloud_provider_access_key
-    options:
-      override:
-        type: allowed
-      sensitive: true
+  - key: TF_VAR_fingerprint
+    sensitive: true
     value: UPDATE_VALUE
-    valueType: text
-  - name: aws_cloud_provider_secret_key
-    options:
-      override:
-        type: allowed
-      sensitive: true
-    value: UPDATE_VALUE
-    valueType: text
+  - key: TF_VAR_private_key_path
+    value: oci-key
+  files:
+  - data: c2VhbGVkOi8vZmlsZXMuMA==
+    name: oci-key
+    sensitive: true
+  - data: c2VhbGVkOi8vZmlsZXMuMQ==
+    name: ssh-key.pub
+    sensitive: true
+  - data: c2VhbGVkOi8vZmlsZXMuMg==
+    name: ssh-key
+    sensitive: true
