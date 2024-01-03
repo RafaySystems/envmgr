@@ -1,0 +1,16 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: Driver
+metadata:
+  name: {{ $glbCtx.OCIDriver }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  config:
+    container:
+      envVars:
+        BOOTSTRAP_ENV: sealed://driverconfig.container.envs.BOOTSTRAP_ENV
+        KUBECONFIG_ENV: sealed://driverconfig.container.envs.KUBECONFIG_ENV
+      image: registry.dev.rafay-edge.net/oci-cli:0.16
+      volumes:
+      - mountPath: /root/oke/import
+    type: container
