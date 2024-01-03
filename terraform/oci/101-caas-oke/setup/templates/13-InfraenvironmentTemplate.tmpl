@@ -9,26 +9,26 @@ spec:
   - kind: resourcetemplate
     name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
-      version: v0
+      version: {{ $glbCtx.version }}
     type: dynamic
   - dependsOn:
     - name: rafay-project
     kind: resourcetemplate
     name: {{ $glbCtx.GroupResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
-      version: v0
+      version: {{ $glbCtx.version }}
     type: dynamic
   - kind: resourcetemplate
     name: {{ $glbCtx.OCIOKEResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
-      version: v1
+      version: {{ $glbCtx.version }}
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.ImportResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
-      version: v0
+      version: {{ $glbCtx.version }}
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.OCIOKEResourceTemplate }}-{{ $glbCtx.projectName }}
@@ -36,6 +36,6 @@ spec:
     kind: resourcetemplate
     name: {{ $glbCtx.PauseResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
-      version: v1
+      version: {{ $glbCtx.version }}
     type: dynamic
   version: {{ $glbCtx.version }}
