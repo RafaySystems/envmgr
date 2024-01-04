@@ -41,5 +41,5 @@ tfRepoPathOCIOKE: terraform/oci/101-caas-oke/terraform/vcn-oke
 tfRepoPathImport: terraform/oci/101-caas-oke/terraform/rafay-import
 tfRepoPathPause: terraform/oci/101-caas-oke/terraform/pause
 ## Other Variables
-ociRegion: us-phoenix-1
+ociRegion: UPDATE_OCI_REGION
 
