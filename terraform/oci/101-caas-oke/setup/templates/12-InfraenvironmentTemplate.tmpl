@@ -1,0 +1,41 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  name: {{ $glbCtx.EnvironmentTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  resources:
+  - kind: resourcetemplate
+    name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.GroupResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - kind: resourcetemplate
+    name: {{ $glbCtx.OCIOKEResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.ImportResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.OCIOKEResourceTemplate }}-{{ $glbCtx.projectName }}
+    - name: {{ $glbCtx.ImportResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.PauseResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  version: {{ $glbCtx.version }}

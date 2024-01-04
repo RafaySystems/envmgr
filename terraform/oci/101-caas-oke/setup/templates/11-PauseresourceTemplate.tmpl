@@ -1,0 +1,41 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.PauseResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.OCIConfigContext }}-{{ $glbCtx.projectName }}
+  hooks:
+    provider:
+      terraform:
+        deploy:
+          apply: {}
+          init: {}
+          output:
+            after:
+            - driver:
+                name: {{ $glbCtx.OCIDriver }}
+              name: kubectl-hook
+              onFailure: unspecified
+              options: {}
+              type: driver
+          plan: {}
+        destroy:
+          destroy: {}
+          init: {}
+          plan: {}  
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathPause }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  version: {{ $glbCtx.version }}

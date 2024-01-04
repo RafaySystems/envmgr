@@ -1,0 +1,14 @@
+{{ $glbCtx := . }}
+apiVersion: integrations.k8smgmt.io/v3
+kind: Repository
+metadata:
+  name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  credentials:
+    username: {{ $glbCtx.usernName }}
+    password: {{ $glbCtx.token }}
+  endpoint: {{ $glbCtx.endPoint }}
+  type: Git
