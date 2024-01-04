@@ -10,10 +10,19 @@ spec:
   - key: TF_VAR_tenancy_ocid
     sensitive: true
     value: UPDATE_VALUE
+  - key: OCI_CLI_TENANCY
+    sensitive: true
+    value: UPDATE_VALUE
   - key: TF_VAR_user_ocid
     sensitive: true
     value: UPDATE_VALUE
+  - key: OCI_CLI_USER
+    sensitive: true
+    value: UPDATE_VALUE
   - key: TF_VAR_fingerprint
+    sensitive: true
+    value: UPDATE_VALUE
+  - key: OCI_CLI_FINGERPRINT
     sensitive: true
     value: UPDATE_VALUE
   - key: TF_VAR_private_key_path
@@ -22,15 +31,6 @@ spec:
     value: oci-key
   - key: OCI_CLI_REGION
     value: us-phoenix-1
-  - key: OCI_CLI_USER
-    sensitive: true
-    value: UPDATE_VALUE
-  - key: OCI_CLI_TENANCY
-    sensitive: true
-    value: UPDATE_VALUE
-  - key: OCI_CLI_FINGERPRINT
-    sensitive: true
-    value: UPDATE_VALUE
   files:
   - data: c2VhbGVkOi8vZmlsZXMuMA==
     name: oci-key
