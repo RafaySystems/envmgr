@@ -8,7 +8,7 @@ spec:
   agents:
   - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
   contexts:
-  - name: {{ $glbCtx.OCIEnvVarsConfigContext }}-{{ $glbCtx.projectName }}
+  - name: {{ $glbCtx.OCIConfigContext }}-{{ $glbCtx.projectName }}
   hooks:
     provider:
       terraform:

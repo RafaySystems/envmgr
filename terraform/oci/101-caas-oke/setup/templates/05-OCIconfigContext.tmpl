@@ -18,13 +18,20 @@ spec:
     value: UPDATE_VALUE
   - key: TF_VAR_private_key_path
     value: oci-key
+  - key: OCI_CLI_KEY_FILE
+    value: oci-key
+  - key: OCI_CLI_REGION
+    value: us-phoenix-1
+  - key: OCI_CLI_USER
+    sensitive: true
+    value: UPDATE_VALUE
+  - key: OCI_CLI_TENANCY
+    sensitive: true
+    value: UPDATE_VALUE
+  - key: OCI_CLI_FINGERPRINT
+    sensitive: true
+    value: UPDATE_VALUE
   files:
   - data: c2VhbGVkOi8vZmlsZXMuMA==
     name: oci-key
-    sensitive: true
-  - data: c2VhbGVkOi8vZmlsZXMuMQ==
-    name: ssh-key.pub
-    sensitive: true
-  - data: c2VhbGVkOi8vZmlsZXMuMg==
-    name: ssh-key
     sensitive: true

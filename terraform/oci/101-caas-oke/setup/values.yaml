@@ -20,7 +20,6 @@ version: v1
 ## Environment Manager congifContext Name
 ## https://docs.rafay.dev/env_manager/templates/contexts/
 OCIConfigContext: oci
-OCIEnvVarsConfigContext: oci-env-vars
 RafayConfigContext: rafay
 ## https://docs.rafay.dev/env_manager/overview/
 ## Environment Manager Driver Name
