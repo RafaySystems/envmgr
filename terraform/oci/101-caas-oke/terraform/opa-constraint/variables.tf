@@ -38,3 +38,4 @@ variable "opa-repo" {
 variable "opa-branch" {
   type = string
   default = "main"
+}
