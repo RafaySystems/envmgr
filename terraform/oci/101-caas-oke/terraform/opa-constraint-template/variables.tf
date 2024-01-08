@@ -33,6 +33,7 @@ variable "constraint_templates" {
 
 variable "opa-repo" {
   type = string
+  default = "https://github.com/RafaySystems/getstarted.git"
 }
 
 variable "opa-branch" {
