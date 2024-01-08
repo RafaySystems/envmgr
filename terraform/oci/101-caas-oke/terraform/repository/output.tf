@@ -1,3 +1,3 @@
-output "group" {
-  value = resource.rafay_repositories.opa_repository.name
+output "repository" {
+  value = resource.rafay_repositories.opa_repository.metadata.name
 }
