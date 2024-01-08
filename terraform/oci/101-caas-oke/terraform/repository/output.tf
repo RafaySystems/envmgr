@@ -1,3 +1,3 @@
 output "repository" {
-  value = resource.rafay_repositories.opa_repository.metadata.name
+  value = resource.rafay_repositories.opa_repository.metadata[0]
 }
