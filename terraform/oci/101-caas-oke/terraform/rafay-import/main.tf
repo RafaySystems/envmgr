@@ -29,7 +29,7 @@ resource "rafay_import_cluster" "import_cluster" {
   depends_on = [rafay_blueprint.custom-blueprint]
   clustername           = var.cluster_name
   projectname           = var.projectname
-  blueprint             = rafay_blueprint.custom-blueprint.name
+  blueprint             = rafay_blueprint.custom-blueprint.metadata[0].name
   location              = var.location
   kubernetes_provider   = "OTHER"
   provision_environment = "ONPREM"
