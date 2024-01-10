@@ -2,11 +2,6 @@ variable "cluster_name" {
   type = string
 }
 
-variable "blueprint" {
-  type    = string
-  default = "minimal"
-}
-
 variable "location" {
   type    = string
   default = "sanjose-us"
@@ -14,4 +9,24 @@ variable "location" {
 
 variable "projectname" {
   type = string
+}
+
+variable "ingress" {
+  type    = string
+  default = "true"
+}
+
+variable "logging" {
+  type    = string
+  default = "true"
+}
+
+variable "monitoring" {
+  type    = string
+  default = "false"
+}
+
+variable "drift" {
+  type    = string
+  default = "true"
 }
