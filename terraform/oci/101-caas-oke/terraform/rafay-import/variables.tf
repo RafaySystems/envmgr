@@ -23,7 +23,7 @@ variable "logging" {
 
 variable "monitoring" {
   type    = string
-  default = "true"
+  default = "false"
 }
 
 variable "drift" {
