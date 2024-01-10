@@ -17,12 +17,12 @@ variable "constraint_templates" {
   "se-linux-custom",
   "seccomp-custom",
   "volume-types-custom",
-  "disallowed-tags-custom"
-  #"replica-limits-custom",
-  #"required-annotations-custom",
-  #"required-labels-custom",
-  #"required-probes-custom",
-  #"allowed-repos-custom",
+  "disallowed-tags-custom",
+  "replica-limits-custom",
+  "required-annotations-custom",
+  "required-labels-custom",
+  "required-probes-custom",
+  "allowed-repos-custom"
   #"block-nodeport-services-custom",
   #"https-only-custom",
   #"image-digests-custom",

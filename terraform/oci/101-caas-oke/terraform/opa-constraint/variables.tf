@@ -23,8 +23,8 @@ variable "constraint_templates" {
   "required-labels-custom",
   "required-probes-custom",
   "allowed-repos-custom",
-  "block-nodeport-services-custom",
-  "https-only-custom"
+  "block-nodeport-services-custom"
+  #"https-only-custom",
   #"image-digests-custom",
   #"container-limits-custom",
   #"container-resource-ratios-custom"
