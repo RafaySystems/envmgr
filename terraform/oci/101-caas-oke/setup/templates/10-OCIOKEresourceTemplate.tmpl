@@ -43,7 +43,7 @@ spec:
                   successCondition: 'if #status.container.exitCode == 0 { success:
                     true } if #status.container.exitCode != 0 { failed: true } reason:
                     #status.container.stdout'
-                  workingDirPath: ' /infracost/'
+                  workingDirPath: '/infracost/'
               type: container
         destroy:
           destroy: {}
