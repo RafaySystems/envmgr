@@ -19,6 +19,36 @@ spec:
     branch: {{ $glbCtx.branch }}
     directoryPath: {{ $glbCtx.tfRepoPathOCIOKE }}
     name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  hooks:
+    provider:
+      terraform:
+        deploy:
+          apply: {}
+          init: {}
+          output: {}
+          plan:
+            before:
+            - agents:
+              - name: eaas-demo-agent
+              name: Infracost
+              onFailure: unspecified
+              options:
+                container:
+                  cpuLimitMilli: "100"
+                  envvars:
+                    DOWNLOAD_TOKEN: $(resource."{{ $glbCtx.OCIOKEResourceTemplate }}-{{ $glbCtx.projectName }}".artifact.workdir.token)$
+                    DOWNLOAD_URL: $(resource."{{ $glbCtx.OCIOKEResourceTemplate }}-{{ $glbCtx.projectName }}".artifact.workdir.url)$
+                  image: eaasunittest/infracost:v2
+                  memoryLimitMB: "500"
+                  successCondition: 'if #status.container.exitCode == 0 { success:
+                    true } if #status.container.exitCode != 0 { failed: true } reason:
+                    #status.container.stdout'
+                  workingDirPath: ' /infracost/'
+              type: container
+        destroy:
+          destroy: {}
+          init: {}
+          plan: {}	
   variables:
   - name: cluster_name
     options:

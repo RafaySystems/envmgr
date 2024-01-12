@@ -1,0 +1,13 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+Config context:
+kind: ConfigContext
+metadata:
+  name: {{ $glbCtx.InfraCostConfigContext }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  envs:
+  - key: INFRACOST_API_KEY
+    sensitive: true
+    value: UPDATE_VALUE
+ 
