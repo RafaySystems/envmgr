@@ -29,7 +29,7 @@ spec:
           plan:
             before:
             - agents:
-              - name: eaas-demo-agent
+              - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
               name: Infracost
               onFailure: unspecified
               options:

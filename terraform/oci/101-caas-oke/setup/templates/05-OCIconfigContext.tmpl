@@ -30,7 +30,7 @@ spec:
   - key: OCI_CLI_KEY_FILE
     value: oci-key
   - key: OCI_CLI_REGION
-    value: us-phoenix-1
+    value: {{ $glbCtx.ociRegion }}  
   files:
   - data: c2VhbGVkOi8vZmlsZXMuMA==
     name: oci-key
