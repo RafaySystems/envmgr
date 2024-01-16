@@ -20,26 +20,12 @@ spec:
     directoryPath: {{ $glbCtx.WorkloadtfRepoPath }}
     name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
   variables:
-  - name: ns_name
-    options:
-      override:
-        type: allowed
-      required: true
-    value: {{ $glbCtx.projectName }}
-    valueType: text
-  - name: workload_name
-    options:
-      override:
-        type: allowed
-      required: true
-    value: wordpress-wk
-    valueType: text
   - name: project
     options:
       override:
         type: allowed
       required: true
-    value: {{ $glbCtx.projectName }}
+    value: $(environment.project.name)$
     valueType: text
   - name: cluster_name
     options:

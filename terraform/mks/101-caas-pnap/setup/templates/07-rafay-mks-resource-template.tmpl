@@ -32,7 +32,7 @@ spec:
       override:
         type: allowed
       required: true
-    value: {{ $glbCtx.projectName }}
+    value: $(environment.project.name)$
     valueType: text
   - name: rafay_location
     options:
