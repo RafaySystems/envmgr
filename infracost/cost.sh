@@ -4,4 +4,4 @@ unzstd ./job.tar.zst
 mkdir terraform
 tar -xf job.tar -C ./terraform
 ls -al ./terraform
-infracost breakdown --path ./terraform
+infracost breakdown --path ./terraform/$REPO_PATH
