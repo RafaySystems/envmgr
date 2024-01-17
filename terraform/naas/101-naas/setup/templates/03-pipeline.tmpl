@@ -1,0 +1,43 @@
+{{ $glbCtx := . }}
+apiVersion: gitops.k8smgmt.io/v3
+kind: Pipeline
+metadata:
+  name: system-sync-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  active: true
+  stages:
+  - config:
+      destinationRepo:
+        path:
+          name: {{ $glbCtx.path }}
+        repository: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+        revision: {{ $glbCtx.branch }}
+      gitToSystemSync: true
+      includedResources:
+      - name: Environment
+      - name: EnvironmentTemplate
+      - name: ConfigContext
+      - name: Agent
+      - name: Repository
+      - name: Resource
+      - name: ResourceTemplate
+      - name: Pipeline
+      sourceRepo:
+        path:
+          name: {{ $glbCtx.path }}
+        repository: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+        revision: {{ $glbCtx.branch }}
+      systemToGitSync: true
+    name: sync
+    type: SystemSync
+  triggers:
+  - config:
+      repo:
+        provider: Github
+        repository: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+        revision: {{ $glbCtx.branch }}
+        paths:
+        - name: {{ $glbCtx.path }}
+    name: eaas-trigger
+    type: Webhook

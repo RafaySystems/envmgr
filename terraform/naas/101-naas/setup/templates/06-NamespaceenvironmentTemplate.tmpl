@@ -1,0 +1,27 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  name: {{ $glbCtx.NamespaceEnvironmentTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  resources:
+  - kind: resourcetemplate
+    name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  variables:
+  - name: project
+    options:
+      override:
+        type: allowed
+    value: {{ $glbCtx.projectName }}
+    valueType: text
+  - name: cluster_name
+    options:
+      override:
+        type: allowed
+    value: {{ $glbCtx.ClusterName }}
+    valueType: text
+  version: {{ $glbCtx.version }}
