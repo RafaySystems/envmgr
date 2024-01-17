@@ -49,8 +49,8 @@ resource "null_resource" "delete_vsphere_cluster" {
     interpreter = ["/bin/bash", "-c"]
     command     = "chmod +x cluster-delete.sh && ./cluster-delete.sh"
      environment = {
-      CLUSTER_NAME = "${self.triggers.name}"
-      PROJECT_NAME = var.project_name
+      CLUSTER_NAME = "${self.triggers.clustername}"
+      PROJECT_NAME = "${self.triggers.projectname}"
     }
     }
   }
