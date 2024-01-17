@@ -15,7 +15,7 @@ fi
 tar -xvf $RCTL_FILE
 
 # Run the delete command
-delete_output=$(./rctl delete cluster $CLUSTER_NAME -y || true)
+delete_output=$(./rctl delete cluster $CLUSTER_NAME -p $PROJECT_NAME -y || true)
 
 # Check if the delete command ran successfully
 if [ $? -eq 0 ]; then
@@ -24,7 +24,7 @@ if [ $? -eq 0 ]; then
     # Infinite loop to check the status
     while true; do
         # Run the get command and parse the output
-        response=$(./rctl get cluster $CLUSTER_NAME -o json 2>&1)
+        response=$(./rctl get cluster $CLUSTER_NAME -p $PROJECT_NAME -o json 2>&1)
 
         if [[ "$response" == *Error:* ]]; then
             echo "Cluster Deletion Done"
