@@ -7,7 +7,7 @@ start_time=$(date +%s)
 
 # Function to check gateway health
 check_health() {
-    healthStatus=$(./rctl get gateway $GATEWAY_NAME --health | ./jq -r '.status')
+    healthStatus=$(./rctl get gateway $GATEWAY_NAME --health -p $PROJECT_NAME | ./jq -r '.status')
     if [ "$healthStatus" == "HEALTHY" ]; then
         echo "[+] Gateway is healthy."
         exit 0
