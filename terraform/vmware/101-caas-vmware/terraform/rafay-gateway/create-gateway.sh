@@ -13,19 +13,19 @@ fi
 tar -xvf $RCTL_FILE
 
 # Check if the gateway already exists
-existing_gateway=$(./rctl get gateway $GATEWAY_NAME -o json 2>/dev/null)
+existing_gateway=$(./rctl get gateway $GATEWAY_NAME -p $PROJECT_NAME -o json 2>/dev/null)
 
 if [[ $(echo $existing_gateway | ./jq -r '.metadata.name') == "$GATEWAY_NAME" ]]; then
     echo "[+] Gateway $GATEWAY_NAME already exists. Writing to output.json."
 else
     # Run the create gateway command
-    ./rctl create gateway $GATEWAY_NAME --gatewaytype vmware
+    ./rctl create gateway $GATEWAY_NAME --gatewaytype vmware -p $PROJECT_NAME 
     sleep 10
     echo "[+] Creating new gateway $GATEWAY_NAME."
 fi
 
 # Run the get gateway command and store the response in a variable
-existing_gateway=$(./rctl get gateway $GATEWAY_NAME --configdetails 2>/dev/null)
+existing_gateway=$(./rctl get gateway $GATEWAY_NAME --configdetails -p $PROJECT_NAME  2>/dev/null)
 
 # Extract information from the response and store in variables
 bootstrapRepoUrl=$(echo $existing_gateway | ./jq -r '.bootstrapRepoUrl')
