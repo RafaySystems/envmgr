@@ -6,6 +6,7 @@ resource "null_resource" "run_script" {
     command = "chmod +x create-gateway.sh && ./create-gateway.sh"
     environment = {
       GATEWAY_NAME = var.gateway_name
+      PROJECT_NAME = var.project_name
     }
   }
 }
@@ -101,6 +102,7 @@ resource "null_resource" "health_script" {
     command = "chmod +x monitor_gateway_health.sh && ./monitor_gateway_health.sh"
     environment = {
       GATEWAY_NAME = var.gateway_name
+      PROJECT_NAME = var.project_name
     }
   }
 }
@@ -116,6 +118,7 @@ resource "null_resource" "delete_vsphere_gatway" {
     command     = "chmod +x delete-gateway.sh && ./delete-gateway.sh"
      environment = {
       GATEWAY_NAME = "${self.triggers.name}"
+      PROJECT_NAME = var.project_name
     }
     }
   }
