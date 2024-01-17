@@ -1,0 +1,21 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+Config context:
+kind: ConfigContext
+metadata:
+  name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  envs:
+  - key: RCTL_API_KEY
+    sensitive: true
+    value: UPDATE_VALUE
+  - key: RCTL_API_SECRET
+    sensitive: true
+    value: UPDATE_VALUE
+  - key: RCTL_REST_ENDPOINT
+    sensitive: false
+    value: UPDATE_VALUE
+  - key: RCTL_PROJECT
+    sensitive: false
+    value: {{ $glbCtx.projectName }}
