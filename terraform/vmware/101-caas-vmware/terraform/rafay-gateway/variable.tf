@@ -43,6 +43,10 @@ variable "vsphere_network" {
   type = string
 }
 
+variable "project_name" {
+  type = string
+}
+
 variable "rafay_controller_endpoint" {
   type = string
 }
