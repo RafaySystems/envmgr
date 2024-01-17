@@ -12,7 +12,7 @@ then
 fi
 tar -xvf $RCTL_FILE
 
-./rctl delete gateway $GATEWAY_NAME -y
+./rctl delete gateway $GATEWAY_NAME  -p $PROJECT_NAME -y
 if [ $? -eq 0 ]; then
     echo "Successfully deleted $GATEWAY_NAME"
     exit 0
