@@ -33,13 +33,15 @@ resource "null_resource" "vmware_cluster" {
     command     = "chmod +x cluster-provision.sh && ./cluster-provision.sh"
     environment = {
       filename = local_file.rafay_vmware_cluter_spec.filename
+      PROJECT_NAME = var.project_name
     }
   }
 }
 
 resource "null_resource" "delete_vsphere_cluster" {
   triggers = {
-    name    = var.cluster_name
+    clustername    = var.cluster_name
+    projectname    = var.project_name
   }
 
   provisioner "local-exec" {
@@ -48,6 +50,7 @@ resource "null_resource" "delete_vsphere_cluster" {
     command     = "chmod +x cluster-delete.sh && ./cluster-delete.sh"
      environment = {
       CLUSTER_NAME = "${self.triggers.name}"
+      PROJECT_NAME = var.project_name
     }
     }
   }
