@@ -109,7 +109,9 @@ resource "null_resource" "health_script" {
 
 resource "null_resource" "delete_vsphere_gatway" {
   triggers = {
-    name    = var.gateway_name
+    gwname    = var.gateway_name
+    projectname = var.project_name
+    
   }
 
   provisioner "local-exec" {
@@ -117,8 +119,8 @@ resource "null_resource" "delete_vsphere_gatway" {
     interpreter = ["/bin/bash", "-c"]
     command     = "chmod +x delete-gateway.sh && ./delete-gateway.sh"
      environment = {
-      GATEWAY_NAME = "${self.triggers.name}"
-      PROJECT_NAME = var.project_name
+      GATEWAY_NAME = "${self.triggers.gwname}"
+      PROJECT_NAME = "${self.triggers.projectname}"
     }
     }
   }
