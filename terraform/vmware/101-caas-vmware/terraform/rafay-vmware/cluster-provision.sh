@@ -28,7 +28,7 @@ echo "Cluster name: $cluster_name"
 # Cluster status tracking
 
 while true; do
-    response=$(./rctl get clusters $cluster_name -p PROJECT_NAME -o json)
+    response=$(./rctl get clusters $cluster_name -p $PROJECT_NAME -o json)
 
     conditions=("ClusterInitialized" "ClusterBootstrapNodeInitialized" "ClusterProviderInfraInitialized" "ClusterSpecApplied" "ClusterControlPlaneReady" "ClusterCNISpecApplied" "ClusterOperatorSpecApplied" "ClusterHealthy" "ClusterPivoted" "ClusterBootstrapNodeDeleted")
 
