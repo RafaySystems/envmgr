@@ -4,7 +4,6 @@ resource "rafay_namespace" "namespace" {
     project     = var.project
     labels      = var.labels
     annotations = var.annotations
-    description = var.description
   }
   spec {
     drift {

@@ -2,10 +2,6 @@ variable "project" {
   type = string
 }
 
-variable "description" {
-  type = string
-}
-
 variable "cluster_name" {
   type = string
 }
