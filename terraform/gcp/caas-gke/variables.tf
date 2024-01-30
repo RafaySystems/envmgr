@@ -1,0 +1,100 @@
+variable "node_pools" {
+  description = "Node pool configuration"
+  type = map(object({
+    name          = string
+    node_count     = number
+    version = string
+    node_locations    = list(string)
+    machine_type = string
+    image_type   = string
+    disk_size    = optional(number)
+    disk_type    = optional(string)
+    labels = optional(map(string))
+    tags = optional(list(string))
+    taints = optional(object({
+        key = string
+        value = string
+        effect = string
+       }))
+    guest_accelerator    = optional(object({
+      	gpu_type   = string
+      	gpu_count       = number
+    	}))
+     reservation_affinity    = optional(object({
+      consume_reservation_type   = string
+      key       = string
+      values    = list(string)
+    }))
+  }))
+}
+
+variable master_ipv4_cidr_block {
+  type = string
+  description = "CIDR block to use for k8s master"
+  default = "172.16.0.0/28"
+}
+
+variable google_project {
+  type = string
+  description = "Google project ID"
+}
+
+variable location {
+  type = string
+  description = "Name of the location where GKE cluster will be created"
+  default = "us-central1-a"
+}
+
+variable network {
+  type = string
+  description = "Name of the network where GKE cluster will be created"
+  default = "default"
+}
+
+variable subnetwork {
+  type = string
+  description = "Name of the subnetwork where GKE cluster will be created"
+  default = "default"
+}
+
+variable k8s_version {
+  type = string
+  description = "Kubernetes Version"
+  default = "1.27.3"
+}
+
+variable node_locations {
+  type = list(string)
+  description = "List of the node locations where GKE cluster will be created"
+  default = ["us-central1-a"]
+}
+
+variable release_channel {
+  type = string
+  description = "Kubernetes Release channel"
+  default = "STABLE"
+}
+
+variable "master_authorized_networks" {
+  type        = list(object({ cidr_block = string, display_name = string }))
+  description = "List of master authorized networks. If none are provided, disallow external access (except the cluster node IPs, which GKE automatically whitelists)."
+  default     = []
+}
+
+
+variable "enable_private_endpoint" {
+  type = bool
+  description = "Use Internal IP for the cluster endpoint"
+  default     = false
+}
+
+variable "ip_allocation_policy" {
+  type        = object({ cluster_secondary_range_name = optional(string), services_secondary_range_name = optional(string) })
+  description = "Name of the secondary address range to use for Pods and Services"
+  default = {}
+}
+
+variable "cluster_name" {}
+variable "project_name" {}
+variable "blueprint" {}
+variable "blueprint_version" {}
