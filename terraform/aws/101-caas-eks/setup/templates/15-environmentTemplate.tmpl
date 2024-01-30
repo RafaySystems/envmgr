@@ -24,7 +24,6 @@ spec:
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.GroupResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.GroupAssociationResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
@@ -40,21 +39,12 @@ spec:
   - dependsOn:
     - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
-    name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
-    resourceOptions:
-      version: {{ $glbCtx.version }}
-    type: dynamic
-  - dependsOn:
-    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
-    kind: resourcetemplate
     name: {{ $glbCtx.EKSCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
       version: {{ $glbCtx.version }}
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.RepositoryResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.AddonResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
@@ -62,8 +52,6 @@ spec:
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.AddonResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.ProjectResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.BlueprintResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
@@ -71,8 +59,6 @@ spec:
     type: dynamic
   - dependsOn:
     - name: {{ $glbCtx.BlueprintResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.AddonResourceTemplate }}-{{ $glbCtx.projectName }}
-    - name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
     - name: {{ $glbCtx.EKSCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}
     kind: resourcetemplate
     name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
