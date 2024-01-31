@@ -14,3 +14,14 @@ variable "username" {
   type    = string
 }
 
+variable "cpu" {
+  description = "Namespace CPU requests"
+  type    = string
+  default = "2000m"
+}
+
+variable "memory" {
+  description = "Namespace memory requests"
+  type    = string
+  default = "2048Mi"
+}
