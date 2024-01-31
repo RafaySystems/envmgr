@@ -27,7 +27,6 @@ resource "rafay_namespace" "namespace" {
     }
     resource_quotas {
 		config_maps = "10"
-		memory_limits = "4096Mi"
 		cpu_requests = var.cpu
 		memory_requests = var.memory
 		persistent_volume_claims = "2"
