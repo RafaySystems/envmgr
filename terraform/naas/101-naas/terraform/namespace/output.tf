@@ -1,6 +1,6 @@
 
 
-output "namepsace" {
+output "namespace" {
   value =local.namespace
 }
 
