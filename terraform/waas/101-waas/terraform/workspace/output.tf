@@ -1,6 +1,6 @@
 
 
-output "namepsace" {
+output "workspace" {
   value =local.workspace
 }
 
