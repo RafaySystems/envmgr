@@ -1,6 +1,6 @@
 resource "random_id" "rnd" {
   keepers = {
-    first = "${timestamp()}"
+    first = var.cluster_name
   }
   byte_length = 4
 }
