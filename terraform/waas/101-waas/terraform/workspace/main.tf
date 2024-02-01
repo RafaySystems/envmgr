@@ -1,6 +1,6 @@
 resource "random_id" "rnd" {
   keepers = {
-    first = "${timestamp()}"
+    first = var.cluster_name
   }
   byte_length = 4
 }
@@ -17,10 +17,8 @@ resource "rafay_project" "workspace_project" {
   spec {
     default = false
     cluster_resource_quota {
-      cpu_requests = "4000m"
-      memory_requests = "4096Mi"
-      cpu_limits = "8000m"
-      memory_limits = "8192Mi"
+      cpu_requests = var.cpu
+      memory_requests = var.memory
       config_maps = "10"
       persistent_volume_claims = "5"
       services = "20"    
@@ -33,8 +31,6 @@ resource "rafay_project" "workspace_project" {
     default_cluster_namespace_quota {
       cpu_requests = "1000m"
       memory_requests = "1024Mi"
-      cpu_limits = "2000m"
-      memory_limits = "2048Mi"
       config_maps = "5"
       persistent_volume_claims = "2"
       services = "10"
