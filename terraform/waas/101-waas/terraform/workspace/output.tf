@@ -1,6 +1,6 @@
 
 
-output "project/workspace name" {
+output "project_workspace_name" {
   value =local.workspace
 }
 
