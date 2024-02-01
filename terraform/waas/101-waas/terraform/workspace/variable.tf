@@ -12,3 +12,14 @@ variable "username" {
   type    = string
 }
 
+variable "cpu" {
+  description = "Workspace CPU requests"
+  type    = string
+  default = "2000m"
+}
+
+variable "memory" {
+  description = "Workspace memory requests"
+  type    = string
+  default = "2048Mi"
+}
