@@ -4,7 +4,39 @@ kind: EnvironmentTemplate
 metadata:
   name: {{ $glbCtx.WorkspaceEnvironmentTemplate }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
+  annotations:
+    eaas.envmgmt.io/category: Developer Productivity
+    eaas.envmgmt.io/github: https://github.com/RafaySystems/envmgr/tree/main/terraform/waas/101-waas
+  description: 'Self Service for requesting a new Workspace on a shared, multi-tenant
+    Kubernetes Cluster. '
+  displayName: Workspace as a Service
 spec:
+  iconURL: https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/2109px-Kubernetes_logo_without_workmark.svg.png
+  readme: "## Introduction\n\nDevelopers and data scientists can use this template
+    to request for the creation and access to a new \nWorkspace on a shared, multi-tenant
+    Kubernetes cluster. A workspace allows the user to create and manage \nmultiple
+    namespaces on a Kubernetes cluster without requiring administrative privileges
+    on the cluster. \n\nLearn more about [Workspaces](https://docs.rafay.co/security/tenancy/workspace/).\n\n---\n\n##
+    What does this do behind the scenes? \n\nThis template will perform the following
+    in a sequence: \n\n1. Create a new Rafay [Project](https://docs.rafay.co/security/tenancy/projects/)
+    with a randomly generated name \n2. Configure the project with specified resource
+    quotas \n3. Create a new group for role based access with **[Workspace Admin](https://docs.rafay.co/security/rbac/roles/)**
+    privileges to this newly created project \n4. Add the requesting user's credentials
+    to the new group \n\n---\n\n## Defaults and Overrides \nUnless specified, the
+    new **project** will be created with the default settings for resource quotas
+    for CPU \nand memory. Users have the option to override the default resource quotas
+    with alternative options. See the \ninput variables section below for complete
+    details. \n\n---\n\n## Instructions\n\nOnce your environment is successfully created,
+    please logout and login to establish a new session with your \nnew role. You will
+    now have administrative privileges in the new workspace to create, read, \nupdate
+    and delete Kubernetes resources. You can also perform the following as part of
+    your application \ndevelopment activities. \n\n- Click on your newly created project
+    \n- Create namespaces in your project \n- Deploy workloads to your namespaces
+    from the pre-configured application catalog, uploading the YAML or Helm manifests\nor
+    from your Git repository\n- Use the integrated Kubernetes dashboard to view the
+    status and details of resources in your namespaces\n- Securely access resources
+    in your namespaces via the web based Kubectl shell\n- Download a kubeconfig file
+    to securely access resources in your namespace using your favorite IDE "
   resources:
   - kind: resourcetemplate
     name: {{ $glbCtx.WorkspaceResourceTemplate }}-{{ $glbCtx.projectName }}
