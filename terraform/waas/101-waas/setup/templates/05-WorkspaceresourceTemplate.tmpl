@@ -20,10 +20,30 @@ spec:
     directoryPath: {{ $glbCtx.tfRepoPathWorkspace }}
     name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
   variables:
-  - name: username
+  - name: memory
     options:
+      description: Assign the amount of memory for the workspace memory request in
+        mebibytes (Mi)
       override:
-        type: allowed
-    value: $(trigger.payload.username)$
-    valueType: expression
+        restrictedValues:
+        - 2048Mi
+        - 4096Mi
+        - 8192Mi
+        type: restricted
+      required: true
+    value: 2048Mi
+    valueType: text
+  - name: cpu
+    options:
+      description: Assign the amount of CPU for the workspace CPU request in milliCPU
+        (m)
+      override:
+        restrictedValues:
+        - 2000m
+        - 4000m
+        - 8000m
+        type: restricted
+      required: true
+    value: 2000m
+    valueType: text
   version: {{ $glbCtx.version }}
