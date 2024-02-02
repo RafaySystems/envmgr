@@ -4,7 +4,37 @@ kind: EnvironmentTemplate
 metadata:
   name: {{ $glbCtx.NamespaceEnvironmentTemplate }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
+  annotations:
+    eaas.envmgmt.io/category: Developer Productivity
+    eaas.envmgmt.io/github: https://github.com/RafaySystems/envmgr/tree/main/terraform/naas/101-naas
+  description: 'Self Service for requesting a new Namespace on a shared, multi-tenant
+    Kubernetes Cluster. '
+  displayName: Namespace as a Service
 spec:
+  iconURL: https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/2109px-Kubernetes_logo_without_workmark.svg.png
+  readme: "Developers and data scientists can request for the creation and access
+    to a new Namespace on a shared, multi-tenant \nKubernetes cluster. \n\n---\n\n##
+    What does this do behind the scenes? \nThis template will perform the following
+    activities: \n\n1. Create a new Kubernetes namespace with a randomly generated
+    name in the designated cluster in the Rafay \nproject where this template is launched
+    \n2. Ensure the namespace is configured with a default set of resource quotas
+    \n3. Create a new group for RBAC with Namespace Admin privileges to this newly
+    created namespace \n4. Add the requesting user's credentials to the new group
+    \n\n---\n\n## Defaults and Overrides \nThe new namespace will be created with
+    a default setting for resource quotas for CPU and memory. You will\nalso have
+    the option to override the default resource quotas with alternative options. See
+    the input variables\nsection below for complete details. \n\n---\n\n## Instructions\n\nOnce
+    your environment is successfully created, please logout and login to establish
+    a new session with your \nnew role. You will now have administrative privileges
+    in the new Kubernetes namespace to create, read, \nupdate and delete Kubernetes
+    resources. You can also perform the following as part of your application \ndevelopment
+    activities. \n\n- Deploy workloads to your namespace from the pre-configured application
+    catalog\n- Deploy workloads by uploading the YAML or Helm manifests \n- Deploy
+    workloads from the pre-configured Git repository\n- Use the integrated Kubernetes
+    dashboard to view the status and details of resources in your namespace \n- Securely
+    access resources in your namespace via the web based Kubectl shell\n- Download
+    a kubeconfig file to securely access resources in your namespace using your favorite
+    IDE "
   resources:
   - kind: resourcetemplate
     name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
