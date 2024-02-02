@@ -19,4 +19,31 @@ spec:
     branch: {{ $glbCtx.branch }}
     directoryPath: {{ $glbCtx.tfRepoPathNamespace }}
     name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: memory
+    options:
+      description: Assign the amount of memory for the namespace memory request in
+        mebibytes (Mi)
+      override:
+        restrictedValues:
+        - 1024Mi
+        - 2048Mi
+        - 4096Mi
+        type: restricted
+      required: true
+    value: 1024Mi
+    valueType: text
+  - name: cpu
+    options:
+      description: Assign the amount of CPU for the namespace CPU request in milliCPU
+        (m)
+      override:
+        restrictedValues:
+        - 1000m
+        - 2000m
+        - 4000m
+        type: restricted
+      required: true
+    value: 1000m
+    valueType: text
   version: {{ $glbCtx.version }}
