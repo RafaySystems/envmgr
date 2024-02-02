@@ -29,6 +29,8 @@ resource "rafay_namespace" "namespace" {
 		config_maps = "10"
 		cpu_requests = var.cpu
 		memory_requests = var.memory
+                cpu_limits = "4000m"
+                memory_limits = "4096Mi"
 		persistent_volume_claims = "2"
 		pods = "30"
 		replication_controllers = "5"
