@@ -54,4 +54,10 @@ spec:
         type: allowed
     value: {{ $glbCtx.ClusterName }}
     valueType: text
+  - name: username
+    options:
+      override:
+        type: notallowed
+    value: $(trigger.payload.username)$
+    valueType: expression
   version: {{ $glbCtx.version }}
