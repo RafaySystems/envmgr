@@ -122,5 +122,9 @@ resource "rafay_blueprint" "blueprint" {
     sharing {
       enabled = false
     }
+    namespace_config {
+      sync_type = "managed"
+      enable_sync = true
+    }
   }
  }
