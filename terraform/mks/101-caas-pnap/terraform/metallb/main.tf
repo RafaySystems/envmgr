@@ -95,6 +95,7 @@ resource "rafay_addon" "metallb-config" {
 }
 
 resource "rafay_blueprint" "blueprint" {
+  depends_on = [rafay_addon.metallb-config, rafay_addon.metallb]
   metadata {
     name    = "metallb"
     project = var.project
