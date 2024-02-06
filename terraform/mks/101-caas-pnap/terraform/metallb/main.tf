@@ -123,6 +123,7 @@ resource "rafay_blueprint" "blueprint" {
       enabled = false
     }
     namespace_config {
+      sync_type = "managed"
       enable_sync = true
     }
   }
