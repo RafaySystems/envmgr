@@ -125,3 +125,4 @@ resource "rafay_blueprint" "blueprint" {
       enable_sync = true
     }
   }
+ }
