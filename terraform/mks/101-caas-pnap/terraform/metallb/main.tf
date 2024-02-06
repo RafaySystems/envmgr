@@ -114,10 +114,12 @@ resource "rafay_blueprint" "blueprint" {
       name = "metallb-config"
       version = "v1"
     }
-    }
     drift {
       action  = "Deny"
       enabled = true
+    }
+    sharing {
+      enabled = false
     }
     namespace_config {
       enable_sync = true
