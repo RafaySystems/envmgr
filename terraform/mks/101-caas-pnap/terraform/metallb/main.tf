@@ -20,7 +20,7 @@ resource "rafay_catalog" "metallb_custom_catalog" {
   }
   spec {
     auto_sync  = true
-    repository = metallb_repository.name
+    repository = rafay_repositories.metallb_repository.name
     type       = "HelmRepository"
   }
 }
