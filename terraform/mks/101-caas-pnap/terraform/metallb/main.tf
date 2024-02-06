@@ -110,11 +110,6 @@ resource "rafay_blueprint" "blueprint" {
       name = "metallb"
       version = "v1"
     }
-    custom_addons {
-      depends_on = ["metallb"]
-      name = "metallb-config"
-      version = "v1"
-    }
     drift {
       action  = "Deny"
       enabled = true
