@@ -53,9 +53,6 @@ resource "rafay_addon" "metallb" {
   spec {
     namespace = "metallb-system"
 	version = "v1"
-    placement {
-      selector = "rafay.dev/clusterName=${var.cluster_name}"
-    }
     artifact {
       type = "Helm"
       artifact {
