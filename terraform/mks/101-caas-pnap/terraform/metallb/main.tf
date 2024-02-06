@@ -94,3 +94,36 @@ resource "rafay_addon" "metallb-config" {
   }
 }
 
+resource "rafay_blueprint" "blueprint" {
+  depends_on = [rafay_addon.metallb-config, rafay_addon.metallb]
+  metadata {
+    name    = "metallb"
+    project = var.project
+  }
+  spec {
+    version = "v1"
+    base {
+      name    = "default"
+      version = "latest"
+    }
+    custom_addons {
+      name = "metallb"
+      version = "v1"
+    }
+    custom_addons {
+      depends_on = ["metallb"]
+      name = "metallb-config"
+      version = "v1"
+    }
+    drift {
+      action  = "Deny"
+      enabled = true
+    }
+    sharing {
+      enabled = false
+    }
+    namespace_config {
+      enable_sync = true
+    }
+  }
+ }
