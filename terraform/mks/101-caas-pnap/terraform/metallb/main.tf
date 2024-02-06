@@ -83,9 +83,6 @@ resource "rafay_addon" "metallb-config" {
   spec {
     namespace = "metallb-system"
 	version = "v1"
-    placement {
-      selector = "rafay.dev/clusterName=${var.cluster_name}"
-    }
     artifact {
       type = "Yaml"
       artifact {
@@ -121,9 +118,6 @@ resource "rafay_blueprint" "blueprint" {
     drift {
       action  = "Deny"
       enabled = true
-    }
-    sharing {
-      enabled = false
     }
     namespace_config {
       enable_sync = true
