@@ -36,11 +36,4 @@ spec:
       required: true
     value: $(environment.project.name)$
     valueType: expression
-  - name: cluster_name
-    options:
-      override:
-        type: notallowed
-      required: true
-    value: $(resource."{{ $glbCtx.MKSResourceTemplate }}-{{ $glbCtx.projectName }}".output.cluster_name.value)$
-    valueType: expression
   version: {{ $glbCtx.version }}
