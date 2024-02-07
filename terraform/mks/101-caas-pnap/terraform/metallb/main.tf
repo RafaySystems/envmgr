@@ -35,12 +35,6 @@ resource "rafay_namespace" "metallb_namespace" {
     drift {
       enabled = true
     }
-    placement {
-      labels {
-        key   = "rafay.dev/clusterName"
-        value = var.cluster_name
-      }
-    }
   }
 }
 

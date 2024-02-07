@@ -24,26 +24,15 @@ PhoenixNAPConfigContext: phoenixnap
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
 PNAPResourceTemplate: phoenixnap-rs-tmpl
+MetallbResourceTemplate: metallb-rs-tmpl
 MKSResourceTemplate: rafay-mks-pnap-rs-tmpl
 WorkloadResourceTemplate: rafay-workload-rs-tmpl
 ProjectResourceTemplate: rafay-project-rs-tmpl
-GroupResourceTemplate: rafay-group-rs-tmpl
-GroupAssociationResourceTemplate: rafay-group-association-rs-tmpl
-RepositoryResourceTemplate: rafay-repository-rs-tmpl
-NamespaceResourceTemplate: rafay-namespace-rs-tmpl
-AddonResourceTemplate: rafay-addon-rs-tmpl
-BlueprintResourceTemplate: rafay-blueprint-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 EnvironmentTemplate: caas-mks-pnap-env-tmpl
 ## Terraform code path 
 PNAPtfRepoPath: terraform/mks/101-caas-pnap/terraform/phoenixnap
+MetallbtfRepoPath: terraform/mks/101-caas-pnap/terraform/metallb
 MKStfRepoPath: terraform/mks/101-caas-pnap/terraform/mks
 WorkloadtfRepoPath: terraform/mks/101-caas-pnap/terraform/workload
-ProjecttfRepoPath: terraform/mks/101-caas-pnap/terraform/project
-GrouptfRepoPath: terraform/mks/101-caas-pnap/terraform/group
-GroupAssociationtfRepoPath: terraform/mks/101-caas-pnap/terraform/group-association
-RepositorytfRepoPath: terraform/mks/101-caas-pnap/terraform/repositories
-NamespacetfRepoPath: terraform/mks/101-caas-pnap/terraform/namespace
-AddontfRepoPath: terraform/mks/101-caas-pnap/terraform/addon
-BlueprinttfRepoPath: terraform/mks/101-caas-pnap/terraform/blueprints

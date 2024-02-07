@@ -5,12 +5,10 @@ variable "ns_name" {
 
 variable "project" {
   type    = string
-  default = "eaas"
 }
 
 variable "cluster_name" {
   type    = string
-  default = "demo-cluster"
 }
 
 variable "workload_name" {

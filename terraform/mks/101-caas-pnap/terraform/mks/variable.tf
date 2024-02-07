@@ -18,6 +18,10 @@ variable "project_name" {
   type = string
 }
 
+variable "blueprint_name" {
+  type = string
+}
+
 variable "rafay_location" {
   type = string
 }
