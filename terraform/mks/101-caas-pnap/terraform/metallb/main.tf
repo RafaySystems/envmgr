@@ -104,10 +104,15 @@ resource "rafay_blueprint" "blueprint" {
     version = "v1"
     base {
       name    = "default"
-      version = "latest"
+      version = "2.3.0"
     }
     custom_addons {
       name = "metallb"
+      version = "v1"
+    }
+    custom_addons {
+      depends_on = ["metallb"]
+      name = "metallb-config"
       version = "v1"
     }
     drift {
