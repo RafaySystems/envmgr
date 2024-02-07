@@ -13,7 +13,7 @@ spec:
   providerOptions:
     terraform:
       refresh: true
-      useSystemStateStore: true
+      backendType: system
       version: 1.4.6
   repositoryOptions:
     branch: {{ $glbCtx.branch }}
