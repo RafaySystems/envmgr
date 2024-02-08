@@ -2,13 +2,48 @@
 apiVersion: eaas.envmgmt.io/v1
 kind: EnvironmentTemplate
 metadata:
-  description: Allowed k8s_version changes
+  annotations:
+    eaas.envmgmt.io/category: Developer Productivity
+    eaas.envmgmt.io/github: https://github.com/RafaySystems/envmgr/tree/main/terraform/mks/101-caas-pnap
+  description: Developer Self Service for requesting a new Kubernetes cluster running on phoenixNAP.
+  displayName: Cluster as a Service on phoenixNAP
   name: {{ $glbCtx.EnvironmentTemplate }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
 spec:
   agents:
   - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
   hooks: {}
+  iconURL: https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/2109px-Kubernetes_logo_without_workmark.svg.png
+  readme: "Developers and data scientists can request for the creation and access
+    to a new Kubernetes cluster running on phoenixNAP. \n\n---\n\n## What does this
+    do behind the scenes? \nThis template will perform the following activities: \n\n1.
+    Create a new Kubernetes cluster with a randomly generated name in the Rafay project
+    where this template is launched \n2. Create a custom cluster blueprint with a
+    custom metallb addon for load balancing\n3. Create a sample nginx workload that
+    will utilize the metallb load balancer\n3. Create a new group for RBAC with Cluster
+    Admin privileges to this newly created cluster \n4. Add the requesting user's
+    credentials to the new group \n\n---\n\n\n## Instructions\n\nOnce your environment
+    is successfully created, please logout and login to establish a new session with
+    your \nnew role. You will now have administrative privileges in the new Kubernetes
+    cluster to create, read, \nupdate and delete Kubernetes resources. You can also
+    perform the following as part of your application \ndevelopment activities. \n\n###
+    Deploying Applications \n\nYou can deploy and operate containerized applications
+    using any of the following approaches: \n\n1. From the pre-configured [application
+    catalog](https://docs.rafay.co/catalog/catalog_overview/)\n2. Using kubectl or
+    helm CLI by downloading the [zero trust kubeconfig](https://docs.rafay.co/accessproxy/kubectl_cli/)\n3.
+    [Rafay workloads](https://docs.rafay.co/workloads/workload_types/) using YAML/Helm
+    charts by uploading them or directly from a Git repository  \n4. [Rafay workloads](https://docs.rafay.co/workloads/workload_types/)
+    pointing to a Git repository \n\n\n### Debugging & Troubleshooting \n\nYou can
+    debug and troubleshoot applications in your **namespace** using the following
+    approaches: \n\n1. Use the integrated [Kubernetes dashboard](https://docs.rafay.co/dashboard/my_clusters/)
+    to view the status and details of resources in your namespace \n2. Securely access
+    resources in your namespace via the [web based Kubectl shell](https://docs.rafay.co/accessproxy/browser_kubectl/)\n3.
+    Download a [kubeconfig file](https://docs.rafay.co/accessproxy/kubectl_cli/) to
+    securely access resources in your namespace using your favorite IDE \n\n--- \n\n##
+    Useful Tutorials\n\nHere are a few useful tutorials that will help you familiarize
+    with the various features that will help application\ndevelopers use their new
+    cluster effectively. \n\n- [App Deployments using Rafay Workloads](https://docs.rafay.co/learn/quickstart/applications/workloads/overview/)\n-
+    [Troubleshooting](https://docs.rafay.co/learn/quickstart/troubleshooting/workloads/overview/)\n"
   resources:
   - kind: resourcetemplate
     name: {{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}
