@@ -5,8 +5,7 @@ variable "cluster_name" {
 
 variable "type" {
   type = string
-  #default = "s1.c1.small"
-  default = "s2.c1.medium"
+  default = "s2.c1.large"
 }
 
 variable "location" {

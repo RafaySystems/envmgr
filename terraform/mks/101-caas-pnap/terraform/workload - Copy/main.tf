@@ -5,6 +5,21 @@ resource "random_id" "rnd" {
   byte_length = 4
 }
 
+resource "random_password" "password" {
+  length  = 8
+  special = false
+}
+
+resource "local_sensitive_file" "workload_values" {
+  depends_on = [random_id.rnd, random_password.password]
+  content = templatefile("${path.module}/templates/values.tftpl", {
+    hostname = var.hostname
+    secret   = random_password.password.result
+  })
+  filename        = "values.yaml"
+  file_permission = "0666"
+}
+
 resource "rafay_namespace" "namespace" {
   metadata {
     name    = var.ns_name
@@ -36,11 +51,13 @@ resource "rafay_workload" "workload" {
     }
     version = "v-${random_id.rnd.hex}"
     artifact {
-      type = "Yaml"
+      type = "Helm"
       artifact {
-        paths {
-          name = "file://config.yaml"
+        values_paths {
+          name = "file://values.yaml"
         }
+        catalog    = "default-bitnami"
+        chart_name = "wordpress"
       }
     }
   }
