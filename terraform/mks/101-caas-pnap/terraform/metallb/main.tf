@@ -67,27 +67,6 @@ resource "local_file" "metallb_values" {
   file_permission = "0666"
 }
 
-
-
-resource "local_file" "rafay_mks_cluter_spec" {
-  depends_on = [random_id.rnd]
-  content = templatefile("${path.module}/templates/rafay-mks.tftpl", {
-    cluster_name   = "${local.uniquename}-cluster"
-    private_ip     = var.private_ip
-    public_ip      = var.public_ip
-    hostname       = var.hostname
-    server_count   = var.server_count
-    project_name   = var.project_name
-    k8s_version    = var.k8s_version
-	blueprint_name = var.blueprint_name
-    rafay_location = "${lookup(var.location_mapping, var.rafay_location)}"
-  })
-  filename        = "${local.uniquename}-${random_id.rnd.hex}-rafay-spec.yaml"
-  file_permission = "0644"
-}
-
-
-
 resource "rafay_addon" "metallb-config" {
   depends_on = [local_file.metallb_values]
   metadata {
