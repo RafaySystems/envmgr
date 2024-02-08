@@ -39,7 +39,7 @@ resource "rafay_workload" "workload" {
       type = "Yaml"
       artifact {
         paths {
-          name = "file://config.yaml"
+          name = "file://workload.yaml"
         }
       }
     }

@@ -6,6 +6,3 @@ output "workload" {
   value = rafay_workload.workload.id
 }
 
-output "ingress_hostname" {
-  value = var.hostname
-}

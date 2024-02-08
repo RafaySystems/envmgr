@@ -15,8 +15,3 @@ variable "workload_name" {
   type    = string
   default = "wk1"
 }
-
-variable "hostname" {
-  type    = string
-  default = "wordpress.demo.gorafay.net"
-}
