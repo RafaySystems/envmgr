@@ -1,0 +1,13 @@
+##
+service:
+  type: LoadBalancer
+  annotations:
+    metallb.universe.tf/address-pool: first-pool
+persistence:
+  storageClass: openebs-hostpath
+wordpressUsername: admin
+wordpressPassword: ${secret}
+mariadb:
+  auth:
+    rootPassword: ${secret}
+    password: ${secret}

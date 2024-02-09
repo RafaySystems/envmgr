@@ -1,6 +1,6 @@
 variable "ns_name" {
   type    = string
-  default = "eaas"
+  default = "wordpress"
 }
 
 variable "project" {
@@ -13,5 +13,5 @@ variable "cluster_name" {
 
 variable "workload_name" {
   type    = string
-  default = "wk1"
+  default = "wordpress"
 }
