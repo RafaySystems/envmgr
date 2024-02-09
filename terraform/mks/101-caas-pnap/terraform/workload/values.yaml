@@ -11,3 +11,6 @@ mariadb:
   auth:
     rootPassword: ${secret}
     password: ${secret}
+  primary:
+    persistence:
+      storageClass: openebs-hostpath
