@@ -6,7 +6,7 @@ resource "pnap_ip_block" "ip-block" {
 
 # Create a public network
 resource "pnap_public_network" "Public-Network" {
-  name     = "rafayPublicNetwork-demo-1"
+  name     = "${var.cluster_name}-${count.index}"
   location = var.location
   ip_blocks {
     public_network_ip_block {
