@@ -6,7 +6,7 @@ resource "pnap_ip_block" "ip-block" {
 
 # Create a public network
 resource "pnap_public_network" "Public-Network" {
-  name     = "${var.cluster_name}-${count.index}"
+  name     = "${var.cluster_name}-${var.total_instances}"
   location = var.location
   ip_blocks {
     public_network_ip_block {
@@ -17,7 +17,7 @@ resource "pnap_public_network" "Public-Network" {
 
 resource "pnap_server" "rafay_server" {
   count                    = var.total_instances
-  hostname                 = "${var.cluster_name}-${count.index}"
+  hostname                 = "${var.cluster_name}-${var.total_instances"
   os                       = var.os
   type                     = var.type
   location                 = var.location
