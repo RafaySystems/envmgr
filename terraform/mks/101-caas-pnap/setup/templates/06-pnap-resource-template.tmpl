@@ -14,6 +14,8 @@ spec:
   providerOptions:
     terraform:
       backendType: system
+      refresh: true
+      useSystemStateStore: true
       version: 1.4.6
   repositoryOptions:
     branch: {{ $glbCtx.branch }}
@@ -24,17 +26,17 @@ spec:
     options:
       description: Hostname of the server
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.name)$
-    valueType: text
+    valueType: expression
   - name: type
     options:
       description: Server type
       override:
         type: allowed
       required: true
-    value: s2.c1.medium
+    value: s2.c1.large
     valueType: text
   - name: os
     options:

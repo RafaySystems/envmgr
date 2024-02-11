@@ -14,6 +14,8 @@ spec:
   providerOptions:
     terraform:
       backendType: system
+      refresh: true
+      useSystemStateStore: true
       version: 1.4.6
   repositoryOptions:
     branch: {{ $glbCtx.branch }}
@@ -23,14 +25,14 @@ spec:
   - name: project
     options:
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.project.name)$
-    valueType: text
+    valueType: expression
   - name: cluster_name
     options:
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(resource."{{ $glbCtx.MKSResourceTemplate }}-{{ $glbCtx.projectName }}".output.cluster_name.value)$
     valueType: expression

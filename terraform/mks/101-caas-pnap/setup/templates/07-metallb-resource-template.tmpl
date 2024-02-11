@@ -1,0 +1,39 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  description: Updated variables
+  name: {{ $glbCtx.MetallbResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      useSystemStateStore: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.MetallbtfRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: iprange
+    options:
+      override:
+        type: notallowed
+      required: true
+    value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.pnap_server_pubic_ip.value)$
+    valueType: expression
+  - name: project_name
+    options:
+      override:
+        type: notallowed
+      required: true
+    value: $(environment.project.name)$
+    valueType: expression
+  version: {{ $glbCtx.version }}

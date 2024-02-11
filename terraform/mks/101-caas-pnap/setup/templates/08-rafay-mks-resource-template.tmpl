@@ -14,6 +14,8 @@ spec:
   providerOptions:
     terraform:
       backendType: system
+      refresh: true
+      useSystemStateStore: true
       version: 1.4.6
   repositoryOptions:
     branch: {{ $glbCtx.branch }}
@@ -23,42 +25,42 @@ spec:
   - name: public_ip
     options:
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.pnap_server_pubic_ip.value)$
     valueType: expression
   - name: project_name
     options:
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.project.name)$
-    valueType: text
+    valueType: expression
   - name: rafay_location
     options:
       override:
-        type: allowed
+        type: notallowed
       required: true
     value:  $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.pnap_server_location.value[0])$
     valueType: expression
   - name: private_ip
     options:
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.pnap_server_private_ip.value)$
     valueType: expression
   - name: hostname
     options:
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.pnap_server_hostname.value)$
     valueType: expression
   - name: server_count
     options:
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.total_instances.value)$
     valueType: expression
@@ -68,5 +70,12 @@ spec:
       override:
         type: allowed
     value: 1.27.5
+    valueType: text
+  - name: blueprint_name
+    options:
+      description: name of blueprint for the cluster
+      override:
+        type: allowed
+    value: metallb
     valueType: text
   version: {{ $glbCtx.version }}
