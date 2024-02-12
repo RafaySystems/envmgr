@@ -27,7 +27,7 @@ spec:
       override:
         type: notallowed
       required: true
-    value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.pnap_server_pubic_ip.value)$
+    value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.pnap_server_public_ip.value)$
     valueType: expression
   - name: project_name
     options:

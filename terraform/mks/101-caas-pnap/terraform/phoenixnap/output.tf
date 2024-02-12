@@ -10,7 +10,7 @@ output "pnap_server_private_ip" {
   value = flatten(pnap_server.rafay_server[*].private_ip_addresses)
 }
 
-output "pnap_server_pubic_ip" {
+output "pnap_server_public_ip" {
   value = flatten(pnap_server.rafay_server[*].public_ip_addresses)
 }
 

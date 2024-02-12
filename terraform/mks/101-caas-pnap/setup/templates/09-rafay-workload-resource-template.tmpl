@@ -36,4 +36,11 @@ spec:
       required: true
     value: $(resource."{{ $glbCtx.MKSResourceTemplate }}-{{ $glbCtx.projectName }}".output.cluster_name.value)$
     valueType: expression
+  - name: public_ip
+    options:
+      override:
+        type: notallowed
+      required: true
+    value: $(resource."{{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}".output.pnap_server_public_ip.value)$
+    valueType: expression
   version: {{ $glbCtx.version }}

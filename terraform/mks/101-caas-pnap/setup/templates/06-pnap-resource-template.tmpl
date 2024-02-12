@@ -34,7 +34,7 @@ spec:
     options:
       description: Server type
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: s2.c1.large
     valueType: text
@@ -42,7 +42,7 @@ spec:
     options:
       description: Operating System of the server
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: ubuntu/jammy
     valueType: text
@@ -50,23 +50,19 @@ spec:
     options:
       description: Location of the server
       override:
-        restrictedValues:
-        - PHX
-        - ASH
-        - SGP
-        - NLD
-        - CHI
-        - SEA
-        - AUS
-        type: restricted
+        type: notallowed
       required: true
-    value: ASH
+    value: PHX
     valueType: text
   - name: total_instances
-    options:
-      description: number of servers
+	 options:
+      description: Number of nodes (6 Cores and 128GB RAM per node)
       override:
-        type: allowed
+        restrictedValues:
+        - "1"
+        - "2"
+        - "3"
+        type: restricted
       required: true
     value: "1"
     valueType: text
@@ -74,7 +70,7 @@ spec:
     options:
       description: public cidr block size
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: "29"
     valueType: text
