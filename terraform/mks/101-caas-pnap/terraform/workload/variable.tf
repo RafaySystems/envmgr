@@ -15,3 +15,7 @@ variable "workload_name" {
   type    = string
   default = "wordpress"
 }
+
+variable "public_ip" {
+  type    = string
+}

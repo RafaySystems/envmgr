@@ -1,8 +1,7 @@
-output "namepsace" {
+output "namespace" {
   value = rafay_namespace.namespace.id
 }
 
-output "workload" {
-  value = rafay_workload.workload.id
+output "url" {
+  value = "http://${var.public_ip}" 
 }
-
