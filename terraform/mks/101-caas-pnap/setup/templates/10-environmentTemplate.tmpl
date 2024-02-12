@@ -5,8 +5,8 @@ metadata:
   annotations:
     eaas.envmgmt.io/category: Developer Productivity
     eaas.envmgmt.io/github: https://github.com/RafaySystems/envmgr/tree/main/terraform/mks/101-caas-pnap
-  description: Developer Self Service for requesting a new Kubernetes cluster running on phoenixNAP.
-  displayName: Cluster as a Service on phoenixNAP
+  description: Self Service provisioning of a Rafay Upstream Kubernetes Cluster (Cluster as Service) on PhoenixNAP's Bare Metal Cloud
+  displayName: Upstream Kubernetes on Bare Metal Cloud (CaaS)
   name: {{ $glbCtx.EnvironmentTemplate }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
 spec:
@@ -18,11 +18,15 @@ spec:
     to a new Kubernetes cluster running on phoenixNAP. \n\n---\n\n## What does this
     do behind the scenes? \nThis template will perform the following activities: \n\n1.
     Create a new Kubernetes cluster with a randomly generated name in the Rafay project
-    where this template is launched \n2. Create a custom cluster blueprint with a
-    custom metallb addon for load balancing\n3. Create a sample nginx workload that
-    will utilize the metallb load balancer\n3. Create a new group for RBAC with Cluster
-    Admin privileges to this newly created cluster \n4. Add the requesting user's
-    credentials to the new group \n\n---\n\n\n## Instructions\n\nOnce your environment
+    where this template is launched \n2. Create a custom cluster blueprint with the
+    following addons: \n\n- Metallb (Custom Add-on)\n- Local Storage (Managed Add-on)\n-
+    Secure Remote Access (Managed Add-on)\n- Cluster Metrics (Managed Add-on)\n- Kubernetes
+    Resources Dashboard (Managed Add-on)\n- Drift Detection in Block Mode (Managed
+    Add-on)\n\n3. Create a sample nginx workload that will utilize the metallb load
+    balancer\n4. Create a new group for RBAC with [Cluster Admin](https://docs.rafay.co/security/rbac/roles/)
+    privileges to this newly created cluster \n5. Add the requesting user's credentials
+    to the new group \n6. Deploy an example \"nginx\" application that will utilize
+    the metallb load balancer\n\n\n---\n\n\n## Instructions\n\nOnce your environment
     is successfully created, please logout and login to establish a new session with
     your \nnew role. You will now have administrative privileges in the new Kubernetes
     cluster to create, read, \nupdate and delete Kubernetes resources. You can also
