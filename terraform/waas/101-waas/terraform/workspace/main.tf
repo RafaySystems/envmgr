@@ -57,6 +57,7 @@ resource "rafay_groupassociation" "groupassociation" {
   group = "${local.workspace}-group"
   roles = ["WORKSPACE_ADMIN"]
   add_users = ["${var.username}"]
+  idp_user = var.user_type
 }
 
 resource "rafay_cluster_sharing" "share_cluster" {
