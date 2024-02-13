@@ -12,6 +12,11 @@ variable "username" {
   type    = string
 }
 
+variable "user_type" {
+  description = "Rafay user type (sso or local)"
+  type    = string
+}
+
 variable "cpu" {
   description = "Workspace CPU requests"
   type    = string
