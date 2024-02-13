@@ -54,4 +54,5 @@ resource "rafay_groupassociation" "groupassociation" {
   namespaces = ["${local.namespace}"]
   roles = ["NAMESPACE_ADMIN"]
   add_users = ["${var.username}"]
+  idp_user = var.user_type
 }
