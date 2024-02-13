@@ -63,7 +63,7 @@ spec:
   - name: user_type
     options:
       override:
-        type: allowed
+        type: notallowed
     value: $(trigger.payload.is_sso_user)$
     valueType: expression
   version: {{ $glbCtx.version }}
