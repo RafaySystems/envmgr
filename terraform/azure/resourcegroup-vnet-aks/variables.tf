@@ -59,20 +59,25 @@ variable "vm_size" {
 
 variable "app_namespace" {
   type = string
+  default = "default"
 }
 
 variable "app_name" {
   type = string
+  default="default"
 }
 
 variable "argo_server" {
   type = string
+  default="default"
 }
 
 variable "argo_username" {
   type = string
+  default="default"
 }
 
 variable "argo_password" {
   type = string
+  default="default"
 }
