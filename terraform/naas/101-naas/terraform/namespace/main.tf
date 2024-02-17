@@ -26,7 +26,7 @@ resource "rafay_namespace" "namespace" {
       }
     }
     resource_quotas {
-		config_maps = "10"
+		config_maps = "15"
 		cpu_requests = var.cpu
 		memory_requests = var.memory
                 cpu_limits = "4000m"
@@ -37,7 +37,7 @@ resource "rafay_namespace" "namespace" {
 		services = "10"
 		services_load_balancers = "10"
 		services_node_ports = "10"
-		storage_requests = "1Gi"
+		storage_requests = "50Gi"
 	}
 }
   }
