@@ -113,7 +113,7 @@ if [ -z "$agentId" ]; then
 fi 
 
 
-rm -rf relayConfigData-$agentId.json docker-compose-$agentId.yaml
+rm -rf $HOME/relayConfigData-$agentId.json $HOME/docker-compose-$agentId.yaml
 ##Download agent config files
 rctl get agent -p $project ${spec_array[1]} -o json --v3 | \
  jq -r -c '.status.extra.files[] | select ( .name == "relayConfigData-'$agentId'.json" ) | .data'| \
@@ -125,7 +125,7 @@ base64 -d >> $HOME/docker-compose-$agentId.yaml
 
 
 ##Run docker-compose
-if ! docker-compose -f $HOME/docker-compose-$agentId.yaml up -d ; then
+if ! sudo docker-compose -f $HOME/docker-compose-$agentId.yaml up -d ; then
    printf -- "\033[31m ERROR: Failed to deploy agent  - FAILED \033[0m\n";
    exit
 else

@@ -23,16 +23,12 @@ spec:
   - name: cluster_name
     options:
       description: Cluster Name
-      override:
-        type: allowed
       required: true
     value: $(environment.name)$
     valueType: expression
   - name: vcn_name
     options:
       description: OCI VCN Name
-      override:
-        type: allowed
       required: true
     value: $(environment.name)$
     valueType: expression
