@@ -1,0 +1,34 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  name: {{ $glbCtx.jupyterhubEnvironmentTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  resources:
+  - kind: resourcetemplate
+    name: {{ $glbCtx.JupyterhubResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic	
+  variables:
+  - name: cluster_name
+    options:
+      override:
+        type: allowed
+      required: true
+    value: {{ $glbCtx.ClusterName }}
+    valueType: text
+  - name: username
+    options:
+      override:
+        type: notallowed
+    value: $(trigger.payload.username)$
+    valueType: expression
+ - name: project
+    options:
+      override:
+        type: allowed
+    value: {{ $glbCtx.projectName }}
+    valueType: text
+  version: {{ $glbCtx.version }}

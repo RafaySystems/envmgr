@@ -1,0 +1,62 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.JupyterhubResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      backendType: system
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathJupyterhub }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: namespace
+    options:
+      description: Name of the namespace
+      override:
+        type: notallowed
+    value: $(environment.name)$
+    valueType: expression
+  - name: jupyter_admin_password
+    options:
+	  sensitive: true
+      override:
+        type: allowed
+      required: true
+    value: {{ $glbCtx.JupyterhubPassword }}
+    valueType: text
+  - name: hub_tolerations
+    options:
+	  description: Tolerations for jupyter hub notebook for scheduling on specific nodes
+      override:
+        type: allowed
+      required: false
+    value: {}
+    valueType: text
+  - name: singleuser_tolerations
+    options:
+	  description: Tolerations for jupyterhub to schedule on gpu nodes
+      override:
+        type: allowed
+      required: false
+    value: {}
+    valueType: text
+  - name: extra_env
+    options:
+	  description: Customisable environment variables to jupyter nodebook
+      override:
+        type: allowed
+      required: false
+    value: {}
+    valueType: text
+  version: {{ $glbCtx.version }}
