@@ -38,7 +38,6 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
 
 templatefile("values.yaml", {
   depends_on = [rafay_namespace.namespace]
-  arn = aws_iam_role.aggregator[each.value].arn
   password = ${var.jupyter_admin_password}
   tolerations = ${yamlencode(var.hub_tolerations)}
   extraTolerations = ${yamlencode(var.singleuser_tolerations)}

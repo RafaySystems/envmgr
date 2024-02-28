@@ -1,5 +1,5 @@
 variable "cluster_name" {
-  description = "name of the eks cluster"
+  description = "name of the cluster"
 }
 
 variable "namespace" {
