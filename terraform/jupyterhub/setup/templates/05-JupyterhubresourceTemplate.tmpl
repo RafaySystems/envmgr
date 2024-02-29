@@ -37,26 +37,26 @@ spec:
     valueType: text
   - name: hub_tolerations
     options:
-	  description: Tolerations for jupyter hub notebook for scheduling on specific nodes
+	  description: Tolerations for Jupyterhub notebook for scheduling on specific nodes
       override:
         type: allowed
       required: false
-    value: {}
-    valueType: text
+    value: '{}'
+    valueType: hcl
   - name: singleuser_tolerations
     options:
-	  description: Tolerations for jupyterhub to schedule on gpu nodes
+	  description: Tolerations for Jupyterhub to schedule on GPU nodes
       override:
         type: allowed
       required: false
-    value: {}
-    valueType: text
+    value: '{}'
+    valueType: hcl
   - name: extra_env
     options:
-	  description: Customisable environment variables to jupyter nodebook
+	  description: Customizable environment variables to Jupyter notebook
       override:
         type: allowed
       required: false
-    value: {}
-    valueType: text
+    value: '{}'
+    valueType: hcl
   version: {{ $glbCtx.version }}

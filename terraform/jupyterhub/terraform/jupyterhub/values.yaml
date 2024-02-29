@@ -4,19 +4,14 @@ hub:
       storage: 10Gi
   service:
     type: LoadBalancer
-    annotations:
-      service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
-      service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
   config:
     Authenticator:
       admin_users:
         - admin
     DummyAuthenticator:
       password: ${password}
-  tolerations: ${tolerations}
 
 singleuser:
-  extraTolerations: ${extraTolerations}
   storage:
     extraVolumes:
       - name: shm-volume
@@ -25,7 +20,6 @@ singleuser:
     extraVolumeMounts:
       - name: shm-volume
         mountPath: /dev/shm
-  extraEnv: ${extraEnv}
   profileList:
     - display_name: "Minimal environment"
       description: "To avoid too much bells and whistles: Python."

@@ -22,10 +22,10 @@ version: v1
 RafayConfigContext: rafay
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
-JupyterhubResourceTemplate: jupyterhub
+JupyterhubResourceTemplate: jupyterhub-rs
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
-jupyterhubEnvironmentTemplate: jupyterhub
+jupyterhubEnvironmentTemplate: jupyterhub-env
 ## Terraform code path 
 tfRepoPathJupyterhub: terraform/jupyterhub/terraform/jupyterhub
 ClusterName: ai-eks-cluster

@@ -1,5 +1,5 @@
 output "jupiterhub_url" {
-  value = "http://${data.local_file.jupyterhub-ip.content}:80"
+  value = "http://${data.local_file.jupyterhub-ip.content}"
 }
 
 

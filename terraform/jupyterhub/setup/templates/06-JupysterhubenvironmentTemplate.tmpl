@@ -4,7 +4,30 @@ kind: EnvironmentTemplate
 metadata:
   name: {{ $glbCtx.jupyterhubEnvironmentTemplate }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
+  description: Provision JupyterHub, a multi-user version of a Jupyter notebook designed
+    for teams and organizations
+  displayName: JupyterHub on Kubernetes
+  annotations:
+    eaas.envmgmt.io/category: AI/ML
+    eaas.envmgmt.io/github: https://github.com/RafaySystems/rafay-ai-templates/tree/main/jupyterhub-env
 spec:
+  iconURL: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrbOEht_kWFcmkWKfClJhGHkfJURbUeoXsMdGiZR1QMg&s
+  readme: "## What does this do? \n\nThis template is based on [JupyterHub](https://jupyter.org/hub)
+    and brings the power of notebooks to data scientists. \nIt gives data scientists
+    access to computational environments and resources without burdening them with
+    installation \nand maintenance tasks. Data scientists can get their work done
+    in their own workspaces on shared resources which can \nbe managed efficiently
+    by system administrators.\n\nThis template can be deployed on Kubernetes clusters
+    in both public cloud and your datacenters making it possible \nto serve a pre-configured
+    data science environment to your data scientists. \n\n## Self Service  \n\nIn
+    just a single click, a team can deploy their own JupyterHub instance and can share
+    notebooks with each other. \n\n## Customizable \nSupports dozens of kernels and
+    can be used to serve a variety of user interfaces including the Jupyter Notebook,
+    \nJupyter Lab, RStudio, nteract, and more.\n\n## Flexible \nCan be configured
+    with authentication in order to provide access to a subset of users. Authentication
+    is pluggable, \nsupporting a number of authentication protocols (such as OAuth
+    and GitHub).\n\n## Scale \nCan be deployed on Kubernetes clusters allowing you
+    to scale to tens of thousands of users."
   resources:
   - kind: resourcetemplate
     name: {{ $glbCtx.JupyterhubResourceTemplate }}-{{ $glbCtx.projectName }}
