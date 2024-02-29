@@ -181,7 +181,7 @@ fi
 
 ##Move eaas service under rafay-resource folder.
 mkdir -p ../../../rafay-resources/projects/$project/configcontexts
-cp $PWD/spec/${spec_array[4]}.yaml  ../../..//rafay-resources/projects/$project/configcontexts/
+cp $PWD/spec/${spec_array[4]}.yaml  ../../../rafay-resources/projects/$project/configcontexts/
 mkdir -p ../../../rafay-resources/projects/$project/resourcetemplates
 cp $PWD/spec/${spec_array[5]}.yaml  ../../../rafay-resources/projects/$project/resourcetemplates/
 mkdir -p ../../../rafay-resources/projects/$project/environmenttemplates

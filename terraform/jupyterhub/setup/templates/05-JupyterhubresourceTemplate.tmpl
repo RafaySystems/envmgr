@@ -29,34 +29,9 @@ spec:
     valueType: expression
   - name: jupyter_admin_password
     options:
-	  sensitive: true
       override:
         type: allowed
       required: true
     value: {{ $glbCtx.JupyterhubPassword }}
     valueType: text
-  - name: hub_tolerations
-    options:
-	  description: Tolerations for Jupyterhub notebook for scheduling on specific nodes
-      override:
-        type: allowed
-      required: false
-    value: '{}'
-    valueType: hcl
-  - name: singleuser_tolerations
-    options:
-	  description: Tolerations for Jupyterhub to schedule on GPU nodes
-      override:
-        type: allowed
-      required: false
-    value: '{}'
-    valueType: hcl
-  - name: extra_env
-    options:
-	  description: Customizable environment variables to Jupyter notebook
-      override:
-        type: allowed
-      required: false
-    value: '{}'
-    valueType: hcl
   version: {{ $glbCtx.version }}
