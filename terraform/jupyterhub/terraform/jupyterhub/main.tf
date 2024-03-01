@@ -63,7 +63,7 @@ resource "rafay_workload" "workload" {
 
 resource "time_sleep" "wait_30_seconds" {
   depends_on      = [rafay_workload.workload]
-  create_duration = "30s"
+  create_duration = "60s"
 }
 
 resource "null_resource" "get-jupyterhub-ip" {
