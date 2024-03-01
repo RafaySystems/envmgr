@@ -1,0 +1,51 @@
+hub:
+  db:
+    pvc:
+      storage: 10Gi
+  service:
+    type: LoadBalancer
+  config:
+    Authenticator:
+      admin_users:
+        - admin
+    DummyAuthenticator:
+      password: ${password}
+
+singleuser:
+  storage:
+    extraVolumes:
+      - name: shm-volume
+        emptyDir:
+          medium: Memory
+    extraVolumeMounts:
+      - name: shm-volume
+        mountPath: /dev/shm
+  profileList:
+    - display_name: "Minimal environment"
+      description: "To avoid too much bells and whistles: Python."
+      default: true
+    - display_name: "Datascience environment"
+      description: "If you want the additional bells and whistles: Python, R, and Julia."
+      kubespawner_override:
+        image: jupyter/datascience-notebook
+    - display_name: "Spark environment"
+      description: "The Jupyter Stacks spark image!"
+      kubespawner_override:
+        image: jupyter/all-spark-notebook
+    - display_name: "Learning Data Science"
+      description: "Datascience Environment with Sample Notebooks"
+      kubespawner_override:
+         image: jupyter/datascience-notebook
+         lifecycle_hooks:
+           postStart:
+             exec:
+               command:
+                 - "sh"
+                 - "-c"
+                 - >
+                   gitpuller https://github.com/data-8/materials-fa17 master materials-fa;
+    - display_name: "GPU Server"
+      description: "Spawns a notebook server with access to a GPU"
+      kubespawner_override:
+        extra_resource_limits:
+          nvidia.com/gpu: "1"

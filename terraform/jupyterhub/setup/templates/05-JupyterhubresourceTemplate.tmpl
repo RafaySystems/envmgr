@@ -1,0 +1,37 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.JupyterhubResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      backendType: system
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathJupyterhub }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: namespace
+    options:
+      description: Name of the namespace
+      override:
+        type: notallowed
+    value: $(environment.name)$
+    valueType: expression
+  - name: jupyter_admin_password
+    options:
+      override:
+        type: allowed
+      required: true
+    value: {{ $glbCtx.JupyterhubPassword }}
+    valueType: text
+  version: {{ $glbCtx.version }}
