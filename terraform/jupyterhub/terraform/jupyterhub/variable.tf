@@ -24,7 +24,3 @@ variable "workload_name" {
 variable "jupyter_admin_password" {
     default = "Jupyt3r"
 }
-
-variable "hub_tolerations" {}
-variable "singleuser_tolerations" {}
-variable "extra_env" {}
