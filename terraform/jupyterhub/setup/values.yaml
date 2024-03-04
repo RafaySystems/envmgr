@@ -28,5 +28,5 @@ JupyterhubResourceTemplate: jupyterhub-rs
 jupyterhubEnvironmentTemplate: jupyterhub-env
 ## Terraform code path 
 tfRepoPathJupyterhub: terraform/jupyterhub/terraform/jupyterhub
-ClusterName: ai-eks-cluster
-JupyterhubPassword: Jupyt3r
+ClusterName: UPDATE_CLUSTER_NAME
+JupyterhubPassword: UPDATE_PASSWORD
