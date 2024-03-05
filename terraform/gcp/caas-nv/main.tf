@@ -184,6 +184,24 @@ resource "google_container_node_pool" "gpu_nodes" {
   }
 }
 
+data "template_file" "kubeconfig" {
+  count = var.cloud_provider == "gcp"  ? 1 : 0
+  template = file("templates/kubeconfig.tpl")
+
+  vars = {
+    cluster_name           = var.cluster_name
+    cluster_endpoint       = "https://${google_container_cluster.gke[0].endpoint}"
+    cluster_ca_certificate = google_container_cluster.gke[0].master_auth.0.cluster_ca_certificate
+    access_token           = data.google_client_config.provider.access_token
+  }
+}
+
+resource "local_file" "kubeconfig" {
+  count = var.cloud_provider == "gcp"  ? 1 : 0
+  content  = data.template_file.kubeconfig[0].rendered
+  filename = "kubeconfig"
+}
+
 
 
 resource "rafay_import_cluster" "gke" {
@@ -217,4 +235,5 @@ resource "helm_release" "rafay_operator" {
       version
     ]
   }
+  depends_on = [local_file.kubeconfig]
 }
