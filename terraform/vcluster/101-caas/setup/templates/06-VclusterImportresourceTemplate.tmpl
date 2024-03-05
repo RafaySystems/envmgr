@@ -36,14 +36,6 @@ spec:
       required: true
     value: $(environment.name)$
     valueType: expression
-  - name: user
-    options:
-      description: User Name
-      override:
-        type: allowed
-      required: true
-    value: $(trigger.payload.username)$
-    valueType: expression
   - name: group
     options:
       description: Group Name

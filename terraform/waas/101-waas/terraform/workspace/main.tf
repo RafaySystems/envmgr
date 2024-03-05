@@ -70,3 +70,13 @@ resource "rafay_cluster_sharing" "share_cluster" {
     }
   }
 }
+
+resource "rafay_groupassociation" "groupassociation_collaborators" {
+  count = var.collaborator == "user_email" ? 0 : 1
+  depends_on = [rafay_groupassociation.groupassociation]
+  project = "${local.workspace}"
+  roles = ["WORKSPACE_ADMIN"]
+  group = "${local.workspace}-group"
+  add_users = ["${var.collaborator}"]
+  idp_user = true
+}

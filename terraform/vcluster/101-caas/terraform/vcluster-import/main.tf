@@ -25,5 +25,17 @@ resource "rafay_groupassociation" "groupassociation" {
   project   = rafay_project.vcluster_project.id
   group     = resource.rafay_group.group-dev.name
   roles     = ["PROJECT_ADMIN"]
-  add_users = [var.user]
+  add_users = [var.username]
+  idp_user = var.user_type
+}
+
+
+resource "rafay_groupassociation" "groupassociation_collaborators" {
+  count = var.collaborator == "user_email" ? 0 : 1
+  depends_on = [rafay_groupassociation.groupassociation]
+  project   = rafay_project.vcluster_project.id
+  roles     = ["PROJECT_ADMIN"]
+  group     = resource.rafay_group.group-dev.name
+  add_users = ["${var.collaborator}"]
+  idp_user = true
 }
