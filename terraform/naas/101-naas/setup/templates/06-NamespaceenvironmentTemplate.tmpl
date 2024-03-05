@@ -66,4 +66,10 @@ spec:
         type: notallowed
     value: $(trigger.payload.is_sso_user)$
     valueType: expression
+  - name: collaborator
+    options:
+      override:
+        type: allowed
+    value: 'user_email'
+    valueType: text
   version: {{ $glbCtx.version }}

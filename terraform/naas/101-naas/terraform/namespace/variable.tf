@@ -30,3 +30,7 @@ variable "memory" {
   type    = string
   default = "2048Mi"
 }
+
+variable "collaborator" {
+  type = string
+}
