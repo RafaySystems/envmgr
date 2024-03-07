@@ -15,19 +15,19 @@ spec:
   - name: project
     options:
       override:
-        type: allowed
+        type: notallowed
     value: {{ $glbCtx.projectName }}
     valueType: text
   - name: cluster_name
     options:
       override:
-        type: allowed
+        type: notallowed
     value: {{ $glbCtx.EKSClusterName }}
     valueType: text
   - name: username
     options:
       override:
-        type: allowed
+        type: notallowed
     value: $(trigger.payload.username)$
     valueType: expression
   version: {{ $glbCtx.version }}

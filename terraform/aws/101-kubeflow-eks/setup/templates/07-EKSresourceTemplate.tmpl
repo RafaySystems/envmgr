@@ -13,6 +13,7 @@ spec:
   provider: terraform
   providerOptions:
     terraform:
+      backendType: system
       refresh: true
       backendType: system
       version: 1.4.6
@@ -36,13 +37,13 @@ spec:
   - name: eks_public_subnets
     options:
       override:
-        type: allowed
+        type: notallowed
     value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.public_subnets.value)$
     valueType: expression
   - name: eks_private_subnets
     options:
       override:
-        type: allowed
+        type: notallowed
     value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.private_subnets.value)$
     valueType: expression
   version: {{ $glbCtx.version }}

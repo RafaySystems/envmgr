@@ -12,6 +12,7 @@ spec:
   provider: terraform
   providerOptions:
     terraform:
+      backendType: system
       refresh: true
       backendType: system
       version: 1.4.6
@@ -24,7 +25,7 @@ spec:
     options:
       description: Host Project
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.project.name)$
     valueType: text
@@ -32,7 +33,7 @@ spec:
     options:
       description: Host Cluster
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: {{ $glbCtx.HostClusterName }}
     valueType: text
@@ -40,7 +41,7 @@ spec:
     options:
       description: vCluster import bootstarp data
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(resource."{{ $glbCtx.VclusterImportResourceTemplate }}-{{ $glbCtx.projectName }}".output.bootstrap.value)$
     valueType: expression
@@ -48,7 +49,7 @@ spec:
     options:
       description: vCluster namespace
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.name)$
     valueType: expression
@@ -56,7 +57,7 @@ spec:
     options:
       description: vCluster name
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.name)$
     valueType: expression

@@ -15,6 +15,10 @@ spec:
   providerOptions:
     terraform:
       backendType: system
+<<<<<<< Updated upstream
+=======
+      useSystemStateStore: true
+>>>>>>> Stashed changes
       version: 1.4.6
   repositoryOptions:
     branch: {{ $glbCtx.branch }}
@@ -30,7 +34,7 @@ spec:
     options:
       description: Control Plane VIP
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: YOUR_CONTROL_PLANE_IP
     valueType: text

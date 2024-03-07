@@ -14,6 +14,10 @@ spec:
   providerOptions:
     terraform:
       backendType: system
+<<<<<<< Updated upstream
+=======
+      useSystemStateStore: true
+>>>>>>> Stashed changes
       version: 1.4.6
   repositoryOptions:
     branch: {{ $glbCtx.branch }}
@@ -24,7 +28,7 @@ spec:
     options:
       description: Rafay Project Name
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.name)$
     valueType: expression
@@ -32,7 +36,7 @@ spec:
     options:
       description: Rafay Cluster Name
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.name)$
     valueType: expression
@@ -40,7 +44,7 @@ spec:
     options:
       description: Cloud Credentials to Use
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(resource."{{ $glbCtx.GCPCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}".output.credentials.value)$
     valueType: expression
@@ -48,7 +52,7 @@ spec:
     options:
       description: GCP Project ID
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: {{ $glbCtx.GCPProjectID }}
     valueType: text

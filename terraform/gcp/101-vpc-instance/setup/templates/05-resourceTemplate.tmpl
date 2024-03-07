@@ -12,6 +12,7 @@ spec:
   provider: terraform
   providerOptions:
     terraform:
+      backendType: system
       refresh: true
       useSystemStateStore: true
       version: 1.4.6
@@ -23,21 +24,21 @@ spec:
   - name: region
     options:
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: {{ $glbCtx.gcpRegion }}
     valueType: text
   - name: zone
     options:
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: {{ $glbCtx.gcpRegion }}-a
     valueType: text
   - name: project_id
     options:
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: {{ $glbCtx.gcpProjectID }}
     valueType: text

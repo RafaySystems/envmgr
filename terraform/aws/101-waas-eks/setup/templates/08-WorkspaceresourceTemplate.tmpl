@@ -12,6 +12,7 @@ spec:
   provider: terraform
   providerOptions:
     terraform:
+      backendType: system
       refresh: true
       backendType: system
       version: 1.4.6
@@ -23,7 +24,7 @@ spec:
   - name: username
     options:
       override:
-        type: allowed
+        type: notallowed
     value: $(trigger.payload.username)$
     valueType: expression
   version: {{ $glbCtx.version }}

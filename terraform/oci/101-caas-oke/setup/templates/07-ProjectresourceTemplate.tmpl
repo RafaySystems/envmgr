@@ -12,6 +12,7 @@ spec:
   provider: terraform
   providerOptions:
     terraform:
+      backendType: system
       refresh: true
       backendType: system
       version: 1.4.6
@@ -23,6 +24,11 @@ spec:
   - name: project_name
     options:
       description: Rafay Project Name
+<<<<<<< Updated upstream
+=======
+      override:
+        type: notallowed
+>>>>>>> Stashed changes
       required: true
     value: $(environment.name)$
     valueType: expression

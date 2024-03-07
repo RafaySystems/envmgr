@@ -12,6 +12,7 @@ spec:
   provider: terraform
   providerOptions:
     terraform:
+      backendType: system
       refresh: true
       backendType: system
       version: 1.4.6
@@ -20,7 +21,7 @@ spec:
     directoryPath: {{ $glbCtx.tfRepoPathBedrock }}
     name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
   variables:
-  - name: region
+  - name: aws_region_bedrock
     options:
       description: AWS region for bedrock
       override:

@@ -12,6 +12,7 @@ spec:
   provider: terraform
   providerOptions:
     terraform:
+      backendType: system
       refresh: true
       backendType: system
       version: 1.4.6
@@ -24,7 +25,7 @@ spec:
     options:
       description: Project Name
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.name)$
     valueType: expression
@@ -32,15 +33,26 @@ spec:
     options:
       description: Cluster Name
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.name)$
     valueType: expression
+<<<<<<< Updated upstream
+=======
+  - name: user
+    options:
+      description: User Name
+      override:
+        type: notallowed
+      required: true
+    value: $(trigger.payload.username)$
+    valueType: expression
+>>>>>>> Stashed changes
   - name: group
     options:
       description: Group Name
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.id)$
     valueType: expression

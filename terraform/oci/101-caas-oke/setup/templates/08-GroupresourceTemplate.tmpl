@@ -12,6 +12,7 @@ spec:
   provider: terraform
   providerOptions:
     terraform:
+      backendType: system
       refresh: true
       backendType: system
       version: 1.4.6
@@ -23,18 +24,33 @@ spec:
   - name: project_name
     options:
       description: Rafay Project Name
+<<<<<<< Updated upstream
+=======
+      override:
+        type: notallowed
+>>>>>>> Stashed changes
       required: true
     value: $(environment.name)$
     valueType: expression
   - name: group
     options:
       description: Rafay Group Name
+<<<<<<< Updated upstream
+=======
+      override:
+        type: notallowed
+>>>>>>> Stashed changes
       required: true
     value: $(environment.id)$
     valueType: expression
   - name: user
     options:
       description: Add user to rafay group for the access
+<<<<<<< Updated upstream
+=======
+      override:
+        type: notallowed
+>>>>>>> Stashed changes
       required: true
     value: $(trigger.payload.username)$
     valueType: expression
