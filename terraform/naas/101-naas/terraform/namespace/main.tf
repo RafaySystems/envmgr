@@ -75,12 +75,10 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
   filename           = "kubeconfig"
 }
 
-resource "null_resource" "create_network_policy" {
-  triggers  =  { always_run = "${timestamp()}" }
-  provisioner "file" {
-  source      = templatefile("networkpolicy.yaml", {namespace = local.namespace })
-  destination = "/tmp/networkpolicy.yaml"
-  }
+
+resource "local_file" "create_network_policy" {
+  content  = templatefile("networkpolicy.yaml", {namespace = local.namespace })
+  filename = "/tmp/networkpolicy.yaml"
   depends_on = [rafay_download_kubeconfig.tfkubeconfig]
 }
 
