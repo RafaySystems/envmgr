@@ -65,9 +65,3 @@ resource "rafay_workload" "vcluster-workload" {
     }
   }
 }
-
- resource "time_sleep" "wait_60_seconds" {
-   depends_on = [resource.rafay_workload.vcluster-workload]
-
-   destroy_duration = "60s"
- }
