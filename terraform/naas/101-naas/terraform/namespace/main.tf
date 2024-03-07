@@ -68,3 +68,17 @@ resource "rafay_groupassociation" "groupassociation_collaborators" {
   add_users = ["${var.collaborator}"]
   idp_user = true
 }
+
+resource "rafay_download_kubeconfig" "tfkubeconfig" {
+  cluster            = var.cluster_name
+  output_folder_path = "/tmp"
+  filename           = "kubeconfig"
+}
+
+resource "null_resource" "get-jupyterhub-ip" {
+  triggers  =  { always_run = "${timestamp()}" }
+  provisioner "local-exec" {
+    command = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ./kubectl apply -f templatefile("networkpolicy.yaml", {namespace = local.namespace }) -n ${local.namespace} --kubeconfig=/tmp/kubeconfig"
+  }
+  depends_on = [rafay_download_kubeconfig.tfkubeconfig]
+}
