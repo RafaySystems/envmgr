@@ -75,7 +75,7 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
   filename           = "kubeconfig"
 }
 
-resource "null_resource" "get-jupyterhub-ip" {
+resource "null_resource" "install_network_policy" {
   triggers  =  { always_run = "${timestamp()}" }
   provisioner "local-exec" {
     command = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ./kubectl apply -f templatefile("networkpolicy.yaml", {namespace = local.namespace }) -n ${local.namespace} --kubeconfig=/tmp/kubeconfig"
