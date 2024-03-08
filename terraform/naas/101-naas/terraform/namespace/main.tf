@@ -70,7 +70,6 @@ resource "local_file" "create_ztka_rule" {
 }
 
 resource "rafay_ztkarule" "ztkarule" 
-  depends_on = [local_file.create_ztka_rule]
   metadata {
     name = "ztkarule-network-policy"
   }
@@ -98,6 +97,7 @@ resource "rafay_ztkarule" "ztkarule"
     }
     version = "v1"
   }
+  depends_on = [local_file.create_ztka_rule]
 }
 
 resource "rafay_ztkapolicy" "rafay_ztkapolicy" {
