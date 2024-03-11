@@ -78,7 +78,7 @@ resource "rafay_ztkarule" "ztkarule" {
       type = "Yaml"
       artifact {
         paths {
-          name = "/tmp/ztkarule.yaml"
+          name = "file://tmp/ztkarule.yaml"
         }
       }
       options {
