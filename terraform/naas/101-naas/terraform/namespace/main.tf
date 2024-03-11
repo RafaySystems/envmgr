@@ -71,7 +71,7 @@ resource "local_file" "create_ztka_rule" {
 
 resource "rafay_ztkarule" "ztkarule" {
   metadata {
-    name = "ztkarule-network-policy"
+    name = "ztkarule-network-policy-${local.namespace}"
   }
   spec {
     artifact {
@@ -103,7 +103,7 @@ resource "rafay_ztkarule" "ztkarule" {
 resource "rafay_ztkapolicy" "rafay_ztkapolicy" {
   depends_on = [rafay_ztkarule.ztkarule]
   metadata {
-    name = "ztkapolicy-network-policy"
+    name = "ztkapolicy-network-policy-${local.namespace}"
   }
   spec {
     ztka_rule_list {
@@ -121,7 +121,7 @@ resource "rafay_customrole" "rafay_customrole" {
   }
   spec {
     ztka_policy_list {
-      name    = "ztkapolicy-network-policy"
+      name    = "ztkapolicy-network-policy-${local.namespace}"
       version = "v1"
     }
     base_role = "NAMESPACE_ADMIN"
