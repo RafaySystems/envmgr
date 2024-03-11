@@ -69,8 +69,7 @@ resource "local_file" "create_ztka_rule" {
   filename = "/tmp/ztkarule.yaml"
 }
 
-resource "rafay_ztkarule" "ztkarule" 
-{
+resource "rafay_ztkarule" "ztkarule" {
   metadata {
     name = "ztkarule-network-policy"
   }
