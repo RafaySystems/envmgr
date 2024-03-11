@@ -1,0 +1,22 @@
+{
+    "apiVersion": "config.rafay.dev/v2",
+    "kind": "Repository",
+    "metadata": {
+        "name": "<REPO_NAME>"
+    },
+    "spec": {
+        "repositoryType": "GitRepository",
+        "endpoint": "https://github.com/RafaySystems/rafay-ai-templates",
+        "insecure": false,
+        "credentials": {},
+        "credentialType": "CredentialTypeNotSet",
+        "internalNetworkAccessOnly": false,
+        "enableSubmodules": false,
+        "maxRetries": 0,
+        "enableLFS": false,
+        "shareMode": "CUSTOM",
+        "agentNames": [
+            ""
+        ]
+    }
+}
