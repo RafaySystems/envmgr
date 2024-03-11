@@ -70,6 +70,7 @@ resource "local_file" "create_ztka_rule" {
 }
 
 resource "rafay_ztkarule" "ztkarule" 
+{
   metadata {
     name = "ztkarule-network-policy"
   }
