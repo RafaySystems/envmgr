@@ -107,7 +107,7 @@ resource "rafay_ztkapolicy" "rafay_ztkapolicy" {
   }
   spec {
     ztka_rule_list {
-      name    = "ztkarule-network-policy-${local.namespace}""
+      name    = "ztkarule-network-policy-${local.namespace}"
       version = "v1"
     }
     version = "v1"
@@ -117,7 +117,7 @@ resource "rafay_ztkapolicy" "rafay_ztkapolicy" {
 resource "rafay_customrole" "rafay_customrole" {
   depends_on = [rafay_ztkapolicy.rafay_ztkapolicy]
   metadata {
-    name = "customrole-network-policy"
+    name = "customrole-network-policy-${local.namespace}"
   }
   spec {
     ztka_policy_list {
@@ -139,7 +139,7 @@ resource "rafay_groupassociation" "groupassociation" {
   project = "${var.project}"
   group = "${local.namespace}-group"
   namespaces = ["${local.namespace}"]
-  custom_roles = ["customrole-network-policy"]
+  custom_roles = ["customrole-network-policy-${local.namespace}"]
   add_users = ["${var.username}"]
   idp_user = var.user_type
 }
@@ -149,7 +149,7 @@ resource "rafay_groupassociation" "groupassociation_collaborators" {
   count = var.collaborator == "user_email" ? 0 : 1
   depends_on = [rafay_groupassociation.groupassociation]
   project = "${var.project}"
-  custom_roles = ["customrole-network-policy"]
+  custom_roles = ["customrole-network-policy-${local.namespace}"]
   group = "${local.namespace}-group"
   namespaces = ["${local.namespace}"]
   add_users = ["${var.collaborator}"]
