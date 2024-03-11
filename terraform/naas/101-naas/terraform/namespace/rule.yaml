@@ -5,8 +5,8 @@ metadata:
   name: network-policy-lockdown-${namespace}
 rules:
 - apiGroups: [""]
-  resources: ["networkpolicy"]
-  verbs: ["get"]
-- apiGroups: [""]
   resources: ["*"]
   verbs: ["*"]
+- apiGroups: [""]
+  resources: ["networkpolicy"]
+  verbs: ["get"]
