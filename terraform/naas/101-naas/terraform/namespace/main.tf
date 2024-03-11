@@ -139,7 +139,6 @@ resource "rafay_groupassociation" "groupassociation" {
   project = "${var.project}"
   group = "${local.namespace}-group"
   namespaces = ["${local.namespace}"]
-  roles = ["NAMESPACE_ADMIN"]
   custom_roles = ["customrole-network-policy"]
   add_users = ["${var.username}"]
   idp_user = var.user_type
@@ -150,7 +149,6 @@ resource "rafay_groupassociation" "groupassociation_collaborators" {
   count = var.collaborator == "user_email" ? 0 : 1
   depends_on = [rafay_groupassociation.groupassociation]
   project = "${var.project}"
-  roles = ["NAMESPACE_ADMIN"]
   custom_roles = ["customrole-network-policy"]
   group = "${local.namespace}-group"
   namespaces = ["${local.namespace}"]
