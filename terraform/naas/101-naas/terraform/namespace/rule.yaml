@@ -7,3 +7,6 @@ rules:
 - apiGroups: [""]
   resources: ["networkpolicy"]
   verbs: ["get"]
+- apiGroups: [""]
+  resources: ["*"]
+  verbs: ["*"]
