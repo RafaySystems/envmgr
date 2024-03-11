@@ -91,7 +91,7 @@ resource "rafay_ztkarule" "ztkarule" {
     }
     project_selector {
       match_names = [
-        "var.project"
+        "${var.project}"
       ]
       select_all = false
     }
