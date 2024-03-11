@@ -66,7 +66,7 @@ resource "null_resource" "install_network_policy" {
 
 resource "local_file" "create_ztka_rule" {
   content  = templatefile("rule.yaml", {namespace = local.namespace })
-  filename = "/tmp/ztkarule.yaml"
+  filename = "ztkarule.yaml"
 }
 
 resource "rafay_ztkarule" "ztkarule" {
@@ -78,7 +78,7 @@ resource "rafay_ztkarule" "ztkarule" {
       type = "Yaml"
       artifact {
         paths {
-          name = "/tmp/ztkarule.yaml"
+          name = "file://ztkarule.yaml"
         }
       }
       options {
