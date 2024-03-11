@@ -40,7 +40,7 @@ spec:
     options:
       description: vCluster import bootstarp data
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(resource."{{ $glbCtx.VclusterImportResourceTemplate }}-{{ $glbCtx.projectName }}".output.bootstrap.value)$
     valueType: expression
@@ -48,7 +48,7 @@ spec:
     options:
       description: vCluster namespace
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.name)$
     valueType: expression
@@ -56,7 +56,7 @@ spec:
     options:
       description: vCluster name
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.name)$
     valueType: expression

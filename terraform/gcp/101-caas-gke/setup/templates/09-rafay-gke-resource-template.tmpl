@@ -24,7 +24,7 @@ spec:
     options:
       description: Rafay Project Name
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.name)$
     valueType: expression
@@ -32,7 +32,7 @@ spec:
     options:
       description: Rafay Cluster Name
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(environment.name)$
     valueType: expression
@@ -40,7 +40,7 @@ spec:
     options:
       description: Cloud Credentials to Use
       override:
-        type: allowed
+        type: notallowed
       required: true
     value: $(resource."{{ $glbCtx.GCPCloudCredentialResourceTemplate }}-{{ $glbCtx.projectName }}".output.credentials.value)$
     valueType: expression

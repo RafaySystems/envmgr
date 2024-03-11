@@ -24,28 +24,28 @@ spec:
     options:
       description: Name of the VPC
       override:
-        type: allowed
+        type: notallowed
     value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.vpc_name.value)$
     valueType: expression
   - name: vpc_id
     options:
       description: ID of the VPC
       override:
-        type: allowed
+        type: notallowed
     value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.vpc_id.value)$
     valueType: expression
   - name: aws_region
     options:
       description: AWS Region
       override:
-        type: allowed
+        type: notallowed
     value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.region.value)$
     valueType: expression
   - name: subnet_id
     options:
       description: Subnet ID for ECS Service
       override:
-        type: allowed
+        type: notallowed
     value: $(resource."{{ $glbCtx.VPCResourceTemplate }}-{{ $glbCtx.projectName }}".output.public_subnets.value[0])$
     valueType: expression
   version: {{ $glbCtx.version }}

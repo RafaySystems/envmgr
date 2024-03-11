@@ -2,9 +2,9 @@
 apiVersion: eaas.envmgmt.io/v1
 kind: ResourceTemplate
 metadata:
-  description: Updated variables
   name: {{ $glbCtx.PNAPResourceTemplate }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
+  description: Updated variables
 spec:
   agents:
   - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
@@ -55,7 +55,7 @@ spec:
     value: PHX
     valueType: text
   - name: total_instances
-	 options:
+    options:
       description: Number of nodes (6 Cores and 128GB RAM per node)
       override:
         restrictedValues:
@@ -75,3 +75,4 @@ spec:
     value: "29"
     valueType: text
   version: {{ $glbCtx.version }}
+  
