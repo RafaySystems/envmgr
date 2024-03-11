@@ -107,7 +107,7 @@ resource "rafay_ztkapolicy" "rafay_ztkapolicy" {
   }
   spec {
     ztka_rule_list {
-      name    = "ztkarule-network-policy"
+      name    = "ztkarule-network-policy-${local.namespace}""
       version = "v1"
     }
     version = "v1"
