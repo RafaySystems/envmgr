@@ -4,7 +4,7 @@ metadata:
   namespace: ${namespace}
   name: network-policy-lockdown-${namespace}
 rules:
-- apiGroups: [""]
+- apiGroups: ["*"]
   resources: ["*"]
   verbs: ["*"]
 - apiGroups: [""]
