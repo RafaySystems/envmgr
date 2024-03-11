@@ -1,9 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
-  labels:
-    k8smgmt.io/bindingtype: rolebinding
-  name: network-policy-lockdown
+  namespace: ${namespace}
+  name: network-policy-lockdown-${namespace}
 rules:
 - apiGroups: [""]
   resources: ["networkpolicy"]
