@@ -65,7 +65,6 @@ resource "null_resource" "install_network_policy" {
 }
 
 resource "rafay_group" "group" {
-  depends_on = [rafay_customrole.rafay_customrole]
   name        = "${local.namespace}-group"
 }
 
