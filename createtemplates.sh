@@ -2,7 +2,7 @@
 
 # console url
 BASE_URL="https://console.stage.rafay.dev"
-API_KEY="ra2.aca8acd81c49fa393364ab744574a6d5386ec7f6.46166dc1e95bc8c12670999c93d02d4285bd02b33f1a317a8d737701810dd7b7"
+API_KEY="<APIKEY>"
 
 PROJECT_NAME="templates"
 PROJECT_HASH=""
