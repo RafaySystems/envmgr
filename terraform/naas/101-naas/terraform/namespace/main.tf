@@ -43,6 +43,27 @@ resource "rafay_namespace" "namespace" {
   }
 
 
+resource "rafay_download_kubeconfig" "tfkubeconfig" {
+  cluster            = var.cluster_name
+  output_folder_path = "/tmp"
+  filename           = "kubeconfig"
+}
+
+
+resource "local_file" "create_network_policy" {
+  content  = templatefile("networkpolicy.yaml", {namespace = local.namespace })
+  filename = "/tmp/networkpolicy.yaml"
+  depends_on = [rafay_download_kubeconfig.tfkubeconfig]
+}
+
+resource "null_resource" "install_network_policy" {
+  triggers  =  { always_run = "${timestamp()}" }
+  provisioner "local-exec" {
+    command = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ./kubectl apply -f /tmp/networkpolicy.yaml -n ${local.namespace} --kubeconfig=/tmp/kubeconfig"
+  }
+  depends_on = [local_file.create_network_policy]
+}
+
 resource "rafay_group" "group" {
   name        = "${local.namespace}-group"
 }
