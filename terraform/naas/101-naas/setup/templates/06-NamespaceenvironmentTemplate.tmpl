@@ -72,4 +72,15 @@ spec:
         type: allowed
     value: 'user_email'
     valueType: text
+  - name: network_policy
+    options:
+      description: Create a network policy that will deny all incoming and outgoing
+        traffic from the namespace
+      override:
+        restrictedValues:
+        - enabled
+        type: restricted
+      required: true
+    value: enabled
+    valueType: text
   version: {{ $glbCtx.version }}
