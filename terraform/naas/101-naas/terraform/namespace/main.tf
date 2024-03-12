@@ -84,7 +84,7 @@ resource "rafay_groupassociation" "groupassociation_collaborators" {
   count = var.collaborator == "user_email" ? 0 : 1
   depends_on = [rafay_groupassociation.groupassociation]
   project = "${var.project}"
-  roles = ["NAMESPACE_ADMIN"
+  roles = ["NAMESPACE_ADMIN"]
   group = "${local.namespace}-group"
   namespaces = ["${local.namespace}"]
   add_users = ["${var.collaborator}"]
