@@ -4,6 +4,9 @@ hostenv: console.stage.rafay.dev
 # API key
 apikey: UPDATE_API_KEY
 
+# org name
+org: UPDATE_ORG_NAME
+
 ## project name
 project: templates
 
@@ -14,8 +17,6 @@ sharingtemplates: true
 
 templates:
   - terraform/naas/101-naas
-
-templatesbk:
   - terraform/aws/101-caas-eks
   - terraform/aws/101-caas-ecs
   - terraform/aws/101-genai-ecs
@@ -33,3 +34,4 @@ templatesbk:
   - terraform/vcluster/101-caas
   - terraform/vmware/101-caas-vmware
   - terraform/waas/101-waas
+  

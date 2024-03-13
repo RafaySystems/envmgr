@@ -36,6 +36,7 @@ ADD_ENVIRONMENT_TEMPLATE="apis/eaas.envmgmt.io/v1/projects/${PROJECT_NAME}/envir
 ADD_DRIVER_TEMPLATE="apis/eaas.envmgmt.io/v1/projects/${PROJECT_NAME}/drivers"
 ADD_CONFIGCONTEXT_TEMPLATE="apis/eaas.envmgmt.io/v1/projects/${PROJECT_NAME}/configcontexts"
 CREATE_PROJECT_URL="auth/v1/projects"
+GET_USERS="auth/v1/users"
 
 PROJECT_HASH=""
 PROJECT_NAME_FIELD="projectName"
@@ -353,6 +354,10 @@ function readvaluesyaml() {
 
     SHARING=$(yq e '.sharingtemplates' values.yaml)
 
+    ORG_NAME=$(yq e '.org' values.yaml)
+
+    validateorgname $ORG_NAME
+
     templates=($(yq e '.templates[]' values.yaml))
 
     for template in "${templates[@]}"; do
@@ -360,11 +365,27 @@ function readvaluesyaml() {
     done
 }
 
+# checks api users org name with the org name from values.yaml to avoid making accidental changes
+function validateorgname() {
+    local orgname="$1"
+    echo "Validating organization"
+    make_get_request_old "$GET_USERS" | jq > users_response.json
+    USER_ORG=$(cat users_response.json | jq '.organization.name')
+    echo "API key belongs to org ${USER_ORG}"
+
+    if [ "$orgname" != "$USER_ORG" ]; then
+        echo "API key does not belong to the org ${orgname}"
+        exit 1
+    fi
+}
+
 main() {
     # check required binaries
     check_required_binaries
 
     readvaluesyaml
+
+    exit 1
 
     # create project 
     createproject
@@ -376,6 +397,7 @@ main() {
     if [ "$CLEANUP_TEMP_FILES" = true ]; then
         rm project_response.json
         rm repository.json
+        rm users_response.json
     fi 
 }
 
