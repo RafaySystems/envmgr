@@ -6,7 +6,7 @@
     },
     "spec": {
         "repositoryType": "GitRepository",
-        "endpoint": "https://github.com/RafaySystems/rafay-ai-templates",
+        "endpoint": "https://github.com/RafaySystems/envmgr",
         "insecure": false,
         "credentials": {},
         "credentialType": "CredentialTypeNotSet",
