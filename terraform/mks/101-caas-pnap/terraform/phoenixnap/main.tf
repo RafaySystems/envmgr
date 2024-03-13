@@ -17,7 +17,7 @@ resource "pnap_public_network" "Public-Network" {
 
 resource "pnap_server" "rafay_server" {
   count                    = var.total_instances
-  hostname                 = "${var.cluster_name}-${var.total_instances"
+  hostname                 = "${var.cluster_name}-${var.total_instances}"
   os                       = var.os
   type                     = var.type
   location                 = var.location
