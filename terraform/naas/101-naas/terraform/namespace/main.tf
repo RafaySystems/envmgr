@@ -50,19 +50,33 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
 }
 
 
-resource "local_file" "create_network_policy" {
-  content  = templatefile("networkpolicy.yaml", {namespace = local.namespace })
-  filename = "/tmp/networkpolicy.yaml"
-  depends_on = [rafay_download_kubeconfig.tfkubeconfig]
-}
+#resource "local_file" "create_network_policy" {
+#  content  = templatefile("networkpolicy.yaml", {namespace = local.namespace })
+#  filename = "/tmp/networkpolicy.yaml"
+#  depends_on = [rafay_download_kubeconfig.tfkubeconfig]
+#}
 
-resource "null_resource" "install_network_policy" {
-  triggers  =  { always_run = "${timestamp()}" }
-  provisioner "local-exec" {
-    command = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ./kubectl apply -f /tmp/networkpolicy.yaml -n ${local.namespace} --kubeconfig=/tmp/kubeconfig"
+#resource "null_resource" "install_network_policy" {
+#  triggers  =  { always_run = "${timestamp()}" }
+#  provisioner "local-exec" {
+#    command = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ./kubectl apply -f /tmp/networkpolicy.yaml -n ${local.namespace} --kubeconfig=/tmp/kubeconfig"
+#  }
+#  depends_on = [local_file.create_network_policy]
+#}
+
+################# Intall IRSA for GenAI##################################
+resource "null_resource" "install_irsa" {
+  depends_on = [rafay_namespace.namespace]
+  triggers = {
+    always_run = timestamp()
   }
-  depends_on = [local_file.create_network_policy]
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    command     = "wget \"https://s3.amazonaws.com/rafay-cli/publish/rctl-linux-amd64.tar.bz2\" && tar -xjf rctl-linux-amd64.tar.bz2 -C ./ &&  chmod +x ./rctl  &&./rctl create iam-service-account ${var.cluster_name} --name gen-ai --namespace ${local.namespace} --policy-document bedrock-policy.json -p ${var.project}"
+  }
 }
+##########################################################################
+
 
 resource "rafay_group" "group" {
   name        = "${local.namespace}-group"
