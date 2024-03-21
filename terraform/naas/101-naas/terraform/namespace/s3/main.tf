@@ -64,20 +64,31 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
 #  depends_on = [local_file.create_network_policy]
 #}
 
-################# Intall IRSA for GenAI##################################
-resource "null_resource" "install_irsa_bedrock" {
+################# Download RCTL ##################################
+resource "null_resource" "download_rctl" {
   depends_on = [rafay_namespace.namespace]
   triggers = {
     always_run = timestamp()
   }
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "wget \"https://s3.amazonaws.com/rafay-cli/publish/rctl-linux-amd64.tar.bz2\" && tar -xjf rctl-linux-amd64.tar.bz2 -C ./ &&  chmod +x ./rctl  &&./rctl create iam-service-account ${var.cluster_name} --name bedrock-irsa --namespace ${local.namespace} --policy-document bedrock-policy.json -p ${var.project}"
+    command     = "wget \"https://s3.amazonaws.com/rafay-cli/publish/rctl-linux-amd64.tar.bz2\" && tar -xjf rctl-linux-amd64.tar.bz2 -C ./ &&  chmod +x ./rctl"
   }
 }
 
+################# Intall IRSA for GenAI ##################################
+resource "null_resource" "install_irsa_bedrock" {
+  depends_on = [null_resource.download_rctl]
+  triggers = {
+    always_run = timestamp()
+  }
+  provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
+    command     = "./rctl create iam-service-account ${var.cluster_name} --name bedrock-irsa --namespace ${local.namespace} --policy-document bedrock-policy.json -p ${var.project}"
+  }
+}
 
-##################### Intall IRSA for S3##################################
+##################### Intall IRSA for S3 ##################################
 
 resource "local_file" "create_s3_policy" {
   content  = templatefile("s3-policy.json", {YOUR_BUCKET = var.s3bucketname })
@@ -87,13 +98,13 @@ resource "local_file" "create_s3_policy" {
 
 
 resource "null_resource" "install_irsa_s3" {
-  depends_on = [rafay_namespace.namespace]
+  depends_on = [null_resource.download_rctl]
   triggers = {
     always_run = timestamp()
   }
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "wget \"https://s3.amazonaws.com/rafay-cli/publish/rctl-linux-amd64.tar.bz2\" && tar -xjf rctl-linux-amd64.tar.bz2 -C ./s3 &&  chmod +x ./s3/rctl  &&./s3/rctl create iam-service-account ${var.cluster_name} --name s3-irsa --namespace ${local.namespace} --policy-document s3_policy.json -p ${var.project}"
+    command     = "./s3/rctl create iam-service-account ${var.cluster_name} --name s3-irsa --namespace ${local.namespace} --policy-document s3_policy.json -p ${var.project}"
   }
 }
 ##########################################################################
