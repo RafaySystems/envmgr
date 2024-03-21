@@ -6,7 +6,7 @@
             "Action": [
                 "s3:ListBucket"
             ],
-            "Resource": "arn:aws:s3:::YOUR_BUCKET"
+            "Resource": "arn:aws:s3:::${YOUR_BUCKET}"
         },
         {
             "Sid": "List",
@@ -15,7 +15,7 @@
                 "s3:GetObject",
                 "s3:GetObjectVersion"
             ],
-            "Resource": "arn:aws:s3:::YOUR_BUCKET/*"
+            "Resource": "arn:aws:s3:::${YOUR_BUCKET}/*"
         }
     ]
 }
