@@ -35,6 +35,6 @@ variable "collaborator" {
   type = string
 }
 
-variable "s3bucketname " {
+variable "s3bucketname" {
   type = string
 }
