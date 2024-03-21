@@ -104,7 +104,7 @@ resource "null_resource" "install_irsa_s3" {
   }
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "./rctl create iam-service-account ${var.cluster_name} --name s3-irsa --namespace ${local.namespace} --policy-document s3_policy.json -p ${var.project}"
+    command     = "./rctl create iam-service-account ${var.cluster_name} --name s3-irsa --namespace ${local.namespace} --policy-document /tmp/s3_policy.json -p ${var.project}"
   }
 }
 ##########################################################################
