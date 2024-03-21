@@ -72,7 +72,7 @@ resource "null_resource" "install_irsa_bedrock" {
   }
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "wget \"https://s3.amazonaws.com/rafay-cli/publish/rctl-linux-amd64.tar.bz2\" && tar -xjfu rctl-linux-amd64.tar.bz2 -C ./ &&  chmod +x ./rctl  &&./rctl create iam-service-account ${var.cluster_name} --name bedrock-irsa --namespace ${local.namespace} --policy-document bedrock-policy.json -p ${var.project}"
+    command     = "wget \"https://s3.amazonaws.com/rafay-cli/publish/rctl-linux-amd64.tar.bz2\" && tar -xjf rctl-linux-amd64.tar.bz2 -C ./ &&  chmod +x ./rctl  &&./rctl create iam-service-account ${var.cluster_name} --name bedrock-irsa --namespace ${local.namespace} --policy-document bedrock-policy.json -p ${var.project}"
   }
 }
 
@@ -93,7 +93,7 @@ resource "null_resource" "install_irsa_s3" {
   }
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "wget \"https://s3.amazonaws.com/rafay-cli/publish/rctl-linux-amd64.tar.bz2\" && tar -xjfu rctl-linux-amd64.tar.bz2 -C ./ &&  chmod +x ./rctl  &&./rctl create iam-service-account ${var.cluster_name} --name s3-irsa --namespace ${local.namespace} --policy-document s3_policy.json -p ${var.project}"
+    command     = "wget \"https://s3.amazonaws.com/rafay-cli/publish/rctl-linux-amd64.tar.bz2\" && tar -xjf rctl-linux-amd64.tar.bz2 -C ./s3 &&  chmod +x ./s3/rctl  &&./s3/rctl create iam-service-account ${var.cluster_name} --name s3-irsa --namespace ${local.namespace} --policy-document s3_policy.json -p ${var.project}"
   }
 }
 ##########################################################################
