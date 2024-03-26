@@ -7,7 +7,11 @@ resource "random_id" "rnd" {
 
 locals {
   # Create a unique workspace name
-  workspace = "${element(split("@",var.username),0)}-${random_id.rnd.dec}"
+  workspace1 = "${element(split("@",var.username),0)}-${random_id.rnd.dec}"
+  workspace2 = replace(local.workspace1,"+","-")
+  workspace3 = replace(local.workspace2,".","-")
+  workspace4 = replace(local.workspace3,"+","-")
+  workspace = lower(local.workspace4)
 }
 
 resource "rafay_project" "workspace_project" {
