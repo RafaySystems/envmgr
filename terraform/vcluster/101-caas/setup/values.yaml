@@ -5,7 +5,7 @@ agentName: eaas-agent
 ##Rafay respository name
 repoName: eaas-repo
 ##Username to access repository
-usernName: UPDATE_REPO_USERNAME
+userName: UPDATE_REPO_USERNAME
 ##Token to access repository
 token: UPDATE_REPO_TOKEN
 ##Repository url
