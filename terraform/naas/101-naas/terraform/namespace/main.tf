@@ -48,9 +48,6 @@ resource "rafay_namespace" "namespace" {
 
 
 resource "rafay_download_kubeconfig" "tfkubeconfig" {
-  triggers = {
-    always_run = "${timestamp()}"
-  }
   cluster            = var.cluster_name
   output_folder_path = "/tmp"
   filename           = "kubeconfig"
