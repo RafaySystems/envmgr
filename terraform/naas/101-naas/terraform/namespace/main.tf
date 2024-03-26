@@ -10,7 +10,7 @@ locals {
   namespace1 = "${element(split("@",var.username),0)}-${random_id.rnd.dec}"
   namespace2 = replace(local.namespace1,"+","-")
   namespace3 = replace(local.namespace2,".","-")
-  namespac4 = replace(local.namespace3,"+","-")
+  namespace4 = replace(local.namespace3,"+","-")
   namespace = lower(local.namespace4)
 }
 
