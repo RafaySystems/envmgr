@@ -51,7 +51,7 @@ printf -- "\033[32m Info: Check RCTL (Rafay CLI) setup    - SUCCESS \033[0m\n";
 
 ##Find projectName from values.yaml
 project=`cat $PWD/values.yaml | awk '/projectName/ {print $2}'`
-userName=`cat $PWD/values.yaml | awk '/usernName/ {print $2}'`
+userName=`cat $PWD/values.yaml | awk '/userName/ {print $2}'`
 token=`cat $PWD/values.yaml | awk '/token/ {print $2}'`
 endpoint=`cat $PWD/values.yaml | awk '/endPoint/ {print $2}' | awk -F// '{print $2}'`
 branch=`cat $PWD/values.yaml | awk '/branch/ {print $2}'`
