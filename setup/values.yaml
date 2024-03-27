@@ -6,13 +6,13 @@ apikey: UPDATE_API_KEY
 
 ## org name
 org: UPDATE_ORG_NAME
-##Rafay Project name
+## Rafay Project name
 projectName: UPDATE_PROJECT_NAME
-##Rafay gitops agent name
+## Rafay gitops agent name
 agentName: eaas-agent
-##Rafay respository name
+## Rafay respository name
 repoName: eaas-repo
-## Is the repo pointing to the Rafay's public repo or cloned private repo
+## Is cloned private repo ? if not will be pointing to the Rafay public repo
 isClonedRepo: true
 ## Username to access repository
 userName: UPDATE_USER_NAME
@@ -31,10 +31,7 @@ sharingtemplates: false
 
 ## list of templates
 templates:
-  - ../terraform/waas/101-waas
-#  - ../terraform/aws/101-vpc-ec2
-
-templates1:
+  - ../terraform/aws/101-vpc-ec2
   - ../terraform/naas/101-naas
   - ../terraform/aws/101-caas-eks
   - ../terraform/aws/101-caas-ecs
@@ -42,7 +39,6 @@ templates1:
   - ../terraform/aws/101-genai-eks
   - ../terraform/aws/101-kubeflow-eks
   - ../terraform/aws/101-naas-eks
-  - ../terraform/aws/101-vpc-ec2
   - ../terraform/aws/101-vpc-ecs
   - ../terraform/aws/101-waas-eks
   - ../terraform/azure/101-vnet-instance
