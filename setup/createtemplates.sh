@@ -94,10 +94,10 @@ function create_sealers {
 
     if ! rctl apply -t $templatefile --values $PWD/tmp.yaml \
         --test-template --write $PWD/templates/$fName.yaml.spec ; then
-        printf -- "\033[31m ERROR: Rafay spec file for %s failed - FAILED \033[0m\n" "$i";
+        printf -- "\033[31m ERROR: Rafay spec file for %s failed - FAILED \033[0m\n" "$templatefile";
         exit
     else
-        printf -- "\033[32m Info: Rafay spec file for %s - SUCCESS \033[0m\n" "$i";
+        printf -- "\033[32m Info: Rafay spec file for %s - SUCCESS \033[0m\n" "$templatefile";
     fi
     
     yq -o=json $PWD/templates/$fName.yaml.spec > $PWD/templates/$fName.json 
@@ -128,10 +128,10 @@ function create_configcontext_templates {
 
     if ! rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
         --test-template --write $PWD/$folder/setup/templates/$fName.yaml.spec ; then
-        printf -- "\033[31m ERROR: Rafay spec file for %s failed - FAILED \033[0m\n" "$i";
+        printf -- "\033[31m ERROR: Rafay spec file for %s failed - FAILED \033[0m\n" "$templatefile";
         exit
     else
-        printf -- "\033[32m Info: Rafay spec file for %s - SUCCESS \033[0m\n" "$i";
+        printf -- "\033[32m Info: Rafay spec file for %s - SUCCESS \033[0m\n" "$templatefile";
     fi
     
     yq -o=json $PWD/$folder/setup/templates/$fName.yaml.spec > $PWD/$folder/setup/templates/$fName.json 
@@ -168,10 +168,10 @@ function create_driver_templates {
 
     if ! rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
         --test-template --write $PWD/$folder/setup/templates/$fName.yaml.spec ; then
-        printf -- "\033[31m ERROR: Rafay spec file for %s failed - FAILED \033[0m\n" "$i";
+        printf -- "\033[31m ERROR: Rafay spec file for %s failed - FAILED \033[0m\n" "$templatefile";
         exit
     else
-        printf -- "\033[32m Info: Rafay spec file for %s - SUCCESS \033[0m\n" "$i";
+        printf -- "\033[32m Info: Rafay spec file for %s - SUCCESS \033[0m\n" "$templatefile";
     fi
     
     yq -o=json $PWD/$folder/setup/templates/$fName.yaml.spec > $PWD/$folder/setup/templates/$fName.json 
@@ -203,10 +203,10 @@ function create_resource_templates {
 
     if ! rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
         --test-template --write $PWD/$folder/setup/templates/$fName.yaml.spec ; then
-        printf -- "\033[31m ERROR: Rafay spec file for %s failed - FAILED \033[0m\n" "$i";
+        printf -- "\033[31m ERROR: Rafay spec file for %s failed - FAILED \033[0m\n" "$templatefile";
         exit
     else
-        printf -- "\033[32m Info: Rafay spec file for %s - SUCCESS \033[0m\n" "$i";
+        printf -- "\033[32m Info: Rafay spec file for %s - SUCCESS \033[0m\n" "$templatefile";
     fi
     
     yq -o=json $PWD/$folder/setup/templates/$fName.yaml.spec > $PWD/$folder/setup/templates/$fName.json 
@@ -243,10 +243,10 @@ function create_environment_templates {
 
     if ! rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
         --test-template --write $PWD/$folder/setup/templates/$fName.yaml.spec ; then
-        printf -- "\033[31m ERROR: Rafay spec file for %s failed - FAILED \033[0m\n" "$i";
+        printf -- "\033[31m ERROR: Rafay spec file for %s failed - FAILED \033[0m\n" "$templatefile";
         exit
     else
-        printf -- "\033[32m Info: Rafay spec file for %s - SUCCESS \033[0m\n" "$i";
+        printf -- "\033[32m Info: Rafay spec file for %s - SUCCESS \033[0m\n" "$templatefile";
     fi
     
     yq -o=json $PWD/$folder/setup/templates/$fName.yaml.spec > $PWD/$folder/setup/templates/$fName.json 
@@ -345,10 +345,10 @@ function create_pipeline {
 
     if ! rctl apply -t $templatefile --values $PWD/tmp.yaml \
         --test-template --write $PWD/templates/$fName.yaml.spec ; then
-        printf -- "\033[31m ERROR: Rafay spec file for %s failed - FAILED \033[0m\n" "$i";
+        printf -- "\033[31m ERROR: Rafay spec file for %s failed - FAILED \033[0m\n" "$templatefile";
         exit
     else
-        printf -- "\033[32m Info: Rafay spec file for %s - SUCCESS \033[0m\n" "$i";
+        printf -- "\033[32m Info: Rafay spec file for %s - SUCCESS \033[0m\n" "$templatefile";
     fi
     
     yq -o=json $PWD/templates/$fName.yaml.spec > $PWD/templates/$fName.json 
@@ -508,8 +508,47 @@ function read_values_yaml() {
     USER_NAME=$(yq e '.userName' values.yaml)
     TOKEN=$(yq e '.token' values.yaml)
     END_POINT=$(yq e '.endPoint' values.yaml)
+    PATH_VAL=$(yq e '.path' values.yaml)
 
-    validateorgname $ORG_NAME
+    if [ -z "$API_KEY" ] || [ "$API_KEY" = "UPDATE_API_KEY" ]; then
+        printf -- "\033[31m ERROR: Please update valid apikey in values.yaml \033[0m\n";
+        exit 1
+    fi
+
+    if [ -z "$ORG_NAME" ] || [ "$ORG_NAME" = "UPDATE_ORG_NAME" ]; then
+        printf -- "\033[31m ERROR: Please update valid org in values.yaml \033[0m\n";
+        exit 1
+    fi
+    
+    if [ -z "$PROJECT_NAME" ] || [ "$PROJECT_NAME" = "UPDATE_PROJECT_NAME" ]; then
+        printf -- "\033[31m ERROR: Please update valid projectName in values.yaml \033[0m\n";
+        exit 1
+    fi
+
+    if [ "$IS_CLONE_REPO" = true ]; then
+        if [ -z "$USER_NAME" ] || [ "$USER_NAME" = "UPDATE_USER_NAME" ]; then
+            printf -- "\033[31m ERROR: Please update valid userName in values.yaml \033[0m\n";
+            exit 1
+        fi
+
+        if [ -z "$TOKEN" ] || [ "$TOKEN" = "UPDATE_TOKEN" ]; then
+            printf -- "\033[31m ERROR: Please update valid token in values.yaml \033[0m\n";
+            exit 1
+        fi
+
+        if [ -z "$END_POINT" ] || [ "$END_POINT" = "UPDATE_END_POINT" ]; then
+            printf -- "\033[31m ERROR: Please update valid token in values.yaml \033[0m\n";
+            exit 1
+        fi
+
+        if [ -z "$PATH_VAL" ] || [ "$PATH_VAL" = "UPDATE_PATH" ]; then
+            printf -- "\033[31m ERROR: Please update valid path in values.yaml \033[0m\n";
+            exit 1
+        fi
+    fi
+
+
+    validate_orgname $ORG_NAME
 
     templates=($(yq e '.templates[]' values.yaml))
 
@@ -524,7 +563,7 @@ function read_values_yaml() {
 }
 
 # checks api users org name with the org name from values.yaml to avoid making accidental changes
-function validateorgname() {
+function validate_orgname() {
     local orgname="$1"
     echo "Validating organization"
     make_get_request_old "$GET_USERS" | jq > templates/users_response.json
@@ -533,7 +572,7 @@ function validateorgname() {
     echo "API key belongs to org ${USER_ORG}"
 
     if [ "$orgname" != "$USER_ORG" ]; then
-        echo "API key does not belong to the org ${orgname} - ${USER_ORG}"
+        echo "API key does not belong to the org ${orgname} - It belongs to different org ${USER_ORG}"
         exit 1
     fi
 }
