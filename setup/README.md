@@ -4,17 +4,19 @@ This setup script will help to deploy the current existing templates in this rep
 
 - **Prerequisites**
 Below binaries are required to run the script.
-> docker docker-compose git grep awk jq yq
+> docker docker-compose git grep awk jq yq rctl
 
 - **Update the values.yaml**
 
-**hostenv** - host environment.
+**hostenv** - Host Environment
+> Default value - console.rafay.dev
 
 **apikey** - Provide the API key
 
 **org** - Provide the org name of the API key
 
-**projectName** - Provide the project name where the templates will be created.
+**projectName** - Provide the project name where the templates will be created. 
+> Default value - defaultproject
 
 **agentName** - Agent name 
 > Default value - eaas-agent

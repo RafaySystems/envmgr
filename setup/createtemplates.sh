@@ -40,7 +40,7 @@ PROJECT_NAME_FIELD="projectName"
 
 # check for required binaries
 function check_required_binaries () {
-    for i in docker docker-compose git grep awk jq yq
+    for i in docker docker-compose git grep awk jq yq rctl
     do
         type $i > /dev/null 2>&1 || \
             { printf -- "\033[31m ERROR: Required binary $i is missing. - FAILED \033[0m\n"; exit 1; }
