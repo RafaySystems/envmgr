@@ -4,30 +4,40 @@ hostenv: console.rafay.dev
 ## API key
 apikey: UPDATE_API_KEY
 
-## org name
+## Org name of the api key. 
 org: UPDATE_ORG_NAME
 ## Rafay Project name
-projectName: UPDATE_PROJECT_NAME
+## Default value - defaultproject
+## Update the project name if the templates need to be created in a different project.
+projectName: defaultproject
 ## Rafay gitops agent name
 agentName: eaas-agent
 ## Rafay respository name
 repoName: eaas-repo
-## Is cloned private repo ? if not will be pointing to the Rafay public repo
-isClonedRepo: true
+## Is using private repository set isPrivateRepo to true 
+## Default value - false.
+## Default repository https://github.com/RafaySystems/envmgr
+isPrivateRepo: true
 ## Username to access repository
 userName: UPDATE_USER_NAME
 ## Token to access repository
 token: UPDATE_TOKEN
 ## Repository url
 endPoint: UPDATE_END_POINT
-## Repository revision name
+## Repository revision name.
+## Default value - main. 
+## Change this if the configuration needs to write back in different branch.
 branch: main
 ## Repository path for Rafay to write back configuration.
-path: UPDATE_PATH
+## Default value - rafay-resources.
+## Change this if write back wants to be a different directory.
+path: rafay-resources
 ## Initial Version for Environment Manager resources.
 version: v1
-## sharing the templates
-sharingtemplates: false
+## Sharing the templates
+## Default value - true
+## Change this if the templates do not want to share to different directory.
+sharingtemplates: true
 
 ## list of templates
 templates:
@@ -45,8 +55,7 @@ templates:
   - ../terraform/gcp/101-caas-gke
   - ../terraform/gcp/101-vpc-instance
   - ../terraform/mks/101-caas-pnap
-  - ../terraform/oci/101-caas-oke  # not working
   - ../terraform/vcluster/101-caas
   - ../terraform/vmware/101-caas-vmware
   - ../terraform/waas/101-waas
-  
+#  - ../terraform/oci/101-caas-oke  # not working
