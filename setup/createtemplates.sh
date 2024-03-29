@@ -45,6 +45,13 @@ function check_required_binaries () {
         type $i > /dev/null 2>&1 || \
             { printf -- "\033[31m ERROR: Required binary $i is missing. - FAILED \033[0m\n"; exit 1; }
     done
+
+    if docker info &>/dev/null; then
+        echo "Docker is running."
+    else
+        echo "Docker is not running."
+        exit 0
+    fi
 }
 
 # POST request for HUB apis
@@ -548,7 +555,7 @@ function read_values_yaml() {
     fi
 
 
-    validate_orgname $ORG_NAME
+    validate_orgname "$ORG_NAME"
 
     templates=($(yq e '.templates[]' values.yaml))
 
