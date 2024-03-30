@@ -538,21 +538,20 @@ function create_templates() {
 function read_values_yaml() {
     echo "Reading values yaml"
 
-    hostenv=$(yq e '.hostenv' values.yaml)
+    hostenv=$(sudo cat values.yaml | yq e '.hostenv')
     BASE_URL="${BASE_URL}${hostenv}"
-    API_KEY=$(yq e '.apikey' values.yaml)
-    REPO_NAME=$(yq e '.repoName' values.yaml)
-    PROJECT_NAME=$(yq e '.projectName' values.yaml)
-    AGENT_NAME=$(yq e '.agentName' values.yaml)
+    API_KEY=$(sudo cat values.yaml |yq e '.apikey')
+    REPO_NAME=$(sudo cat values.yaml | yq e '.repoName')
+    PROJECT_NAME=$(sudo cat values.yaml | yq e '.projectName')
+    AGENT_NAME=$(sudo cat values.yaml | yq e '.agentName')
+    ORG_NAME=$(sudo cat values.yaml | yq e '.org')
 
-    SHARING=$(yq e '.sharingtemplates' values.yaml)
-    ORG_NAME=$(yq e '.org' values.yaml)
-
-    IS_PRIVATE_REPO=$(yq e '.isPrivateRepo' values.yaml)
-    USER_NAME=$(yq e '.userName' values.yaml)
-    TOKEN=$(yq e '.token' values.yaml)
-    END_POINT=$(yq e '.endPoint' values.yaml)
-    PATH_VAL=$(yq e '.path' values.yaml)
+    SHARING=$(sudo cat values.yaml | yq e '.sharingtemplates')
+    IS_PRIVATE_REPO=$(sudo cat values.yaml | yq e '.isClonedRepo')
+    USER_NAME=$(sudo cat values.yaml | yq e '.userName')
+    TOKEN=$(sudo cat values.yaml | yq e '.token')
+    END_POINT=$(sudo cat values.yaml | yq e '.endPoint')
+    PATH_VAL=$(sudo cat values.yaml | yq e '.path')
 
     if [ -z "$API_KEY" ] || [ "$API_KEY" = "UPDATE_API_KEY" ]; then
         printf -- "\033[31m ERROR: Please update valid apikey in values.yaml \033[0m\n";
