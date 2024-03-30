@@ -50,7 +50,7 @@ function check_required_binaries () {
         echo "Docker is running."
     else
         echo "Docker is not running."
-        exit 0
+        exit 1
     fi
 }
 
@@ -70,7 +70,7 @@ function make_get_request_old {
 function make_post_request_new {
     local endpoint="$1"
     local data_file="$2"
-    echo "${BASE_URL}/${endpoint}"
+    #echo "${BASE_URL}/${endpoint}"
     curl -s -X POST -H "Content-Type: application/json" -H "X-API-KEY: ${API_KEY}" -d "@${data_file}" "${BASE_URL}/${endpoint}" 
 }
 
@@ -78,8 +78,8 @@ function make_post_request_new {
 function make_post_request_old {
     local endpoint="$1"
     local data_file="$2"
-    echo "${BASE_URL}/${endpoint}"
-    curl -s -X POST -H "Content-Type: application/json" -H "X-RAFAY-API-KEYID: ${API_KEY}" -d "@${data_file}" "${BASE_URL}/${endpoint}" 
+    #echo "${BASE_URL}/${endpoint}"
+    curl -s -X POST -H "Content-Type: application/json" -H "X-RAFAY-API-KEYID: ${API_KEY}" -d "@${data_file}" "${BASE_URL}/${endpoint}"
 }
 
 # creates project
@@ -92,7 +92,7 @@ function create_project {
 # creates sealers
 function create_sealers {
     local templatefile="$1"
-    echo "Creating secret sealers for ${templatefile}"
+    echo "Creating secret sealer for ${templatefile}"
 
     sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/values.yaml > $PWD/tmp.yaml
     
@@ -110,16 +110,22 @@ function create_sealers {
     yq -o=json $PWD/templates/$fName.yaml.spec > $PWD/templates/$fName.json 
 
     jq 'del(.apiVersion, .kind, .metadata.project)' $PWD/templates/$fName.json > $PWD/templates/$fName.json1
-    make_post_request_old "$ADD_SECRETSEALER_TEMPLATE" $PWD/templates/$fName.json1
+
+    local response=$(make_post_request_old "$ADD_SECRETSEALER_TEMPLATE" $PWD/templates/$fName.json1)
+
+    if [[ $response == *"\"error\""* ]]; then
+       error_message=$(echo "$response" | jq -r '.error')
+       printf -- "\033[31m ERROR: Failed to create secret sealer %s \033[0m\n" "$error_message";
+    else
+       printf -- "\033[32m Info: Created secret sealer successfully \033[0m\n";
+    fi
 
     if [ "$CLEANUP_TEMP_FILES" = true ]; then
-        rm "$PWD/tmp.yaml"
-        rm "$PWD/templates/$fName.json"
-        rm "$PWD/templates/$fName.json1"
-        rm "$PWD/templates/$fName.yaml.spec"
+        rm -f "$PWD/tmp.yaml"
+        rm -f "$PWD/templates/$fName.json"
+        rm -f "$PWD/templates/$fName.json1"
+        rm -f "$PWD/templates/$fName.yaml.spec"
     fi
-    echo ""
-    echo "Successfully created secret sealers"
 }
 
 # creates configcontext templates
@@ -148,18 +154,22 @@ function create_configcontext_templates {
     else
         jq --arg repo_name "$REPO_NAME" '(.spec.repositoryOptions.name |= $repo_name) ' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     fi
-    
-    make_post_request_new "$ADD_CONFIGCONTEXT_TEMPLATE" $PWD/$folder/setup/templates/$fName.json1
 
-    if [ "$CLEANUP_TEMP_FILES" = true ]; then
-        rm "$PWD/$folder/setup/tmp.yaml"
-        rm "$PWD/$folder/setup/templates/$fName.json"
-        rm "$PWD/$folder/setup/templates/$fName.json1"
-        rm "$PWD/$folder/setup/templates/$fName.yaml.spec"
+    local response=$(make_post_request_new "$ADD_CONFIGCONTEXT_TEMPLATE" $PWD/$folder/setup/templates/$fName.json1)
+
+    if [[ $response == *"\"internal\""* ]]; then
+       error_message=$(echo "$response" | jq -r '.internal')
+       printf -- "\033[31m ERROR: Failed to create config context %s \033[0m\n" "$error_message";
+    else
+       printf -- "\033[32m Info: Created config context successfully \033[0m\n";
     fi
 
-    echo ""
-    echo "Successfully created configcontext"
+    if [ "$CLEANUP_TEMP_FILES" = true ]; then
+        rm -f "$PWD/$folder/setup/tmp.yaml"
+        rm -f "$PWD/$folder/setup/templates/$fName.json"
+        rm -f "$PWD/$folder/setup/templates/$fName.json1"
+        rm -f "$PWD/$folder/setup/templates/$fName.yaml.spec"
+    fi
 }
 
 # creates driver templates
@@ -184,17 +194,22 @@ function create_driver_templates {
     yq -o=json $PWD/$folder/setup/templates/$fName.yaml.spec > $PWD/$folder/setup/templates/$fName.json 
 
     jq --arg repo_name "$REPO_NAME" '(.spec.repositoryOptions.name |= $repo_name) | del(.spec.agents, .spec.contexts)' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
-    make_post_request_new "$ADD_DRIVER_TEMPLATE" $PWD/$folder/setup/templates/$fName.json1
+    
+    local response=$(make_post_request_new "$ADD_DRIVER_TEMPLATE" $PWD/$folder/setup/templates/$fName.json1)
 
-    if [ "$CLEANUP_TEMP_FILES" = true ]; then
-        rm "$PWD/$folder/setup/tmp.yaml"
-        rm "$PWD/$folder/setup/templates/$fName.json"
-        rm "$PWD/$folder/setup/templates/$fName.json1"
-        rm "$PWD/$folder/setup/templates/$fName.yaml.spec"
+    if [[ $response == *"\"error\""* ]]; then
+       error_message=$(echo "$response" | jq -r '.error')
+       printf -- "\033[31m ERROR: Failed to create driver %s \033[0m\n" "$error_message";
+    else
+       printf -- "\033[32m Info: Created driver successfully \033[0m\n";
     fi
 
-    echo ""
-    echo "Successfully created driver"
+    if [ "$CLEANUP_TEMP_FILES" = true ]; then
+        rm -f "$PWD/$folder/setup/tmp.yaml"
+        rm -f "$PWD/$folder/setup/templates/$fName.json"
+        rm -f "$PWD/$folder/setup/templates/$fName.json1"
+        rm -f "$PWD/$folder/setup/templates/$fName.yaml.spec"
+    fi
 }
 
 # creates resource templates
@@ -224,17 +239,21 @@ function create_resource_templates {
         jq --arg repo_name "$REPO_NAME" '(.spec.repositoryOptions.name |= $repo_name)' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     fi
     
-    make_post_request_new "$ADD_RESOURCE_TEMPLATE" $PWD/$folder/setup/templates/$fName.json1
+    local response=$(make_post_request_new "$ADD_RESOURCE_TEMPLATE" $PWD/$folder/setup/templates/$fName.json1)
 
-    if [ "$CLEANUP_TEMP_FILES" = true ]; then
-        rm "$PWD/$folder/setup/tmp.yaml"
-        rm "$PWD/$folder/setup/templates/$fName.json"
-        rm "$PWD/$folder/setup/templates/$fName.json1"
-        rm "$PWD/$folder/setup/templates/$fName.yaml.spec"
+    if [[ $response == *"\"internal\""* ]]; then
+       error_message=$(echo "$response" | jq -r '.internal')
+       printf -- "\033[31m ERROR: Failed to create resoure template %s \033[0m\n" "$error_message";
+    else
+       printf -- "\033[32m Info: Created resource template successfully \033[0m\n";
     fi
 
-    echo ""
-    echo "Successfully created resource"
+    if [ "$CLEANUP_TEMP_FILES" = true ]; then
+        rm -f "$PWD/$folder/setup/tmp.yaml"
+        rm -f "$PWD/$folder/setup/templates/$fName.json"
+        rm -f "$PWD/$folder/setup/templates/$fName.json1"
+        rm -f "$PWD/$folder/setup/templates/$fName.yaml.spec"
+    fi
 }
 
 # creates environment templates
@@ -264,17 +283,21 @@ function create_environment_templates {
         jq --arg repo_name "$REPO_NAME" '(.spec.repositoryOptions.name |= $repo_name) ' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     fi
     
-    make_post_request_new "$ADD_ENVIRONMENT_TEMPLATE" $PWD/$folder/setup/templates/$fName.json1
+    local response=$(make_post_request_new "$ADD_ENVIRONMENT_TEMPLATE" $PWD/$folder/setup/templates/$fName.json1)
 
-    if [ "$CLEANUP_TEMP_FILES" = true ]; then
-        rm "$PWD/$folder/setup/tmp.yaml"
-        rm "$PWD/$folder/setup/templates/$fName.json"
-        rm "$PWD/$folder/setup/templates/$fName.json1"
-        rm "$PWD/$folder/setup/templates/$fName.yaml.spec"
+    if [[ $response == *"\"internal\""* ]]; then
+       error_message=$(echo "$response" | jq -r '.internal')
+       printf -- "\033[31m ERROR: Failed to create environment template %s \033[0m\n" "$error_message";
+    else
+       printf -- "\033[32m Info: Created environment template successfully \033[0m\n";
     fi
 
-    echo ""
-    echo "Successfully created environment template"
+    if [ "$CLEANUP_TEMP_FILES" = true ]; then
+        rm -f "$PWD/$folder/setup/tmp.yaml"
+        rm -f "$PWD/$folder/setup/templates/$fName.json"
+        rm -f "$PWD/$folder/setup/templates/$fName.json1"
+        rm -f "$PWD/$folder/setup/templates/$fName.yaml.spec"
+    fi
 }
 
 # reads the spec files in the template folder
@@ -359,7 +382,16 @@ function create_pipeline {
     fi
     
     yq -o=json $PWD/templates/$fName.yaml.spec > $PWD/templates/$fName.json 
-    make_post_request_new "$ADD_PIPELINE_URL" $PWD/templates/$fName.json
+    
+
+    local response=$(make_post_request_new "$ADD_PIPELINE_URL" $PWD/templates/$fName.json)
+
+    if [[ $response == *"\"error\""* ]]; then
+       error_message=$(echo "$response" | jq -r '.error')
+       printf -- "\033[31m ERROR: Failed to pipeline %s \033[0m\n" "$error_message";
+    else
+       printf -- "\033[32m Info: Created pipeline successfully \033[0m\n";
+    fi
 
     triggerName=$(cat $PWD/templates/$fName.json  | jq -r '.spec.triggers[0].name')
 
@@ -376,9 +408,9 @@ function create_pipeline {
     echo "====================================================="
 
     if [ "$CLEANUP_TEMP_FILES" = true ]; then
-        rm "$PWD/tmp.yaml"
-        rm "$PWD/templates/$fName.json"
-        rm "$PWD/templates/$fName.yaml.spec"
+        rm -f "$PWD/tmp.yaml"
+        rm -f "$PWD/templates/$fName.json"
+        rm -f "$PWD/templates/$fName.yaml.spec"
     fi
     echo "Successfully created pipelines"
 }
@@ -392,10 +424,15 @@ function create_agent() {
     GET_AGENT_URL="v2/config/project/${PROJECT_HASH}/agent/{$AGENT_NAME}"
 
     jq --arg name "$AGENT_NAME" '(.metadata.name |= $name)' templates/agent_template.json > templates/agent.json
-    make_post_request_old "$ADD_AGENT_URL" templates/agent.json
 
-    echo ""
-    echo "Successfully created agent"
+    local response=$(make_post_request_old "$ADD_AGENT_URL" templates/agent.json)
+
+    if [[ $response == *"\"error\""* ]]; then
+       error_message=$(echo "$response" | jq -r '.error')
+       printf -- "\033[31m ERROR: Failed to create agent %s \033[0m\n" "$error_message";
+    else
+       printf -- "\033[32m Info: Created agent successfully \033[0m\n";
+    fi
 
     make_get_request_old "$GET_AGENT_URL" | jq > templates/agents_response.json
     agentId=$(cat templates/agents_response.json | jq -r '.metadata.id')
@@ -434,13 +471,13 @@ function create_agent() {
         fi
     done
 
-    rm "docker-compose-$agentId.yaml"
-    rm "relayConfigData-$agentId.json"
+    rm -f "docker-compose-$agentId.yaml"
+    rm -f "relayConfigData-$agentId.json"
 }
 
 # Create Repo and pipeline
 function create_repository() {
-    if [ "$IS_CLONE_REPO" = false ]; then
+    if [ "$IS_PRIVATE_REPO" = false ]; then
         echo "Creating public repo"
         jq --arg name "$REPO_NAME" --arg agentname "$AGENT_NAME" '(.metadata.name |= $name) | (.spec.agentNames = [$agentname]) | del(.spec.credentials)' templates/repository_template.json > templates/repository.json
         make_post_request_old "$ADD_REPO_URL" templates/repository.json
@@ -511,7 +548,7 @@ function read_values_yaml() {
     SHARING=$(yq e '.sharingtemplates' values.yaml)
     ORG_NAME=$(yq e '.org' values.yaml)
 
-    IS_CLONE_REPO=$(yq e '.isClonedRepo' values.yaml)
+    IS_PRIVATE_REPO=$(yq e '.isPrivateRepo' values.yaml)
     USER_NAME=$(yq e '.userName' values.yaml)
     TOKEN=$(yq e '.token' values.yaml)
     END_POINT=$(yq e '.endPoint' values.yaml)
@@ -532,7 +569,7 @@ function read_values_yaml() {
         exit 1
     fi
 
-    if [ "$IS_CLONE_REPO" = true ]; then
+    if [ "$IS_PRIVATE_REPO" = true ]; then
         if [ -z "$USER_NAME" ] || [ "$USER_NAME" = "UPDATE_USER_NAME" ]; then
             printf -- "\033[31m ERROR: Please update valid userName in values.yaml \033[0m\n";
             exit 1
@@ -562,7 +599,7 @@ function read_values_yaml() {
     ADD_RESOURCE_TEMPLATE="apis/eaas.envmgmt.io/v1/projects/${PROJECT_NAME}/resourcetemplates"
     ADD_ENVIRONMENT_TEMPLATE="apis/eaas.envmgmt.io/v1/projects/${PROJECT_NAME}/environmenttemplates"
     ADD_DRIVER_TEMPLATE="apis/eaas.envmgmt.io/v1/projects/${PROJECT_NAME}/drivers"
-    ADD_CONFIGCONTEXT_TEMPLATE="apis/eaas.envmgmt.io/v1/projects/${PROJECT_NAME}/configcontexts"
+    ADD_CONFIGCONTEXT_TEMPLATE="apis/eaas.envmgmt.io/v1/projects/${PROJECT_NAME}/configcontexts?fail-on-exists=true"
 
     for template in "${templates[@]}"; do
         echo "$template"
@@ -598,12 +635,12 @@ main() {
 
     # cleanup the tmp files
     if [ "$CLEANUP_TEMP_FILES" = true ]; then
-        rm templates/users_response.json
-        rm templates/project_response.json
-        rm templates/trigger_response.json
-        rm templates/agents_response.json
-        rm templates/repository.json
-        rm templates/agent.json
+        rm -f templates/users_response.json
+        rm -f templates/project_response.json
+        rm -f templates/trigger_response.json
+        rm -f templates/agents_response.json
+        rm -f templates/repository.json
+        rm -f templates/agent.json
     fi 
 }
 
