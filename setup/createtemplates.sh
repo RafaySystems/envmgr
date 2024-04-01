@@ -547,7 +547,7 @@ function read_values_yaml() {
     ORG_NAME=$(cat values.yaml | yq e '.org')
 
     SHARING=$(cat values.yaml | yq e '.sharingtemplates')
-    IS_PRIVATE_REPO=$(cat values.yaml | yq e '.isClonedRepo')
+    IS_PRIVATE_REPO=$(cat values.yaml | yq e '.isPrivateRepo')
     USER_NAME=$(cat values.yaml | yq e '.userName')
     TOKEN=$(cat values.yaml | yq e '.token')
     END_POINT=$(cat values.yaml | yq e '.endPoint')
