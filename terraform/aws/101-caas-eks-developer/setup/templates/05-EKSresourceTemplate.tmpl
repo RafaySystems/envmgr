@@ -1,0 +1,97 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      backendType: system
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathEKS }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: eks_cluster_project
+    options:
+      override:
+        type: notallowed
+    value: $(trigger.payload.project)$
+    valueType: expression
+  - name: eks_cluster_region
+    options:
+      override:
+        restrictedValues:
+        - us-west-2
+	- us-east-1
+        type: restricted
+      required: true
+    value: us-west-2
+    valueType: text
+  - name: node_count
+    options:
+      override:
+        restrictedValues:
+        - 1
+	- 2
+	- 3
+        type: restricted
+      required: true
+    value: 1
+    valueType: text
+  - name: eks_cluster_name
+    options:
+      override:
+        type: allowed
+    value: update-me
+    valueType: text
+  - name: cloud_credential_name
+    options:
+      override:
+        type: notallowed
+    value: update-me
+    valueType: text
+  - name: username
+    options:
+      override:
+        type: notallowed
+    value: $(trigger.payload.username)$
+    valueType: expression
+  - name: user_type
+    options:
+      override:
+        type: notallowed
+    value: $(trigger.payload.is_sso_user)$
+    valueType: expression
+  - name: collaborator
+    options:
+      override:
+        type: allowed
+    value: 'user_email'
+    valueType: text
+  - name: eks_cluster_node_instance_type
+    options:
+      override:
+        type: notallowed
+    value: t3.xlarge
+    valueType: text
+  - name: eks_cluster_version
+    options:
+      override:
+        restrictedValues:
+        - 1.29
+	- 1.28
+	- 1.27
+        type: restricted
+      required: true
+    value: 1.29
+    valueType: text
+  version: {{ $glbCtx.version }}

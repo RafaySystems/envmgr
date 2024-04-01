@@ -1,0 +1,54 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  annotations:
+    eaas.envmgmt.io/category: Developer Productivity
+    eaas.envmgmt.io/github: https://github.com/RafaySystems/envmgr/tree/main/terraform/aws/101-caas-eks-developer
+  name: {{ $glbCtx.InfraEnvironmentTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+  description: Self Service for requesting a new EKS Kubernetes cluster
+  displayName: EKS Cluster as a Service
+spec:
+  iconURL: https://static-00.iconduck.com/assets.00/amazon-eks-icon-455x512-0zairb3r.png
+  readme: "Developers and data scientists can request for the creation and access
+    to a new EKS Kubernetes cluster. \r\n\r\n---\r\n\r\n## What does this do behind
+    the scenes? \r\nThis template will perform the following activities: \r\n\r\n1.
+    Create a new EKS Kubernetes cluster in the Rafay project where this template is
+    launched \r\n3. Create a new group for RBAC with Cluster Admin privileges to this
+    newly created cluster \r\n4. Add the requesting user's credentials to the new
+    group \r\n\r\n---\r\n\r\n## Inputs and Variables\r\nThe following inputs are required
+    when deploying a cluster:\r\n\r\n**eks_cluster_name**: Enter a name for the cluster
+    that will be created\r\n**eks_cluster_region**: Select the AWS region where the
+    cluster will be located\r\n**eks_cluster_version**: Select the Kubernetes version
+    to be installed on the cluster\r\n**node_count**: Select the number of nodes to
+    be provisioned in the cluster\r\n\r\nOptionally, you can enter the email address
+    of a collaborator who will be granted Cluster Admin permissions on the cluster.\r\n\r\n---\r\n\r\n##
+    Instructions\r\n\r\nOnce your environment is successfully created, please logout
+    and login to establish a new session with your \r\nnew role. You will now have
+    administrative privileges on the new Kubernetes cluster to create, read, \r\nupdate
+    and delete Kubernetes resources. You can also perform the following as part of
+    your application \r\ndevelopment activities. \r\n\r\n### Deploying Applications
+    \r\n\r\nYou can deploy and operate containerized applications using any of the
+    following approaches: \r\n\r\n1. From the pre-configured [application catalog](https://docs.rafay.co/catalog/catalog_overview/)\r\n2.
+    Using kubectl or helm CLI by downloading the [zero trust kubeconfig](https://docs.rafay.co/accessproxy/kubectl_cli/)\r\n3.
+    [Rafay workloads](https://docs.rafay.co/workloads/workload_types/) using YAML/Helm
+    charts by uploading them or directly from a Git repository  \r\n4. [Rafay workloads](https://docs.rafay.co/workloads/workload_types/)
+    pointing to a Git repository \r\n\r\n\r\n### Debugging & Troubleshooting \r\n\r\nYou
+    can debug and troubleshoot applications in your **cluster** using the following
+    approaches: \r\n\r\n1. Use the integrated [Kubernetes dashboard](https://docs.rafay.co/dashboard/my_clusters/)
+    to view the status and details of resources in your namespace \r\n2. Securely
+    access resources in your namespace via the [web based Kubectl shell](https://docs.rafay.co/accessproxy/browser_kubectl/)\r\n3.
+    Download a [kubeconfig file](https://docs.rafay.co/accessproxy/kubectl_cli/) to
+    securely access resources in your namespace using your favorite IDE \r\n\r\n---
+    \r\n\r\n## Useful Tutorials\r\n\r\nHere are a few useful tutorials that will help
+    you familiarize with the various features that will help application\r\ndevelopers
+    use their new cluster effectively. \r\n\r\n- [App Deployments using Rafay Workloads](https://docs.rafay.co/learn/quickstart/applications/workloads/overview/)\r\n-
+    [Troubleshooting](https://docs.rafay.co/learn/quickstart/troubleshooting/workloads/overview/)\r\n"
+  resources:
+  - kind: resourcetemplate
+    name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  version: {{ $glbCtx.version }}
