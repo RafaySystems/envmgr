@@ -1,9 +1,0 @@
-apiVersion: gitops.k8smgmt.io/v3
-kind: Agent
-metadata:
-  name: eaas-agent-defaultproject
-  project: defaultproject
-spec:
-  active: true
-  type: Docker
-  version: r2.4.0

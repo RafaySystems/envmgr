@@ -1,8 +1,0 @@
-apiVersion: integrations.k8smgmt.io/v3
-kind: Repository
-metadata:
-  name: default-stable-helm
-  project: defaultproject
-spec:
-  endpoint: https://charts.helm.sh/stable
-  type: Helm
