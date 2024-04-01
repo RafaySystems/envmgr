@@ -593,7 +593,7 @@ function read_values_yaml() {
 
     validate_orgname "$ORG_NAME"
 
-    templates=($(yq e '.templates[]' values.yaml))
+    templates=($(cat values.yaml | yq e '.templates[]'))
 
     ADD_RESOURCE_TEMPLATE="apis/eaas.envmgmt.io/v1/projects/${PROJECT_NAME}/resourcetemplates"
     ADD_ENVIRONMENT_TEMPLATE="apis/eaas.envmgmt.io/v1/projects/${PROJECT_NAME}/environmenttemplates"
