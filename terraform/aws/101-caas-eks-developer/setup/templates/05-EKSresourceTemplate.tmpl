@@ -42,12 +42,12 @@ spec:
       description: Select the number of  t3.xlarge nodes to be provisioned in the cluster
       override:
         restrictedValues:
-        - 1
-        - 2
-        - 3
+        - "1"
+        - "2"
+        - "3"
         type: restricted
       required: true
-    value: 1
+    value: "1"
     valueType: text
   - name: eks_cluster_name
     options:
@@ -91,11 +91,11 @@ spec:
       description: Select the Kubernetes version to be installed on the cluster
       override:
         restrictedValues:
-        - 1.29
-        - 1.28
-        - 1.27
+        - "1.29"
+        - "1.28"
+        - "1.27"
         type: restricted
       required: true
-    value: 1.29
+    value: "1.29"
     valueType: text
   version: {{ $glbCtx.version }}
