@@ -1,0 +1,8 @@
+apiVersion: integrations.k8smgmt.io/v3
+kind: Repository
+metadata:
+  name: default-cert-manager
+  project: defaultproject
+spec:
+  endpoint: https://github.com/jetstack/cert-manager.git
+  type: Git
