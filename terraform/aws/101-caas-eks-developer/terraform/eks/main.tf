@@ -33,7 +33,7 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
       version = var.eks_cluster_version
       tags = {
         env = "dev"
-        email = var.email_tag
+        email = var.username
       }
     }
     vpc {
@@ -64,15 +64,49 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
       volume_size      = 80
       volume_type      = "gp3"
       private_networking = true
-      subnets = var.eks_private_subnets
       labels = {
         app = "infra"
         dedicated = "true"
       }
       tags = {
         env = "dev"
-        email = var.email_tag
+        email = var.username
       }
     }
+    addons {
+      name = "vpc-cni"
+      version = "latest"
+    }
+    addons {
+      name = "kube-proxy"
+      version = "latest"
+    }
+    addons {
+      name = "coredns"
+      version = "latest"
+    }
   }
+}
+
+resource "rafay_group" "group" {
+  name        = "${var.eks_cluster_name}-group"
+}
+
+resource "rafay_groupassociation" "groupassociation" {
+  depends_on = [rafay_group.group]
+  project = "${var.eks_cluster_project}"
+  group = "${rafay_group.group.name}"
+  roles = ["CLUSTER_ADMIN"]
+  add_users = ["${var.username}"]
+  idp_user = var.user_type
+}
+
+resource "rafay_groupassociation" "groupassociation_collaborators" {
+  count = var.collaborator == "user_email" ? 0 : 1
+  depends_on = [rafay_groupassociation.groupassociation]
+  project = "${var.eks_cluster_project}"
+  roles = ["CLUSTER_ADMIN"]
+  group = "${rafay_group.group.name}"
+  add_users = ["${var.collaborator}"]
+  idp_user = true
 }

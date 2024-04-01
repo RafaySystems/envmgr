@@ -1,7 +1,3 @@
-variable "email_tag" {
-  description = "Tag that will be applied to the AWS resource"
-}
-
 variable "cloud_credential_name" {
   description = "Name of the Rafay cloud credential that will be used for provisioning"
 }
@@ -32,4 +28,18 @@ variable "eks_cluster_node_instance_type" {
 
 variable "eks_cluster_public_access" {
   description = "public access"
+}
+
+variable "username" {
+  description = "Rafay username"
+  type    = string
+}
+
+variable "user_type" {
+  description = "Rafay user type (sso or local)"
+  type    = string
+}
+
+variable "collaborator" {
+  type = string
 }

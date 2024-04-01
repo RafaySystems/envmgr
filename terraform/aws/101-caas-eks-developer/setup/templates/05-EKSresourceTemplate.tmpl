@@ -59,12 +59,24 @@ spec:
         type: notallowed
     value: update-me
     valueType: text
-  - name: email_tag
+  - name: username
     options:
       override:
         type: notallowed
     value: $(trigger.payload.username)$
     valueType: expression
+  - name: user_type
+    options:
+      override:
+        type: notallowed
+    value: $(trigger.payload.is_sso_user)$
+    valueType: expression
+  - name: collaborator
+    options:
+      override:
+        type: allowed
+    value: 'user_email'
+    valueType: text
   - name: eks_cluster_node_instance_type
     options:
       override:
