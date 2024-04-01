@@ -1,0 +1,8 @@
+apiVersion: integrations.k8smgmt.io/v3
+kind: Repository
+metadata:
+  name: default-bitnami
+  project: defaultproject
+spec:
+  endpoint: https://charts.bitnami.com/bitnami
+  type: Helm
