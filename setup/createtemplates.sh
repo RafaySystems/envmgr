@@ -538,20 +538,20 @@ function create_templates() {
 function read_values_yaml() {
     echo "Reading values yaml"
 
-    hostenv=$(sudo cat values.yaml | yq e '.hostenv')
+    hostenv=$(cat values.yaml | yq e '.hostenv')
     BASE_URL="${BASE_URL}${hostenv}"
-    API_KEY=$(sudo cat values.yaml |yq e '.apikey')
-    REPO_NAME=$(sudo cat values.yaml | yq e '.repoName')
-    PROJECT_NAME=$(sudo cat values.yaml | yq e '.projectName')
-    AGENT_NAME=$(sudo cat values.yaml | yq e '.agentName')
-    ORG_NAME=$(sudo cat values.yaml | yq e '.org')
+    API_KEY=$(cat values.yaml |yq e '.apikey')
+    REPO_NAME=$(cat values.yaml | yq e '.repoName')
+    PROJECT_NAME=$(cat values.yaml | yq e '.projectName')
+    AGENT_NAME=$(cat values.yaml | yq e '.agentName')
+    ORG_NAME=$(cat values.yaml | yq e '.org')
 
-    SHARING=$(sudo cat values.yaml | yq e '.sharingtemplates')
-    IS_PRIVATE_REPO=$(sudo cat values.yaml | yq e '.isClonedRepo')
-    USER_NAME=$(sudo cat values.yaml | yq e '.userName')
-    TOKEN=$(sudo cat values.yaml | yq e '.token')
-    END_POINT=$(sudo cat values.yaml | yq e '.endPoint')
-    PATH_VAL=$(sudo cat values.yaml | yq e '.path')
+    SHARING=$(cat values.yaml | yq e '.sharingtemplates')
+    IS_PRIVATE_REPO=$(cat values.yaml | yq e '.isClonedRepo')
+    USER_NAME=$(cat values.yaml | yq e '.userName')
+    TOKEN=$(cat values.yaml | yq e '.token')
+    END_POINT=$(cat values.yaml | yq e '.endPoint')
+    PATH_VAL=$(cat values.yaml | yq e '.path')
 
     if [ -z "$API_KEY" ] || [ "$API_KEY" = "UPDATE_API_KEY" ]; then
         printf -- "\033[31m ERROR: Please update valid apikey in values.yaml \033[0m\n";
