@@ -28,6 +28,7 @@ spec:
     valueType: expression
   - name: eks_cluster_region
     options:
+      description: Select the AWS region where the cluster will be located
       override:
         restrictedValues:
         - us-west-2
@@ -38,6 +39,7 @@ spec:
     valueType: text
   - name: node_count
     options:
+      description: Select the number of  t3.xlarge nodes to be provisioned in the cluster
       override:
         restrictedValues:
         - 1
@@ -49,6 +51,7 @@ spec:
     valueType: text
   - name: eks_cluster_name
     options:
+      description: Enter a name for the cluster that will be created
       override:
         type: allowed
     value: update-me
@@ -85,6 +88,7 @@ spec:
     valueType: text
   - name: eks_cluster_version
     options:
+      description: Select the Kubernetes version to be installed on the cluster
       override:
         restrictedValues:
         - 1.29
