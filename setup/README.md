@@ -21,20 +21,22 @@ Below binaries are required to run the script.
 **agentName** - Agent name 
 > Default value - eaas-agent
 
+**Note**: Project name will be suffixed for the agent name
+
 **repoName** - Repository name
 > Default value - eaas-repo
 
-**isClonedRepo** - This value should be set to true if the customer wants to create the repo pointing to the cloned repo.
+**isPrivateRepo** - This value should be set to true if the customer creates the private repository.
 
-**userName** - User name of the git repo
+**userName** - User name of the git repository
 
-**token** - Token for authenticating to the git repo
+**token** - Token for authenticating to the git repository
 
-**endPoint** - Update the end point of the cloned repo.
+**endPoint** - Update the end point of the cloned repository.
 
-**branch** - Update which brach the repo should be pointing to.
+**branch** - Update which branch the repository should be pointing to.
 
-**path** - Repository path for Rafay to write back configuration
+**path** - Repository path for pipeline to write back configuration
 
 **version** - Version of the templates
 
