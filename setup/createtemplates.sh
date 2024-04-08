@@ -35,8 +35,21 @@ GET_PROJECTS="v1/auth/projects"
 CREATE_PROJECT_URL="auth/v1/projects"
 GET_USERS="auth/v1/users"
 
+MAIN_YAML="$PWD/values.yaml"
+
 PROJECT_HASH=""
 PROJECT_NAME_FIELD="projectName"
+
+function merge_yaml_files () {
+    local localYamlFile="$1"
+    local tempYamlFile="$2"
+
+    merged_yaml=$(yq eval-all 'select(fileIndex == 0) + select(fileIndex == 1)' "$localYamlFile" "$MAIN_YAML")
+    echo "$merged_yaml" > "$tempYamlFile" || { 
+        printf -- "\033[31m ERROR: Failed to write merged YAML %s \033[0m\n" "$tempYamlFile";
+        exit 1
+    }
+}
 
 # check for required binaries
 function check_required_binaries () {
@@ -49,7 +62,7 @@ function check_required_binaries () {
     if docker info &>/dev/null; then
         echo "Docker is running."
     else
-        echo "Docker is not running."
+        echo "Docker is not running. Ensure the docker is running from where the script is executed"
         exit 1
     fi
 }
@@ -134,7 +147,7 @@ function create_configcontext_templates {
     local folder="$2"
     echo "Creating you configcontext for ${templatefile}"
 
-    sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/$folder/setup/values.yaml > $PWD/$folder/setup/tmp.yaml
+    sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/$folder/setup/values_tmp.yaml > $PWD/$folder/setup/tmp.yaml
     
     fName="$(rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
            --test-template | grep -A1 metadata | awk  '/name/ {print $2}')" 
@@ -178,7 +191,7 @@ function create_driver_templates {
     local folder="$2"
     echo "Creating you driver for ${templatefile}"
 
-    sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/$folder/setup/values.yaml > $PWD/$folder/setup/tmp.yaml
+    sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/$folder/setup/values_tmp.yaml > $PWD/$folder/setup/tmp.yaml
     
     fName="$(rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
            --test-template | grep -A1 metadata | awk  '/name/ {print $2}')" 
@@ -218,7 +231,7 @@ function create_resource_templates {
     local folder="$2"
     echo "Creating resource template for ${templatefile}"
 
-    sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/$folder/setup/values.yaml > $PWD/$folder/setup/tmp.yaml
+    sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/$folder/setup/values_tmp.yaml > $PWD/$folder/setup/tmp.yaml
     
     fName="$(rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
            --test-template | grep -A1 metadata | awk  '/name/ {print $2}')" 
@@ -262,7 +275,7 @@ function create_environment_templates {
     local folder="$2"
     echo "Creating environment template for ${templatefile}"
 
-    sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/$folder/setup/values.yaml > $PWD/$folder/setup/tmp.yaml
+    sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/$folder/setup/values_tmp.yaml > $PWD/$folder/setup/tmp.yaml
 
     fName="$(rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
            --test-template | grep -A1 metadata | awk  '/name/ {print $2}')" 
@@ -308,6 +321,10 @@ function read_folder {
     local driver_templates=()
     local resource_templates=()
     local environment_templates=()
+
+    #cat "$folder/setup/values.yaml"
+
+    merge_yaml_files "$folder/setup/values.yaml" "$folder/setup/values_tmp.yaml"
 
     # Searching for configcontext
     while IFS= read -r -d '' file; do
@@ -361,6 +378,10 @@ function read_folder {
         printf -- "\033[32m %s\033[0m\n" "$file"
         create_environment_templates "$file" "$folder"
     done
+
+    if [ "$CLEANUP_TEMP_FILES" = true ]; then
+        rm -f "$folder/setup/values_tmp.yaml"
+    fi
 }
 
 # creates pipeline
