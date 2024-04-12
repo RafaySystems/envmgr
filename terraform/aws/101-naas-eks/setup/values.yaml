@@ -23,9 +23,9 @@ AWSConfigContext: aws-101-naas-eks
 RafayConfigContext: rafay-101-naas-eks
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
-VPCResourceTemplate: aws-vpc-rs-tmpl
-EKSResourceTemplate: aws-eks-rs-tmpl
-NamespaceResourceTemplate: aws-namespace-eks-rs-tmpl
+VPCResourceTemplate: 101-naas-eks-aws-vpc-rs-tmpl
+EKSResourceTemplate: 101-naas-eks-aws-eks-rs-tmpl
+NamespaceResourceTemplate: 101-naas-eks-aws-namespace-eks-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 InfraEnvironmentTemplate: eks-naas-infra-env-tmpl
