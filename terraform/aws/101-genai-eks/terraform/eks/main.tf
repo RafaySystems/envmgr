@@ -126,5 +126,22 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
         email = var.email_tag
       }
     }
+    addons {
+      name = "aws-ebs-csi-driver"
+      version = "latest" 
+      configuration_values = "{\"controller\":{\"tolerations\":[{\"key\":\"CriticalAddonsOnly\",\"operator\":\"Exists\"},{\"operator\":\"Exists\"}]}}"
+    }
+    addons {
+      name = "vpc-cni"
+      version = "latest"
+    }
+    addons {
+      name = "kube-proxy"
+      version = "latest"
+    }
+    addons {
+      name = "coredns"
+      version = "latest"
+    }
   }
 }
