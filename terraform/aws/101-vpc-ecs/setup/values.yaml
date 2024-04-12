@@ -19,7 +19,7 @@ version: v1
 ## https://docs.rafay.dev/env_manager/overview/
 ## Environment Manager congifContext Name
 ## https://docs.rafay.dev/env_manager/templates/contexts/
-ConfigContext: aws
+ConfigContext: aws-101-vpc-ecs
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
 ECSResourceTemplate: aws-ecs-rs-tmpl
