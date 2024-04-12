@@ -6,6 +6,8 @@ This setup script will help to deploy the current existing templates in this rep
 Below binaries are required to run the script.
 > docker docker-compose git grep awk jq yq rctl
 
+RCTL must be initialized with the org details where the templates will be installed.
+
 - **Update the values.yaml**
 
 **hostenv** - Host Environment
@@ -41,6 +43,8 @@ Below binaries are required to run the script.
 **version** - Version of the templates
 
 **sharingtemplates** - Set to true if the templates need to be shared across the projects.
+
+**templates** - remove any directories from the list of templates that are NOT intended to be created in the controller
 
 - **How to Run**
 > ./createtemplates.sh
