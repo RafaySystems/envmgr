@@ -23,15 +23,15 @@ RafayConfigContext: rafay-101-caas-eks
 AWSConfigContext: aws-101-caas-eks
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
-ProjectResourceTemplate: rafay-project-rs-tmpl
-GroupResourceTemplate: rafay-group-rs-tmpl
-GroupAssociationResourceTemplate: rafay-group-association-rs-tmpl
-RepositoryResourceTemplate: rafay-repository-rs-tmpl
-NamespaceResourceTemplate: rafay-namespace-rs-tmpl
-EKSCloudCredentialResourceTemplate: rafay-ekscloudcredential-rs-tmpl
-AddonResourceTemplate: rafay-addon-rs-tmpl
-BlueprintResourceTemplate: rafay-blueprint-rs-tmpl
-EKSResourceTemplate: rafay-eks-rs-tmpl
+ProjectResourceTemplate: 101-caas-eks-rafay-project-rs-tmpl
+GroupResourceTemplate: 101-caas-eks-rafay-group-rs-tmpl
+GroupAssociationResourceTemplate: 101-caas-eks-rafay-group-association-rs-tmpl
+RepositoryResourceTemplate: 101-caas-eks-rafay-repository-rs-tmpl
+NamespaceResourceTemplate: 101-caas-eks-rafay-namespace-rs-tmpl
+EKSCloudCredentialResourceTemplate: 101-caas-eks-rafay-ekscloudcredential-rs-tmpl
+AddonResourceTemplate: 101-caas-eks-rafay-addon-rs-tmpl
+BlueprintResourceTemplate: 101-caas-eks-rafay-blueprint-rs-tmpl
+EKSResourceTemplate: 101-caas-eks-rafay-eks-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 EnvironmentTemplate: caas-eks-env-tmpl
