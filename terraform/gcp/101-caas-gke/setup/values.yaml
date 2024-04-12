@@ -23,10 +23,10 @@ RafayConfigContext: rafay-101-caas-gke
 GCPConfigContext: gcp-101-caas-gke
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
-ProjectResourceTemplate: rafay-project-rs-tmpl
-GroupAssociationResourceTemplate: rafay-group-association-rs-tmpl
-GCPCloudCredentialResourceTemplate: rafay-gcpcloudcredential-rs-tmpl
-GKEResourceTemplate: rafay-gke-rs-tmpl
+ProjectResourceTemplate: 101-caas-gke-rafay-project-rs-tmpl
+GroupAssociationResourceTemplate: 101-caas-gke-rafay-group-association-rs-tmpl
+GCPCloudCredentialResourceTemplate: 101-caas-gke-rafay-gcpcloudcredential-rs-tmpl
+GKEResourceTemplate: 101-caas-gke-rafay-gke-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 EnvironmentTemplate: caas-gke-env-tmpl
