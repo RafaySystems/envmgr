@@ -19,8 +19,8 @@ version: v1
 ## https://docs.rafay.dev/env_manager/overview/
 ## Environment Manager congifContext Name
 ## https://docs.rafay.dev/env_manager/templates/contexts/
-OCIConfigContext: oci
-RafayConfigContext: rafay
+OCIConfigContext: oci-101-caas-oke
+RafayConfigContext: rafay-101-caas-oke
 ## https://docs.rafay.dev/env_manager/overview/
 ## Environment Manager Driver Name
 OCIDriver: oci-driver
