@@ -20,13 +20,6 @@ spec:
     directoryPath: {{ $glbCtx.tfRepoPathOpenAI }}
     name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
   variables:
-  - name: region
-    options:
-      description: AWS region
-      override:
-        type: allowed
-    value: {{ $glbCtx.awsRegion }}
-    valueType: text
   - name: secret_name
     options:
       description: Name of the Secret to be created in secret manager
