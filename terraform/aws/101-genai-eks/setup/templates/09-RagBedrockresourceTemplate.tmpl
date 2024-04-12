@@ -20,13 +20,6 @@ spec:
     directoryPath: {{ $glbCtx.tfRepoPathBedrock }}
     name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
   variables:
-  - name: region
-    options:
-      description: AWS region for bedrock
-      override:
-        type: allowed
-    value: {{ $glbCtx.awsRegion }}
-    valueType: text
   - name: service-account-name
     options:
       description: Name of the service account
