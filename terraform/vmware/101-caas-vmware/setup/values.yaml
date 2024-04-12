@@ -23,12 +23,12 @@ RafayConfigContext: rafay-101-caas-vmware
 VMwarevSphereConfigContext: vmware-vsphere-101-caas-vmware
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
-ProjectResourceTemplate: rafay-project-rs-tmpl
-GroupAssociationResourceTemplate: rafay-group-association-rs-tmpl
-VSphereCloudCredentialResourceTemplate: rafay-vspherecloudcredential-rs-tmpl
-GatewayResourceTemplate: rafay-gateway-rs-tmpl
-VMwarevSphereResourceTemplate: rafay-vmware-vsphere-rs-tmpl
-WordPressWorkloadResourceTemplate: rafay-wordpress-ts-tmpl
+ProjectResourceTemplate: 101-caas-vmware-rafay-project-rs-tmpl
+GroupAssociationResourceTemplate: 101-caas-vmware-rafay-group-association-rs-tmpl
+VSphereCloudCredentialResourceTemplate: 101-caas-vmware-rafay-vspherecloudcredential-rs-tmpl
+GatewayResourceTemplate: 101-caas-vmware-rafay-gateway-rs-tmpl
+VMwarevSphereResourceTemplate: 101-caas-vmware-rafay-vmware-vsphere-rs-tmpl
+WordPressWorkloadResourceTemplate: 101-caas-vmware-rafay-wordpress-ts-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 EnvironmentTemplate: caas-vmware-env-tmpl
