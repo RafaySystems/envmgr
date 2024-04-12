@@ -22,8 +22,8 @@ version: v1
 ConfigContext: aws-101-genai-ecs
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
-VPCResourceTemplate: aws-vpc-rs-tmpl
-GENAIResourceTemplate: ecs-genai-rs-tmpl
+VPCResourceTemplate: 101-genai-ecs-aws-vpc-rs-tmpl
+GENAIResourceTemplate: 101-genai-ecs-ecs-genai-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 EnvironmentTemplate: ecs-genai-env-tmpl
