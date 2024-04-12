@@ -23,13 +23,13 @@ AWSConfigContext: aws-101-genai-eks
 RafayConfigContext: rafay-101-genai-eks
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
-VPCResourceTemplate: aws-vpc
-EKSResourceTemplate: aws-eks
-GenAIResourceTemplate: aws-genai-eks
-RagBedrockResourceTemplate: rag-eks-bedrock
-RagOpenAIResourceTemplate: rag-eks-openai
-RagQdrantResourceTemplate: rag-eks-qdrant
-RagAppResourceTemplate: rag-eks-app
+VPCResourceTemplate: 101-genai-eks-aws-vpc
+EKSResourceTemplate: 101-genai-eks-aws-eks
+GenAIResourceTemplate: 101-genai-eks-aws-genai-eks
+RagBedrockResourceTemplate: 101-genai-eks-rag-eks-bedrock
+RagOpenAIResourceTemplate: 101-genai-eks-rag-eks-openai
+RagQdrantResourceTemplate: 101-genai-eks-rag-eks-qdrant
+RagAppResourceTemplate: 101-genai-eks-rag-eks-app
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 InfraEnvironmentTemplate: eks-ai-infra
