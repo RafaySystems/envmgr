@@ -22,7 +22,7 @@ version: v1
 RafayConfigContext: rafay-101-caas-eks-developer
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
-EKSResourceTemplate: aws-eks-rs-tmpl
+EKSResourceTemplate: 101-caas-eks-developer-aws-eks-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 InfraEnvironmentTemplate: eks-naas-infra-env-tmpl
