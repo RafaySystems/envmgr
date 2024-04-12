@@ -40,6 +40,13 @@ spec:
       version: {{ $glbCtx.version }}
     type: dynamic
   variables:
+  - name: region
+    options:
+      description: AWS region for bedrock
+      override:
+        type: allowed
+    value: {{ $glbCtx.awsRegion }}
+    valueType: text
   - name: project
     options:
       override:
