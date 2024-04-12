@@ -23,9 +23,9 @@ AWSConfigContext: aws-101-kubeflow-eks
 RafayConfigContext: rafay-101-kubeflow-eks
 ##Environment Manager resourceTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/resource_templates/
-VPCResourceTemplate: aws-vpc-rs-tmpl
-EKSResourceTemplate: aws-eks-rs-tmpl
-KubeflowResourceTemplate: kubeflow-rs-tmpl
+VPCResourceTemplate: 101-kubeflow-eks-aws-vpc-rs-tmpl
+EKSResourceTemplate: 101-kubeflow-eks-aws-eks-rs-tmpl
+KubeflowResourceTemplate: 101-kubeflow-eks-kubeflow-rs-tmpl
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
 EnvironmentTemplate: eks-kubeflow-env-tmpl
