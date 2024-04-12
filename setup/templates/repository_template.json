@@ -1,0 +1,27 @@
+{
+    "apiVersion": "config.rafay.dev/v2",
+    "kind": "Repository",
+    "metadata": {
+        "name": "<REPO_NAME>"
+    },
+    "spec": {
+        "repositoryType": "GitRepository",
+        "endpoint": "https://github.com/RafaySystems/envmgr",
+        "insecure": false,
+        "credentialType": "CredentialTypeNotSet",
+        "internalNetworkAccessOnly": true,
+        "enableSubmodules": false,
+        "maxRetries": 0,
+        "enableLFS": false,
+        "shareMode": "CUSTOM",
+        "agentNames": [
+            "<AGENT_NAME>"
+        ],
+        "credentials": {
+            "userPass": {
+              "username": "<USER_NAME>",
+              "password": "<PASSWORD>"
+            }
+        }
+    }
+}

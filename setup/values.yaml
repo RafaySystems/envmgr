@@ -1,0 +1,61 @@
+## environment
+hostenv: console.rafay.dev
+
+## API key
+apikey: UPDATE_API_KEY
+
+## Org name of the api key. 
+org: UPDATE_ORG_NAME
+## Rafay Project name
+## Default value - defaultproject
+## Update the project name if the templates need to be created in a different project.
+projectName: defaultproject
+## Rafay gitops agent name
+agentName: eaas-agent
+## Rafay respository name
+repoName: eaas-repo
+## Is using private repository set isPrivateRepo to true 
+## Default value - false.
+## Default repository https://github.com/RafaySystems/envmgr
+isPrivateRepo: true
+## Username to access repository
+userName: UPDATE_USER_NAME
+## Token to access repository
+token: UPDATE_TOKEN
+## Repository url
+endPoint: UPDATE_END_POINT
+## Repository revision name.
+## Default value - main. 
+## Change this if the configuration needs to write back in different branch.
+branch: main
+## Repository path for Rafay to write back configuration.
+## Default value - rafay-resources.
+## Change this if write back wants to be a different directory.
+path: rafay-resources
+## Initial Version for Environment Manager resources.
+version: v1
+## Sharing the templates
+## Default value - true
+## Change this if the templates do not want to share to different directory.
+sharingtemplates: true
+
+## list of templates
+templates:
+  - ../terraform/aws/101-vpc-ec2
+  - ../terraform/naas/101-naas
+  - ../terraform/aws/101-caas-eks
+  - ../terraform/aws/101-caas-ecs
+  - ../terraform/aws/101-genai-ecs
+  - ../terraform/aws/101-genai-eks
+  - ../terraform/aws/101-kubeflow-eks
+  - ../terraform/aws/101-naas-eks
+  - ../terraform/aws/101-vpc-ecs
+  - ../terraform/aws/101-waas-eks
+  - ../terraform/azure/101-vnet-instance
+  - ../terraform/gcp/101-caas-gke
+  - ../terraform/gcp/101-vpc-instance
+  - ../terraform/mks/101-caas-pnap
+  - ../terraform/vcluster/101-caas
+  - ../terraform/vmware/101-caas-vmware
+  - ../terraform/waas/101-waas
+#  - ../terraform/oci/101-caas-oke  # not working

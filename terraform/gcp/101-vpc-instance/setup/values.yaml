@@ -1,9 +1,9 @@
 ##Rafay Project name
 projectName: UPDATE_EXISTING_PROJECT_NAME
 ##Rafay gitops agent name
-agentName: gitops-agent
+agentName: eaas-agent
 ##Rafay respository name
-repoName: gitops-repo
+repoName: eaas-repo
 ##Username to access repository
 usernName: UPDATE_REPO_USERNAME
 ##Token to access repository
