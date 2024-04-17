@@ -62,8 +62,13 @@ function check_required_binaries () {
     if docker info &>/dev/null; then
         echo "Docker is running."
     else
-        echo "Docker is not running. Ensure the docker is running from where the script is executed"
+        printf -- "\033[31m ERROR: Docker is not running. Ensure the docker is running from where the script is executed \033[0m\n";
         exit 1
+    fi
+
+    rctl config show >/dev/null
+    if [ $? -ne 0 ]; then
+        printf -- "\033[31m ERROR: Initialize the rctl \033[0m\n";
     fi
 }
 
@@ -422,12 +427,6 @@ function create_pipeline {
     webHookURL=$(cat $PWD/templates/trigger_response.json  | jq -r '.status.extra.webHook.webHookURL')
     webHookSecret=$(cat $PWD/templates/trigger_response.json  | jq -r '.status.extra.webHook.webHookSecret')
 
-    echo ""
-    echo "====================================================="
-    echo "Webhook --> $webHookURL"
-    echo "Webhook --> $webHookSecret"
-    echo "====================================================="
-
     if [ "$CLEANUP_TEMP_FILES" = true ]; then
         rm -f "$PWD/tmp.yaml"
         rm -f "$PWD/templates/$fName.json"
@@ -662,6 +661,14 @@ main() {
         rm -f templates/repository.json
         rm -f templates/agent.json
     fi 
+
+    if [ "$IS_PRIVATE_REPO" = true ]; then
+        echo ""
+        echo "====================================================="
+        echo "Webhook        --> $webHookURL"
+        echo "Webhook Secret --> $webHookSecret"
+        echo "====================================================="
+    fi
 }
 
 ## entry point 
