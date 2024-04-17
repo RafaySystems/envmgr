@@ -5,6 +5,8 @@ metadata:
   name: {{ $glbCtx.Environment }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
 spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
   template:
     name: {{ $glbCtx.EnvironmentTemplate }}-{{ $glbCtx.projectName }}
     version: {{ $glbCtx.version }}

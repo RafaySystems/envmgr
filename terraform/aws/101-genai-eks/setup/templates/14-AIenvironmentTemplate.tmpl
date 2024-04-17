@@ -5,6 +5,8 @@ metadata:
   name: {{ $glbCtx.AIEnvironmentTemplate }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
 spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
   resources:
   - kind: resourcetemplate
     name: {{ $glbCtx.GenAIResourceTemplate }}-{{ $glbCtx.projectName }}
