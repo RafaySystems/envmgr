@@ -41,21 +41,20 @@ sharingtemplates: true
 
 ## list of templates
 templates:
-  - ../terraform/aws/101-vpc-ec2
-  - ../terraform/naas/101-naas
-  - ../terraform/aws/101-caas-eks
-  - ../terraform/aws/101-caas-ecs
-  - ../terraform/aws/101-genai-ecs
-  - ../terraform/aws/101-genai-eks
-  - ../terraform/aws/101-kubeflow-eks
-  - ../terraform/aws/101-naas-eks
-  - ../terraform/aws/101-vpc-ecs
-  - ../terraform/aws/101-waas-eks
-  - ../terraform/azure/101-vnet-instance
-  - ../terraform/gcp/101-caas-gke
-  - ../terraform/gcp/101-vpc-instance
-  - ../terraform/mks/101-caas-pnap
-  - ../terraform/vcluster/101-caas
-  - ../terraform/vmware/101-caas-vmware
-  - ../terraform/waas/101-waas
-#  - ../terraform/oci/101-caas-oke  # not working
+#  - ../terraform/naas/101-naas
+#  - ../terraform/waas/101-waas
+#  - ../terraform/vcluster/101-caas
+#  - ../terraform/aws/101-vpc-ec2
+#  - ../terraform/aws/101-caas-eks
+#  - ../terraform/aws/101-caas-ecs
+#  - ../terraform/aws/101-genai-ecs
+#  - ../terraform/aws/101-genai-eks
+#  - ../terraform/aws/101-kubeflow-eks
+#  - ../terraform/aws/101-naas-eks
+#  - ../terraform/aws/101-vpc-ecs
+#  - ../terraform/aws/101-waas-eks
+#  - ../terraform/azure/101-vnet-instance
+#  - ../terraform/gcp/101-caas-gke
+#  - ../terraform/gcp/101-vpc-instance
+#  - ../terraform/mks/101-caas-pnap
+#  - ../terraform/vmware/101-caas-vmware
