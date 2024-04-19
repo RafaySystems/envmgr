@@ -59,3 +59,4 @@ templates:
 #  - ../terraform/mks/101-caas-pnap
 #  - ../terraform/vmware/101-caas-vmware
 #  - ../terraform/jupyterhub
+#  - ../terraform/oci/101-caas-oke
