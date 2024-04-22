@@ -4,6 +4,12 @@ kind: EnvironmentTemplate
 metadata:
   name: {{ $glbCtx.VclusterEnvironmentTemplate }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
+  annotations:
+    eaas.envmgmt.io/category: Developer Productivity
+    eaas.envmgmt.io/github: https://github.com/RafaySystems/envmgr/tree/main/terraform/vcluster/101-caas
+  description: 'Self Service for requesting a new vCluster on a shared, multi-tenant
+    Kubernetes Cluster. '
+  displayName: vCluster based Developer Testbed
 spec:
   agents:
   - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
