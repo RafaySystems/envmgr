@@ -6,6 +6,7 @@ resource "random_string" "resource_code" {
 
 locals {
  instance_type = lookup(var.instance_map, var.compute, "")
+ ami = lookup(var.ami_map, var.guest_os_version, "")
 }
 
 module "vpc" {
@@ -19,5 +20,6 @@ module "ec2" {
   source        = "./modules/ec2"
   instance_type = local.instance_type
   subnet_id     = module.vpc.private_subnets[0]
+  ami_id        = local.ami
   prefix        = random_string.resource_code.result
 }
