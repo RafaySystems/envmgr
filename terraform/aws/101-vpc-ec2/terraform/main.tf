@@ -13,6 +13,7 @@ module "vpc" {
   source     = "./modules/vpc"
   vpc_cidr   = var.vpc_cidr
   aws_region = var.aws_region
+  storage_size = var.storage
   prefix     = random_string.resource_code.result
 }
 
