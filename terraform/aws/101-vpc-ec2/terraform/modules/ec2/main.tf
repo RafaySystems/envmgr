@@ -7,6 +7,16 @@ module "ec2_instance" {
   subnet_id              = var.subnet_id
   ami                    = var.ami_id
 
+  ebs_block_device = [
+    {
+      device_name = "/dev/sdf"
+      volume_type = "gp3"
+      volume_size = var.storage_size
+      throughput  = 200
+      encrypted   = true
+    }
+  ]
+
   tags = {
       Name = "em-ec2-${var.prefix}"
       email = "hardik@rafay.co"
