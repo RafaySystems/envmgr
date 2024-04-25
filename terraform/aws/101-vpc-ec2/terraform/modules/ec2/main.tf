@@ -5,6 +5,7 @@ module "ec2_instance" {
 
   instance_type          = var.instance_type
   subnet_id              = var.subnet_id
+  ami                    = var.ami_id
 
   tags = {
       Name = "em-ec2-${var.prefix}"
