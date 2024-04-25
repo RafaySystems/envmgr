@@ -20,6 +20,6 @@ module "ec2" {
   source        = "./modules/ec2"
   instance_type = local.instance_type
   subnet_id     = module.vpc.private_subnets[0]
-  ami_id        = local.ami
+  ami_id        = local.ami[0]
   prefix        = random_string.resource_code.result
 }
