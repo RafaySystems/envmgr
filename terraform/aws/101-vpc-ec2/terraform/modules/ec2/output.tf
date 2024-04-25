@@ -11,5 +11,5 @@ data "aws_instance" "ec2_instance" {
 }
 
 output "instance_id"{
-  value = data.aws_instance.ec2_instance.instance_id
+  value = data.aws_instance.ec2_instance.host_id
 }
