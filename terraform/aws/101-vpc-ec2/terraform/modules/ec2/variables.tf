@@ -12,6 +12,10 @@ variable "ami_id" {
   type = string
 }
 
+variable "storage_size" {
+  type = string
+}
+
 variable "prefix" {
   type = string
 }
