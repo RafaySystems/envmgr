@@ -5,13 +5,7 @@ resource "random_string" "resource_code" {
 }
 
 locals {
-
-instance_type = var.instance_map[index(var.instance_map.*.id, "var.compute")]
- #instance_type = var.compute == "2 vCPU, 2 GiB Memory" ? t3.small : false
- #instance_type = var.compute == "2 vCPU, 4 GiB Memory" ? t3.medium : false
- #instance_type = var.compute == "2 vCPU, 8 GiB Memory" ? t3.large : false
- #instance_type = var.compute == "4 vCPU, 16 GiB Memory" ? t3.xlarge : false
- #instance_type = var.compute == "8 vCPU, 32 GiB Memory" ? t3.2xlarge : false
+ instance_type = lookup(var.instance_map, var.compute, "")
 }
 
 module "vpc" {
