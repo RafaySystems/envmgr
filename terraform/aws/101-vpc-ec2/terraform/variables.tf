@@ -1,7 +1,6 @@
 variable "aws_region" {
   description = "AWS Region"
   type        = string
-  default     = "us-west-2"
 }
 
 variable "vpc_cidr" {
@@ -10,8 +9,22 @@ variable "vpc_cidr" {
   default     = "10.0.0.0/16"
 }
 
-variable "instance_type" {
+variable "compute" {
   description = "EC2 Instance Type"
   type        = string
-  default     = "t3.medium"
+}
+
+variable "guest_os_version" {
+  description = "os version"
+  type        = string
+}
+
+variable "storage" {
+  description = "storage capacity in GB"
+  type        = string
+}
+
+variable "network" {
+  description = "subnet name"
+  type        = string
 }
