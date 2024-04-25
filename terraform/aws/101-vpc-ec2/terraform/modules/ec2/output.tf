@@ -3,7 +3,7 @@ output "ip_address"{
 }
 
 data "aws_instance" "ec2_instance" {
-  depends_on      = [module.ec2]
+  depends_on      = [module.ec2_instance]
   filter {
     name   = "tag:Name"
     values = ["module.ec2_instance.name"]
