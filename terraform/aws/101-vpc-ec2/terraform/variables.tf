@@ -37,6 +37,6 @@ variable "isntance_map" {
    "2 vCPU, 4 GiB Memory" = "t3.medium"
    "2 vCPU, 8 GiB Memory" = "t3.large"
    "4 vCPU, 16 GiB Memory" = "t3.xlarge"
-   "2 vCPU, 32 GiB Memory" = "t3.2xlarge"
+   "8 vCPU, 32 GiB Memory" = "t3.2xlarge"
 }
 }
