@@ -29,14 +29,14 @@ variable "network" {
   type        = string
 }
 
-variable "isntance_map" {
+variable "instance_map" {
   type = map(string)
   description = "list of instance types
   default = {
-   "2 vCPU, 2 GiB Memory" = "t3.small"
-   "2 vCPU, 4 GiB Memory" = "t3.medium"
-   "2 vCPU, 8 GiB Memory" = "t3.large"
-   "4 vCPU, 16 GiB Memory" = "t3.xlarge"
-   "8 vCPU, 32 GiB Memory" = "t3.2xlarge"
+   ${2 vCPU, 2 GiB Memory} = "t3.small"
+   ${2 vCPU, 4 GiB Memory} = "t3.medium"
+   ${2 vCPU, 8 GiB Memory} = "t3.large"
+   ${4 vCPU, 16 GiB Memory} = "t3.xlarge"
+   ${8 vCPU, 32 GiB Memory} = "t3.2xlarge"
 }
 }
