@@ -5,7 +5,7 @@ output "ip_address"{
 data "aws_instance" "ec2_instance" {
   filter {
     name   = "tag:Name"
-    values = ["instance-name-tag"]
+    values = ["module.ec2_instance.name"]
   }
 }
 
