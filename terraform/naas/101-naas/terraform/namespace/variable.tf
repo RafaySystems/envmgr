@@ -34,3 +34,11 @@ variable "memory" {
 variable "collaborator" {
   type = string
 }
+
+variable "network_policy" {
+  type = string
+}
+
+variable "network_policy_version" {
+  type = string
+}
