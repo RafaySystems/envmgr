@@ -46,8 +46,8 @@ resource "rafay_namespace" "namespace" {
     network_policy_params {
             network_policy_enabled = true
             policies {
-                name    = "namespace_network_policy_name"
-                version = "v0"
+                name    = var.network_policy
+                version = var.network_policy_version
             }
         }
 }
