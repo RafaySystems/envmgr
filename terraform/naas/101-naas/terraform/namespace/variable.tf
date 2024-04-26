@@ -35,7 +35,7 @@ variable "collaborator" {
   type = string
 }
 
-variable "network_policy" {
+variable "network_policy_name" {
   type = string
 }
 
