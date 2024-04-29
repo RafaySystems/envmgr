@@ -38,10 +38,10 @@ variable "namespace_quotas" {
   }
 }
 
-# variable "group" {
-#   type = string
-# }
+variable "group" {
+  type = string
+}
 
-# variable "user" {
-#   type = string
-# }
+variable "user" {
+  type = string
+}
