@@ -19,10 +19,11 @@ resource "rafay_gke_cluster" "tf-example" {
       gcp_project           = var.gcp_project
       control_plane_version = var.k8s_version
       location {
-        type = var.region != "" ? "regional" : "zonal"
+        #type = var.region != "" ? "regional" : "zonal"
+        type = "zonal"
         config {
-          region = try(var.region, null)
-          zone   = var.zone
+          #region = try(var.region, null)
+          zone = var.zone
         }
       }
       security {
