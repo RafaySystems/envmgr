@@ -67,17 +67,39 @@ resource "google_container_node_pool" "np" {
 
   name       = each.value.name
   cluster    = google_container_cluster.primary.id
-  project                  = "kr-test-200723"
+  project                  = var.google_project
   node_count = each.value.node_count
   version    = each.value.version
   node_locations =  each.value.node_locations
+  dynamic "placement_policy" {
+    for_each = each.value.placement_policy == null ? [] : [each.value.placement_policy]
+    iterator = policy
+    content {
+      policy_name = lookup(policy.value, "policy_name", null)
+      type = lookup(policy.value, "type", null)
+    }
+  }
   node_config {
+    dynamic "host_maintenance_policy" {
+      for_each = each.value.host_maintenance_policy == null ? [] : [each.value.host_maintenance_policy]
+      iterator = hmp
+      content {
+              maintenance_interval = lookup(hmp.value, "maintenance_interval", null)
+      }
+    }
     image_type   = each.value.image_type
     machine_type = each.value.machine_type
     disk_size_gb  = lookup(each.value, "disk_size", 100)
     disk_type  = lookup(each.value, "disk_type", "pd-standard")
     labels = each.value.labels == null ? {} :  each.value.labels
     tags = each.value.tags == null ? [] :  each.value.tags
+    dynamic "ephemeral_storage_local_ssd_config" {
+      for_each = each.value.ephemeral_storage_local_ssd_config == null ? [] : [each.value.ephemeral_storage_local_ssd_config]
+      iterator = eph_storage
+      content {
+        local_ssd_count = lookup(eph_storage.value, "local_ssd_count", null)
+      }
+    }
     dynamic "taint" {
       for_each = each.value.taints == null ? [] : [each.value.taints]
       content {
