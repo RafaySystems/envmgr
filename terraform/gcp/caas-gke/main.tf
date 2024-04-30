@@ -4,6 +4,11 @@ locals {
   }]
 }
 
+resource "random_integer" "priority" {
+  min = 1
+  max = 250
+}
+
 resource "google_container_cluster" "primary" {
   name                     = var.cluster_name
   project                  = var.google_project
@@ -43,7 +48,7 @@ resource "google_container_cluster" "primary" {
   private_cluster_config {
     enable_private_nodes    = true
     enable_private_endpoint = var.enable_private_endpoint
-    master_ipv4_cidr_block  = var.master_ipv4_cidr_block
+    master_ipv4_cidr_block  = "172.16.${random_integer.priority.result}.0/28"
   }
 
   dynamic "master_authorized_networks_config" {
@@ -171,4 +176,16 @@ resource "helm_release" "rafay_operator" {
       version
     ]
   }
+}
+
+data "rafay_download_kubeconfig" "kubeconfig_cluster" {
+  username = var.username
+  depends_on = [helm_release.rafay_operator]
+}
+
+
+
+output "kubeconfig_cluster" {
+  description = "kubeconfig_cluster"
+  value       = data.rafay_download_kubeconfig.kubeconfig_cluster.kubeconfig
 }
