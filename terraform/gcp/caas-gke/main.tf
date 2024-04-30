@@ -63,6 +63,7 @@ resource "google_container_cluster" "primary" {
 
 
 resource "google_container_node_pool" "np" {
+  provider = google-beta
   for_each = var.node_pools
 
   name       = each.value.name
