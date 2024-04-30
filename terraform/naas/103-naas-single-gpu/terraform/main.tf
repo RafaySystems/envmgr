@@ -26,14 +26,14 @@ resource "rafay_namespace" "namespace" {
   }
 }
 
-# resource "rafay_group" "group-dev" {
-#   name = var.group
-# }
+resource "rafay_group" "group-dev" {
+  name = var.group
+}
 
-# resource "rafay_groupassociation" "groupassociation" {
-#   project    = var.project
-#   group      = resource.rafay_group.group-dev.name
-#   namespaces = [rafay_namespace.namespace.metadata[0].name]
-#   roles      = ["NAMESPACE_ADMIN"]
-#   add_users  = [var.user]
-# }
+resource "rafay_groupassociation" "groupassociation" {
+  project    = var.project
+  group      = resource.rafay_group.group-dev.name
+  namespaces = [rafay_namespace.namespace.metadata[0].name]
+  roles      = ["NAMESPACE_ADMIN"]
+  add_users  = [var.user]
+}
