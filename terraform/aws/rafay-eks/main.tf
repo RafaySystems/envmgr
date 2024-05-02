@@ -32,6 +32,22 @@ resource "rafay_eks_cluster" "eks-cluster" {
       service_role_arn = try(var.service_role_arn, null)
       with_oidc        = true
     }
+    addons {
+      name    = "aws-ebs-csi-driver"
+      version = "latest"
+    }
+    addons {
+      name    = "vpc-cni"
+      version = "latest"
+    }
+    addons {
+      name    = "kube-proxy"
+      version = "latest"
+    }
+    addons {
+      name    = "coredns"
+      version = "latest"
+    }
     vpc {
       cluster_endpoints {
         private_access = true
