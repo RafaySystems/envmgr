@@ -71,6 +71,7 @@ output "db_instance_name" {
 output "db_instance_username" {
   description = "The master username for the database"
   value       = module.terraform-aws-rds.db_instance_username
+  sensitive = true
 }
 
 output "db_instance_domain" {
