@@ -29,6 +29,12 @@ resource "google_container_cluster" "primary" {
     horizontal_pod_autoscaling {
       disabled = false
     }
+    dynamic "network_policy_config" {
+      for_each = var.network_policy_config == null ? [] : [var.network_policy_config]
+      content {
+        disabled = lookup(network_policy_config.value, "disabled", true)
+      }
+    }
   }
 
   release_channel {
@@ -50,6 +56,14 @@ resource "google_container_cluster" "primary" {
     enable_private_endpoint = var.enable_private_endpoint
     master_ipv4_cidr_block  = "172.16.${random_integer.priority.result}.0/28"
   }
+  dynamic "network_policy" {
+    for_each = var.network_policy == null ? [] : [var.network_policy]
+    content {
+      enabled  = lookup(network_policy.value, "enabled", false)
+      provider = lookup(network_policy.value, "provider", "")
+    }
+  }
+
 
   dynamic "master_authorized_networks_config" {
     for_each = local.master_authorized_networks_config
