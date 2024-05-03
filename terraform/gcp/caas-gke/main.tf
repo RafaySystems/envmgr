@@ -200,6 +200,18 @@ resource "helm_release" "rafay_operator" {
   }
 }
 
+resource "rafay_cluster_sharing" "cluster-sharing" {
+  clustername = var.cluster_name
+  project     = var.project_name
+  sharing {
+    all = false
+    projects {
+      name = var.shared_project_name
+    }
+  }
+  depends_on=["helm_release.rafay_operator"]
+}
+
 /*data "rafay_download_kubeconfig" "kubeconfig_cluster" {
   username = var.username
   depends_on = [helm_release.rafay_operator]

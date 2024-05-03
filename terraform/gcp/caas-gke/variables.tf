@@ -122,3 +122,4 @@ variable "project_name" {}
 variable "blueprint" {}
 variable "blueprint_version" {}
 variable "username" {}
+variable "shared_project_name" {}
