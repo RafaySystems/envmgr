@@ -17,22 +17,11 @@ resource "null_resource" "kubectl_install" {
   }
 }
 
-resource "null_resource" "kustomize_install" {
-  triggers = {
-    always_run = timestamp()
-  }
-  depends_on = [null_resource.kubectl_install]
-  provisioner "local-exec" {
-    interpreter = ["/bin/bash", "-c"]
-    command     = "snap install kustomize"
-  }
-}
-
 resource "null_resource" "clone_git" {
   triggers = {
     always_run = timestamp()
   }
-  depends_on = [null_resource.kustomize_install]
+  depends_on = [null_resource.kubectl_install]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
     command     = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ls /tmp && git clone https://github.com/kubeflow/manifests.git && cd manifests &&  ./kubectl apply -k \"github.com/kubeflow/pipelines/manifests/kustomize/cluster-scoped-resources?ref=2.0.3\" --kubeconfig=/tmp/kubeconfig && ./kubectl wait --for condition=established --timeout=60s crd/applications.app.k8s.io --kubeconfig=/tmp/kubeconfig  && ./kubectl apply -k \"github.com/kubeflow/pipelines/manifests/kustomize/env/platform-agnostic-pns?ref=2.0.3\" --kubeconfig=/tmp/kubeconfig && ./kubectl expose deployment ml-pipeline-ui --type=LoadBalancer --name=kubeflow-ui-loadbalancer -n kubeflow --kubeconfig=/tmp/kubeconfig "
