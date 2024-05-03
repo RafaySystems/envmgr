@@ -24,7 +24,7 @@ resource "null_resource" "kustomize_install" {
   depends_on = [null_resource.kubectl_install]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "sudo snap install kustomize"
+    command     = "snap install kustomize"
   }
 }
 
