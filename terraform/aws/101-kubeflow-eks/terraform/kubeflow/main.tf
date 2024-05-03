@@ -46,7 +46,7 @@ resource "null_resource" "kubeflow_install" {
   depends_on = [null_resource.clone_git]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "while ! kustomize build example | ./kubectl apply --kubeconfig=/tmp/kubeconfig -f -; do echo "Retrying to apply resources"; sleep 10; done "
+    command     = "while ! kustomize build example | ./kubectl apply --kubeconfig=/tmp/kubeconfig -f -; do echo Retrying; sleep 10; done "
   }
 }
 
