@@ -21,10 +21,10 @@ variable "credentials_name" {
 }
 
 ## Requied for Regional cluster
-variable "region" {
-  type = string
-  #default = "us-central1"
-}
+# variable "region" {
+#   type    = string
+#   default = ""
+# }
 
 variable "zone" {
   type    = string
