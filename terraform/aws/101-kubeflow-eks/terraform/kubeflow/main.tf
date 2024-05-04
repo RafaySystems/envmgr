@@ -24,7 +24,7 @@ resource "null_resource" "clone_git" {
   depends_on = [null_resource.kubectl_install]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "git clone https://github.com/kubeflow/manifests.git && cd manifests "
+    command     = "git clone https://github.com/kubeflow/manifests.git"
   }
 }
 
@@ -35,7 +35,7 @@ resource "null_resource" "kubeflow_install" {
   depends_on = [null_resource.clone_git]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "ls && while ! kustomize build example | ./kubectl apply --kubeconfig=/tmp/kubeconfig -f -; do echo Retrying; sleep 10; done "
+    command     = "ls && cd manifests && while ! kustomize build example | ./kubectl apply --kubeconfig=/tmp/kubeconfig -f -; do echo Retrying; sleep 10; done "
   }
 }
 
