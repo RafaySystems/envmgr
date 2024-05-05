@@ -1,6 +1,9 @@
 
 
 resource "rafay_download_kubeconfig" "tfkubeconfig" {
+  triggers = {
+    always_run = timestamp()
+  }
   cluster            = var.eks_cluster_name
   output_folder_path = "/tmp"
   filename           = "kubeconfig"
