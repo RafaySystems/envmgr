@@ -46,7 +46,7 @@ resource "null_resource" "lb_install" {
   depends_on = [null_resource.kubeflow_install]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "./kubectl wait --for condition=established --timeout=60s crd/applications.app.k8s.io --kubeconfig=/tmp/kubeconfig  && ./kubectl expose deployment ml-pipeline-ui --type=LoadBalancer --name=kubeflow-ui-loadbalancer -n kubeflow --kubeconfig=/tmp/kubeconfig "
+    command     = "./kubectl wait --for condition=established --timeout=60s crd/applications.app.k8s.io --kubeconfig=/tmp/kubeconfig  && ./kubectl expose deployment istio-ingressgateway --type=LoadBalancer --name=kubeflow-ui-loadbalancer -n istio-system --kubeconfig=/tmp/kubeconfig "
   }
 }
 
