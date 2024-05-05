@@ -25,7 +25,8 @@ resource "null_resource" "lb_install" {
 
 
 resource "time_sleep" "wait_60_seconds" {
-  depends_on      = [null_resource.kubeflow_install]
+  #depends_on      = [null_resource.kubeflow_install]
+  depends_on      = [null_resource.lb_install]
   create_duration = "60s"
 }
 
