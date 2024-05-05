@@ -16,7 +16,7 @@ resource "null_resource" "lb_install" {
   triggers = {
     always_run = timestamp()
   }
-  depends_on = [null_resource.kubeflow_install]
+  #depends_on = [null_resource.kubeflow_install]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
     command     = "./kubectl expose deployment istio-ingressgateway --type=LoadBalancer --name=kubeflow-ui-loadbalancer -n istio-system --kubeconfig=/tmp/kubeconfig "
