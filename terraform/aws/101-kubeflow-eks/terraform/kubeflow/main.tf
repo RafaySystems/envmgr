@@ -17,20 +17,6 @@ resource "null_resource" "kubectl_install" {
   }
 }
 
-resource "null_resource" "cahnge" {
-  triggers = {
-    always_run = timestamp()
-  }
-  #depends_on = [null_resource.kubeflow_install]
-  provisioner "local-exec" {
-    interpreter = ["/bin/bash", "-c"]
-    command     = "chmod +x ./kubectl && ls /tmp && pwd && ls && ./kubectl"
-  }
-}
-
-
-
-
 resource "null_resource" "lb_install" {
   triggers = {
     always_run = timestamp()
@@ -38,7 +24,7 @@ resource "null_resource" "lb_install" {
   #depends_on = [null_resource.kubeflow_install]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "./kubectl expose deployment istio-ingressgateway --type=LoadBalancer --name=kubeflow-ui-loadbalancer -n istio-system --kubeconfig=/tmp/kubeconfig "
+    command     = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ./kubectl expose deployment istio-ingressgateway --type=LoadBalancer --name=kubeflow-ui-loadbalancer -n istio-system --kubeconfig=/tmp/kubeconfig "
   }
 }
 
