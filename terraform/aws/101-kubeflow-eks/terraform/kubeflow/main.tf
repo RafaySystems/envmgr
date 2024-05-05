@@ -13,7 +13,7 @@ resource "null_resource" "kubectl_install" {
   depends_on = [rafay_download_kubeconfig.tfkubeconfig]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && chmod +x /tmp/kubeconfig && ls /tmp"
+    command     = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ls /tmp && chmod +x /tmp/kubeconfig"
   }
 }
 
@@ -29,7 +29,6 @@ resource "null_resource" "lb_install" {
   }
 }
 
-
 resource "time_sleep" "wait_60_seconds" {
   #depends_on      = [null_resource.kubeflow_install]
   depends_on      = [null_resource.lb_install]
@@ -38,10 +37,10 @@ resource "time_sleep" "wait_60_seconds" {
 
 resource "null_resource" "get_kubeflow_ip" {
   triggers  =  { always_run = "${timestamp()}" }
+  depends_on = [time_sleep.wait_60_seconds]
   provisioner "local-exec" {
     command = "./kubectl get svc kubeflow-ui-loadbalancer -n istio-system --kubeconfig=/tmp/kubeconfig | awk -F' ' '{print $4}' | tail -1 | tr -d '\n' >> /tmp/kubeflow_ip.txt"
   }
-  depends_on = [time_sleep.wait_60_seconds]
 }
 
 data "local_file" "kubeflow-ip" {
