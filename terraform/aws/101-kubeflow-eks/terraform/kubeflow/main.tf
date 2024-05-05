@@ -1,9 +1,6 @@
 
 
 resource "rafay_download_kubeconfig" "tfkubeconfig" {
-  triggers = {
-    always_run = timestamp()
-  }
   cluster            = var.eks_cluster_name
   output_folder_path = "/tmp"
   filename           = "kubeconfig"
@@ -16,7 +13,7 @@ resource "null_resource" "kubectl_install" {
   depends_on = [rafay_download_kubeconfig.tfkubeconfig]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command     = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ls /tmp && chmod +x /tmp/kubeconfig"
+    command     = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ls /tmp "
   }
 }
 
