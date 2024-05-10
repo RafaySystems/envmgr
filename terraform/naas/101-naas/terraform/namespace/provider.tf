@@ -1,3 +1,6 @@
+# Please visit the following link for provider details
+# https://registry.terraform.io/providers/RafaySystems/rafay/latest/docs
+
 terraform {
   backend "local" {}
   required_providers {
