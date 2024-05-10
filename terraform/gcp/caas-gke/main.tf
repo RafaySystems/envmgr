@@ -146,6 +146,10 @@ resource "google_container_node_pool" "np" {
       }
    }
   }
+  timeouts {
+    create = "120m"
+    update = "120m"
+  }
 
 }
 
