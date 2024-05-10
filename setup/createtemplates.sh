@@ -527,11 +527,12 @@ function create_common_resources() {
     if [ -z "$PROJECT_HASH" ]; then
         echo "Project $PROJECT_NAME does not exist. Creating project.."
         create_project
+        sleep 5
     else 
         echo "Project hash $PROJECT_HASH"
-        ADD_SECRETSEALER_TEMPLATE="v2/config/project/${PROJECT_HASH}/secretsealer"
     fi
 
+    ADD_SECRETSEALER_TEMPLATE="v2/config/project/${PROJECT_HASH}/secretsealer"
     ADD_REPO_URL="v2/config/project/${PROJECT_HASH}/repository"
     #ADD_PIPELINE_URL="v2/pipeline/project/${PROJECT_HASH}/pipeline"
     ADD_PIPELINE_URL="apis/gitops.k8smgmt.io/v3/projects/${PROJECT_NAME}/pipelines"
