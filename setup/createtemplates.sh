@@ -33,7 +33,7 @@ templates=(
 BASE_URL="https://"
 GET_PROJECTS="v1/auth/projects"
 CREATE_PROJECT_URL="auth/v1/projects"
-GET_USERS="auth/v1/users"
+GET_USERS="auth/v1/users/-/current/"
 
 MAIN_YAML="$PWD/values.yaml"
 
@@ -168,7 +168,7 @@ function create_configcontext_templates {
     yq -o=json $PWD/$folder/setup/templates/$fName.yaml.spec > $PWD/$folder/setup/templates/$fName.json 
 
     if [ "$SHARING" = true ]; then
-        jq --arg repo_name "$REPO_NAME" '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } } | (.spec.repositoryOptions.name |= $repo_name) | del(.spec.agents, .spec.files)' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
+        jq --arg repo_name "$REPO_NAME" '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } } | (.spec.repositoryOptions.name |= $repo_name)' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     else
         jq --arg repo_name "$REPO_NAME" '(.spec.repositoryOptions.name |= $repo_name) ' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     fi
@@ -252,7 +252,7 @@ function create_resource_templates {
     yq -o=json $PWD/$folder/setup/templates/$fName.yaml.spec > $PWD/$folder/setup/templates/$fName.json 
 
     if [ "$SHARING" = true ]; then
-        jq --arg repo_name "$REPO_NAME" '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } } | (.spec.repositoryOptions.name |= $repo_name) | del(.spec.agents)' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
+        jq --arg repo_name "$REPO_NAME" '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } } | (.spec.repositoryOptions.name |= $repo_name)' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     else
         jq --arg repo_name "$REPO_NAME" '(.spec.repositoryOptions.name |= $repo_name)' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     fi
@@ -296,7 +296,7 @@ function create_environment_templates {
     yq -o=json $PWD/$folder/setup/templates/$fName.yaml.spec > $PWD/$folder/setup/templates/$fName.json 
 
     if [ "$SHARING" = true ]; then
-        jq --arg repo_name "$REPO_NAME" '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } } | (.spec.repositoryOptions.name |= $repo_name) | del(.spec.agents) ' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
+        jq --arg repo_name "$REPO_NAME" '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } } | (.spec.repositoryOptions.name |= $repo_name)' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     else
         jq --arg repo_name "$REPO_NAME" '(.spec.repositoryOptions.name |= $repo_name) ' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     fi
