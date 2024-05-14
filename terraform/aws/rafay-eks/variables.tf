@@ -123,14 +123,14 @@ variable "tags" {
   type        = map(string)
   description = "Cluster Tags"
   default = {
-    "env"   = "qa"
+    "env" = "qa"
   }
 }
 
-variable "cluster_labels" {
-  type        = map(string)
-  description = "Cluster Labels"
-  default = {
-    "provisioned-by" = "rafay"
-  }
-}
+# variable "cluster_labels" {
+#   type        = map(string)
+#   description = "Cluster Labels"
+#   default = {
+#     "provisioned-by" = "rafay"
+#   }
+# }

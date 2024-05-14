@@ -10,8 +10,7 @@ resource "rafay_eks_cluster" "eks-cluster" {
       project = var.project
       #labels  = try(var.cluster_labels, null)
       labels = merge({
-        "cluster-name" = var.cluster_name },
-      var.tags)
+      "cluster-name" = var.cluster_name })
     }
     spec {
       type                   = "eks"
