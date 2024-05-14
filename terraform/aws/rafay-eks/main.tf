@@ -8,7 +8,10 @@ resource "rafay_eks_cluster" "eks-cluster" {
     metadata {
       name    = var.cluster_name
       project = var.project
-      labels  = try(var.cluster_labels, null)
+      #labels  = try(var.cluster_labels, null)
+      labels = merge({
+        "cluster-name" = var.cluster_name },
+      var.tags)
     }
     spec {
       type                   = "eks"
@@ -26,7 +29,10 @@ resource "rafay_eks_cluster" "eks-cluster" {
       name    = var.cluster_name
       region  = var.region
       version = var.k8s_version
-      tags    = try(var.tags, null)
+      tags = merge({
+        "cluster-name" = var.cluster_name },
+      var.tags)
+      #tags    = try(var.tags, null)
     }
     iam {
       service_role_arn = try(var.service_role_arn, null)
