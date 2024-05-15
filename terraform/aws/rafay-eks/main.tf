@@ -78,46 +78,45 @@ resource "rafay_eks_cluster" "eks-cluster" {
           name      = "karpenter"
           namespace = "karpenter"
         }
-        attach_policy = <<EOF
-        {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-          "Action": [
-            "ec2:CreateFleet",
-            "ec2:CreateTags",
-            "ec2:CreateLaunchTemplate"
-            "ec2:DeleteLaunchTemplate",
-            "ec2:DescribeAvailabilityZones",
-            "ec2:DescribeImages",
-            "ec2:DescribeInstanceTypeOfferings",
-            "ec2:DescribeInstanceTypes",
-            "ec2:DescribeInstances",
-            "ec2:DescribeLaunchTemplates",
-            "ec2:DescribeSecurityGroups",
-            "ec2:DescribeSpotPriceHistory",
-            "ec2:DescribeSubnets",
-            "ec2:RunInstances",
-            "ec2:TerminateInstances",
-            "eks:DescribeCluster",
-            "iam:AddRoleToInstanceProfile",
-            "iam:CreateInstanceProfile",
-            "iam:DeleteInstanceProfile",
-            "iam:GetInstanceProfile",
-            "iam:PassRole",
-            "iam:RemoveRoleFromInstanceProfile"
-            "iam:TagInstanceProfile",
-            "pricing:GetAttributeValues"
-            "pricing:GetProducts",
-            "ssm:GetParameter",
-            pricing:DescribeServices"
-          ],
-         "Reource": "*",
-          "Efect": "Allow"
-        }
-      ]
-    }
-      EOF
+        attach_policy = jsonencode({
+          Version = "2012-10-17"
+          Statement = [
+            {
+              Action = [
+                "ec2:CreateFleet",
+                "ec2:CreateTags",
+                "ec2:CreateLaunchTemplate",
+                "ec2:DeleteLaunchTemplate",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeImages",
+                "ec2:DescribeInstanceTypeOfferings",
+                "ec2:DescribeInstanceTypes",
+                "ec2:DescribeInstances",
+                "ec2:DescribeLaunchTemplates",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeSpotPriceHistory",
+                "ec2:DescribeSubnets",
+                "ec2:RunInstances",
+                "ec2:TerminateInstances",
+                "eks:DescribeCluster",
+                "iam:AddRoleToInstanceProfile",
+                "iam:CreateInstanceProfile",
+                "iam:DeleteInstanceProfile",
+                "iam:GetInstanceProfile",
+                "iam:PassRole",
+                "iam:RemoveRoleFromInstanceProfile",
+                "iam:TagInstanceProfile",
+                "pricing:GetAttributeValues",
+                "pricing:GetProducts",
+                "ssm:GetParameter",
+                "pricing:DescribeServices"
+              ]
+              Reource = "*"
+              Efect   = "Allow"
+            }
+          ]
+          }
+        )
       }
     }
     addons {
