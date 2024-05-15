@@ -1,3 +1,28 @@
+resource "aws_iam_role" "karpenter_role" {
+  name = "${var.cluster_name}-${var.role_name}"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+  "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
+}
+
+resource "aws_iam_instance_profile" "test_profile" {
+  name = "${var.cluster_name}-${var.role_name}"
+  role = aws_iam_role.karpenter_role.name
+}
+
 locals {
   rolearn = var.account_id != "" && var.linked_role_arn != "" ? format("arn:aws:iam::%s:role/%s", var.account_id, var.linked_role_arn) : null
 }
@@ -19,6 +44,18 @@ resource "rafay_eks_cluster" "eks-cluster" {
       cloud_provider         = var.cloud_credentials_name
       cross_account_role_arn = try(local.rolearn, null)
       cni_provider           = "aws-cni"
+      system_components_placement {
+        node_selector = var.node_selector
+        dynamic "tolerations" {
+          for_each = var.tolerations
+          content {
+            effect   = tolerations.value.effect
+            key      = tolerations.value.key
+            operator = tolerations.value.operator
+          }
+
+        }
+      }
     }
   }
   cluster_config {
@@ -36,6 +73,52 @@ resource "rafay_eks_cluster" "eks-cluster" {
     iam {
       service_role_arn = try(var.service_role_arn, null)
       with_oidc        = true
+      service_accounts {
+        metadata {
+          name      = "karpenter"
+          namespace = "karpenter"
+        }
+        attach_policy = <<EOF
+        {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+          "Action": [
+            "ec2:CreateFleet",
+            "ec2:CreateTags",
+            "ec2:CreateLaunchTemplate"
+            "ec2:DeleteLaunchTemplate",
+            "ec2:DescribeAvailabilityZones",
+            "ec2:DescribeImages",
+            "ec2:DescribeInstanceTypeOfferings",
+            "ec2:DescribeInstanceTypes",
+            "ec2:DescribeInstances",
+            "ec2:DescribeLaunchTemplates",
+            "ec2:DescribeSecurityGroups",
+            "ec2:DescribeSpotPriceHistory",
+            "ec2:DescribeSubnets",
+            "ec2:RunInstances",
+            "ec2:TerminateInstances",
+            "eks:DescribeCluster",
+            "iam:AddRoleToInstanceProfile",
+            "iam:CreateInstanceProfile",
+            "iam:DeleteInstanceProfile",
+            "iam:GetInstanceProfile",
+            "iam:PassRole",
+            "iam:RemoveRoleFromInstanceProfile"
+            "iam:TagInstanceProfile",
+            "pricing:GetAttributeValues"
+            "pricing:GetProducts",
+            "ssm:GetParameter",
+            pricing:DescribeServices"
+          ],
+         "Reource": "*",
+          "Efect": "Allow"
+        }
+      ]
+    }
+      EOF
+      }
     }
     addons {
       name    = "aws-ebs-csi-driver"
@@ -52,6 +135,13 @@ resource "rafay_eks_cluster" "eks-cluster" {
     addons {
       name    = "coredns"
       version = "latest"
+    }
+    identity_mappings {
+      arns {
+        arn      = resource.aws_iam_role.karpenter_role.arn
+        group    = ["system:bootstrappers", "system:nodes"]
+        username = "system:node:{{EC2PrivateDNSName}}"
+      }
     }
     vpc {
       cluster_endpoints {
@@ -101,6 +191,13 @@ resource "rafay_eks_cluster" "eks-cluster" {
           for_each = managed_nodegroups.value.instance_role_arn == null ? [] : [managed_nodegroups.value.instance_role_arn]
           content {
             instance_role_arn = iam.value
+          }
+        }
+        dynamic "taints" {
+          for_each = managed_nodegroups.value.taints
+          content {
+            effect = taints.value.effect
+            key    = taints.value.key
           }
         }
         tags   = try(managed_nodegroups.value.tags, null)

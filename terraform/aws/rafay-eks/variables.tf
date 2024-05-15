@@ -87,6 +87,28 @@ variable "create_vpc" {
   default = false
 }
 
+variable "node_selector" {
+  type = map(string)
+  default = {
+    node-role = "rafay"
+  }
+}
+
+variable "tolerations" {
+  type = map(object({
+    effect   = string
+    key      = string
+    operator = string
+  }))
+  default = {
+    "addons" = {
+      effect   = "NoSchedule"
+      key      = "CriticalAddonsOnly"
+      operator = "Exists"
+    }
+  }
+}
+
 variable "managed_nodegroups" {
   type = map(object({
     node_count         = number
@@ -100,6 +122,10 @@ variable "managed_nodegroups" {
     private_networking = bool
     tags               = map(string)
     labels             = map(string)
+    taints = map(object({
+      key    = string
+      effect = string
+    }))
   }))
   description = "Managed Nodegroup configurations"
   default = {
@@ -114,11 +140,16 @@ variable "managed_nodegroups" {
       private_networking = true
       instance_role_arn  = null
       tags               = null
-      labels             = null
+      labels             = { node-role = "rafay" }
+      taints = {
+        "nodes" = {
+          key    = "CriticalAddonsOnly"
+          effect = "NoSchedule"
+        }
+      }
     }
   }
 }
-
 variable "tags" {
   type        = map(string)
   description = "Cluster Tags"
@@ -127,10 +158,8 @@ variable "tags" {
   }
 }
 
-# variable "cluster_labels" {
-#   type        = map(string)
-#   description = "Cluster Labels"
-#   default = {
-#     "provisioned-by" = "rafay"
-#   }
-# }
+variable "role_name" {
+  description = "IAM role name"
+  type        = string
+  default     = "KarpenterNodeRole"
+}

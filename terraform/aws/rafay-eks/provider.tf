@@ -4,5 +4,8 @@ terraform {
       version = ">= 0.1"
       source  = "registry.terraform.io/RafaySystems/rafay"
     }
+    aws = {
+      source = "hashicorp/aws"
+    }
   }
 }
