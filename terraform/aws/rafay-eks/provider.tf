@@ -4,9 +4,9 @@ terraform {
       version = ">= 0.1"
       source  = "registry.terraform.io/RafaySystems/rafay"
     }
-    aws = {
-      source = "hashicorp/aws"
-      region = var.region
-    }
   }
+}
+
+provider "aws" {
+  region = var.region
 }
