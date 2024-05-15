@@ -30,36 +30,36 @@ resource "aws_iam_policy" "karpenter_policy" {
     Statement = [
       {
         Action = [
-          "ec2:CreateFleet",
-          "ec2:CreateTags",
           "ec2:CreateLaunchTemplate",
-          "ec2:DeleteLaunchTemplate",
-          "ec2:DescribeAvailabilityZones",
-          "ec2:DescribeImages",
-          "ec2:DescribeInstanceTypeOfferings",
-          "ec2:DescribeInstanceTypes",
-          "ec2:DescribeInstances",
-          "ec2:DescribeLaunchTemplates",
-          "ec2:DescribeSecurityGroups",
-          "ec2:DescribeSpotPriceHistory",
-          "ec2:DescribeSubnets",
+          "ec2:CreateFleet",
           "ec2:RunInstances",
+          "ec2:CreateTags",
+          "iam:PassRole",
           "ec2:TerminateInstances",
+          "ec2:DescribeLaunchTemplates",
+          "ec2:DescribeInstances",
+          "ec2:DescribeSecurityGroups",
+          "ec2:DescribeSubnets",
+          "ec2:DescribeInstanceTypes",
+          "ec2:DescribeInstanceTypeOfferings",
+          "ec2:DescribeAvailabilityZones",
+          "ssm:GetParameter",
           "eks:DescribeCluster",
-          "iam:AddRoleToInstanceProfile",
+          "ec2:DescribeImages",
+          "ec2:DescribeSpotPriceHistory",
+          "ec2:DeleteLaunchTemplate",
+          "iam:GetInstanceProfile",
           "iam:CreateInstanceProfile",
           "iam:DeleteInstanceProfile",
-          "iam:GetInstanceProfile",
-          "iam:PassRole",
-          "iam:RemoveRoleFromInstanceProfile",
           "iam:TagInstanceProfile",
-          "pricing:GetAttributeValues",
+          "iam:AddRoleToInstanceProfile",
+          "iam:RemoveRoleFromInstanceProfile",
           "pricing:GetProducts",
-          "ssm:GetParameter",
           "pricing:DescribeServices",
-        ]
-        Reource = "*"
-        Efect   = "Allow"
+          "pricing:GetAttributeValues",
+        ],
+        Resource = "*",
+        Effect   = "Allow"
       }
     ]
   })
