@@ -150,6 +150,7 @@ variable "managed_nodegroups" {
     }
   }
 }
+
 variable "tags" {
   type        = map(string)
   description = "Cluster Tags"
@@ -162,4 +163,10 @@ variable "role_name" {
   description = "IAM role name"
   type        = string
   default     = "KarpenterNodeRole"
+}
+
+variable "policy_name" {
+  description = "IAM policy name"
+  type        = string
+  default     = "KarpenterNodePolicy"
 }
