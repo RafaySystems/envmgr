@@ -6,6 +6,7 @@ terraform {
     }
     aws = {
       source = "hashicorp/aws"
+      region = var.region
     }
   }
 }
