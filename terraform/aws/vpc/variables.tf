@@ -21,6 +21,6 @@ variable "tags" {
   description = "AWS Tags"
   type        = map(string)
   default = {
-    "cluster-name" = "demo-cluster"
+    "env" = "qa"
   }
 }

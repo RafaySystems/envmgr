@@ -14,7 +14,7 @@ module "vpc" {
   enable_dns_support     = true
 
   tags = merge({
-    "Name" = var.vpc_name },
+    "Name" = var.vpc_name, "cluster-name" = var.vpc_name },
   var.tags)
 }
 
