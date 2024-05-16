@@ -4,6 +4,11 @@ locals {
   }]
 }
 
+resource "random_integer" "priority" {
+  min = 1
+  max = 250
+}
+
 resource "google_container_cluster" "primary" {
   name                     = var.cluster_name
   project                  = var.google_project
@@ -24,6 +29,12 @@ resource "google_container_cluster" "primary" {
     horizontal_pod_autoscaling {
       disabled = false
     }
+    dynamic "network_policy_config" {
+      for_each = var.network_policy_config == null ? [] : [var.network_policy_config]
+      content {
+        disabled = lookup(network_policy_config.value, "disabled", true)
+      }
+    }
   }
 
   release_channel {
@@ -43,8 +54,16 @@ resource "google_container_cluster" "primary" {
   private_cluster_config {
     enable_private_nodes    = true
     enable_private_endpoint = var.enable_private_endpoint
-    master_ipv4_cidr_block  = var.master_ipv4_cidr_block
+    master_ipv4_cidr_block  = "172.16.${random_integer.priority.result}.0/28"
   }
+  dynamic "network_policy" {
+    for_each = var.network_policy == null ? [] : [var.network_policy]
+    content {
+      enabled  = lookup(network_policy.value, "enabled", false)
+      provider = lookup(network_policy.value, "provider", "")
+    }
+  }
+
 
   dynamic "master_authorized_networks_config" {
     for_each = local.master_authorized_networks_config
@@ -63,21 +82,44 @@ resource "google_container_cluster" "primary" {
 
 
 resource "google_container_node_pool" "np" {
+  provider = google-beta
   for_each = var.node_pools
 
   name       = each.value.name
   cluster    = google_container_cluster.primary.id
-  project                  = "kr-test-200723"
+  project                  = var.google_project
   node_count = each.value.node_count
   version    = each.value.version
   node_locations =  each.value.node_locations
+  dynamic "placement_policy" {
+    for_each = each.value.placement_policy == null ? [] : [each.value.placement_policy]
+    iterator = policy
+    content {
+      policy_name = lookup(policy.value, "policy_name", null)
+      type = lookup(policy.value, "type", null)
+    }
+  }
   node_config {
+    dynamic "host_maintenance_policy" {
+      for_each = each.value.host_maintenance_policy == null ? [] : [each.value.host_maintenance_policy]
+      iterator = hmp
+      content {
+              maintenance_interval = lookup(hmp.value, "maintenance_interval", null)
+      }
+    }
     image_type   = each.value.image_type
     machine_type = each.value.machine_type
     disk_size_gb  = lookup(each.value, "disk_size", 100)
     disk_type  = lookup(each.value, "disk_type", "pd-standard")
     labels = each.value.labels == null ? {} :  each.value.labels
     tags = each.value.tags == null ? [] :  each.value.tags
+    dynamic "ephemeral_storage_local_ssd_config" {
+      for_each = each.value.ephemeral_storage_local_ssd_config == null ? [] : [each.value.ephemeral_storage_local_ssd_config]
+      iterator = eph_storage
+      content {
+        local_ssd_count = lookup(eph_storage.value, "local_ssd_count", null)
+      }
+    }
     dynamic "taint" {
       for_each = each.value.taints == null ? [] : [each.value.taints]
       content {
@@ -113,6 +155,10 @@ provider "kubernetes" {
   host                   = "https://${google_container_cluster.primary.endpoint}"
   cluster_ca_certificate = base64decode(google_container_cluster.primary.master_auth.0.cluster_ca_certificate)
   token                  = data.google_client_config.current.access_token
+  /*exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      command = "gke-gcloud-auth-plugin"
+  }*/
 }
 
 provider "helm" {
@@ -120,6 +166,10 @@ provider "helm" {
     host                   = "https://${google_container_cluster.primary.endpoint}"
     cluster_ca_certificate = base64decode(google_container_cluster.primary.master_auth.0.cluster_ca_certificate)
     token                  = data.google_client_config.current.access_token
+    /*exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      command = "gke-gcloud-auth-plugin"
+    }*/
   }
 }
 
@@ -149,3 +199,27 @@ resource "helm_release" "rafay_operator" {
     ]
   }
 }
+
+resource "rafay_cluster_sharing" "cluster-sharing" {
+  clustername = var.cluster_name
+  project     = var.project_name
+  sharing {
+    all = false
+    projects {
+      name = var.shared_project_name
+    }
+  }
+  depends_on=["helm_release.rafay_operator"]
+}
+
+/*data "rafay_download_kubeconfig" "kubeconfig_cluster" {
+  username = var.username
+  depends_on = [helm_release.rafay_operator]
+}
+
+
+
+output "kubeconfig_cluster" {
+  description = "kubeconfig_cluster"
+  value       = data.rafay_download_kubeconfig.kubeconfig_cluster.kubeconfig
+}*/

@@ -11,6 +11,16 @@ variable "node_pools" {
     disk_type    = optional(string)
     labels = optional(map(string))
     tags = optional(list(string))
+    placement_policy    = optional(object({
+      	policy_name   = string
+      	type       = string
+    	}))
+    host_maintenance_policy    = optional(object({
+      	maintenance_interval   = string
+    	}))
+    ephemeral_storage_local_ssd_config    = optional(object({
+      	local_ssd_count   = number
+    	}))
     taints = optional(object({
         key = string
         value = string
@@ -94,7 +104,22 @@ variable "ip_allocation_policy" {
   default = {}
 }
 
+variable "network_policy" {
+  type        = object({ enabled = optional(bool), provider = optional(string) })
+  description = "Network Policy Config"
+  default = {enabled = false, provider = "PROVIDER_UNSPECIFIED"}
+}
+
+variable "network_policy_config" {
+  type        = object({ disabled = optional(bool) })
+  description = "Network Policy Config"
+  default = {disabled = true}
+}
+
+
 variable "cluster_name" {}
 variable "project_name" {}
 variable "blueprint" {}
 variable "blueprint_version" {}
+variable "username" {}
+variable "shared_project_name" {}
