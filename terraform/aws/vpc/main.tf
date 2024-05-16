@@ -1,27 +1,20 @@
-/* For simplicity, this RDS tutorial instance is publicly accessible. 
-Avoid configuring database instances in public subnets in production, since it increases the risk of security attacks.
-*/
-
-provider "aws" {
-  region = var.region
-}
-
-// can be externalized as a shared / static resource
 module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "2.77.0"
+  source = "terraform-aws-modules/vpc/aws"
 
-  name                 = "${var.name}"
-  cidr                 = "10.0.0.0/16" // can be externalized as input var
-  azs                  = ["${var.region}a", "${var.region}b", "${var.region}c"]
-  public_subnets       = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+  name            = var.vpc_name
+  cidr            = var.vpc_cidr
+  azs             = ["${var.region}a", "${var.region}b", "${var.region}c"]
+  private_subnets = [cidrsubnet(var.vpc_cidr, 8, 1), cidrsubnet(var.vpc_cidr, 8, 2), cidrsubnet(var.vpc_cidr, 8, 3)]
+  public_subnets  = [cidrsubnet(var.vpc_cidr, 8, 100), cidrsubnet(var.vpc_cidr, 8, 101), cidrsubnet(var.vpc_cidr, 8, 102)]
 
-  tags = {
-    name = var.name
-    email = var.email
-    env = "dev"
-  }
+  enable_nat_gateway     = true
+  single_nat_gateway     = true
+  one_nat_gateway_per_az = false
+  enable_dns_hostnames   = true
+  enable_dns_support     = true
+
+  tags = merge({
+    "Name" = var.vpc_name, "cluster-name" = var.vpc_name },
+  var.tags)
 }
 
