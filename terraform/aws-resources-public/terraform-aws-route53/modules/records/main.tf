@@ -1,5 +1,5 @@
 module "terraform-aws-route53" {
-  source  = "terraform-aws-route53/modules/records"
+  source  = "terraform-aws-route53//modules/records"
   version = "2.11.1"
 
   create = var.create
