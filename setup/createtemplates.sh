@@ -115,7 +115,7 @@ function create_sealers {
     sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/values.yaml > $PWD/tmp.yaml
     
     fName="$(rctl apply -t $templatefile --values $PWD/tmp.yaml \
-        --test-template | grep -A1 metadata | awk  '/name/ {print $2}')" 
+        --test-template | grep -m1 -A1 metadata | awk  '/name/ {print $2}')" 
 
     if ! rctl apply -t $templatefile --values $PWD/tmp.yaml \
         --test-template --write $PWD/templates/$fName.yaml.spec ; then
@@ -155,7 +155,7 @@ function create_configcontext_templates {
     sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/$folder/setup/values_tmp.yaml > $PWD/$folder/setup/tmp.yaml
     
     fName="$(rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
-           --test-template | grep -A1 metadata | awk  '/name/ {print $2}')" 
+           --test-template | grep -m1 -A1 metadata | awk  '/name/ {print $2}')" 
 
     if ! rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
         --test-template --write $PWD/$folder/setup/templates/$fName.yaml.spec ; then
@@ -199,7 +199,7 @@ function create_driver_templates {
     sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/$folder/setup/values_tmp.yaml > $PWD/$folder/setup/tmp.yaml
     
     fName="$(rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
-           --test-template | grep -A1 metadata | awk  '/name/ {print $2}')" 
+           --test-template | grep -m1 -A1 metadata | awk  '/name/ {print $2}')" 
 
     if ! rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
         --test-template --write $PWD/$folder/setup/templates/$fName.yaml.spec ; then
@@ -238,8 +238,10 @@ function create_resource_templates {
 
     sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/$folder/setup/values_tmp.yaml > $PWD/$folder/setup/tmp.yaml
     
+
+
     fName="$(rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
-           --test-template | grep -A1 metadata | awk  '/name/ {print $2}')" 
+           --test-template | grep -m1 -A1 metadata | awk  '/name/ {print $2}')" 
 
     if ! rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
         --test-template --write $PWD/$folder/setup/templates/$fName.yaml.spec ; then
@@ -283,7 +285,7 @@ function create_environment_templates {
     sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/$folder/setup/values_tmp.yaml > $PWD/$folder/setup/tmp.yaml
 
     fName="$(rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
-           --test-template | grep -A1 metadata | awk  '/name/ {print $2}')" 
+           --test-template | grep -m1 -A1 metadata | awk  '/name/ {print $2}')" 
 
     if ! rctl apply -t $templatefile --values $PWD/$folder/setup/tmp.yaml \
         --test-template --write $PWD/$folder/setup/templates/$fName.yaml.spec ; then
@@ -397,7 +399,7 @@ function create_pipeline {
     sed "s/^$PROJECT_NAME_FIELD: .*$/$PROJECT_NAME_FIELD: $PROJECT_NAME/" $PWD/values.yaml > $PWD/tmp.yaml
     
     fName="$(rctl apply -t $templatefile --values $PWD/tmp.yaml \
-        --test-template | grep -A1 metadata | awk  '/name/ {print $2}')" 
+        --test-template | grep -m1 -A1 metadata | awk  '/name/ {print $2}')" 
 
     if ! rctl apply -t $templatefile --values $PWD/tmp.yaml \
         --test-template --write $PWD/templates/$fName.yaml.spec ; then
@@ -621,9 +623,9 @@ function read_values_yaml() {
     ADD_DRIVER_TEMPLATE="apis/eaas.envmgmt.io/v1/projects/${PROJECT_NAME}/drivers"
     ADD_CONFIGCONTEXT_TEMPLATE="apis/eaas.envmgmt.io/v1/projects/${PROJECT_NAME}/configcontexts?fail-on-exists=true"
 
-    for template in "${templates[@]}"; do
-        echo "$template"
-    done
+    #for template in "${templates[@]}"; do
+    #    echo "$template"
+    #done
 }
 
 # checks api users org name with the org name from values.yaml to avoid making accidental changes
