@@ -1,0 +1,44 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.Route53DelegationResolverRuleAssociationsResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      backendType: system
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRoute53DelegationResolverRuleAssociationsRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: create
+    options:
+      description: Whether to create Route53 Resolver rule associations
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: vpc_id
+    options:
+      description: Default VPC ID for all the Route53 Resolver rule associations
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: resolver_rule_associations
+    options:
+      description: Map of Route53 Resolver rule associations parameters
+      override:
+        type: allowed
+    value: "{}"
+    valueType: hcl
+  version: {{ $glbCtx.version }}

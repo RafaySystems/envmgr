@@ -1,0 +1,37 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.Route53DelegationSetsResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      backendType: system
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRoute53DelegationSetsRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: create
+    options:
+      description: Whether to create Route53 delegation sets
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: delegation_sets
+    options:
+      description: Map of Route53 delegation set parameters
+      override:
+        type: allowed
+    value: "{}"
+    valueType: hcl
+  version: {{ $glbCtx.version }}

@@ -1,0 +1,401 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.SecurityGroupResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      backendType: system
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfSecurityRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: create
+    options:
+      description: Whether to create security group and all rules
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: create_sg
+    options:
+      description: Whether to create security group
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: security_group_id
+    options:
+      description: ID of existing security group whose rules we will manage
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: vpc_id
+    options:
+      description: ID of the VPC where to create security group
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: name
+    options:
+      description: Name of security group - not required if create_sg is false
+      override:
+        type: allowed
+    value: $("em-sg-\(environment.name)")$
+    valueType: expression
+  - name: use_name_prefix
+    options:
+      description: Whether to use name_prefix or fixed name. Should be true to able to update security group name after initial creation
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: description
+    options:
+      description: Description of security group
+      override:
+        type: allowed
+    value: '"Security Group managed by Terraform"'
+    valueType: hcl
+  - name: revoke_rules_on_delete
+    options:
+      description: Instruct Terraform to revoke all of the Security Groups attached ingress and egress rules before deleting the rule itself. Enable for EMR.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: tags
+    options:
+      description: A mapping of tags to assign to security group
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: create_timeout
+    options:
+      description: Time to wait for a security group to be created
+      override:
+        type: allowed
+    value: '"10m"'
+    valueType: hcl
+  - name: delete_timeout
+    options:
+      description: Time to wait for a security group to be deleted
+      override:
+        type: allowed
+    value: '"15m"'
+    valueType: hcl
+  - name: ingress_rules
+    options:
+      description: List of ingress rules to create by name
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_with_self
+    options:
+      description: List of ingress rules to create where 'self' is defined
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_with_cidr_blocks
+    options:
+      description: List of ingress rules to create where 'cidr_blocks' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_with_ipv6_cidr_blocks
+    options:
+      description: List of ingress rules to create where 'ipv6_cidr_blocks' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_with_source_security_group_id
+    options:
+      description: List of ingress rules to create where 'source_security_group_id' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_cidr_blocks
+    options:
+      description: List of IPv4 CIDR ranges to use on all ingress rules
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_ipv6_cidr_blocks
+    options:
+      description: List of IPv6 CIDR ranges to use on all ingress rules
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_prefix_list_ids
+    options:
+      description: List of prefix list IDs (for allowing access to VPC endpoints) to use on all ingress rules
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_with_prefix_list_ids
+    options:
+      description: List of ingress rules to create where 'prefix_list_ids' is used only
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_rules
+    options:
+      description: List of computed ingress rules to create by name
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_with_self
+    options:
+      description: List of computed ingress rules to create where 'self' is defined
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_with_cidr_blocks
+    options:
+      description: List of computed ingress rules to create where 'cidr_blocks' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_with_ipv6_cidr_blocks
+    options:
+      description: List of computed ingress rules to create where 'ipv6_cidr_blocks' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_with_source_security_group_id
+    options:
+      description: List of computed ingress rules to create where 'source_security_group_id' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_with_prefix_list_ids
+    options:
+      description: List of computed ingress rules to create where 'prefix_list_ids' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: number_of_computed_ingress_rules
+    options:
+      description: Number of computed ingress rules to create by name
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_with_self
+    options:
+      description: Number of computed ingress rules to create where 'self' is defined
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_with_cidr_blocks
+    options:
+      description: Number of computed ingress rules to create where 'cidr_blocks' is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_with_ipv6_cidr_blocks
+    options:
+      description: Number of computed ingress rules to create where 'ipv6_cidr_blocks' is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_with_source_security_group_id
+    options:
+      description: Number of computed ingress rules to create where 'source_security_group_id' is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_with_prefix_list_ids
+    options:
+      description: Number of computed ingress rules to create where 'prefix_list_ids' is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: egress_rules
+    options:
+      description: List of egress rules to create by name
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: egress_with_self
+    options:
+      description: List of egress rules to create where 'self' is defined
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: egress_with_cidr_blocks
+    options:
+      description: List of egress rules to create where 'cidr_blocks' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: egress_with_ipv6_cidr_blocks
+    options:
+      description: List of egress rules to create where 'ipv6_cidr_blocks' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: egress_with_source_security_group_id
+    options:
+      description: List of egress rules to create where 'source_security_group_id' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: egress_with_prefix_list_ids
+    options:
+      description: List of egress rules to create where 'prefix_list_ids' is used only
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: egress_cidr_blocks
+    options:
+      description: List of IPv4 CIDR ranges to use on all egress rules
+      override:
+        type: allowed
+    value: '["0.0.0.0/0"]'
+    valueType: hcl
+  - name: egress_ipv6_cidr_blocks
+    options:
+      description: List of IPv6 CIDR ranges to use on all egress rules
+      override:
+        type: allowed
+    value: '["::/0"]'
+    valueType: hcl
+  - name: egress_prefix_list_ids
+    options:
+      description: List of prefix list IDs (for allowing access to VPC endpoints) to use on all egress rules
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_rules
+    options:
+      description: List of computed egress rules to create by name
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_with_self
+    options:
+      description: List of computed egress rules to create where 'self' is defined
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_with_cidr_blocks
+    options:
+      description: List of computed egress rules to create where 'cidr_blocks' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_with_ipv6_cidr_blocks
+    options:
+      description: List of computed egress rules to create where 'ipv6_cidr_blocks' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_with_source_security_group_id
+    options:
+      description: List of computed egress rules to create where 'source_security_group_id' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_with_prefix_list_ids
+    options:
+      description: List of computed egress rules to create where 'prefix_list_ids' is used only
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: number_of_computed_egress_rules
+    options:
+      description: Number of computed egress rules to create by name
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_with_self
+    options:
+      description: Number of computed egress rules to create where 'self' is defined
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_with_cidr_blocks
+    options:
+      description: Number of computed egress rules to create where 'cidr_blocks' is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_with_ipv6_cidr_blocks
+    options:
+      description: Number of computed egress rules to create where 'ipv6_cidr_blocks' is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_with_source_security_group_id
+    options:
+      description: Number of computed egress rules to create where 'source_security_group_id' is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_with_prefix_list_ids
+    options:
+      description: Number of computed egress rules to create where 'prefix_list_ids' is used only
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: putin_khuylo
+    options:
+      description: Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info https//en.wikipedia.org/wiki/Putin_khuylo!
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  version: {{ $glbCtx.version }}

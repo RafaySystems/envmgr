@@ -1,0 +1,51 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.CloudwatchQueryDefinitionResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      backendType: system
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfCloudwatchQueryDefinitionRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: create
+    options:
+      description: Whether to create the Cloudwatch query definition
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: name
+    options:
+      description: The name of the query.
+      override:
+        type: allowed
+    value: $("query-\(environment.name)")$
+    valueType: expression
+  - name: query_string
+    options:
+      description: The The query to save.
+      override:
+        type: allowed
+    value: "''"
+    valueType: hcl
+  - name: log_group_names
+    options:
+      description: Specific log groups to use with the query.
+      override:
+        type: allowed
+    value: 'null'
+    valueType: hcl
+  version: {{ $glbCtx.version }}
