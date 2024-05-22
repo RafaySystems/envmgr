@@ -41,6 +41,7 @@ sharingtemplates: true
 
 ## list of templates
 templates:
+- ../terraform/rafay/rctl-apply
 #  - ../terraform/naas/101-naas
 #  - ../terraform/waas/101-waas
 #  - ../terraform/vcluster/101-caas

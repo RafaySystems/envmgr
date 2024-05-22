@@ -24,6 +24,7 @@ templates=(
     #"terraform/gcp/101-vpc-instance"
     #"terraform/mks/101-caas-pnap"
     #"terraform/oci/101-caas-oke"
+    terraform/rafay/rctl-apply
     #"terraform/vcluster/101-caas"
     #"terraform/vmware/101-caas-vmware"
     #"terraform/waas/101-waas"

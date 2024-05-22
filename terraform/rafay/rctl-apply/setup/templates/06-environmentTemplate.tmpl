@@ -1,0 +1,23 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  annotations:
+    eaas.envmgmt.io/category: Developer Productivity
+    eaas.envmgmt.io/github: https://github.com/thirumal-rafay/demo-repo-1/tree/main/caas-mks
+  description: Allowed k8s_version changes
+  name: {{ $glbCtx.EnvironmentTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  hooks: {}
+  iconURL: https://docs.rafay.co/icons/rafay-logo.svg
+  readme: Self Service provisioning of any Rafay Resource
+  resources:
+  - kind: resourcetemplate
+    name: {{ $glbCtx.RctlApplyResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: {{ $glbCtx.version }}
+    type: dynamic
+  version: {{ $glbCtx.version }}
