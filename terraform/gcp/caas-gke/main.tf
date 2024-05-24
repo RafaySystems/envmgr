@@ -18,9 +18,9 @@ resource "google_container_cluster" "primary" {
   network                  = var.network
   subnetwork               = var.subnetwork
   networking_mode          = "VPC_NATIVE"
-  min_master_version	   = var.k8s_version
+  min_master_version       = var.k8s_version
   deletion_protection      = false
-  node_locations = var.node_locations
+  node_locations           = var.node_locations
 
   addons_config {
     http_load_balancing {
@@ -35,6 +35,9 @@ resource "google_container_cluster" "primary" {
         disabled = lookup(network_policy_config.value, "disabled", true)
       }
     }
+    gcp_filestore_csi_driver_config {
+      enabled = true
+    }
   }
 
   release_channel {
@@ -42,14 +45,14 @@ resource "google_container_cluster" "primary" {
   }
 
 
-  dynamic ip_allocation_policy {
-     for_each = var.ip_allocation_policy == null ? [] : [var.ip_allocation_policy]
-     iterator = res
-     content {
-        cluster_secondary_range_name  = lookup(res.value, "cluster_secondary_range_name", null)
-        services_secondary_range_name = lookup(res.value, "services_secondary_range_name", null)
-      }
-   }
+  dynamic "ip_allocation_policy" {
+    for_each = var.ip_allocation_policy == null ? [] : [var.ip_allocation_policy]
+    iterator = res
+    content {
+      cluster_secondary_range_name  = lookup(res.value, "cluster_secondary_range_name", null)
+      services_secondary_range_name = lookup(res.value, "services_secondary_range_name", null)
+    }
+  }
 
   private_cluster_config {
     enable_private_nodes    = true
@@ -85,18 +88,18 @@ resource "google_container_node_pool" "np" {
   provider = google-beta
   for_each = var.node_pools
 
-  name       = each.value.name
-  cluster    = google_container_cluster.primary.id
-  project                  = var.google_project
-  node_count = each.value.node_count
-  version    = each.value.version
-  node_locations =  each.value.node_locations
+  name           = each.value.name
+  cluster        = google_container_cluster.primary.id
+  project        = var.google_project
+  node_count     = each.value.node_count
+  version        = each.value.version
+  node_locations = each.value.node_locations
   dynamic "placement_policy" {
     for_each = each.value.placement_policy == null ? [] : [each.value.placement_policy]
     iterator = policy
     content {
       policy_name = lookup(policy.value, "policy_name", null)
-      type = lookup(policy.value, "type", null)
+      type        = lookup(policy.value, "type", null)
     }
   }
   node_config {
@@ -104,15 +107,15 @@ resource "google_container_node_pool" "np" {
       for_each = each.value.host_maintenance_policy == null ? [] : [each.value.host_maintenance_policy]
       iterator = hmp
       content {
-              maintenance_interval = lookup(hmp.value, "maintenance_interval", null)
+        maintenance_interval = lookup(hmp.value, "maintenance_interval", null)
       }
     }
     image_type   = each.value.image_type
     machine_type = each.value.machine_type
-    disk_size_gb  = lookup(each.value, "disk_size", 100)
-    disk_type  = lookup(each.value, "disk_type", "pd-standard")
-    labels = each.value.labels == null ? {} :  each.value.labels
-    tags = each.value.tags == null ? [] :  each.value.tags
+    disk_size_gb = lookup(each.value, "disk_size", 100)
+    disk_type    = lookup(each.value, "disk_type", "pd-standard")
+    labels       = each.value.labels == null ? {} : each.value.labels
+    tags         = each.value.tags == null ? [] : each.value.tags
     dynamic "ephemeral_storage_local_ssd_config" {
       for_each = each.value.ephemeral_storage_local_ssd_config == null ? [] : [each.value.ephemeral_storage_local_ssd_config]
       iterator = eph_storage
@@ -128,7 +131,7 @@ resource "google_container_node_pool" "np" {
         value  = taint.value.value
       }
     }
-    dynamic guest_accelerator {
+    dynamic "guest_accelerator" {
       for_each = each.value.guest_accelerator == null ? [] : [each.value.guest_accelerator]
       iterator = gpu
       content {
@@ -136,15 +139,15 @@ resource "google_container_node_pool" "np" {
         count = lookup(gpu.value, "gpu_count", null)
       }
     }
-   dynamic reservation_affinity {
-     for_each = each.value.reservation_affinity == null ? [] : [each.value.reservation_affinity]
-     iterator = res
-     content {
-        consume_reservation_type  = lookup(res.value, "consume_reservation_type", null)
-        key = lookup(res.value, "key", null)
-        values = lookup(res.value, "values", null)
+    dynamic "reservation_affinity" {
+      for_each = each.value.reservation_affinity == null ? [] : [each.value.reservation_affinity]
+      iterator = res
+      content {
+        consume_reservation_type = lookup(res.value, "consume_reservation_type", null)
+        key                      = lookup(res.value, "key", null)
+        values                   = lookup(res.value, "values", null)
       }
-   }
+    }
   }
   timeouts {
     create = "120m"
@@ -186,15 +189,15 @@ resource "rafay_import_cluster" "gke" {
   kubernetes_provider   = "GKE"
   provision_environment = "CLOUD"
   values_path           = "values.yaml"
-  depends_on 	= [google_container_node_pool.np]
+  depends_on            = [google_container_node_pool.np]
 }
 
 resource "helm_release" "rafay_operator" {
-  name       = "v2-infra"
-  namespace = "rafay-system"
+  name             = "v2-infra"
+  namespace        = "rafay-system"
   create_namespace = true
-  repository = "https://rafaysystems.github.io/rafay-helm-charts/"
-  chart      = "v2-infra"
+  repository       = "https://rafaysystems.github.io/rafay-helm-charts/"
+  chart            = "v2-infra"
 
   values = [rafay_import_cluster.gke.values_data]
   lifecycle {
@@ -213,7 +216,7 @@ resource "rafay_cluster_sharing" "cluster-sharing" {
       name = var.shared_project_name
     }
   }
-  depends_on=["helm_release.rafay_operator"]
+  depends_on = ["helm_release.rafay_operator"]
 }
 
 /*data "rafay_download_kubeconfig" "kubeconfig_cluster" {
