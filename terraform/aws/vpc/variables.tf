@@ -24,3 +24,13 @@ variable "tags" {
     "env" = "qa"
   }
 }
+
+variable "account_id" {
+  type    = string
+  default = ""
+}
+
+variable "role_name" {
+  type    = string
+  default = ""
+}

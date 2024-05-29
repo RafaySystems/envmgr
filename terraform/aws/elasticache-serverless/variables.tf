@@ -74,3 +74,13 @@ variable "security_group_ids" {
 variable "subnet_ids" {
   type = list(string)
 }
+
+variable "account_id" {
+  type    = string
+  default = ""
+}
+
+variable "role_name" {
+  type    = string
+  default = ""
+}
