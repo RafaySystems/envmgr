@@ -1,5 +1,5 @@
-module "terraform-aws-route53" {
-  source  = "terraform-aws-route53//modules/resolver-rule-associations"
+module "route53_resolver-rule-associations" {
+  source  = "terraform-aws-modules/route53/aws//modules/resolver-rule-associations"
   version = "2.11.1"
 
   create = var.create

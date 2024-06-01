@@ -1,5 +1,5 @@
-module "terraform-aws-route53" {
-  source  = "terraform-aws-route53//modules/zones"
+module "route53_zones" {
+  source  = "terraform-aws-modules/route53/aws//modules/zones"
   version = "2.11.1"
 
   create = var.create
