@@ -1,5 +1,5 @@
-module "terraform-aws-cloudwatch" {
-  source  = "terraform-aws-cloudwatch//modules/metric-alarms-by-multiple-dimensions"
+module "cloudwatch_metric-alarms-by-multiple-dimensions" {
+  source  = "terraform-aws-modules/cloudwatch/aws//modules/metric-alarms-by-multiple-dimensions"
   version = "5.3.1"
 
   create_metric_alarm = var.create_metric_alarm

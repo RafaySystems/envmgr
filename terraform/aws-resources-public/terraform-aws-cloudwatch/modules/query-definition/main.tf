@@ -1,5 +1,5 @@
-module "terraform-aws-cloudwatch" {
-  source  = "terraform-aws-cloudwatch//modules/query-definition"
+module "cloudwatch_query-definition" {
+  source  = "terraform-aws-modules/cloudwatch/aws//modules/query-definition"
   version = "5.3.1"
 
   create = var.create

@@ -1,5 +1,5 @@
-module "terraform-aws-cloudwatch" {
-  source  = "terraform-aws-cloudwatch//modules/cis-alarms"
+module "cloudwatch_cis-alarms" {
+  source  = "terraform-aws-modules/cloudwatch/aws//modules/cis-alarms"
   version = "5.3.1"
 
   create = var.create

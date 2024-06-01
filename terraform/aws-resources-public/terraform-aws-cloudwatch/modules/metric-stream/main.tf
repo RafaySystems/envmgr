@@ -1,5 +1,5 @@
-module "terraform-aws-cloudwatch" {
-  source  = "terraform-aws-cloudwatch//modules/metric-stream"
+module "cloudwatch_metric-stream" {
+  source  = "terraform-aws-modules/cloudwatch/aws//modules/metric-stream"
   version = "5.3.1"
 
   create = var.create

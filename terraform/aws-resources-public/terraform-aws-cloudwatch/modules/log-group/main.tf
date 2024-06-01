@@ -1,5 +1,5 @@
-module "terraform-aws-cloudwatch" {
-  source  = "terraform-aws-cloudwatch//modules/log-group"
+module "cloudwatch_log-group" {
+  source  = "terraform-aws-modules/cloudwatch/aws//modules/log-group"
   version = "5.3.1"
 
   create = var.create

@@ -1,5 +1,5 @@
-module "terraform-aws-s3-bucket" {
-  source  = "terraform-aws-s3-bucket//modules/object"
+module "s3-bucket_object" {
+  source  = "terraform-aws-modules/s3-bucket/aws//modules/object"
   version = "4.1.2"
 
   create = var.create
