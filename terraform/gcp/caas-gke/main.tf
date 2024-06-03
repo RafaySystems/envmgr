@@ -144,8 +144,8 @@ resource "google_container_node_pool" "np" {
       iterator = res
       content {
         consume_reservation_type = lookup(res.value, "consume_reservation_type", null)
-        key                      = lookup(res.value, "key", null)
-        values                   = lookup(res.value, "values", null)
+        # key                      = lookup(res.value, "key", null)
+        # values                   = lookup(res.value, "values", null)
       }
     }
   }
