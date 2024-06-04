@@ -123,7 +123,7 @@ variable "tags" {
   type        = map(string)
   description = "Cluster Tags"
   default = {
-    "env"   = "qa"
+    "env" = "qa"
   }
 }
 
@@ -133,4 +133,19 @@ variable "cluster_labels" {
   default = {
     "provisioned-by" = "rafay"
   }
+}
+
+variable "custom_networking" {
+  type        = bool
+  description = "Enable/Disable custom netwokring using secondary vpc CIDRs"
+  default     = false
+}
+
+variable "secondary_cidr" {
+  type = map(object({
+    availability_zone = string
+    subnet            = string
+    security_groups   = optional(list(string))
+  }))
+  default = {}
 }

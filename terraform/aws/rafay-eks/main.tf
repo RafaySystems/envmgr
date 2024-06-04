@@ -17,6 +17,21 @@ resource "rafay_eks_cluster" "eks-cluster" {
       cloud_provider         = var.cloud_credentials_name
       cross_account_role_arn = try(local.rolearn, null)
       cni_provider           = "aws-cni"
+      dynamic "cni_params" {
+        for_each = var.custom_networking ? [] : [var.custom_networking]
+        content {
+          dynamic "custom_cni_crd_spec" {
+            for_each = var.secondary_cidr
+            content {
+              name = custom_cni_crd_spec.value.availability_zone
+              cni_spec {
+                subnet          = custom_cni_crd_spec.value.subnet
+                security_groups = try(custom_cni_crd_spec.value.security_groups, null)
+              }
+            }
+          }
+        }
+      }
     }
   }
   cluster_config {
