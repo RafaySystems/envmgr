@@ -1,0 +1,44 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.CloudwatchLogStreamResourceTemplate }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      backendType: system
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfCloudwatchRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: create
+    options:
+      description: Whether to create the Cloudwatch log stream
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: name
+    options:
+      description: A name for the log stream
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: log_group_name
+    options:
+      description: A name of the log group
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  version: {{ $glbCtx.version }}

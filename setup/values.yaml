@@ -61,3 +61,4 @@ templates:
 #  - ../terraform/vmware/101-caas-vmware
 #  - ../terraform/jupyterhub
 #  - ../terraform/oci/101-caas-oke
+#  - ../terraform/rafay-aws-resources

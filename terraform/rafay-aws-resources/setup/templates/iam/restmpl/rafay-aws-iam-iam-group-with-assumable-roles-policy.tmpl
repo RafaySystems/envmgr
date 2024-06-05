@@ -1,0 +1,65 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.IamGroupWithAssumableRolesPolicyResourceTemplate }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      backendType: system
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfIamRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: name
+    options:
+      description: Name of IAM policy and IAM group
+      override:
+        type: allowed
+    value: $("em-iam-\(environment.name)")$
+    valueType: expression
+  - name: path
+    options:
+      description: Path of IAM policy and IAM group
+      override:
+        type: allowed
+    value: '"/"'
+    valueType: hcl
+  - name: assumable_roles
+    options:
+      description: List of IAM roles ARNs which can be assumed by the group
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: assumable_roles_policy_name_suffix
+    options:
+      description: Append this name to the policy name that will be created for assuming the given roles (default null -- the policy name will be group name)
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: group_users
+    options:
+      description: List of IAM users to have in an IAM group which can assume the role
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: tags
+    options:
+      description: A map of tags to add to all resources.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  version: {{ $glbCtx.version }}

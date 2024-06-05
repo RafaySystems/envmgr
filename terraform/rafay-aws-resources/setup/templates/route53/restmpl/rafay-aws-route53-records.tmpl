@@ -1,0 +1,65 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.Route53RecordsResourceTemplate }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      backendType: system
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRoute53RecordsRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: create
+    options:
+      description: Whether to create DNS records
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: zone_id
+    options:
+      description: ID of DNS zone
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: zone_name
+    options:
+      description: Name of DNS zone
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: private_zone
+    options:
+      description: Whether Route53 zone is private or public
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: records
+    options:
+      description: List of objects of DNS records
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: records_jsonencoded
+    options:
+      description: List of map of DNS records (stored as jsonencoded string, for terragrunt)
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  version: {{ $glbCtx.version }}
