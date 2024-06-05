@@ -1,0 +1,44 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.Route53DelegationZonesResourceTemplate }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: {{ $glbCtx.ConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      backendType: system
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRoute53DelegationZonesRepoPath }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: create
+    options:
+      description: Whether to create Route53 zone
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: zones
+    options:
+      description: Map of Route53 zone parameters
+      override:
+        type: allowed
+    value: "{}"
+    valueType: hcl
+  - name: tags
+    options:
+      description: Tags added to all zones. Will take precedence over tags from the 'zones' variable
+      override:
+        type: allowed
+    value: "{}"
+    valueType: hcl
+  version: {{ $glbCtx.version }}

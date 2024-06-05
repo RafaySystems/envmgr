@@ -1,0 +1,85 @@
+projectName: rkd-apr29
+agentName: eaas-agent
+repoName: eaas-repo
+branch: main
+
+## Initial Version for Environment Manager resources.
+version: v1
+ConfigContext: aws-101-vpc-ec2
+
+## VPC
+VPCResourceTemplate: rafay-aws-vpc
+VPCEndpointsResourceTemplate: rafay-aws-vpc-endpoints
+tfVPCRepoPath: terraform/rafay-aws-resources/terraform/aws-vpc
+
+## EC2
+EC2ResourceTemplate: rafay-aws-ec2
+tfEC2RepoPath: terraform/rafay-aws-resources/terraform/aws-ec2-instance
+
+## SecurityGroup
+SecurityGroupResourceTemplate: rafay-aws-security-group
+SecurityGroupSSHResourceTemplate: rafay-aws-security-group-ssh
+tfSecurityRepoPath: terraform/rafay-aws-resources/terraform/aws-security-group
+
+## RDS
+RDSResourceTemplate: rafay-aws-rds
+tfRdsRepoPath: terraform/rafay-aws-resources/terraform/aws-rds
+
+## IAM
+IamUserResourceTemplate: rafay-aws-iam-user
+IamRoleForServiceAccountResourceTemplate: rafay-aws-iam-service-accounts-eks
+IamReadOnlyPolicyResourceTemplate: rafay-aws-iam-read-only-policy
+IamPolicyResourceTemplate: rafay-aws-iam-policy
+IamGroupWithPolicyResourceTemplate: rafay-aws-iam-group-with-policies
+IamGroupWithAssumableRolesPolicyResourceTemplate: rafay-aws-iam-group-with-assumable-roles-policy
+IamGithubOidcResourceTemplate: rafay-aws-iam-github-oidc-role
+IamGithubOidcProviderTemplate: rafay-aws-iam-github-oidc-provider
+IamEksRoleTemplate: rafay-aws-iam-eks-role
+IamAssumableRolesTemplate: rafay-aws-iam-assumable-roles
+IamAssumableRolesWithSamlTemplate: rafay-aws-iam-assumable-roles-with-saml
+IamAssumableRoleTemplate: rafay-aws-iam-assumable-role
+IamAssumableRoleWithSamlTemplate: rafay-aws-iam-assumable-role-with-saml
+IamAssumableRoleWithOidcTemplate: rafay-aws-iam-iam-assumable-role-with-oidc
+IamAccountTemplate: rafay-aws-iam-account
+tfIamRepoPath: terraform/rafay-aws-resources/terraform/aws-iam/modules
+
+## Cloudwatch
+CloudwatchCisAlarmsResourceTemplate: rafay-aws-cloudwatch-cis-alarms
+CloudwatchCompositeAlarmsResourceTemplate: rafay-aws-cloudwatch-composite-alarms
+CloudwatchLogGroupResourceTemplate: rafay-aws-cloudwatch-log-group
+CloudwatchLogMetricFilterResourceTemplate: rafay-aws-cloudwatch-log-metric-filter
+CloudwatchLogStreamResourceTemplate: rafay-aws-cloudwatch-log-stream
+CloudwatchMetricAlarmResourceTemplate: rafay-aws-cloudwatch-metic-alarm
+CloudwatchMetricAlarmsByMultipleResourceTemplate: rafay-aws-cloudwatch-metic-alarms-by-multiple
+CloudwatchMetricStreamResourceTemplate: rafay-aws-cloudwatch-metic-stream
+CloudwatchQueryDefinitionResourceTemplate: rafay-aws-cloudwatch-query-definition
+tfCloudwatchRepoPath: terraform/rafay-aws-resources/terraform/aws-cloudwatch
+
+
+## EFS
+EfsResourceTemplate: rafay-aws-efs
+tfEfsRepoPath: terraform/rafay-aws-resources/terraform/aws-efs
+
+## S3 bucket
+S3BucketResourceTemplate: rafay-aws-s3-bucket
+S3BucketNotificationResourceTemplate: rafay-aws-s3-bucket-notification
+S3BucketObjectResourceTemplate: rafay-aws-s3-bucket-object
+tfS3BucketRepoPath: terraform/rafay-aws-resources/terraform/aws-s3
+tfS3BucketObjectRepoPath: terraform/rafay-aws-resources/terraform/aws-s3
+
+## Route53
+Route53RecordsResourceTemplate: rafay-aws-route53-records
+tfRoute53RecordsRepoPath: terraform/rafay-aws-resources/terraform/aws-route53-records
+
+Route53DelegationSetsResourceTemplate: rafay-aws-route53-delegation-sets
+tfRoute53DelegationSetsRepoPath: terraform/rafay-aws-resources/terraform/aws-route53
+
+Route53DelegationZonesResourceTemplate: rafay-aws-route53-delegation-zones
+tfRoute53DelegationZonesRepoPath: terraform/rafay-aws-resources/terraform/aws-route53
+
+Route53DelegationResolverRuleAssociationsResourceTemplate: rafay-aws-route53-delegation-resolver-rule-associations
+tfRoute53DelegationResolverRuleAssociationsRepoPath: terraform/rafay-aws-resources/terraform/aws-route53
+
+EC2EnvironmentTemplate: rafay-aws-vpc-ec2-env
+
+region: us-west-2
