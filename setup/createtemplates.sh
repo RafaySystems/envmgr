@@ -24,7 +24,7 @@ templates=(
     #"terraform/gcp/101-vpc-instance"
     #"terraform/mks/101-caas-pnap"
     #"terraform/oci/101-caas-oke"
-    terraform/rafay/rctl-apply
+    #terraform/rafay/rctl-apply
     #"terraform/vcluster/101-caas"
     #"terraform/vmware/101-caas-vmware"
     #"terraform/waas/101-waas"
@@ -255,9 +255,9 @@ function create_resource_templates {
     yq -o=json $PWD/$folder/setup/templates/$fName.yaml.spec > $PWD/$folder/setup/templates/$fName.json 
 
     if [ "$SHARING" = true ]; then
-        jq --arg repo_name "$REPO_NAME" '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } } | (.spec.repositoryOptions.name |= $repo_name)' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
+        jq --arg '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } }' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     else
-        jq --arg repo_name "$REPO_NAME" '(.spec.repositoryOptions.name |= $repo_name)' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
+        cp $PWD/$folder/setup/templates/$fName.json $PWD/$folder/setup/templates/$fName.json1
     fi
     
     local response=$(make_post_request_new "$ADD_RESOURCE_TEMPLATE" $PWD/$folder/setup/templates/$fName.json1)
@@ -299,9 +299,9 @@ function create_environment_templates {
     yq -o=json $PWD/$folder/setup/templates/$fName.yaml.spec > $PWD/$folder/setup/templates/$fName.json 
 
     if [ "$SHARING" = true ]; then
-        jq --arg repo_name "$REPO_NAME" '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } } | (.spec.repositoryOptions.name |= $repo_name)' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
+        jq --arg '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } }' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     else
-        jq --arg repo_name "$REPO_NAME" '(.spec.repositoryOptions.name |= $repo_name) ' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
+        cp $PWD/$folder/setup/templates/$fName.json $PWD/$folder/setup/templates/$fName.json1
     fi
     
     local response=$(make_post_request_new "$ADD_ENVIRONMENT_TEMPLATE" $PWD/$folder/setup/templates/$fName.json1)
@@ -502,14 +502,14 @@ function create_agent() {
 function create_repository() {
     if [ "$IS_PRIVATE_REPO" = false ]; then
         echo "Creating public repo"
-        jq --arg name "$REPO_NAME" --arg agentname "$AGENT_NAME" '(.metadata.name |= $name) | (.spec.agentNames = [$agentname]) | del(.spec.credentials)' templates/repository_template.json > templates/repository.json
+        jq --arg name "$REPO_NAME-$PROJECT_NAME" --arg agentname "$AGENT_NAME" '(.metadata.name |= $name) | (.spec.agentNames = [$agentname]) | del(.spec.credentials)' templates/repository_template.json > templates/repository.json
         make_post_request_old "$ADD_REPO_URL" templates/repository.json
         echo ""
         echo "Successfully created repo"
     else
         echo "Creating private repo"
         CRED_TYPE="UserPassCredential"
-        jq --arg name "$REPO_NAME" --arg endpoint "$END_POINT" --arg agentname "$AGENT_NAME" --arg username "$USER_NAME" --arg token "$TOKEN" --arg credType "$CRED_TYPE" '(.metadata.name |= $name) | (.spec.endpoint = $endpoint) | (.spec.agentNames = [$agentname]) | (.spec.credentials.userPass.username = $username) | (.spec.credentials.userPass.password = $token) | (.spec.credentialType = $credType)' templates/repository_template.json > templates/repository.json
+        jq --arg name "$REPO_NAME-$PROJECT_NAME" --arg endpoint "$END_POINT" --arg agentname "$AGENT_NAME" --arg username "$USER_NAME" --arg token "$TOKEN" --arg credType "$CRED_TYPE" '(.metadata.name |= $name) | (.spec.endpoint = $endpoint) | (.spec.agentNames = [$agentname]) | (.spec.credentials.userPass.username = $username) | (.spec.credentials.userPass.password = $token) | (.spec.credentialType = $credType)' templates/repository_template.json > templates/repository.json
         make_post_request_old "$ADD_REPO_URL" templates/repository.json
         echo ""
         echo "Successfully created repo"
