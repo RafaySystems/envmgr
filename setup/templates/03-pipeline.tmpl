@@ -11,7 +11,7 @@ spec:
       destinationRepo:
         path:
           name: {{ $glbCtx.path }}
-        repository: {{ $glbCtx.repoName }}
+        repository: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
         revision: {{ $glbCtx.branch }}
       gitToSystemSync: true
       includedResources:
