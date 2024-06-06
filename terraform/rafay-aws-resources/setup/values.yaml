@@ -1,6 +1,6 @@
 ## Initial Version for Environment Manager resources.
 version: v1
-ConfigContext: aws-101-vpc-ec2
+ConfigContext: rafay-aws
 
 ## VPC
 VPCResourceTemplate: rafay-aws-vpc
