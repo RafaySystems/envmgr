@@ -7,5 +7,5 @@ output "cluster" {
 }
 
 output "project" {
-  value = rafay_eks_cluster.eks-cluster.cluster[0].metadata[0].name
+  value = rafay_eks_cluster.eks-cluster.cluster[0].metadata[0].project
 }
