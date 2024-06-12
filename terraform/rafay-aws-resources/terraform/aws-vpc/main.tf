@@ -224,5 +224,4 @@ module "terraform-aws-vpc" {
   flow_log_cloudwatch_log_group_kms_key_id = var.flow_log_cloudwatch_log_group_kms_key_id
   flow_log_cloudwatch_log_group_skip_destroy = var.flow_log_cloudwatch_log_group_skip_destroy
   flow_log_cloudwatch_log_group_class = var.flow_log_cloudwatch_log_group_class
-  putin_khuylo = var.putin_khuylo
 }

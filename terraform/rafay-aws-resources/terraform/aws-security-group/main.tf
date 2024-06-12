@@ -55,5 +55,4 @@ module "terraform-aws-security-group" {
   number_of_computed_egress_with_ipv6_cidr_blocks = var.number_of_computed_egress_with_ipv6_cidr_blocks
   number_of_computed_egress_with_source_security_group_id = var.number_of_computed_egress_with_source_security_group_id
   number_of_computed_egress_with_prefix_list_ids = var.number_of_computed_egress_with_prefix_list_ids
-  putin_khuylo = var.putin_khuylo
 }

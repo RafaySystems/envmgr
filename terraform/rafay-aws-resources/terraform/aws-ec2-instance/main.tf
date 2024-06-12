@@ -60,7 +60,6 @@ module "terraform-aws-ec2-instance" {
   spot_valid_until = var.spot_valid_until
   spot_valid_from = var.spot_valid_from
   disable_api_stop = var.disable_api_stop
-  putin_khuylo = var.putin_khuylo
   create_iam_instance_profile = var.create_iam_instance_profile
   iam_role_name = var.iam_role_name
   iam_role_use_name_prefix = var.iam_role_use_name_prefix

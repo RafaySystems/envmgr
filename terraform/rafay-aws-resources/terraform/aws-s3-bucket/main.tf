@@ -54,5 +54,4 @@ module "terraform-aws-s3-bucket" {
   restrict_public_buckets = var.restrict_public_buckets
   control_object_ownership = var.control_object_ownership
   object_ownership = var.object_ownership
-  putin_khuylo = var.putin_khuylo
 }
