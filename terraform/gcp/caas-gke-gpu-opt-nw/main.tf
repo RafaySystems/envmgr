@@ -10,6 +10,7 @@ resource "random_integer" "priority" {
 }
 
 resource "google_container_cluster" "primary" {
+  provider		   = google-beta
   name                     = var.cluster_name
   project                  = var.google_project
   location                 = var.location
