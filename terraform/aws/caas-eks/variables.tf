@@ -155,7 +155,7 @@ variable "tags" {
   type        = map(string)
   description = "Cluster Tags"
   default = {
-    "env" = "qa"
+    "managed-by-rafay" = "true"
   }
 }
 
