@@ -84,7 +84,7 @@ variable "vpc_cidr" {
 # Set to true if VPC needs to be created using Rafay. 
 variable "create_vpc" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "node_selector" {
