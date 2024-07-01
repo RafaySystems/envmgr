@@ -1,69 +1,3 @@
-resource "aws_iam_role" "karpenter_role" {
-  name = "${var.cluster_name}-${var.role_name}"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        },
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
-  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
-    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
-    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
-  "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
-}
-
-resource "aws_iam_instance_profile" "test_profile" {
-  name = "${var.cluster_name}-${var.role_name}"
-  role = aws_iam_role.karpenter_role.name
-}
-
-resource "aws_iam_policy" "karpenter_policy" {
-  name = "${var.cluster_name}-${var.policy_name}"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "ec2:CreateLaunchTemplate",
-          "ec2:CreateFleet",
-          "ec2:RunInstances",
-          "ec2:CreateTags",
-          "iam:PassRole",
-          "ec2:TerminateInstances",
-          "ec2:DescribeLaunchTemplates",
-          "ec2:DescribeInstances",
-          "ec2:DescribeSecurityGroups",
-          "ec2:DescribeSubnets",
-          "ec2:DescribeInstanceTypes",
-          "ec2:DescribeInstanceTypeOfferings",
-          "ec2:DescribeAvailabilityZones",
-          "ssm:GetParameter",
-          "eks:DescribeCluster",
-          "ec2:DescribeImages",
-          "ec2:DescribeSpotPriceHistory",
-          "ec2:DeleteLaunchTemplate",
-          "iam:GetInstanceProfile",
-          "iam:CreateInstanceProfile",
-          "iam:DeleteInstanceProfile",
-          "iam:TagInstanceProfile",
-          "iam:AddRoleToInstanceProfile",
-          "iam:RemoveRoleFromInstanceProfile",
-          "pricing:GetProducts",
-          "pricing:DescribeServices",
-          "pricing:GetAttributeValues",
-        ],
-        Resource = "*",
-        Effect   = "Allow"
-      }
-    ]
-  })
-}
 
 locals {
   rolearn = var.account_id != "" && var.linked_role_arn != "" ? format("arn:aws:iam::%s:role/%s", var.account_id, var.linked_role_arn) : null
@@ -75,7 +9,6 @@ resource "rafay_eks_cluster" "eks-cluster" {
     metadata {
       name    = var.cluster_name
       project = var.project
-      #labels  = try(var.cluster_labels, null)
       labels = merge({
       "cluster-name" = var.cluster_name })
     }
@@ -120,7 +53,44 @@ resource "rafay_eks_cluster" "eks-cluster" {
           name      = "karpenter"
           namespace = "karpenter"
         }
-        attach_policy_arns = [resource.aws_iam_policy.karpenter_policy.arn]
+        attach_policy = jsonencode({
+          Version = "2012-10-17"
+          Statement = [
+            {
+              Action = [
+                "ec2:CreateLaunchTemplate",
+                "ec2:CreateFleet",
+                "ec2:RunInstances",
+                "ec2:CreateTags",
+                "iam:PassRole",
+                "ec2:TerminateInstances",
+                "ec2:DescribeLaunchTemplates",
+                "ec2:DescribeInstances",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeInstanceTypes",
+                "ec2:DescribeInstanceTypeOfferings",
+                "ec2:DescribeAvailabilityZones",
+                "ssm:GetParameter",
+                "eks:DescribeCluster",
+                "ec2:DescribeImages",
+                "ec2:DescribeSpotPriceHistory",
+                "ec2:DeleteLaunchTemplate",
+                "iam:GetInstanceProfile",
+                "iam:CreateInstanceProfile",
+                "iam:DeleteInstanceProfile",
+                "iam:TagInstanceProfile",
+                "iam:AddRoleToInstanceProfile",
+                "iam:RemoveRoleFromInstanceProfile",
+                "pricing:GetProducts",
+                "pricing:DescribeServices",
+                "pricing:GetAttributeValues",
+              ],
+              Resource = "*",
+              Effect   = "Allow"
+            }
+          ]
+        })
       }
     }
     addons {
@@ -141,7 +111,7 @@ resource "rafay_eks_cluster" "eks-cluster" {
     }
     identity_mappings {
       arns {
-        arn      = resource.aws_iam_role.karpenter_role.arn
+        arn      = "arn:aws:iam::${var.account_id}:role/KarpenterNodeRole"
         group    = ["system:bootstrappers", "system:nodes"]
         username = "system:node:{{EC2PrivateDNSName}}"
       }
