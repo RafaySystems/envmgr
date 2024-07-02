@@ -75,6 +75,49 @@ tfRoute53DelegationZonesRepoPath: terraform/rafay-aws-resources/terraform/aws-ro
 Route53DelegationResolverRuleAssociationsResourceTemplate: rafay-aws-route53-delegation-resolver-rule-associations
 tfRoute53DelegationResolverRuleAssociationsRepoPath: terraform/rafay-aws-resources/terraform/aws-route53
 
+## EKS
+EKSResourceTemplate: rafay-aws-eks
+tfEKSRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
+EKSSelfManagedNodeGroupResourceTemplate: rafay-aws-eks-self-managed-node-group
+tfEKSSelfManagedNodeGroupRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
+EKSKarpenterResourceTemplate: rafay-aws-eks-karpenter
+tfEKSKarpenterRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
+EKSFargateProfileResourceTemplate: rafay-aws-eks-fargateprofile
+tfEKSFargateProfileRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
+EKSManagedNodeGroupResourceTemplate: rafay-aws-eks-managed-node-group
+tfEKSManagedNodeGroupRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
+EKSAWSAuthResourceTemplate: rafay-aws-eks-aws-auth
+tfEKSAWSAuthRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
+EKSUserDataResourceTemplate: rafay-aws-eks-user-data
+tfEKSUserDataRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
+## Lambda
+LambdaResourceTemplate: rafay-aws-lambda
+tfLambdaRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
+LambdaDockerResourceTemplate: rafay-aws-lambda-docker
+tfLambdaDockerRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
+LambdaDeployResourceTemplate: rafay-aws-lambda-deploy
+tfLambdaDeployRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
+LambdaAliasResourceTemplate: rafay-aws-lambda-alias
+tfLambdaAliasRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
+## RDS Aurora
+RDSAuroraResourceTemplate: rafay-aws-rds-aurora
+tfRDSAuroraRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
+## KMS
+KMSResourceTemplate: rafay-aws-kms
+tfKMSRepoPath: terraform/rafay-aws-resources/terraform/aws-eks
+
 EC2EnvironmentTemplate: rafay-aws-vpc-ec2-env
 
 
