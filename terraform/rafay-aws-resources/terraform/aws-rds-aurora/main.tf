@@ -109,7 +109,6 @@ module "terraform-aws-rds-aurora" {
   db_parameter_group_description = var.db_parameter_group_description
   db_parameter_group_family = var.db_parameter_group_family
   db_parameter_group_parameters = var.db_parameter_group_parameters
-  putin_khuylo = var.putin_khuylo
   create_cloudwatch_log_group = var.create_cloudwatch_log_group
   cloudwatch_log_group_retention_in_days = var.cloudwatch_log_group_retention_in_days
   cloudwatch_log_group_kms_key_id = var.cloudwatch_log_group_kms_key_id

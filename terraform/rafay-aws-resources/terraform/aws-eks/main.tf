@@ -89,5 +89,4 @@ module "terraform-aws-eks" {
   self_managed_node_group_defaults = var.self_managed_node_group_defaults
   eks_managed_node_groups = var.eks_managed_node_groups
   eks_managed_node_group_defaults = var.eks_managed_node_group_defaults
-  putin_khuylo = var.putin_khuylo
 }

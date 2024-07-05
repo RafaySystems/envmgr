@@ -9,7 +9,6 @@ module "terraform-aws-lambda" {
   create_role = var.create_role
   create_lambda_function_url = var.create_lambda_function_url
   create_sam_metadata = var.create_sam_metadata
-  putin_khuylo = var.putin_khuylo
   lambda_at_edge = var.lambda_at_edge
   lambda_at_edge_logs_all_regions = var.lambda_at_edge_logs_all_regions
   function_name = var.function_name
