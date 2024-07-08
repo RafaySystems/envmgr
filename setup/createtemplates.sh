@@ -254,7 +254,7 @@ function create_resource_templates {
     yq -o=json $PWD/$folder/setup/templates/$fName.yaml.spec > $PWD/$folder/setup/templates/$fName.json 
 
     if [ "$SHARING" = true ]; then
-        jq --arg '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } }' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
+        jq '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } }' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     else
         cp $PWD/$folder/setup/templates/$fName.json $PWD/$folder/setup/templates/$fName.json1
     fi
@@ -298,7 +298,7 @@ function create_environment_templates {
     yq -o=json $PWD/$folder/setup/templates/$fName.yaml.spec > $PWD/$folder/setup/templates/$fName.json 
 
     if [ "$SHARING" = true ]; then
-        jq --arg '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } }' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
+        jq '.spec += { "sharing": { "enabled": true, "projects": [{ "name": "*" }] } }' $PWD/$folder/setup/templates/$fName.json > $PWD/$folder/setup/templates/$fName.json1
     else
         cp $PWD/$folder/setup/templates/$fName.json $PWD/$folder/setup/templates/$fName.json1
     fi
