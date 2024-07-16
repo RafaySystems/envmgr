@@ -37,7 +37,7 @@ version: v1
 ## Sharing the templates
 ## Default value - true
 ## Change this if the templates do not want to share to different directory.
-sharingtemplates: true
+sharingtemplates: false
 
 ## list of templates
 templates:
