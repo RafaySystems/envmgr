@@ -10,7 +10,7 @@ resource "random_integer" "priority" {
 }
 
 resource "google_container_cluster" "primary" {
-  provider		   = google-beta
+  provider                 = google-beta
   name                     = var.cluster_name
   project                  = var.google_project
   location                 = var.location
@@ -22,8 +22,8 @@ resource "google_container_cluster" "primary" {
   min_master_version       = var.k8s_version
   deletion_protection      = false
   node_locations           = var.node_locations
-  enable_multi_networking = var.enable_multi_networking
-  datapath_provider           = var.datapath_provider
+  enable_multi_networking  = var.enable_multi_networking
+  datapath_provider        = var.datapath_provider
   addons_config {
     http_load_balancing {
       disabled = true
@@ -105,14 +105,14 @@ resource "google_container_node_pool" "np" {
     }
   }
   network_config {
-     enable_private_nodes = true
-     dynamic "additional_node_network_configs" {
-         for_each = var.additional_node_network_configs
-         content {   
-            network=additional_node_network_configs.value.network
-            subnetwork=additional_node_network_configs.value.subnetwork
-         }
-     }
+    enable_private_nodes = true
+    dynamic "additional_node_network_configs" {
+      for_each = var.additional_node_network_configs
+      content {
+        network    = additional_node_network_configs.value.network
+        subnetwork = additional_node_network_configs.value.subnetwork
+      }
+    }
   }
   node_config {
     dynamic "host_maintenance_policy" {
@@ -243,3 +243,20 @@ output "kubeconfig_cluster" {
   value       = data.rafay_download_kubeconfig.kubeconfig_cluster.kubeconfig
 }*/
 
+resource "kubernetes_storage_class" "filestore" {
+  for_each = {
+    for k, v in var.storage_classes : k => v
+  }
+  metadata {
+    name = each.key
+  }
+  storage_provisioner = "filestore.csi.storage.gke.io"
+  reclaim_policy      = "Delete"
+  parameters = {
+    tier    = each.value.tier
+    network = var.network
+  }
+  volume_binding_mode    = "WaitForFirstConsumer"
+  allow_volume_expansion = true
+  depends_on             = [google_container_node_pool.np]
+}
