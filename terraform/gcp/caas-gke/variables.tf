@@ -123,3 +123,21 @@ variable "blueprint" {}
 variable "blueprint_version" {}
 variable "username" {}
 variable "shared_project_name" {}
+
+variable "storage_classes" {
+  type = map(object({
+    tier = string
+  }))
+  default = {
+    "nvidia-standard-rwx" = {
+      tier = "standard"
+    }
+    "nvidia-premium-rwx" = {
+      tier = "premium"
+    }
+    "nvidia-enterprise-rwx" = {
+      tier = "enterprise"
+    }
+  }
+
+}

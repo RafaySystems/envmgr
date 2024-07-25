@@ -230,3 +230,21 @@ output "kubeconfig_cluster" {
   description = "kubeconfig_cluster"
   value       = data.rafay_download_kubeconfig.kubeconfig_cluster.kubeconfig
 }*/
+
+resource "kubernetes_storage_class" "filestore" {
+  for_each = {
+    for k, v in var.storage_classes : k => v
+  }
+  metadata {
+    name = each.key
+  }
+  storage_provisioner = "filestore.csi.storage.gke.io"
+  reclaim_policy      = "Delete"
+  parameters = {
+    tier    = each.value.tier
+    network = var.network
+  }
+  volume_binding_mode    = "WaitForFirstConsumer"
+  allow_volume_expansion = true
+  depends_on             = [google_container_node_pool.np]
+}
