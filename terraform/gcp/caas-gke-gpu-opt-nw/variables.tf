@@ -36,8 +36,8 @@ variable "node_pools" {
       values                   = optional(list(string))
     }))
     additional_node_network_configs = optional(object({
-      network                      = optional(string)
-      subnetwork                   = optional(string)
+      network    = optional(string)
+      subnetwork = optional(string)
     }))
   }))
 }
@@ -131,20 +131,38 @@ variable "shared_project_name" {}
 variable "additional_node_network_configs" {
   description = "GPU Network configuration"
   type = map(object({
-    network        = string
-    subnetwork     = string
+    network    = string
+    subnetwork = string
   }))
 }
 
 variable "enable_multi_networking" {
-   type = bool
-   description = "Enable Multi Networking"
-   default = true
+  type        = bool
+  description = "Enable Multi Networking"
+  default     = true
 }
 
 variable "datapath_provider" {
-    type = string
-    description = "Datapath Provider type"
-    default="ADVANCED_DATAPATH"
+  type        = string
+  description = "Datapath Provider type"
+  default     = "ADVANCED_DATAPATH"
 }
 
+
+variable "storage_classes" {
+  type = map(object({
+    tier = string
+  }))
+  default = {
+    "nvidia-standard-rwx" = {
+      tier = "standard"
+    }
+    "nvidia-premium-rwx" = {
+      tier = "premium"
+    }
+    "nvidia-enterprise-rwx" = {
+      tier = "enterprise"
+    }
+  }
+
+}
