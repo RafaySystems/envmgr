@@ -32,14 +32,26 @@ resource "rafay_namespace" "namespace" {
         value = var.host_cluster_name
       }
     }
-    # resource_quotas {
-    #   cpu_requests    = var.namespace_quotas[var.namespace_quota_size]["cpu_requests"]
-    #   memory_requests = var.namespace_quotas[var.namespace_quota_size]["memory_requests"]
-    #   cpu_limits      = var.namespace_quotas[var.namespace_quota_size]["cpu_limits"]
-    #   memory_limits   = var.namespace_quotas[var.namespace_quota_size]["memory_limits"]
-    #   gpu_requests    = var.namespace_quotas[var.namespace_quota_size]["gpu_requests"]
-    #   gpu_limits      = var.namespace_quotas[var.namespace_quota_size]["gpu_limits"]
-    # }
+    resource_quotas {
+      cpu_requests    = var.namespace_quotas[var.namespace_quota_size]["cpu_requests"]
+      memory_requests = var.namespace_quotas[var.namespace_quota_size]["memory_requests"]
+      cpu_limits      = var.namespace_quotas[var.namespace_quota_size]["cpu_limits"]
+      memory_limits   = var.namespace_quotas[var.namespace_quota_size]["memory_limits"]
+      gpu_requests    = var.namespace_quotas[var.namespace_quota_size]["gpu_requests"]
+      gpu_limits      = var.namespace_quotas[var.namespace_quota_size]["gpu_limits"]
+    }
+    limit_range {
+      container {
+        default {
+          cpu    = "500m"
+          memory = "512Mi"
+        }
+        default_request {
+          cpu    = "100m"
+          memory = "128Mi"
+        }
+      }
+    }
   }
 }
 
