@@ -1,6 +1,5 @@
 output "bootstrap" {
-  value = rafay_import_cluster.vcluster.bootstrap_data
-  #value     = rafay_import_cluster.vcluster.values_data
+  value     = rafay_import_cluster.vcluster.bootstrap_data
   sensitive = true
 }
 
