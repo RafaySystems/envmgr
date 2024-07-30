@@ -44,20 +44,20 @@ variable "repository" {
   default = "rafay-vcluster-loft"
 }
 
-# variable "namespace_quota_size" {
-#   type    = string
-#   default = "single_gpu"
-# }
+variable "namespace_quota_size" {
+  type    = string
+  default = "single_gpu"
+}
 
-# variable "namespace_quotas" {
-#   default = {
-#     single_gpu = {
-#       cpu_requests    = "2600m"
-#       memory_requests = "234Gi"
-#       cpu_limits      = "2600m"
-#       memory_limits   = "234Gi"
-#       gpu_requests    = "1"
-#       gpu_limits      = "1"
-#     }
-#   }
-# }
+variable "namespace_quotas" {
+  default = {
+    single_gpu = {
+      cpu_requests    = "2600m"
+      memory_requests = "234Gi"
+      cpu_limits      = "2600m"
+      memory_limits   = "234Gi"
+      gpu_requests    = "1"
+      gpu_limits      = "1"
+    }
+  }
+}
