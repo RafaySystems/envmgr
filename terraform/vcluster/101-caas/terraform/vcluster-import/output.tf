@@ -3,6 +3,6 @@ output "bootstrap" {
   sensitive = true
 }
 
-output "group" {
+/*output "group" {
   value = resource.rafay_group.group-dev.name
-}
+}*/
