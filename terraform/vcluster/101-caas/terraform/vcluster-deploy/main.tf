@@ -43,7 +43,7 @@ resource "rafay_namespace" "namespace" {
     limit_range {
       container {
         default {
-          cpu    = "500m"
+          cpu    = "200m"
           memory = "512Mi"
         }
         default_request {
