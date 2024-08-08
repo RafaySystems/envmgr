@@ -1,15 +1,16 @@
-resource "rafay_project" "vcluster_project" {
+/*resource "rafay_project" "vcluster_project" {
   metadata {
     name = var.project_name
   }
   spec {
     default = false
   }
-}
+}*/
 
 resource "rafay_import_cluster" "vcluster" {
   clustername           = var.cluster_name
-  projectname           = rafay_project.vcluster_project.id
+  #projectname           = rafay_project.vcluster_project.id
+  projectname           = var.project_name
   blueprint             = var.blueprint
   blueprint_version     = var.blueprint_version
   kubernetes_provider   = "OTHER"
@@ -17,12 +18,13 @@ resource "rafay_import_cluster" "vcluster" {
   bootstrap_path        = "bootstrap.yaml"
 }
 
-resource "rafay_group" "group-dev" {
+/*resource "rafay_group" "group-dev" {
   name = var.group
 }
 
 resource "rafay_groupassociation" "groupassociation" {
-  project   = rafay_project.vcluster_project.id
+  #project   = rafay_project.vcluster_project.id
+  project   = var.project_name
   group     = resource.rafay_group.group-dev.name
   roles     = ["PROJECT_ADMIN"]
   add_users = [var.username]
@@ -33,9 +35,11 @@ resource "rafay_groupassociation" "groupassociation" {
 resource "rafay_groupassociation" "groupassociation_collaborators" {
   count = var.collaborator == "user_email" ? 0 : 1
   depends_on = [rafay_groupassociation.groupassociation]
-  project   = rafay_project.vcluster_project.id
+  #project   = rafay_project.vcluster_project.id
+  project   = var.project_name
   roles     = ["PROJECT_ADMIN"]
   group     = resource.rafay_group.group-dev.name
   add_users = ["${var.collaborator}"]
   idp_user = true
-}
+}*/
+
