@@ -54,7 +54,7 @@ variable "namespace_quotas" {
     single_gpu = {
       cpu_requests    = "3000m"
       memory_requests = "33Gi"
-      cpu_limits      = "3000m"
+      cpu_limits      = "6000m"
       memory_limits   = "33Gi"
       gpu_requests    = "1"
       gpu_limits      = "1"
