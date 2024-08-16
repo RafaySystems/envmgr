@@ -1,4 +1,4 @@
-variable "node_pools" {
+  variable "node_pools" {
   description = "Node pool configuration"
   type = map(object({
     name           = string
@@ -166,3 +166,7 @@ variable "storage_classes" {
   }
 
 }
+
+  variable "rafay_rest_endpoint" {
+    default = "nvidia-admin.rafay.dev"
+  }

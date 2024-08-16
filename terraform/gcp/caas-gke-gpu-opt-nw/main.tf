@@ -192,6 +192,30 @@ provider "helm" {
   }
 }
 
+resource "rafay_access_apikey" "sampleuser" {
+  user_name = var.username
+}
+
+resource "null_resource" "delete-webhook" {
+  triggers = {
+    cluster_name      = var.cluster_name
+    rafay_rest_endpoint       = var.rafay_rest_endpoint
+    project_name    = var.project_name
+    rafay_api_key   = rafay_access_apikey.sampleuser.apikey
+  }
+  provisioner "local-exec" {
+    when  = destroy
+    command = "./delete-webhook.sh"
+    environment = {
+      CLUSTER_NAME        = "${self.triggers.cluster_name}"
+      RAFAY_REST_ENDPOINT = "${self.triggers.rafay_rest_endpoint}"
+      RAFAY_API_KEY       = "${self.triggers.rafay_api_key}"
+      PROJECT             = "${self.triggers.project_name}"
+    }
+  }
+  depends_on = [rafay_access_apikey.sampleuser,helm_release.rafay_operator]
+}
+
 
 resource "rafay_import_cluster" "gke" {
   clustername           = var.cluster_name
