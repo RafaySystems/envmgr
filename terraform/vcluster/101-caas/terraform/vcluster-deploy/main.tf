@@ -81,6 +81,7 @@ resource "rafay_workload" "vcluster-workload" {
         }
         repository = var.repository
         chart_name = lookup(var.default_charts, var.distro)
+        chart_version = "0.19.6"
       }
     }
   }
