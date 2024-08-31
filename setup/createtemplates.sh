@@ -102,7 +102,7 @@ function make_post_request_old {
 
 # creates project
 function create_project {
-    curl -s -X POST -H "Content-Type: application/json" -H "X-RAFAY-API-KEYID: ${API_KEY}" -d "{\"name\":\"${PROJECT_NAME}\",\"description\":\"Project for templates\"}" "${BASE_URL}/$CREATE_PROJECT_URL/" | jq > project_response.json
+    curl -s -X POST -H "Content-Type: application/json" -H "X-RAFAY-API-KEYID: ${API_KEY}" -d "{\"name\":\"${PROJECT_NAME}\",\"description\":\"Project for templates\"}" "${BASE_URL}/$CREATE_PROJECT_URL/" | jq . > project_response.json
     PROJECT_HASH=$(cat project_response.json | jq -r '.id')
     echo "Successfully created project ${PROJECT_NAME} id ${PROJECT_HASH}"
 }
@@ -424,7 +424,7 @@ function create_pipeline {
     triggerName=$(cat $PWD/templates/$fName.json  | jq -r '.spec.triggers[0].name')
 
     GET_PIPELINE_URL="v2/pipeline/project/${PROJECT_HASH}/trigger/${triggerName}"
-    make_get_request_old "$GET_PIPELINE_URL" | jq > templates/trigger_response.json
+    make_get_request_old "$GET_PIPELINE_URL" | jq . > templates/trigger_response.json
 
     webHookURL=$(cat $PWD/templates/trigger_response.json  | jq -r '.status.extra.webHook.webHookURL')
     webHookSecret=$(cat $PWD/templates/trigger_response.json  | jq -r '.status.extra.webHook.webHookSecret')
@@ -456,12 +456,12 @@ function create_agent() {
        printf -- "\033[32m Info: Created agent successfully \033[0m\n";
     fi
 
-    make_get_request_old "$GET_AGENT_URL" | jq > templates/agents_response.json
+    make_get_request_old "$GET_AGENT_URL" | jq . > templates/agents_response.json
     agentId=$(cat templates/agents_response.json | jq -r '.metadata.id')
     agentStatus=$(cat templates/agents_response.json | jq -r '.status.health.status')
 
     GET_RELAY_CONFIG_URL="v2/config/project/${PROJECT_HASH}/agent/${AGENT_NAME}/relay-config"
-    make_get_request_old "$GET_RELAY_CONFIG_URL" | jq > "relayConfigData-$agentId.json"
+    make_get_request_old "$GET_RELAY_CONFIG_URL" | jq . > "relayConfigData-$agentId.json"
     GET_DOCKER_COMPOSE_URL="v2/config/project/${PROJECT_HASH}/agent/${AGENT_NAME}/docker-compose"
     make_get_request_old "$GET_DOCKER_COMPOSE_URL" > "docker-compose-$agentId.yaml"
 
@@ -484,7 +484,7 @@ function create_agent() {
             exit 0
         fi
         STATUS_ITERATIONS=$((STATUS_ITERATIONS+1))
-        make_get_request_old "$GET_AGENT_URL" | jq > templates/agents_response.json
+        make_get_request_old "$GET_AGENT_URL" | jq . > templates/agents_response.json
         agentStatus=$(cat templates/agents_response.json | jq -r '.status.health.status')
         if [ $agentStatus != "HEALTHY" ]; then
             printf -- "\033[33m Warn: Agent Status $agentStatus   - WAITING \033[0m\n";
@@ -520,7 +520,7 @@ function create_repository() {
 # create project if not exist
 function create_common_resources() {
     # get the project hash for the given org
-    make_get_request_old "$GET_PROJECTS" | jq > templates/project_response.json
+    make_get_request_old "$GET_PROJECTS" | jq . > templates/project_response.json
 
     echo "Successfully retrieved projects"
 
@@ -632,7 +632,7 @@ function read_values_yaml() {
 function validate_orgname() {
     local orgname="$1"
     echo "Validating organization"
-    make_get_request_old "$GET_USERS" | jq > templates/users_response.json
+    make_get_request_old "$GET_USERS" | jq . > templates/users_response.json
     USER_ORG=$(cat templates/users_response.json | jq '.organization.name' | sed 's/"//g') 
      
     echo "API key belongs to org ${USER_ORG}"
