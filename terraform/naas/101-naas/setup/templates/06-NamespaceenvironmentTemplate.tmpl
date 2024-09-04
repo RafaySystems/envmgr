@@ -36,7 +36,7 @@ spec:
     a kubeconfig file to securely access resources in your namespace using your favorite
     IDE "
   agents:
-  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  - name: {{ $glbCtx.agentName }}
   resources:
   - kind: resourcetemplate
     name: {{ $glbCtx.NamespaceResourceTemplate }}-{{ $glbCtx.projectName }}
