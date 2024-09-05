@@ -440,11 +440,21 @@ function create_pipeline {
 function create_agent() {
     # Create agent
     echo "Creating agent"
-    AGENT_NAME=$AGENT_NAME-$PROJECT_NAME
 
     ADD_AGENT_URL="v2/config/project/${PROJECT_HASH}/agent"
     GET_AGENT_URL="v2/config/project/${PROJECT_HASH}/agent/{$AGENT_NAME}"
 
+    local response=$( make_get_request_old "$GET_AGENT_URL" templates/agent_check.json)
+    if [[ $response != *"\"error\""* ]]; then
+       printf -- "\033[32m Agent already exists \033[0m\n";
+    else
+       create_agent_local
+    fi
+
+    rm -f "templates/agent_check.json"
+}
+
+function create_agent_local() {
     jq --arg name "$AGENT_NAME" '(.metadata.name |= $name)' templates/agent_template.json > templates/agent.json
 
     local response=$(make_post_request_old "$ADD_AGENT_URL" templates/agent.json)
