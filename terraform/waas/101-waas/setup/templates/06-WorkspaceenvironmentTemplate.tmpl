@@ -38,7 +38,7 @@ spec:
     in your namespaces via the web based Kubectl shell\n- Download a kubeconfig file
     to securely access resources in your namespace using your favorite IDE "
   agents:
-  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  - name: {{ $glbCtx.agentName }}
   resources:
   - kind: resourcetemplate
     name: {{ $glbCtx.WorkspaceResourceTemplate }}-{{ $glbCtx.projectName }}

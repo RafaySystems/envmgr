@@ -12,7 +12,7 @@ metadata:
   displayName: vCluster based Developer Testbed
 spec:
   agents:
-  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  - name: {{ $glbCtx.agentName }}
   resources:
   - kind: resourcetemplate
     name: {{ $glbCtx.VclusterImportResourceTemplate }}-{{ $glbCtx.projectName }}

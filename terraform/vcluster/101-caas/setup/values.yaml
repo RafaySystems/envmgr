@@ -1,19 +1,5 @@
 ##Rafay Project name
 projectName: UPDATE_EXISTING_PROJECT_NAME
-##Rafay gitops agent name
-agentName: eaas-agent
-##Rafay respository name
-repoName: eaas-repo
-##Username to access repository
-userName: UPDATE_REPO_USERNAME
-##Token to access repository
-token: UPDATE_REPO_TOKEN
-##Repository url
-endPoint: UPDATE_REPO_ENDPOINT
-##Repository revision name
-branch: UPDATE_REPO_BRANCH
-## Repository path for Rafay to write back configuration.
-path: rafay-resources
 ## Initial Version for Environment Manager resources.
 version: v1
 ## https://docs.rafay.dev/env_manager/overview/
