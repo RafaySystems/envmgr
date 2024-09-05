@@ -20,7 +20,7 @@ RCTL must be initialized with the org details where the templates will be instal
 **projectName** - Provide the project name where the templates will be created. 
 > Default value - defaultproject
 
-**agentName** - Agent name 
+**agentName** - Provide the name of an existing agent or if the agent does not exist an agent will be created on the machine where this utility is executed
 > Default value - eaas-agent
 
 **Note**: Project name will be suffixed for the agent name
