@@ -46,7 +46,7 @@ spec:
     use their new cluster effectively. \r\n\r\n- [App Deployments using Rafay Workloads](https://docs.rafay.co/learn/quickstart/applications/workloads/overview/)\r\n-
     [Troubleshooting](https://docs.rafay.co/learn/quickstart/troubleshooting/workloads/overview/)\r\n"
   agents:
-  - name: {{ $glbCtx.agentName }}-{{ $glbCtx.projectName }}
+  - name: {{ $glbCtx.agentName }}
   resources:
   - kind: resourcetemplate
     name: {{ $glbCtx.EKSResourceTemplate }}-{{ $glbCtx.projectName }}

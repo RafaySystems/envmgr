@@ -11,6 +11,7 @@ org: UPDATE_ORG_NAME
 ## Update the project name if the templates need to be created in a different project.
 projectName: defaultproject
 ## Rafay gitops agent name
+## Provide the name of an existing agent or if the agent does not exist an agent will be created on the machine where this utility is executed
 agentName: eaas-agent
 ## Rafay respository name
 repoName: eaas-repo
