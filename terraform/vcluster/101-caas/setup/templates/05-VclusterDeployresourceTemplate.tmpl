@@ -73,4 +73,11 @@ spec:
       required: true
     value: {{ $glbCtx.vclusterType }}
     valueType: text
+  - name: chart_version
+    options:
+      override:
+        type: allowed
+      required: true
+    value: 0.19.7
+    valueType: text
   version: {{ $glbCtx.version }}
