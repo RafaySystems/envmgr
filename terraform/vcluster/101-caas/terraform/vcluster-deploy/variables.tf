@@ -43,3 +43,8 @@ variable "repository" {
   type    = string
   default = "rafay-vcluster-loft"
 }
+
+variable "chart_version" {
+  type    = string
+  default = "0.19.7"
+}
