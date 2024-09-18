@@ -10,3 +10,7 @@ output "bootstrap" {
 output "group" {
   value = rafay_group.dgx-group.name
 }
+
+output "collab_group" {
+  value = rafay_group.collab-group.name
+}

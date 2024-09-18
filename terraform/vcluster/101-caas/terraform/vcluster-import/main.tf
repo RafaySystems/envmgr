@@ -169,4 +169,13 @@ resource "rafay_groupassociation" "groupassociation" {
   custom_roles = [rafay_customrole.rafay_customrole.metadata[0].name]
 }
 
+resource "rafay_group" "collab-group" {
+  name  = "${var.cluster_name}-${local.user_norm}-collab"
+}
 
+resource "rafay_groupassociation" "collab-groupassociation" {
+  group        = rafay_group.collab-group.name
+  add_users    = [var.username]
+  project      = var.project_name
+  roles     = ["ENVIRONMENT_TEMPLATE_USER"]
+}

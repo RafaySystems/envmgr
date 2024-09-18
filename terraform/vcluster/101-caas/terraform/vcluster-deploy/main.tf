@@ -1,7 +1,7 @@
 resource "random_string" "resource_code" {
   keepers = {
     first = "${timestamp()}"
-  }     
+  }
   length  = 4
   special = false
   upper   = false
