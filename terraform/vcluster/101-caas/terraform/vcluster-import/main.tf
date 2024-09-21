@@ -22,6 +22,9 @@ resource "rafay_import_cluster" "vcluster" {
   kubernetes_provider   = "OTHER"
   provision_environment = "CLOUD"
   bootstrap_path        = "bootstrap.yaml"
+  labels = {
+    "dgx-user" = "${local.user_norm}"
+  }
 }
 
 /*resource "rafay_group" "group-dev" {
