@@ -1,70 +1,3 @@
-resource "aws_iam_role" "karpenter_role" {
-  name = "${var.cluster_name}-${var.role_name}"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        },
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
-  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
-    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
-    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
-  "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
-}
-
-resource "aws_iam_instance_profile" "test_profile" {
-  name = "${var.cluster_name}-${var.role_name}"
-  role = aws_iam_role.karpenter_role.name
-}
-
-resource "aws_iam_policy" "karpenter_policy" {
-  name = "${var.cluster_name}-${var.policy_name}"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "ec2:CreateLaunchTemplate",
-          "ec2:CreateFleet",
-          "ec2:RunInstances",
-          "ec2:CreateTags",
-          "iam:PassRole",
-          "ec2:TerminateInstances",
-          "ec2:DescribeLaunchTemplates",
-          "ec2:DescribeInstances",
-          "ec2:DescribeSecurityGroups",
-          "ec2:DescribeSubnets",
-          "ec2:DescribeInstanceTypes",
-          "ec2:DescribeInstanceTypeOfferings",
-          "ec2:DescribeAvailabilityZones",
-          "ssm:GetParameter",
-          "eks:DescribeCluster",
-          "ec2:DescribeImages",
-          "ec2:DescribeSpotPriceHistory",
-          "ec2:DeleteLaunchTemplate",
-          "iam:GetInstanceProfile",
-          "iam:CreateInstanceProfile",
-          "iam:DeleteInstanceProfile",
-          "iam:TagInstanceProfile",
-          "iam:AddRoleToInstanceProfile",
-          "iam:RemoveRoleFromInstanceProfile",
-          "pricing:GetProducts",
-          "pricing:DescribeServices",
-          "pricing:GetAttributeValues",
-        ],
-        Resource = "*",
-        Effect   = "Allow"
-      }
-    ]
-  })
-}
-
 locals {
   rolearn = var.account_id != "" && var.linked_role_arn != "" ? format("arn:aws:iam::%s:role/%s", var.account_id, var.linked_role_arn) : null
 }
@@ -75,9 +8,7 @@ resource "rafay_eks_cluster" "eks-cluster" {
     metadata {
       name    = var.cluster_name
       project = var.project
-      #labels  = try(var.cluster_labels, null)
-      labels = merge({
-      "cluster-name" = var.cluster_name })
+      labels  = try(var.cluster_labels, null)
     }
     spec {
       type                   = "eks"
@@ -86,16 +17,19 @@ resource "rafay_eks_cluster" "eks-cluster" {
       cloud_provider         = var.cloud_credentials_name
       cross_account_role_arn = try(local.rolearn, null)
       cni_provider           = "aws-cni"
-      system_components_placement {
-        node_selector = var.node_selector
-        dynamic "tolerations" {
-          for_each = var.tolerations
-          content {
-            effect   = tolerations.value.effect
-            key      = tolerations.value.key
-            operator = tolerations.value.operator
+      dynamic "cni_params" {
+        for_each = var.custom_networking ? [] : [var.custom_networking]
+        content {
+          dynamic "custom_cni_crd_spec" {
+            for_each = var.secondary_cidr
+            content {
+              name = custom_cni_crd_spec.value.availability_zone
+              cni_spec {
+                subnet          = custom_cni_crd_spec.value.subnet
+                security_groups = try(custom_cni_crd_spec.value.security_groups, null)
+              }
+            }
           }
-
         }
       }
     }
@@ -107,20 +41,20 @@ resource "rafay_eks_cluster" "eks-cluster" {
       name    = var.cluster_name
       region  = var.region
       version = var.k8s_version
-      tags = merge({
-        "cluster-name" = var.cluster_name },
-      var.tags)
-      #tags    = try(var.tags, null)
+      tags    = try(var.tags, null)
     }
     iam {
       service_role_arn = try(var.service_role_arn, null)
       with_oidc        = true
-      service_accounts {
-        metadata {
-          name      = "karpenter"
-          namespace = "karpenter"
+      dynamic "service_accounts" {
+        for_each = var.service_accounts
+        content {
+          metadata {
+            name = service_accounts.value.name
+            namespace = service_accounts.value.namespace
+          }
+          attach_policy_arns = ["${service_accounts.value.attach_policy_arn}"]
         }
-        attach_policy_arns = [resource.aws_iam_policy.karpenter_policy.arn]
       }
     }
     addons {
@@ -138,13 +72,6 @@ resource "rafay_eks_cluster" "eks-cluster" {
     addons {
       name    = "coredns"
       version = "latest"
-    }
-    identity_mappings {
-      arns {
-        arn      = resource.aws_iam_role.karpenter_role.arn
-        group    = ["system:bootstrappers", "system:nodes"]
-        username = "system:node:{{EC2PrivateDNSName}}"
-      }
     }
     vpc {
       cluster_endpoints {
@@ -179,14 +106,15 @@ resource "rafay_eks_cluster" "eks-cluster" {
     dynamic "managed_nodegroups" {
       for_each = var.managed_nodegroups
       content {
-        name               = managed_nodegroups.key
+        name               = managed_nodegroups.value.ami == "" ? "amazonlinux-ami-${managed_nodegroups.key}" : "custom-ami-${managed_nodegroups.key}"
         instance_type      = managed_nodegroups.value.instance_type
         desired_capacity   = managed_nodegroups.value.node_count
         min_size           = managed_nodegroups.value.min_size
         max_size           = managed_nodegroups.value.max_size
         volume_size        = 80
         volume_type        = "gp3"
-        version            = managed_nodegroups.value.k8s_version
+        version            = managed_nodegroups.value.ami == "" ? var.k8s_version : null
+        ami                = managed_nodegroups.value.ami != "" ? managed_nodegroups.value.ami : null
         ami_family         = managed_nodegroups.value.ami_family
         private_networking = managed_nodegroups.value.private_networking
         volume_encrypted   = managed_nodegroups.value.volume_encrypted
@@ -194,13 +122,6 @@ resource "rafay_eks_cluster" "eks-cluster" {
           for_each = managed_nodegroups.value.instance_role_arn == null ? [] : [managed_nodegroups.value.instance_role_arn]
           content {
             instance_role_arn = iam.value
-          }
-        }
-        dynamic "taints" {
-          for_each = managed_nodegroups.value.taints
-          content {
-            effect = taints.value.effect
-            key    = taints.value.key
           }
         }
         tags   = try(managed_nodegroups.value.tags, null)

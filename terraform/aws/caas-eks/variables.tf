@@ -81,30 +81,34 @@ variable "vpc_cidr" {
   default     = "192.168.0.0/16"
 }
 
-# Set to true if VPC needs to be created using Rafay. 
+# Set to true if VPC needs to be created using Rafay.
 variable "create_vpc" {
   type    = bool
   default = false
 }
 
-variable "node_selector" {
-  type = map(string)
-  default = {
-    node-role = "rafay"
-  }
-}
-
-variable "tolerations" {
+variable "service_accounts" {
   type = map(object({
-    effect   = string
-    key      = string
-    operator = string
+    name               = string
+    namespace          = string
+    attach_policy_arn  = string
   }))
+  description = "IRSA configurations"
   default = {
-    "addons" = {
-      effect   = "NoSchedule"
-      key      = "CriticalAddonsOnly"
-      operator = "Exists"
+    "cluster-autoscaler" = {
+      name               = "cluster-autoscaler"
+      namespace          = "kube-system"
+      attach_policy_arn  = "arn:aws:iam::679196758854:policy/demo-cluster-autoscaler-policy"
+    }
+    "karpenter-sa" = {
+      name               = "karpenter"
+      namespace          = "karpenter"
+      attach_policy_arn  = "arn:aws:iam::679196758854:policy/demo-karpenter-policy"
+    }
+    "em-agent-sa" = {
+      name               = "em-agent-sa"
+      namespace          = "rafay-system"
+      attach_policy_arn  = "arn:aws:iam::679196758854:policy/demo-eaas-permissions"
     }
   }
 }
@@ -115,38 +119,30 @@ variable "managed_nodegroups" {
     max_size           = number
     min_size           = number
     instance_type      = string
-    k8s_version        = string
+    #k8s_version        = string
     instance_role_arn  = string
+    ami                = string
     ami_family         = string
     volume_encrypted   = bool
     private_networking = bool
     tags               = map(string)
     labels             = map(string)
-    taints = map(object({
-      key    = string
-      effect = string
-    }))
   }))
   description = "Managed Nodegroup configurations"
   default = {
     "ng-1" = {
-      node_count         = 3
-      max_size           = 6
-      min_size           = 3
+      node_count         = 1
+      max_size           = 3
+      min_size           = 1
       instance_type      = "t3.large"
-      k8s_version        = "1.27"
+      #k8s_version        = "1.27"
+      ami                = ""
       ami_family         = "AmazonLinux2"
       volume_encrypted   = true
       private_networking = true
       instance_role_arn  = null
       tags               = null
-      labels             = { node-role = "rafay" }
-      taints = {
-        "nodes" = {
-          key    = "CriticalAddonsOnly"
-          effect = "NoSchedule"
-        }
-      }
+      labels             = null
     }
   }
 }
@@ -159,14 +155,25 @@ variable "tags" {
   }
 }
 
-variable "role_name" {
-  description = "IAM role name"
-  type        = string
-  default     = "KarpenterNodeRole"
+variable "cluster_labels" {
+  type        = map(string)
+  description = "Cluster Labels"
+  default = {
+    "provisioned-by" = "rafay"
+  }
 }
 
-variable "policy_name" {
-  description = "IAM policy name"
-  type        = string
-  default     = "KarpenterNodePolicy"
+variable "custom_networking" {
+  type        = bool
+  description = "Enable/Disable custom netwokring using secondary vpc CIDRs"
+  default     = false
+}
+
+variable "secondary_cidr" {
+  type = map(object({
+    availability_zone = string
+    subnet            = string
+    security_groups   = optional(list(string))
+  }))
+  default = {}
 }

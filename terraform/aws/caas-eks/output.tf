@@ -1,11 +1,11 @@
-output "clusterId" {
-  value = rafay_eks_cluster.eks-cluster.id
+output "cluster_project_name" {
+  value = var.project
 }
 
-output "cluster" {
-  value = rafay_eks_cluster.eks-cluster.cluster[0].metadata[0].name
+output "cluster_name" {
+  value = var.cluster_name
 }
 
-output "project" {
-  value = rafay_eks_cluster.eks-cluster.cluster[0].metadata[0].project
+output "cluster_aws_region" {
+  value = var.region
 }
