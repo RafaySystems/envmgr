@@ -1,0 +1,36 @@
+{
+  "apiVersion": "apps.k8smgmt.io/v3",
+  "kind": "Workload",
+  "metadata": {
+    "name": "${workload_name}",
+    "project": "${project_name}"
+  },
+  "spec": {
+    "namespace": "${namespace}",
+    "artifact": {
+      "type": "Helm",
+      "artifact": {
+        "catalog": "${app_catalog}",
+        "chartName": "${helm_chart_name}",
+        "chartVersion": "${helm_chart_version}",
+        "valuesRef": {
+          "repository": "${gitrepo_name}",
+          "revision": "${workload_release_branch}",
+          "valuesPaths": [
+            {
+              "name": "${custom_value_path}"
+            }
+          ]
+        }
+      },
+      "options": {
+        "maxHistory": 10,
+        "timeout": "5m0s"
+      }
+    },
+    "placement": {
+      "selector": "canary=${deployment_group}"
+    },
+    "version": "${workload_release_branch}-${random_id}"
+  }
+}
