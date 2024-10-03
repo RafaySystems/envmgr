@@ -1,0 +1,9 @@
+apiVersion: gitops.k8smgmt.io/v3
+kind: Agent
+metadata:
+  name: madhuagent210
+  project: madhueaasutility
+spec:
+  active: true
+  type: Docker
+  version: r2.10.0

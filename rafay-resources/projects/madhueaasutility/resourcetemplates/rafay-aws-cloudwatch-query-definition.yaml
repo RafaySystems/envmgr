@@ -1,0 +1,51 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-cloudwatch-query-definition
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-cloudwatch
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create
+    options:
+      description: Whether to create the Cloudwatch query definition
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: name
+    options:
+      description: The name of the query.
+      override:
+        type: allowed
+    value: $("query-\(environment.name)")$
+    valueType: expression
+  - name: query_string
+    options:
+      description: The The query to save.
+      override:
+        type: allowed
+    value: ''''''
+    valueType: hcl
+  - name: log_group_names
+    options:
+      description: Specific log groups to use with the query.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  version: v1
+  versionState: active

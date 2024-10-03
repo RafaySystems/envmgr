@@ -1,0 +1,84 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-cloudwatch-log-group
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-cloudwatch
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create
+    options:
+      description: Whether to create the Cloudwatch log group
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: name
+    options:
+      description: A name for the log group
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: name_prefix
+    options:
+      description: A name prefix for the log group
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: retention_in_days
+    options:
+      description: Specifies the number of days you want to retain log events in the
+        specified log group. Possible values are 1, 3, 5, 7, 14, 30, 60, 90, 120,
+        150, 180, 365, 400, 545, 731, 1827, and 3653.
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: kms_key_id
+    options:
+      description: The ARN of the KMS Key to use when encrypting logs
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: log_group_class
+    options:
+      description: Specified the log class of the log group. Possible values are STANDARD
+        or INFREQUENT_ACCESS
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: skip_destroy
+    options:
+      description: Set to true if you do not wish the log group (and any logs it may
+        contain) to be deleted at destroy time, and instead just remove the log group
+        from the Terraform state
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: tags
+    options:
+      description: A map of tags to add to Cloudwatch log group
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  version: v1
+  versionState: active

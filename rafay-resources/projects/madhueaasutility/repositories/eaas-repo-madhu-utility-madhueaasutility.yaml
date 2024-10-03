@@ -1,0 +1,26 @@
+apiVersion: integrations.k8smgmt.io/v3
+kind: Repository
+metadata:
+  name: eaas-repo-madhu-utility-madhueaasutility
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  credentials:
+    password: sealed://credentials.password
+    username: gumpumadhu
+  endpoint: https://github.com/RafaySystems/envmgr.git
+  options: {}
+  secret:
+    name: file://artifacts/eaas-repo-madhu-utility-madhueaasutility/sealed-secret.yaml
+  type: Git
+status:
+  agents:
+  - id: pk088lm
+    name: madhuagent210
+  projects:
+  - projectId: k5zzypk
+    repositoryId: ko45yy2
+  webhookConfig:
+    webhookSecret: 0816000d9d414792ec54da623816e6f9a32e79a131c8143781911e79dfc3e5a1
+    webhookURL: https://console.stage.rafay.dev/v2/config/webhook/repository/ko45yy2

@@ -1,0 +1,52 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-iam-github-oidc-provider
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-iam/modules
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create
+    options:
+      description: Controls if resources should be created (affects all resources)
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: client_id_list
+    options:
+      description: List of client IDs (also known as audiences) for the IAM OIDC provider.
+        Defaults to STS service if not values are provided
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: url
+    options:
+      description: The URL of the identity provider. Corresponds to the iss claim
+      override:
+        type: allowed
+    value: '"https://token.actions.githubusercontent.com"'
+    valueType: hcl
+  - name: additional_thumbprints
+    options:
+      description: List of additional thumbprints to add to the thumbprint list.
+      override:
+        type: allowed
+    value: '["6938fd4d98bab03faadb97b34396831e3780aea1","1c58a3a8518e8759bf075b76b750d4f2df264fcd"]'
+    valueType: hcl
+  version: v1
+  versionState: active

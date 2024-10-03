@@ -1,0 +1,105 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-iam-group-with-policies
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-iam/modules
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create_group
+    options:
+      description: Whether to create IAM group
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: name
+    options:
+      description: Name of IAM group
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: path
+    options:
+      description: Desired path for the IAM group
+      override:
+        type: allowed
+    value: '"/"'
+    valueType: hcl
+  - name: group_users
+    options:
+      description: List of IAM users to have in an IAM group which can assume the
+        role
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: custom_group_policy_arns
+    options:
+      description: List of IAM policies ARNs to attach to IAM group
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: custom_group_policies
+    options:
+      description: List of maps of inline IAM policies to attach to IAM group. Should
+        have `name` and `policy` keys in each element.
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: enable_mfa_enforcement
+    options:
+      description: Determines whether permissions are added to the policy which requires
+        the groups IAM users to use MFA
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: attach_iam_self_management_policy
+    options:
+      description: Whether to attach IAM policy which allows IAM users to manage their
+        credentials and MFA
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: iam_self_management_policy_name_prefix
+    options:
+      description: Name prefix for IAM policy to create with IAM self-management permissions
+      override:
+        type: allowed
+    value: '"IAMSelfManagement-"'
+    valueType: hcl
+  - name: aws_account_id
+    options:
+      description: AWS account id to use inside IAM policies. If empty, current AWS
+        account ID will be used.
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: tags
+    options:
+      description: A map of tags to add to all resources.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  version: v1
+  versionState: active

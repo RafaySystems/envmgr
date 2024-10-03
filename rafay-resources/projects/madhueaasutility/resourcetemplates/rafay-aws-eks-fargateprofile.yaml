@@ -1,0 +1,158 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-eks-fargateprofile
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-eks
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create
+    options:
+      description: Determines whether to create Fargate profile or not
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: tags
+    options:
+      description: A map of tags to add to all resources
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: create_iam_role
+    options:
+      description: Determines whether an IAM role is created or to use an existing
+        IAM role
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: cluster_ip_family
+    options:
+      description: The IP family used to assign Kubernetes pod and service addresses.
+        Valid values are `ipv4` (default) and `ipv6`
+      override:
+        type: allowed
+    value: '"ipv4"'
+    valueType: hcl
+  - name: iam_role_arn
+    options:
+      description: Existing IAM role ARN for the Fargate profile. Required if `create_iam_role`
+        is set to `false`
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: iam_role_name
+    options:
+      description: Name to use on IAM role created
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: iam_role_use_name_prefix
+    options:
+      description: Determines whether the IAM role name (`iam_role_name`) is used
+        as a prefix
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: iam_role_path
+    options:
+      description: IAM role path
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: iam_role_description
+    options:
+      description: Description of the role
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: iam_role_permissions_boundary
+    options:
+      description: ARN of the policy that is used to set the permissions boundary
+        for the IAM role
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: iam_role_attach_cni_policy
+    options:
+      description: Whether to attach the `AmazonEKS_CNI_Policy`/`AmazonEKS_CNI_IPv6_Policy`
+        IAM policy to the IAM IAM role. WARNING If set `false` the permissions must
+        be assigned to the `aws-node` DaemonSet pods via another method or nodes will
+        not be able to join the cluster
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: iam_role_additional_policies
+    options:
+      description: Additional policies to be added to the IAM role
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: iam_role_tags
+    options:
+      description: A map of additional tags to add to the IAM role created
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: cluster_name
+    options:
+      description: Name of the EKS cluster
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: name
+    options:
+      description: Name of the EKS Fargate Profile
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: subnet_ids
+    options:
+      description: A list of subnet IDs for the EKS Fargate Profile
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: selectors
+    options:
+      description: Configuration block(s) for selecting Kubernetes Pods to execute
+        with this Fargate Profile
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: timeouts
+    options:
+      description: Create and delete timeout configurations for the Fargate Profile
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  version: v1
+  versionState: active

@@ -1,0 +1,143 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-iam-user
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-iam/modules
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create_user
+    options:
+      description: Whether to create the IAM user
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: create_iam_user_login_profile
+    options:
+      description: Whether to create IAM user login profile
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: create_iam_access_key
+    options:
+      description: Whether to create IAM access key
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: name
+    options:
+      description: Desired name for the IAM user
+      override:
+        type: allowed
+    value: $("em-iam-user-\(environment.name)")$
+    valueType: expression
+  - name: path
+    options:
+      description: Desired path for the IAM user
+      override:
+        type: allowed
+    value: '"/"'
+    valueType: hcl
+  - name: force_destroy
+    options:
+      description: When destroying this user, destroy even if it has non-Terraform-managed
+        IAM access keys, login profile or MFA devices. Without force_destroy a user
+        with non-Terraform-managed access keys and login profile will fail to be destroyed.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: pgp_key
+    options:
+      description: Either a base-64 encoded PGP public key, or a keybase username
+        in the form `keybaseusername`. Used to encrypt password and access key.
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: iam_access_key_status
+    options:
+      description: Access key status to apply.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: password_reset_required
+    options:
+      description: Whether the user should be forced to reset the generated password
+        on first login.
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: password_length
+    options:
+      description: The length of the generated password
+      override:
+        type: allowed
+    value: "20.0"
+    valueType: hcl
+  - name: upload_iam_user_ssh_key
+    options:
+      description: Whether to upload a public ssh key to the IAM user
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: ssh_key_encoding
+    options:
+      description: Specifies the public key encoding format to use in the response.
+        To retrieve the public key in ssh-rsa format, use SSH. To retrieve the public
+        key in PEM format, use PEM
+      override:
+        type: allowed
+    value: '"SSH"'
+    valueType: hcl
+  - name: ssh_public_key
+    options:
+      description: The SSH public key. The public key must be encoded in ssh-rsa format
+        or PEM format
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: permissions_boundary
+    options:
+      description: The ARN of the policy that is used to set the permissions boundary
+        for the user.
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: policy_arns
+    options:
+      description: The list of ARNs of policies directly assigned to the IAM user
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: tags
+    options:
+      description: A map of tags to add to all resources.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  version: v1
+  versionState: active

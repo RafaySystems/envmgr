@@ -1,0 +1,44 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-cloudwatch-log-stream
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-cloudwatch
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create
+    options:
+      description: Whether to create the Cloudwatch log stream
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: name
+    options:
+      description: A name for the log stream
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: log_group_name
+    options:
+      description: A name of the log group
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  version: v1
+  versionState: active

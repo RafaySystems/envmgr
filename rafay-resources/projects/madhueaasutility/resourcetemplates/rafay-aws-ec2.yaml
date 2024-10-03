@@ -1,0 +1,515 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-ec2
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-ec2-instance
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create
+    options:
+      description: Whether to create an instance
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: name
+    options:
+      description: Name to be used on EC2 instance created
+      override:
+        type: notallowed
+    value: $("em-ec2-\(environment.name)")$
+    valueType: expression
+  - name: ami_ssm_parameter
+    options:
+      description: SSM parameter name for the AMI ID. For Amazon Linux AMI SSM parameters
+        see [reference](https//docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-public-parameters-ami.html)
+      override:
+        type: allowed
+    value: '"/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"'
+    valueType: hcl
+  - name: ami
+    options:
+      description: ID of AMI to use for the instance
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: ignore_ami_changes
+    options:
+      description: Whether changes to the AMI ID changes should be ignored by Terraform.
+        Note - changing this value will result in the replacement of the instance
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: associate_public_ip_address
+    options:
+      description: Whether to associate a public IP address with an instance in a
+        VPC
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: maintenance_options
+    options:
+      description: The maintenance options for the instance
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: availability_zone
+    options:
+      description: AZ to start the instance in
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: capacity_reservation_specification
+    options:
+      description: Describes an instance's Capacity Reservation targeting option
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: cpu_credits
+    options:
+      description: The credit option for CPU usage (unlimited or standard)
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: disable_api_termination
+    options:
+      description: If true, enables EC2 Instance Termination Protection
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: ebs_block_device
+    options:
+      description: Additional EBS block devices to attach to the instance
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ebs_optimized
+    options:
+      description: If true, the launched EC2 instance will be EBS-optimized
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: enclave_options_enabled
+    options:
+      description: Whether Nitro Enclaves will be enabled on the instance. Defaults
+        to `false`
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: ephemeral_block_device
+    options:
+      description: Customize Ephemeral (also known as Instance Store) volumes on the
+        instance
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: get_password_data
+    options:
+      description: If true, wait for password data to become available and retrieve
+        it
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: hibernation
+    options:
+      description: If true, the launched EC2 instance will support hibernation
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: host_id
+    options:
+      description: ID of a dedicated host that the instance will be assigned to. Use
+        when an instance is to be launched on a specific dedicated host
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: iam_instance_profile
+    options:
+      description: IAM Instance Profile to launch the instance with. Specified as
+        the name of the Instance Profile
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: instance_initiated_shutdown_behavior
+    options:
+      description: Shutdown behavior for the instance. Amazon defaults this to stop
+        for EBS-backed instances and terminate for instance-store instances. Cannot
+        be set on instance-store instance
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: instance_type
+    options:
+      description: The type of instance to start
+      override:
+        type: allowed
+    value: '"t3.micro"'
+    valueType: hcl
+  - name: instance_tags
+    options:
+      description: Additional tags for the instance
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: ipv6_address_count
+    options:
+      description: A number of IPv6 addresses to associate with the primary network
+        interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: ipv6_addresses
+    options:
+      description: Specify one or more IPv6 addresses from the range of the subnet
+        to associate with the primary network interface
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: key_name
+    options:
+      description: Key name of the Key Pair to use for the instance; which can be
+        managed using the `aws_key_pair` resource
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: launch_template
+    options:
+      description: Specifies a Launch Template to configure the instance. Parameters
+        configured on this resource will override the corresponding parameters in
+        the Launch Template
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: monitoring
+    options:
+      description: If true, the launched EC2 instance will have detailed monitoring
+        enabled
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: network_interface
+    options:
+      description: Customize network interfaces to be attached at instance boot time
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: private_dns_name_options
+    options:
+      description: Customize the private DNS name options of the instance
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: placement_group
+    options:
+      description: The Placement Group to start the instance in
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: private_ip
+    options:
+      description: Private IP address to associate with the instance in a VPC
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: root_block_device
+    options:
+      description: Customize details about the root block device of the instance.
+        See Block Devices below for details
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: secondary_private_ips
+    options:
+      description: A list of secondary private IPv4 addresses to assign to the instance's
+        primary network interface (eth0) in a VPC. Can only be assigned to the primary
+        network interface (eth0) attached at instance creation, not a pre-existing
+        network interface i.e. referenced in a `network_interface block`
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: source_dest_check
+    options:
+      description: Controls if traffic is routed to the instance when the destination
+        address does not match the instance. Used for NAT or VPNs
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: subnet_id
+    options:
+      description: The VPC Subnet ID to launch in
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: tenancy
+    options:
+      description: The tenancy of the instance (if the instance is running in a VPC).
+        Available values default, dedicated, host
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: user_data
+    options:
+      description: The user data to provide when launching the instance. Do not pass
+        gzip-compressed data via this argument; see user_data_base64 instead
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: user_data_base64
+    options:
+      description: Can be used instead of user_data to pass base64-encoded binary
+        data directly. Use this instead of user_data whenever the value is not a valid
+        UTF-8 string. For example, gzip-encoded user data must be base64-encoded and
+        passed via this argument to avoid corruption
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: user_data_replace_on_change
+    options:
+      description: When used in combination with user_data or user_data_base64 will
+        trigger a destroy and recreate when set to true. Defaults to false if not
+        set
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: volume_tags
+    options:
+      description: A mapping of tags to assign to the devices created by the instance
+        at launch time
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: enable_volume_tags
+    options:
+      description: Whether to enable volume tags (if enabled it conflicts with root_block_device
+        tags)
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: vpc_security_group_ids
+    options:
+      description: A list of security group IDs to associate with
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: timeouts
+    options:
+      description: Define maximum timeout for creating, updating, and deleting EC2
+        instance resources
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: cpu_options
+    options:
+      description: Defines CPU options to apply to the instance at launch time.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: cpu_core_count
+    options:
+      description: Sets the number of CPU cores for an instance
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: cpu_threads_per_core
+    options:
+      description: Sets the number of CPU threads per core for an instance (has no
+        effect unless cpu_core_count is also set)
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: create_spot_instance
+    options:
+      description: Depicts if the instance is a spot instance
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: spot_price
+    options:
+      description: The maximum price to request on the spot market. Defaults to on-demand
+        price
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: spot_wait_for_fulfillment
+    options:
+      description: If set, Terraform will wait for the Spot Request to be fulfilled,
+        and will throw an error if the timeout of 10m is reached
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: spot_type
+    options:
+      description: If set to one-time, after the instance is terminated, the spot
+        request will be closed. Default `persistent`
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: spot_launch_group
+    options:
+      description: A launch group is a group of spot instances that launch together
+        and terminate together. If left empty instances are launched and terminated
+        individually
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: spot_block_duration_minutes
+    options:
+      description: The required duration for the Spot instances, in minutes. This
+        value must be a multiple of 60 (60, 120, 180, 240, 300, or 360)
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: spot_instance_interruption_behavior
+    options:
+      description: Indicates Spot instance behavior when it is interrupted. Valid
+        values are `terminate`, `stop`, or `hibernate`
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: spot_valid_until
+    options:
+      description: The end date and time of the request, in UTC RFC3339 format(for
+        example, YYYY-MM-DDTHHMMSSZ)
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: spot_valid_from
+    options:
+      description: The start date and time of the request, in UTC RFC3339 format(for
+        example, YYYY-MM-DDTHHMMSSZ)
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: disable_api_stop
+    options:
+      description: If true, enables EC2 Instance Stop Protection
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: create_iam_instance_profile
+    options:
+      description: Determines whether an IAM instance profile is created or to use
+        an existing IAM instance profile
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: iam_role_name
+    options:
+      description: Name to use on IAM role created
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: iam_role_use_name_prefix
+    options:
+      description: Determines whether the IAM role name (`iam_role_name` or `name`)
+        is used as a prefix
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: iam_role_path
+    options:
+      description: IAM role path
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: iam_role_description
+    options:
+      description: Description of the role
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: iam_role_permissions_boundary
+    options:
+      description: ARN of the policy that is used to set the permissions boundary
+        for the IAM role
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: iam_role_policies
+    options:
+      description: Policies attached to the IAM role
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: iam_role_tags
+    options:
+      description: A map of additional tags to add to the IAM role/profile created
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  version: v1
+  versionState: active

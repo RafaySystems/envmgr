@@ -1,0 +1,219 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-iam-assumable-roles
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-iam/modules
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: trusted_role_actions
+    options:
+      description: Additional trusted role actions
+      override:
+        type: allowed
+    value: '["sts:AssumeRole", "sts:TagSession"]'
+    valueType: hcl
+  - name: trusted_role_arns
+    options:
+      description: ARNs of AWS entities who can assume these roles
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: trusted_role_services
+    options:
+      description: AWS Services that can assume these roles
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: mfa_age
+    options:
+      description: Max age of valid MFA (in seconds) for roles which require MFA
+      override:
+        type: allowed
+    value: "86400.0"
+    valueType: hcl
+  - name: allow_self_assume_role
+    options:
+      description: Determines whether to allow the role to be [assume itself](https//aws.amazon.com/blogs/security/announcing-an-update-to-iam-role-trust-policy-behavior/)
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: create_admin_role
+    options:
+      description: Whether to create admin role
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: admin_role_name
+    options:
+      description: IAM role with admin access
+      override:
+        type: allowed
+    value: '"admin"'
+    valueType: hcl
+  - name: admin_role_path
+    options:
+      description: Path of admin IAM role
+      override:
+        type: allowed
+    value: '"/"'
+    valueType: hcl
+  - name: admin_role_requires_mfa
+    options:
+      description: Whether admin role requires MFA
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: admin_role_policy_arns
+    options:
+      description: List of policy ARNs to use for admin role
+      override:
+        type: allowed
+    value: '["arn:aws:iam::aws:policy/AdministratorAccess"]'
+    valueType: hcl
+  - name: admin_role_permissions_boundary_arn
+    options:
+      description: Permissions boundary ARN to use for admin role
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: admin_role_tags
+    options:
+      description: A map of tags to add to admin role resource.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: create_poweruser_role
+    options:
+      description: Whether to create poweruser role
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: poweruser_role_name
+    options:
+      description: IAM role with poweruser access
+      override:
+        type: allowed
+    value: '"poweruser"'
+    valueType: hcl
+  - name: poweruser_role_path
+    options:
+      description: Path of poweruser IAM role
+      override:
+        type: allowed
+    value: '"/"'
+    valueType: hcl
+  - name: poweruser_role_requires_mfa
+    options:
+      description: Whether poweruser role requires MFA
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: poweruser_role_policy_arns
+    options:
+      description: List of policy ARNs to use for poweruser role
+      override:
+        type: allowed
+    value: '["arn:aws:iam::aws:policy/PowerUserAccess"]'
+    valueType: hcl
+  - name: poweruser_role_permissions_boundary_arn
+    options:
+      description: Permissions boundary ARN to use for poweruser role
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: poweruser_role_tags
+    options:
+      description: A map of tags to add to poweruser role resource.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: create_readonly_role
+    options:
+      description: Whether to create readonly role
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: readonly_role_name
+    options:
+      description: IAM role with readonly access
+      override:
+        type: allowed
+    value: '"readonly"'
+    valueType: hcl
+  - name: readonly_role_path
+    options:
+      description: Path of readonly IAM role
+      override:
+        type: allowed
+    value: '"/"'
+    valueType: hcl
+  - name: readonly_role_requires_mfa
+    options:
+      description: Whether readonly role requires MFA
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: readonly_role_policy_arns
+    options:
+      description: List of policy ARNs to use for readonly role
+      override:
+        type: allowed
+    value: '["arn:aws:iam::aws:policy/ReadOnlyAccess"]'
+    valueType: hcl
+  - name: readonly_role_permissions_boundary_arn
+    options:
+      description: Permissions boundary ARN to use for readonly role
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: readonly_role_tags
+    options:
+      description: A map of tags to add to readonly role resource.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: max_session_duration
+    options:
+      description: Maximum CLI/API session duration in seconds between 3600 and 43200
+      override:
+        type: allowed
+    value: "3600.0"
+    valueType: hcl
+  - name: force_detach_policies
+    options:
+      description: Whether policies should be detached from this role when destroying
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  version: v1
+  versionState: active

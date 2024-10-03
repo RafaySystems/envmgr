@@ -1,0 +1,231 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-iam-assumable-role
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-iam/modules
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: trusted_role_actions
+    options:
+      description: Additional trusted role actions
+      override:
+        type: allowed
+    value: '["sts:AssumeRole", "sts:TagSession"]'
+    valueType: hcl
+  - name: trusted_role_arns
+    options:
+      description: ARNs of AWS entities who can assume these roles
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: trusted_role_services
+    options:
+      description: AWS Services that can assume these roles
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: mfa_age
+    options:
+      description: Max age of valid MFA (in seconds) for roles which require MFA
+      override:
+        type: allowed
+    value: "86400.0"
+    valueType: hcl
+  - name: max_session_duration
+    options:
+      description: Maximum CLI/API session duration in seconds between 3600 and 43200
+      override:
+        type: allowed
+    value: "3600.0"
+    valueType: hcl
+  - name: create_role
+    options:
+      description: Whether to create a role
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: create_instance_profile
+    options:
+      description: Whether to create an instance profile
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: role_name
+    options:
+      description: IAM role name
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: role_name_prefix
+    options:
+      description: IAM role name prefix
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: role_path
+    options:
+      description: Path of IAM role
+      override:
+        type: allowed
+    value: '"/"'
+    valueType: hcl
+  - name: role_requires_mfa
+    options:
+      description: Whether role requires MFA
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: role_permissions_boundary_arn
+    options:
+      description: Permissions boundary ARN to use for IAM role
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: tags
+    options:
+      description: A map of tags to add to IAM role resources
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: custom_role_policy_arns
+    options:
+      description: List of ARNs of IAM policies to attach to IAM role
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: custom_role_trust_policy
+    options:
+      description: A custom role trust policy. (Only valid if create_custom_role_trust_policy
+        = true)
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: create_custom_role_trust_policy
+    options:
+      description: Whether to create a custom_role_trust_policy. Prevent errors with
+        count, when custom_role_trust_policy is computed
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: number_of_custom_role_policy_arns
+    options:
+      description: Number of IAM policies to attach to IAM role
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: admin_role_policy_arn
+    options:
+      description: Policy ARN to use for admin role
+      override:
+        type: allowed
+    value: '"arn:aws:iam::aws:policy/AdministratorAccess"'
+    valueType: hcl
+  - name: poweruser_role_policy_arn
+    options:
+      description: Policy ARN to use for poweruser role
+      override:
+        type: allowed
+    value: '"arn:aws:iam::aws:policy/PowerUserAccess"'
+    valueType: hcl
+  - name: readonly_role_policy_arn
+    options:
+      description: Policy ARN to use for readonly role
+      override:
+        type: allowed
+    value: '"arn:aws:iam::aws:policy/ReadOnlyAccess"'
+    valueType: hcl
+  - name: attach_admin_policy
+    options:
+      description: Whether to attach an admin policy to a role
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: attach_poweruser_policy
+    options:
+      description: Whether to attach a poweruser policy to a role
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: attach_readonly_policy
+    options:
+      description: Whether to attach a readonly policy to a role
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: force_detach_policies
+    options:
+      description: Whether policies should be detached from this role when destroying
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: role_description
+    options:
+      description: IAM Role description
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: role_sts_externalid
+    options:
+      description: STS ExternalId condition values to use with a role (when MFA is
+        not required)
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: allow_self_assume_role
+    options:
+      description: Determines whether to allow the role to be [assume itself](https//aws.amazon.com/blogs/security/announcing-an-update-to-iam-role-trust-policy-behavior/)
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: role_requires_session_name
+    options:
+      description: Determines if the role-session-name variable is needed when assuming
+        a role(https//aws.amazon.com/blogs/security/easily-control-naming-individual-iam-role-sessions/)
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: role_session_name
+    options:
+      description: role_session_name for roles which require this parameter when being
+        assumed. By default, you need to set your own username as role_session_name
+      override:
+        type: allowed
+    value: '["$${aws:username}"]'
+    valueType: hcl
+  version: v1
+  versionState: active

@@ -1,0 +1,86 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-s3-bucket-notification
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-s3
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create
+    options:
+      description: Whether to create this resource or not?
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: create_sns_policy
+    options:
+      description: Whether to create a policy for SNS permissions or not?
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: create_sqs_policy
+    options:
+      description: Whether to create a policy for SQS permissions or not?
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: bucket
+    options:
+      description: Name of S3 bucket to use
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: bucket_arn
+    options:
+      description: ARN of S3 bucket to use in policies
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: eventbridge
+    options:
+      description: Whether to enable Amazon EventBridge notifications
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: lambda_notifications
+    options:
+      description: Map of S3 bucket notifications to Lambda function
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: sqs_notifications
+    options:
+      description: Map of S3 bucket notifications to SQS queue
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: sns_notifications
+    options:
+      description: Map of S3 bucket notifications to SNS topic
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  version: v1
+  versionState: active

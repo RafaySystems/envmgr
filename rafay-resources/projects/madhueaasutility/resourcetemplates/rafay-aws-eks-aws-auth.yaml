@@ -1,0 +1,67 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-eks-aws-auth
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-eks
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create
+    options:
+      description: Controls if resources should be created (affects all resources)
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: create_aws_auth_configmap
+    options:
+      description: Determines whether to create the aws-auth configmap. NOTE - this
+        is only intended for scenarios where the configmap does not exist (i.e. -
+        when using only self-managed node groups). Most users should use `manage_aws_auth_configmap`
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: manage_aws_auth_configmap
+    options:
+      description: Determines whether to manage the aws-auth configmap
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: aws_auth_roles
+    options:
+      description: List of role maps to add to the aws-auth configmap
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: aws_auth_users
+    options:
+      description: List of user maps to add to the aws-auth configmap
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: aws_auth_accounts
+    options:
+      description: List of account maps to add to the aws-auth configmap
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  version: v1
+  versionState: active

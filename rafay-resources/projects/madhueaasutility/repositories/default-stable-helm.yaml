@@ -1,0 +1,16 @@
+apiVersion: integrations.k8smgmt.io/v3
+kind: Repository
+metadata:
+  name: default-stable-helm
+  project: madhueaasutility
+spec:
+  endpoint: https://charts.helm.sh/stable
+  options: {}
+  type: Helm
+status:
+  projects:
+  - projectId: k5zzypk
+    repositoryId: 24q06em
+  webhookConfig:
+    webhookSecret: d3da5af3f9a69de44bc1943240c5fb04dccfb0a061aad90790dc0d9824c03dc7
+    webhookURL: https://console.stage.rafay.dev/v2/config/webhook/repository/24q06em

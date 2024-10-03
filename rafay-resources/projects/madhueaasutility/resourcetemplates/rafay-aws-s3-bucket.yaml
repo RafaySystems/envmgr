@@ -1,0 +1,421 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-s3-bucket
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-s3
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create_bucket
+    options:
+      description: Controls if S3 bucket should be created
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: attach_elb_log_delivery_policy
+    options:
+      description: Controls if S3 bucket should have ELB log delivery policy attached
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: attach_lb_log_delivery_policy
+    options:
+      description: Controls if S3 bucket should have ALB/NLB log delivery policy attached
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: attach_access_log_delivery_policy
+    options:
+      description: Controls if S3 bucket should have S3 access log delivery policy
+        attached
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: attach_deny_insecure_transport_policy
+    options:
+      description: Controls if S3 bucket should have deny non-SSL transport policy
+        attached
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: attach_require_latest_tls_policy
+    options:
+      description: Controls if S3 bucket should require the latest version of TLS
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: attach_policy
+    options:
+      description: Controls if S3 bucket should have bucket policy attached (set to
+        `true` to use value of `policy` as bucket policy)
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: attach_public_policy
+    options:
+      description: Controls if a user defined public bucket policy will be attached
+        (set to `false` to allow upstream to apply defaults to the bucket)
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: attach_inventory_destination_policy
+    options:
+      description: Controls if S3 bucket should have bucket inventory destination
+        policy attached.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: attach_analytics_destination_policy
+    options:
+      description: Controls if S3 bucket should have bucket analytics destination
+        policy attached.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: attach_deny_incorrect_encryption_headers
+    options:
+      description: Controls if S3 bucket should deny incorrect encryption headers
+        policy attached.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: attach_deny_incorrect_kms_key_sse
+    options:
+      description: Controls if S3 bucket policy should deny usage of incorrect KMS
+        key SSE.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: allowed_kms_key_arn
+    options:
+      description: The ARN of KMS key which should be allowed in PutObject
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: attach_deny_unencrypted_object_uploads
+    options:
+      description: Controls if S3 bucket should deny unencrypted object uploads policy
+        attached.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: bucket
+    options:
+      description: (Optional, Forces new resource) The name of the bucket. If omitted,
+        Terraform will assign a random, unique name.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: bucket_prefix
+    options:
+      description: (Optional, Forces new resource) Creates a unique bucket name beginning
+        with the specified prefix. Conflicts with bucket.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: acl
+    options:
+      description: (Optional) The canned ACL to apply. Conflicts with `grant`
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: policy
+    options:
+      description: (Optional) A valid bucket policy JSON document. Note that if the
+        policy document is not specific enough (but still valid), Terraform may view
+        the policy as constantly changing in a terraform plan. In this case, please
+        make sure you use the verbose/specific version of the policy. For more information
+        about building AWS IAM policy documents with Terraform, see the AWS IAM Policy
+        Document Guide.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: tags
+    options:
+      description: (Optional) A mapping of tags to assign to the bucket.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: force_destroy
+    options:
+      description: (Optional, Defaultfalse ) A boolean that indicates all objects
+        should be deleted from the bucket so that the bucket can be destroyed without
+        error. These objects are not recoverable.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: acceleration_status
+    options:
+      description: (Optional) Sets the accelerate configuration of an existing bucket.
+        Can be Enabled or Suspended.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: request_payer
+    options:
+      description: (Optional) Specifies who should bear the cost of Amazon S3 data
+        transfer. Can be either BucketOwner or Requester. By default, the owner of
+        the S3 bucket would incur the costs of any data transfer. See Requester Pays
+        Buckets developer guide for more information.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: website
+    options:
+      description: Map containing static web-site hosting or redirect configuration.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: cors_rule
+    options:
+      description: List of maps containing rules for Cross-Origin Resource Sharing.
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: versioning
+    options:
+      description: Map containing versioning configuration.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: logging
+    options:
+      description: Map containing access bucket logging configuration.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: access_log_delivery_policy_source_buckets
+    options:
+      description: (Optional) List of S3 bucket ARNs which should be allowed to deliver
+        access logs to this bucket.
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: access_log_delivery_policy_source_accounts
+    options:
+      description: (Optional) List of AWS Account IDs should be allowed to deliver
+        access logs to this bucket.
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: grant
+    options:
+      description: An ACL policy grant. Conflicts with `acl`
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: owner
+    options:
+      description: Bucket owner's display name and ID. Conflicts with `acl`
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: expected_bucket_owner
+    options:
+      description: The account ID of the expected bucket owner
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: lifecycle_rule
+    options:
+      description: List of maps containing configuration of object lifecycle management.
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: replication_configuration
+    options:
+      description: Map containing cross-region replication configuration.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: server_side_encryption_configuration
+    options:
+      description: Map containing server-side encryption configuration.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: intelligent_tiering
+    options:
+      description: Map containing intelligent tiering configuration.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: object_lock_configuration
+    options:
+      description: Map containing S3 object locking configuration.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: metric_configuration
+    options:
+      description: Map containing bucket metric configuration.
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: inventory_configuration
+    options:
+      description: Map containing S3 inventory configuration.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: inventory_source_account_id
+    options:
+      description: The inventory source account id.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: inventory_source_bucket_arn
+    options:
+      description: The inventory source bucket ARN.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: inventory_self_source_destination
+    options:
+      description: Whether or not the inventory source bucket is also the destination
+        bucket.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: analytics_configuration
+    options:
+      description: Map containing bucket analytics configuration.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: analytics_source_account_id
+    options:
+      description: The analytics source account id.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: analytics_source_bucket_arn
+    options:
+      description: The analytics source bucket ARN.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: analytics_self_source_destination
+    options:
+      description: Whether or not the analytics source bucket is also the destination
+        bucket.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: object_lock_enabled
+    options:
+      description: Whether S3 bucket should have an Object Lock configuration enabled.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: block_public_acls
+    options:
+      description: Whether Amazon S3 should block public ACLs for this bucket.
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: block_public_policy
+    options:
+      description: Whether Amazon S3 should block public bucket policies for this
+        bucket.
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: ignore_public_acls
+    options:
+      description: Whether Amazon S3 should ignore public ACLs for this bucket.
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: restrict_public_buckets
+    options:
+      description: Whether Amazon S3 should restrict public bucket policies for this
+        bucket.
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: control_object_ownership
+    options:
+      description: Whether to manage S3 Bucket Ownership Controls on this bucket.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: object_ownership
+    options:
+      description: Object ownership. Valid values BucketOwnerEnforced, BucketOwnerPreferred
+        or ObjectWriter. 'BucketOwnerEnforced' ACLs are disabled, and the bucket owner
+        automatically owns and has full control over every object in the bucket. 'BucketOwnerPreferred'
+        Objects uploaded to the bucket change ownership to the bucket owner if the
+        objects are uploaded with the bucket-owner-full-control canned ACL. 'ObjectWriter'
+        The uploading account will own the object if the object is uploaded with the
+        bucket-owner-full-control canned ACL.
+      override:
+        type: allowed
+    value: '"BucketOwnerEnforced"'
+    valueType: hcl
+  version: v1
+  versionState: active

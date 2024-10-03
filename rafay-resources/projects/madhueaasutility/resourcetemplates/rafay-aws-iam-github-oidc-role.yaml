@@ -1,0 +1,116 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-iam-github-oidc-role
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-iam/modules
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create
+    options:
+      description: Controls if resources should be created (affects all resources)
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: tags
+    options:
+      description: A map of tags to add to the resources created
+      override:
+        type: allowed
+    value: '{'
+    valueType: hcl
+  - name: name
+    options:
+      description: Name of IAM role
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: path
+    options:
+      description: Path of IAM role
+      override:
+        type: allowed
+    value: '"/"'
+    valueType: hcl
+  - name: permissions_boundary_arn
+    options:
+      description: Permissions boundary ARN to use for IAM role
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: description
+    options:
+      description: IAM Role description
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: name_prefix
+    options:
+      description: IAM role name prefix
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: policies
+    options:
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: force_detach_policies
+    options:
+      description: Whether policies should be detached from this role when destroying
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: max_session_duration
+    options:
+      description: Maximum CLI/API session duration in seconds between 3600 and 43200
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: audience
+    options:
+      description: Audience to use for OIDC role. Defaults to `sts.amazonaws.com`
+        for use with the [official AWS GitHub action](https//github.com/aws-actions/configure-aws-credentials)
+      override:
+        type: allowed
+    value: '"sts.amazonaws.com"'
+    valueType: hcl
+  - name: subjects
+    options:
+      description: List of GitHub OIDC subjects that are permitted by the trust policy.
+        You do not need to prefix with `repo` as this is provided. Example `['my-org/my-repo*',
+        'octo-org/octo-reporefrefs/heads/octo-branch']`
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: provider_url
+    options:
+      description: The URL of the identity provider. Corresponds to the iss claim
+      override:
+        type: allowed
+    value: '"token.actions.githubusercontent.com"'
+    valueType: hcl
+  version: v1
+  versionState: active

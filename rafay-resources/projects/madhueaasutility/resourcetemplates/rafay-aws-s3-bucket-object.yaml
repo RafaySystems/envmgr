@@ -1,0 +1,235 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-s3-bucket-object
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-s3
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create
+    options:
+      description: Whether to create this resource or not?
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: bucket
+    options:
+      description: The name of the bucket to put the file in. Alternatively, an S3
+        access point ARN can be specified.
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: key
+    options:
+      description: The name of the object once it is in the bucket.
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: file_source
+    options:
+      description: The path to a file that will be read and uploaded as raw bytes
+        for the object content.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: content
+    options:
+      description: Literal string value to use as the object content, which will be
+        uploaded as UTF-8-encoded text.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: content_base64
+    options:
+      description: Base64-encoded data that will be decoded and uploaded as raw bytes
+        for the object content. This allows safely uploading non-UTF8 binary data,
+        but is recommended only for small content such as the result of the gzipbase64
+        function with small text strings. For larger objects, use source to stream
+        the content from a disk file.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: acl
+    options:
+      description: The canned ACL to apply. Valid values are private, public-read,
+        public-read-write, aws-exec-read, authenticated-read, bucket-owner-read, and
+        bucket-owner-full-control. Defaults to private.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: cache_control
+    options:
+      description: Specifies caching behavior along the request/reply chain.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: content_disposition
+    options:
+      description: Specifies presentational information for the object.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: content_encoding
+    options:
+      description: Specifies what content encodings have been applied to the object
+        and thus what decoding mechanisms must be applied to obtain the media-type
+        referenced by the Content-Type header field.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: content_language
+    options:
+      description: The language the content is in e.g. en-US or en-GB.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: content_type
+    options:
+      description: A standard MIME type describing the format of the object data,
+        e.g. application/octet-stream. All Valid MIME Types are valid for this input.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: website_redirect
+    options:
+      description: Specifies a target URL for website redirect.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: storage_class
+    options:
+      description: Specifies the desired Storage Class for the object. Can be either
+        STANDARD, REDUCED_REDUNDANCY, ONEZONE_IA, INTELLIGENT_TIERING, GLACIER, DEEP_ARCHIVE,
+        or STANDARD_IA. Defaults to STANDARD.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: etag
+    options:
+      description: Used to trigger updates. This attribute is not compatible with
+        KMS encryption, kms_key_id or server_side_encryption
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: server_side_encryption
+    options:
+      description: Specifies server-side encryption of the object in S3. Valid values
+        are
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: kms_key_id
+    options:
+      description: Amazon Resource Name (ARN) of the KMS Key to use for object encryption.
+        If the S3 Bucket has server-side encryption enabled, that value will automatically
+        be used. If referencing the aws_kms_key resource, use the arn attribute. If
+        referencing the aws_kms_alias data source or resource, use the target_key_arn
+        attribute. Terraform will only perform drift detection if a configuration
+        value is provided.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: bucket_key_enabled
+    options:
+      description: Whether or not to use Amazon S3 Bucket Keys for SSE-KMS.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: metadata
+    options:
+      description: A map of keys values to provision metadata will be automatically
+        prefixed by note that only lowercase label are currently supported by the
+        AWS Go API.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: tags
+    options:
+      description: A map of tags to assign to the object.
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: force_destroy
+    options:
+      description: Allow the object to be deleted by removing any legal hold on any
+        object version. Default is false. This value should be set to true only if
+        the bucket has S3 object lock enabled.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: object_lock_legal_hold_status
+    options:
+      description: The legal hold status that you want to apply to the specified object.
+        Valid values are ON and OFF.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: object_lock_mode
+    options:
+      description: The object lock retention mode that you want to apply to this object.
+        Valid values are GOVERNANCE and COMPLIANCE.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: object_lock_retain_until_date
+    options:
+      description: The date and time, in RFC3339 format, when this object's object
+        lock will expire.
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: source_hash
+    options:
+      description: Triggers updates like etag but useful to address etag encryption
+        limitations. Set using filemd
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: override_default_tags
+    options:
+      description: Ignore provider default_tags. S3 objects support a maximum of 10
+        tags.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  version: v1
+  versionState: active

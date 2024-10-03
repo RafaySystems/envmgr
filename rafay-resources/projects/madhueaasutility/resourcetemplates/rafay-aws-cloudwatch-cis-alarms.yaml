@@ -1,0 +1,111 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-cloudwatch-cis-alarms
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-cloudwatch
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create
+    options:
+      description: Whether to create the Cloudwatch log metric filter and metric alarms
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: use_random_name_prefix
+    options:
+      description: Whether to prefix resource names with random prefix
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: name_prefix
+    options:
+      description: A name prefix for the cloudwatch alarm (if use_random_name_prefix
+        is true, this will be ignored)
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: control_overrides
+    options:
+      description: A map of overrides to apply to each control
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: disabled_controls
+    options:
+      description: List of IDs of disabled CIS controls
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: namespace
+    options:
+      description: The namespace where metric filter and metric alarm should be cleated
+      override:
+        type: allowed
+    value: '"CISBenchmark"'
+    valueType: hcl
+  - name: log_group_name
+    options:
+      description: The name of the log group to associate the metric filter with
+      override:
+        type: allowed
+    value: '""'
+    valueType: hcl
+  - name: alarm_actions
+    options:
+      description: List of ARNs to put as Cloudwatch Alarms actions (eg, ARN of SNS
+        topic)
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: actions_enabled
+    options:
+      description: Indicates whether or not actions should be executed during any
+        changes to the alarm's state.
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: tags
+    options:
+      description: A mapping of tags to assign to all resources
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: ok_actions
+    options:
+      description: List of ARNs to put as Cloudwatch OK actions (eg, ARN of SNS topic)
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: insufficient_data_actions
+    options:
+      description: List of ARNs to put as Cloudwatch insuficient data actions (eg,
+        ARN of SNS topic)
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  version: v1
+  versionState: active

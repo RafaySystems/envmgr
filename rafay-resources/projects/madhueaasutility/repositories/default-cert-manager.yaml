@@ -1,0 +1,16 @@
+apiVersion: integrations.k8smgmt.io/v3
+kind: Repository
+metadata:
+  name: default-cert-manager
+  project: madhueaasutility
+spec:
+  endpoint: https://github.com/jetstack/cert-manager.git
+  options: {}
+  type: Git
+status:
+  projects:
+  - projectId: k5zzypk
+    repositoryId: 281pnek
+  webhookConfig:
+    webhookSecret: 9632b12d1df21fae887a0c0ae33719286124a94b643365d831119d6cb4abb289
+    webhookURL: https://console.stage.rafay.dev/v2/config/webhook/repository/281pnek

@@ -1,0 +1,476 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: rafay-aws-security-group-ssh
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  contexts:
+  - name: rafay-aws-madhueaasutility
+  provider: terraform
+  providerOptions:
+    terraform:
+      backendType: system
+      refresh: true
+      version: 1.4.6
+  repositoryOptions:
+    branch: main
+    directoryPath: terraform/rafay-aws-resources/terraform/aws-security-group
+    name: eaas-repo-madhu-utility-madhueaasutility
+  variables:
+  - name: create
+    options:
+      description: Whether to create security group and all rules
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: vpc_id
+    options:
+      description: ID of the VPC where to create security group
+      override:
+        type: allowed
+    value: "null"
+    valueType: hcl
+  - name: name
+    options:
+      description: Name of security group
+      override:
+        type: allowed
+    value: $("em-sg-ssh-\(environment.name)")$
+    valueType: hcl
+  - name: use_name_prefix
+    options:
+      description: Whether to use name_prefix or fixed name. Should be true to able
+        to update security group name after initial creation
+      override:
+        type: allowed
+    value: "true"
+    valueType: hcl
+  - name: description
+    options:
+      description: Description of security group
+      override:
+        type: allowed
+    value: '"Security Group managed by Terraform"'
+    valueType: hcl
+  - name: revoke_rules_on_delete
+    options:
+      description: Instruct Terraform to revoke all of the Security Groups attached
+        ingress and egress rules before deleting the rule itself. Enable for EMR.
+      override:
+        type: allowed
+    value: "false"
+    valueType: hcl
+  - name: tags
+    options:
+      description: A mapping of tags to assign to security group
+      override:
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: ingress_rules
+    options:
+      description: List of ingress rules to create by name
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_with_self
+    options:
+      description: List of ingress rules to create where 'self' is defined
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_with_cidr_blocks
+    options:
+      description: List of ingress rules to create where 'cidr_blocks' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_with_ipv6_cidr_blocks
+    options:
+      description: List of ingress rules to create where 'ipv6_cidr_blocks' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_with_source_security_group_id
+    options:
+      description: List of ingress rules to create where 'source_security_group_id'
+        is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_with_prefix_list_ids
+    options:
+      description: List of ingress rules to create where 'prefix_list_ids' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_cidr_blocks
+    options:
+      description: List of IPv4 CIDR ranges to use on all ingress rules
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_ipv6_cidr_blocks
+    options:
+      description: List of IPv6 CIDR ranges to use on all ingress rules
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: ingress_prefix_list_ids
+    options:
+      description: List of prefix list IDs (for allowing access to VPC endpoints)
+        to use on all ingress rules
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_rules
+    options:
+      description: List of computed ingress rules to create by name
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_with_self
+    options:
+      description: List of computed ingress rules to create where 'self' is defined
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_with_cidr_blocks
+    options:
+      description: List of computed ingress rules to create where 'cidr_blocks' is
+        used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_with_ipv6_cidr_blocks
+    options:
+      description: List of computed ingress rules to create where 'ipv6_cidr_blocks'
+        is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_with_source_security_group_id
+    options:
+      description: List of computed ingress rules to create where 'source_security_group_id'
+        is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_with_prefix_list_ids
+    options:
+      description: List of computed ingress rules to create where 'prefix_list_ids'
+        is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_cidr_blocks
+    options:
+      description: List of IPv4 CIDR ranges to use on all computed ingress rules
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_ipv6_cidr_blocks
+    options:
+      description: List of IPv6 CIDR ranges to use on all computed ingress rules
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_ingress_prefix_list_ids
+    options:
+      description: List of prefix list IDs (for allowing access to VPC endpoints)
+        to use on all computed ingress rules
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: number_of_computed_ingress_rules
+    options:
+      description: Number of computed ingress rules to create by name
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_with_self
+    options:
+      description: Number of computed ingress rules to create where 'self' is defined
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_with_cidr_blocks
+    options:
+      description: Number of computed ingress rules to create where 'cidr_blocks'
+        is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_with_ipv6_cidr_blocks
+    options:
+      description: Number of computed ingress rules to create where 'ipv6_cidr_blocks'
+        is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_with_source_security_group_id
+    options:
+      description: Number of computed ingress rules to create where 'source_security_group_id'
+        is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_with_prefix_list_ids
+    options:
+      description: Number of computed ingress rules to create where 'prefix_list_ids'
+        is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_cidr_blocks
+    options:
+      description: Number of IPv4 CIDR ranges to use on all computed ingress rules
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_ipv6_cidr_blocks
+    options:
+      description: Number of IPv6 CIDR ranges to use on all computed ingress rules
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_ingress_prefix_list_ids
+    options:
+      description: Number of prefix list IDs (for allowing access to VPC endpoints)
+        to use on all computed ingress rules
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: egress_rules
+    options:
+      description: List of egress rules to create by name
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: egress_with_self
+    options:
+      description: List of egress rules to create where 'self' is defined
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: egress_with_cidr_blocks
+    options:
+      description: List of egress rules to create where 'cidr_blocks' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: egress_with_ipv6_cidr_blocks
+    options:
+      description: List of egress rules to create where 'ipv6_cidr_blocks' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: egress_with_source_security_group_id
+    options:
+      description: List of egress rules to create where 'source_security_group_id'
+        is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: egress_with_prefix_list_ids
+    options:
+      description: List of egress rules to create where 'prefix_list_ids' is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: egress_cidr_blocks
+    options:
+      description: List of IPv4 CIDR ranges to use on all egress rules
+      override:
+        type: allowed
+    value: '["0.0.0.0/0"]'
+    valueType: hcl
+  - name: egress_ipv6_cidr_blocks
+    options:
+      description: List of IPv6 CIDR ranges to use on all egress rules
+      override:
+        type: allowed
+    value: '["::/0"]'
+    valueType: hcl
+  - name: egress_prefix_list_ids
+    options:
+      description: List of prefix list IDs (for allowing access to VPC endpoints)
+        to use on all egress rules
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_rules
+    options:
+      description: List of computed egress rules to create by name
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_with_self
+    options:
+      description: List of computed egress rules to create where 'self' is defined
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_with_cidr_blocks
+    options:
+      description: List of computed egress rules to create where 'cidr_blocks' is
+        used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_with_ipv6_cidr_blocks
+    options:
+      description: List of computed egress rules to create where 'ipv6_cidr_blocks'
+        is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_with_source_security_group_id
+    options:
+      description: List of computed egress rules to create where 'source_security_group_id'
+        is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_with_prefix_list_ids
+    options:
+      description: List of computed egress rules to create where 'prefix_list_ids'
+        is used
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: computed_egress_cidr_blocks
+    options:
+      description: List of IPv4 CIDR ranges to use on all computed egress rules
+      override:
+        type: allowed
+    value: '["0.0.0.0/0"]'
+    valueType: hcl
+  - name: computed_egress_ipv6_cidr_blocks
+    options:
+      description: List of IPv6 CIDR ranges to use on all computed egress rules
+      override:
+        type: allowed
+    value: '["::/0"]'
+    valueType: hcl
+  - name: computed_egress_prefix_list_ids
+    options:
+      description: List of prefix list IDs (for allowing access to VPC endpoints)
+        to use on all computed egress rules
+      override:
+        type: allowed
+    value: '[]'
+    valueType: hcl
+  - name: number_of_computed_egress_rules
+    options:
+      description: Number of computed egress rules to create by name
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_with_self
+    options:
+      description: Number of computed egress rules to create where 'self' is defined
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_with_cidr_blocks
+    options:
+      description: Number of computed egress rules to create where 'cidr_blocks' is
+        used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_with_ipv6_cidr_blocks
+    options:
+      description: Number of computed egress rules to create where 'ipv6_cidr_blocks'
+        is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_with_source_security_group_id
+    options:
+      description: Number of computed egress rules to create where 'source_security_group_id'
+        is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_with_prefix_list_ids
+    options:
+      description: Number of computed egress rules to create where 'prefix_list_ids'
+        is used
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_cidr_blocks
+    options:
+      description: Number of IPv4 CIDR ranges to use on all computed egress rules
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_ipv6_cidr_blocks
+    options:
+      description: Number of IPv6 CIDR ranges to use on all computed egress rules
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  - name: number_of_computed_egress_prefix_list_ids
+    options:
+      description: Number of prefix list IDs (for allowing access to VPC endpoints)
+        to use on all computed egress rules
+      override:
+        type: allowed
+    value: "0.0"
+    valueType: hcl
+  version: v1
+  versionState: active

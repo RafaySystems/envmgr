@@ -1,0 +1,16 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  name: aws-vpc-ec2-env-tmpl-madhueaasutility
+  project: madhueaasutility
+spec:
+  agents:
+  - name: madhuagent210
+  resources:
+  - kind: resourcetemplate
+    name: aws-vpc-ec2-rs-tmpl-madhueaasutility
+    resourceOptions:
+      version: v1
+    type: dynamic
+  version: v1
+  versionState: active
