@@ -10,7 +10,8 @@
 locals {
   rafay_resource_version = "v1"
   user = element(split("@", var.username), 0)
-  user_norm = replace("${local.user}", "+", "-")
+  user_norm1 = replace("${local.user}", "+", "-")
+  user_norm = replace("${local.user_norm1}", "_", "-")
 }
 
 resource "rafay_import_cluster" "vcluster" {
