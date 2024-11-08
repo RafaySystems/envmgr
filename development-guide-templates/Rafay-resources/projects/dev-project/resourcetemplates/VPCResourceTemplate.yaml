@@ -5,20 +5,15 @@ metadata:
   project: dev-project
 spec:
 # Here we are defining provider as opentofu to use, if no providerOptions is mentioned then Rafay will use latest version 
-
-
   provider: opentofu
   providerOptions:
    openTofu:
       backendType: system
       refresh: true
-
   repositoryOptions:
 # Here we are associating code in repository to the resource template
-
-
    branch: dev
-   directoryPath: terraform/VPC
+   directoryPath: development-guide-templates/terraform/VPC
    name: envmgr
   variables:
 # Here we are defining input collection variable for aws_region which in turn would be passed onto the underlying IaC code
