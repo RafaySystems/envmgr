@@ -57,7 +57,7 @@ spec:
           selector: resources.vpc-resource-template.aws_region
           type: allowed
         required: true
-      value: us-west-1
+      value: us-west-2
       valueType: text
 
     # Here we are defining input collection variable to collect cluster name from end user of the template.
@@ -83,5 +83,5 @@ spec:
         driver:
           name: jira-approval
 
-  version: v4
+  version: v1
   versionState: active

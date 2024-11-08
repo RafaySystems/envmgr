@@ -13,7 +13,7 @@ spec:
   repositoryOptions:
 # Here we are associating code in repository to the resource template
     branch: dev
-    directoryPath: terraform/VPC
+    directoryPath: rafay-resources
     name: envmgr
   resources:
 # Here we are defining dependency on VPCResourceTemplate, so that this resource template runs only after VPCResourceTemplate is successfully run
@@ -36,7 +36,7 @@ spec:
     options:
       override:
         type: allowed
-    value: us-west-1
+    value: us-west-2
     valueType: text
   - name: eks_cluster_name
     options:
