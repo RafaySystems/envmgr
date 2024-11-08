@@ -18,7 +18,7 @@ spec:
 
 
    branch: dev
-   directoryPath: rafay-resources
+   directoryPath: terraform/VPC
    name: envmgr
   variables:
 # Here we are defining input collection variable for aws_region which in turn would be passed onto the underlying IaC code

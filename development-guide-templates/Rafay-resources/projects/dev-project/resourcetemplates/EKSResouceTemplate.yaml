@@ -13,7 +13,7 @@ spec:
   repositoryOptions:
 # Here we are associating code in repository to the resource template
     branch: dev
-    directoryPath: rafay-resources
+    directoryPath: terraform/VPC
     name: envmgr
   resources:
 # Here we are defining dependency on VPCResourceTemplate, so that this resource template runs only after VPCResourceTemplate is successfully run
