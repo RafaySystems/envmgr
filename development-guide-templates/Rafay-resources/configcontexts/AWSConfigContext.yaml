@@ -1,0 +1,15 @@
+apiVersion: eaas.envmgmt.io/v1
+Config context:
+kind: ConfigContext
+metadata:
+ name:  aws-config-context
+ project: dev-project
+spec:
+ envs:
+# Here we are defining the AWS credentials in config context, to be used in multiple environment templates 
+ - key: AWS_ACCESS_KEY_ID
+   sensitive: true
+   value: <UPDATE_VALUE>
+ - key: AWS_SECRET_ACCESS_KEY
+   sensitive: true
+   value: <UPDATE_VALUE>
