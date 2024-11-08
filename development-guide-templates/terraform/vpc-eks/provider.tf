@@ -9,15 +9,16 @@ terraform {
   required_version = ">= 1.4.4"
 }
 
-provider "aws" {
-  region = "us-west-2" 
-}
-
 provider "rafay" {
   provider_config_file = var.rafay_config_file
 }
 
+
 variable "rafay_config_file" {
   description = "rafay provider config file for authentication"
   default     = "/opt/rafay/rctl.conf"
+}
+
+provider "aws" {
+  region = "us-west-2" 
 }
