@@ -9,6 +9,9 @@ terraform {
   required_version = ">= 1.4.4"
 }
 
+provider "aws" {
+  region = "us-west-2" 
+}
 
 provider "rafay" {
   provider_config_file = var.rafay_config_file

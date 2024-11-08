@@ -12,7 +12,7 @@ spec:
       refresh: true
   repositoryOptions:
 # Here we are associating code in repository to the resource template
-   branch: dev
+   branch: dev-guide-templates
    directoryPath: development-guide-templates/terraform/vpc-eks
    name: envmgr
   variables:

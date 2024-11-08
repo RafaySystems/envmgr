@@ -12,7 +12,7 @@ spec:
      refresh: true
 # Here we are associating code in repository to the resource template
   repositoryOptions:
-   branch: dev
+   branch: dev-guide-templates
    directoryPath: development-guide-templates/terraform/namespace
    name: envmgr
   resources:
