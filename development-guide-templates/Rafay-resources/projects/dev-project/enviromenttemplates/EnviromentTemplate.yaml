@@ -1,0 +1,87 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  name: app-enviroment-template
+  project: dev-project
+spec:
+  agents:
+    # Here we are associating an agent which will be used for running code of all involved resource templates, in this case being VPCResourcetemplate
+    - name: dev-agent
+  contexts:
+    # Here we are associating a configcontext that contains information related to AWS credentials. Reason a configcontext is used here , so that the same can be associated to multiple other env templates
+    - name: aws-config-context
+  resources:
+    # Here we are associating first resource template VPCResourceTemplate and its version.
+    - kind: resourcetemplate
+      name: vpc-resource-template
+      resourceOptions:
+        version: v1
+      type: dynamic
+    # Here we are associating second resource template EKSResourceTemplate and its version with the dependency on VPCResourceTemplate.
+    - kind: resourcetemplate
+      name: eks-resource-template
+      resourceOptions:
+        version: v1
+      type: dynamic
+      dependsOn:
+        - name: vpc-resource-template
+    # Here we are associating third resource template NamespaceResourceTemplate and its version with the dependency on EKSResourceTemplate.
+    - kind: resourcetemplate
+      name: namespace-resource-template
+      resourceOptions:
+        version: v1
+      type: dynamic
+      dependsOn:
+        - name: eks-resource-template
+  variables:
+    # Here we are defining input collection variable to collect project where cluster needs to be provisioned , from end user of the template.
+    # Its type is set to allowed, so that end user at environment launch time can provide region info which is free form text
+    # Its marked required, so that it shows up as mandatory field in the UI
+    # selector is user here to wire the input value collected for cluster's project to the appropriate EKS resource template's input variable. This way, platform team gets to pre-set, restrict values at only one place , which is environment template level before its shared with end developers/users
+    - name: cluster_project
+      options:
+        override:
+          selector: resources.eks-resource-template.eks_cluster_project
+          type: allowed
+        required: true
+      value:
+      valueType: text
+
+    # Here we are defining input collection variable to collect aws region from end user of the template.
+    # Its type is set to allowed, so that end user at environment launch time can provide region info which is free form text
+    # Its marked required, so that it shows up as mandatory field in the UI
+    # selector is user here to wire the input value collected for aws region to the appropriate resource template's variable. This way, platform team gets to pre-set, restrict values at only one place , which is environment template level before its shared with end developers/users
+    - name: aws_region
+      options:
+        override:
+          selector: resources.vpc-resource-template.aws_region
+          type: allowed
+        required: true
+      value: us-west-2
+      valueType: text
+
+    # Here we are defining input collection variable to collect cluster name from end user of the template.
+    # Its type is set to allowed, so that end user at environment launch time can provide region info which is free form text
+    # Its marked required, so that it shows up as mandatory field in the UI
+    # selector is user here to wire the input value collected for cluster name to the EKS resource template's variable. This way, platform team gets to pre-set, restrict values at only one place , which is environment template level before its shared with end developers/users
+    - name: cluster_name
+      options:
+        override:
+          selector: resources.eks-resource-template.eks_cluster_name
+          type: allowed
+        required: true
+      value:
+      valueType: text
+
+# Here we are associating the driver for JiraAprpoval onInit hook
+  hook:
+    onInit:
+      - name: approval
+        type: driver
+        options: {}
+        onFailure: unspecified
+        driver:
+          name: jira-approval
+
+  version: v1
+  versionState: active

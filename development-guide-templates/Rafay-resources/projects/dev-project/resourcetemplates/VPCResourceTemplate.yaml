@@ -1,0 +1,36 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: vpc-resource-template
+  project: dev-project
+spec:
+# Here we are defining provider as opentofu to use, if no providerOptions is mentioned then Rafay will use latest version 
+
+
+  provider: opentofu
+  providerOptions:
+   openTofu:
+      backendType: system
+      refresh: true
+
+  repositoryOptions:
+# Here we are associating code in repository to the resource template
+
+
+   branch: dev
+   directoryPath: terraform/VPC
+   name: envmgr
+  variables:
+# Here we are defining input collection variable for aws_region which in turn would be passed onto the underlying IaC code
+  - name: aws_region
+    options:
+      override:
+        type: allowed
+      required: true
+      description: "AWS region where VPC needs to be created. Check that the region is valid for VPC hosting."
+    value: us-west-2
+    valueType: text
+  version: v1
+
+
+#Output of this resource template run will be captured into variables as crafted in the output.tf shown below which will be used later in our template evolution
