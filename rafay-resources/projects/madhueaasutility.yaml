@@ -1,8 +1,0 @@
-apiVersion: system.k8smgmt.io/v3
-kind: Project
-metadata:
-  description: Project for templates
-  name: madhueaasutility
-spec:
-  driftWebhook:
-    enabled: true
