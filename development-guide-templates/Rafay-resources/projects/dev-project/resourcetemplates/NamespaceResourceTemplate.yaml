@@ -13,7 +13,7 @@ spec:
 # Here we are associating code in repository to the resource template
   repositoryOptions:
    branch: dev
-   directoryPath: development-guide-templates/terraform/VPC
+   directoryPath: development-guide-templates/terraform/namespace
    name: envmgr
   resources:
   # Here we are associating first resource template VPCResourceTemplate and its version.
