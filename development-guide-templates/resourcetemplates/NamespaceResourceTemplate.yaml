@@ -1,0 +1,47 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+ name: namespace-resource-template
+ project: dev-project
+spec:
+# Here we are defining provider as opentofu to use, if no providerOptions is mentioned then Rafay will use latest version 
+  provider: opentofu
+  providerOptions:
+   openTofu:
+     backendType: system
+     refresh: true
+# Here we are associating code in repository to the resource template
+  repositoryOptions:
+   branch: dev
+   directoryPath: terraform/VPC
+   name: envmgr
+  resources:
+  # Here we are associating first resource template VPCResourceTemplate and its version.
+  - kind: resourcetemplate
+    name: vpc-resource-template
+    resourceOptions:
+    version: v1
+    type: dynamic
+  # Here we are associating second resource template EKSResourceTemplate and its version with the dependency on VPCResourceTemplate.
+  - kind: resourcetemplate
+    name: eks-resource-template
+    resourceOptions:
+    version: v1
+    type: dynamic
+    dependsOn:
+    - name: vpc-resource-template
+  variables:
+  - name: project
+    options:
+      override:
+        type: allowed
+    value: dev-project
+    valueType: text
+  # Here we using the output from the EKSResourceTemplate's eks_cluster_name information and use it for the cluster where we want namespace to be created
+  - name: cluster_name
+    options:
+      override:
+        type: allowed
+    value: $(resource.eks-resource-template.output.eks_cluster_name.value)$
+    valueType: text
+  version: v1

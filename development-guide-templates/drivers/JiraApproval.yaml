@@ -1,0 +1,204 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: Driver
+metadata:
+   name: jira-approval
+   project: dev-project
+spec:
+ inputs:
+# Here we are providing the jira server details for creating the approval ticket
+ - data:
+     variables:
+# Here we are providing the jira server fqdn.
+     - name: jira_fqdn
+       value: <jira fqdn>
+       valueType: text
+       options:
+         description: 'Jira URL'
+         override:
+           type: allowed
+# Here we are providing the jira server api user.
+     - name: jira_api_user
+       value: <api user>
+       valueType: text
+       options:
+         description: 'Jira API User'
+         override:
+           type: allowed
+# Here we are providing the jira server api token.
+     - name: jira_api_token
+       value: <api token>
+       valueType: text
+       options:
+         description: 'Jira API Token'
+         override:
+           type: allowed
+# Here we are providing the jira ticket text.
+     - name: jira_ticket_text
+       value: "Approval request for the environment creation $(environment.name)$"
+       valueType: text
+       options:
+         description: 'Jira ticket text'
+         override:
+           type: allowed
+# Here we are providing the jira ticket priority.
+     - name: jira_ticket_priority
+       value: "P1"
+       valueType: text
+       options:
+         description: 'Jira ticket priority'
+         override:
+          type: allowed
+          # Here we are providing in which project jira ticket will be created.
+     - name: jira_ticket_project
+       value: "EM"
+       valueType: text
+       options:
+          description: 'Jira ticket project'
+          override:
+            type: allowed
+       config:
+         type: function
+         timeoutSeconds: 600
+         function:
+           cpuLimitMilli: '50'
+           memoryLimitMi: '128'
+           language: python
+           languageVersion: '3.6'
+           maxConcurrency: 10
+           numReplicas: 1
+           source: |
+            from typing import *
+            import requests
+            from requests.auth import HTTPBasicAuth
+            import json
+            import time
+            import sys
+            import os
+            from logging import Logger
+            from python_sdk_rafay_workflow import sdk
+
+
+            from requests.adapters import HTTPAdapter
+
+
+            headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+
+
+            class Config:
+                ### generic
+                debug: str ## true or false
+
+
+                ### snow connection configuration
+                servicenow_fqdn: str
+                servicenow_api_user: str
+                servicenow_api_token: str
+                servicenow_url: str
+                servicenow_approved_state: str
+                servicenow_denied_state: str
+
+
+                ### snow ticket configuration
+                short_description: str
+                description: str
+                assigned_to: str
+                u_notifiers: str
+                priority: str
+                impact: str
+
+
+            def create_ticket(logger: Logger, conf: Config):
+                data = {
+                    "short_description": conf.short_description,
+                    "description": conf.description,
+                    "assigned_to": conf.assigned_to,
+                    "u_notifiers": conf.u_notifiers,
+                    "priority" : conf.priority,
+                    "impact" : conf.impact,
+                }
+
+
+                #logger.info(f" url: {url} api_user: {conf.api_user}, api_token: {conf.api_token}")
+                response = requests.post(conf.servicenow_url, auth=(conf.servicenow_api_user, conf.servicenow_api_token), headers=headers, data=json.dumps(data))
+                
+                if response.status_code == 201:
+                    ticket = response.json()['result']
+                    logger.info(f"Ticket created with number: {ticket['number']}")
+                    return ticket  # Return the unique ticket ID
+                else:
+                    logger.info(f"Failed to create ticket: {response.status_code}, {response.text}")
+                    return None
+
+
+            def get_state(logger: Logger, conf: Config, sys_id):
+                poll_url = f'{conf.servicenow_url}/{sys_id}'
+                status = "1"
+
+
+                response = requests.get(poll_url, auth=(conf.servicenow_api_user, conf.servicenow_api_token), headers=headers)
+                if response.status_code == 200:
+                    ticket = response.json()['result']
+                    logger.info(f"Current State: {ticket['state']}") 
+                    status = ticket['state']
+                else:
+                    logger.info(f"Failed to create ticket: {response.status_code}, {response.text}")
+                return status
+
+
+            def handle(logger: Logger, request: Dict[str, Any]) -> Dict[str, Any]:
+                try:
+                    conf = Config()
+                    conf.servicenow_fqdn = request['servicenow_fqdn'] if 'servicenow_fqdn' in request else ''
+                    conf.servicenow_api_user = request['servicenow_api_user'] if 'servicenow_api_user' in request else ''
+                    conf.servicenow_api_token = request['servicenow_api_token'] if 'servicenow_api_token' in request else ''
+                    conf.servicenow_url = f'https://{conf.servicenow_fqdn}/api/now/table/incident'
+                    conf.servicenow_approved_state = request['servicenow_approved_state'] if 'servicenow_approved_state' in request else ''
+                    conf.servicenow_denied_state = request['servicenow_denied_state'] if 'servicenow_denied_state' in request else ''
+                  
+
+
+                    conf.short_description = request['short_description'] if 'short_description' in request else ''
+                    conf.description = request['description'] if 'description' in request else ''
+                    conf.assigned_to = request['assigned_to'] if 'assigned_to' in request else ''
+                    conf.u_notifiers = request['u_notifiers'] if 'u_notifiers' in request else ''
+                    conf.priority = request['priority'] if 'priority' in request else ''
+                    conf.impact = request['impact'] if 'impact' in request else ''
+
+
+                    logger.info("Checking if ticket exists")
+                    counter = request['previous'].get('counter', 0) if 'previous' in request else 0
+                    id = request['previous'].get('ticket_id', '') if 'previous' in request else ''
+                    t_url = request['previous'].get('ticket_url', '') if 'previous' in request else ''
+                    t_no = request['previous'].get('ticket_number', '') if 'previous' in request else ''
+                    if id:
+                        logger.info(f"Ticket exists with {id}")
+                        status=get_state(logger, conf, id)
+                    else:
+                        ticket = create_ticket(logger, conf)
+                        id = ticket['sys_id']
+                        t_url = ticket['opened_by']['link']
+                        t_no = ticket['number']
+                        logger.info(f"Ticket created with {id}")
+                        status=get_state(logger, conf, id)
+                except ConnectionError as e:
+                    logger.error(f"ConnectionError: {str(e)}")
+                    raise sdk.TransientException(f"ConnectionError: {str(e)}")
+                except Exception as e:
+                    logger.error(f"FailedException: {str(e)}")
+                    raise sdk.FailedException(f"FailedException: {str(e)}")
+
+
+                if status == conf.servicenow_approved_state:
+                    logger.info(f"ServiceNow ticket {t_url} is Resolved")
+                    return {"status": "Resolved", "ticket_id":id, "ticket_number":t_no, "ticket_url": t_url, "counter":counter+1}
+                elif status == conf.servicenow_denied_state:
+                    logger.info(f"ServiceNow ticket {t_url} is Denied")
+                    raise sdk.FailedException(f"ServiceNow ticket {t_url} is Denied", ticket_id=id, ticket_number=t_no, ticket_url=t_url)
+                else:
+                    logger.info(f"Waiting for the ServiceNow ticket {t_url} to be approved")
+                    raise sdk.ExecuteAgainException(f"Waiting for the ServiceNow ticket {t_url} to be approved", ticket_id=id, ticket_number=t_no, ticket_url=t_url, counter=counter+1)
+              
+outputs: {}
