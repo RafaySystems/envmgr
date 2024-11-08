@@ -13,7 +13,7 @@ spec:
   repositoryOptions:
 # Here we are associating code in repository to the resource template
    branch: dev
-   directoryPath: development-guide-templates/terraform/vpc
+   directoryPath: development-guide-templates/terraform/eks-vpc
    name: envmgr
   variables:
 # Here we are defining input collection variable for aws_region which in turn would be passed onto the underlying IaC code
