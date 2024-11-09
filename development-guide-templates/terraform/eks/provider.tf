@@ -6,6 +6,7 @@ terraform {
       source = "registry.terraform.io/RafaySystems/rafay"
     }
   }
+  required_version = ">= 1.4.4"
 }
 
 provider "aws" {
