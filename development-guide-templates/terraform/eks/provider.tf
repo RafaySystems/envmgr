@@ -1,8 +1,9 @@
 terraform {
+  backend "local" {}
   required_providers {
     rafay = {
-      version = ">= 0.1"
-      source  = "registry.terraform.io/RafaySystems/rafay"
+      version = "= 1.1.15"
+      source = "registry.terraform.io/RafaySystems/rafay"
     }
   }
 }
