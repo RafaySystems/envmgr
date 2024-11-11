@@ -1,3 +1,8 @@
+variable "aws_region" {
+  description = "Configuring AWS as provider"
+  type        = string
+  default     = "us-west-2"
+}
 variable "email_tag" {
   description = "resource tag"
   default = "test@rafay.co"

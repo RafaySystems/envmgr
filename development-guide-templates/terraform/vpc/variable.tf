@@ -10,17 +10,10 @@ variable "vpc_cidr" {
  default     = "10.0.0.0/16"
 }
 
-
 variable "aws_region" {
   description = "The AWS region"
   type        = string
   default     = "us-west-2"
-}
-
-variable "prefix" {
-  description = "The prefix for the VPC"
-  type        = string
-  default     = "em"
 }
 
 variable "tags" {
@@ -28,5 +21,7 @@ variable "tags" {
  type        = map(string)
  default = {
    "env" = "qa"
+   "email" = "test@rafay.co"
  }
 }
+

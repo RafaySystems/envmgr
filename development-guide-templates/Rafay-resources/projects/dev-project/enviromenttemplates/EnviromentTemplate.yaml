@@ -9,7 +9,7 @@ spec:
     - name: dev-agent
   contexts:
     # Here we are associating a configcontext that contains information related to AWS credentials. Reason a configcontext is used here , so that the same can be associated to multiple other env templates
-    - name: aws-config-context
+    - name: rafay-config-context
   resources:
     # Here we are associating first resource template VPCResourceTemplate and its version.
     - kind: resourcetemplate

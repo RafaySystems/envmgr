@@ -43,5 +43,5 @@ spec:
       override:
         type: allowed
     value: $(resource.eks-resource-template.output.eks_cluster_name.value)$
-    valueType: text
+    valueType: expression
   version: v1

@@ -2,7 +2,7 @@ module "vpc" {
  source = "terraform-aws-modules/vpc/aws"
 
 
- name = "em-vpc-${var.prefix}"
+ name = var.vpc_name
  cidr = var.vpc_cidr
 
 
@@ -16,7 +16,5 @@ module "vpc" {
  one_nat_gateway_per_az = false
 
 
- tags = {
-   Name = "em-vpc-${var.prefix}"
- }
+ tags = var.tags
 }
