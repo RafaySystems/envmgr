@@ -68,6 +68,7 @@ resource "rafay_workload" "deh" {
       }
     }
   }
+  depends_on = [rafay_namespace.namespace,local_file.deh_yaml]
 }
 
 resource "aws_route53_record" "deh" {
