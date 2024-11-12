@@ -8,7 +8,7 @@ resource "random_string" "resource_code" {
 }
 
 resource "local_file" "deh_yaml" {
-  content = templatefile("templates/deh.tftpl", {
+  content = templatefile("${path.module}/templates/deh.tftpl", {
     image  = var.image
     model  = var.model
     ingress_host = "${var.name}.${var.ingress_domain}"
