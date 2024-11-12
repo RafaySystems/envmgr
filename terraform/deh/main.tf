@@ -75,6 +75,6 @@ resource "aws_route53_record" "deh" {
   name    = "${var.name}.${var.ingress_domain}"
   type    = "A"
   ttl     = 300
-  records = [var.ingress_controller_ips]
+  records = var.ingress_controller_ips
 }
 
