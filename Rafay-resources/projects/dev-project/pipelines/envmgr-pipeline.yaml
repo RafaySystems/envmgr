@@ -1,0 +1,30 @@
+apiVersion: gitops.k8smgmt.io/v3
+kind: Pipeline
+metadata:
+  name: envmgr-pipeline
+  project: dev-project
+spec:
+  active: true
+  stages:
+  - config:
+      destinationRepo: {}
+      gitToSystemSync: true
+      includedResources:
+      - name: '*'
+      sourceAsDestination: true
+      sourceRepo:
+        path:
+          name: Rafay-resources
+        repository: envmgr
+        revision: dev
+      systemToGitSync: true
+    name: envmgr-sync
+    type: SystemSync
+  triggers:
+  - config:
+      repo:
+        provider: Github
+        repository: envmgr
+        revision: dev
+    name: envmgr-trigger
+    type: Webhook

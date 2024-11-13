@@ -1,0 +1,7 @@
+apiVersion: system.k8smgmt.io/v3
+kind: Project
+metadata:
+  name: dev-project
+spec:
+  driftWebhook:
+    enabled: true

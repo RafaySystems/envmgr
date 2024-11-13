@@ -1,0 +1,16 @@
+apiVersion: integrations.k8smgmt.io/v3
+kind: Repository
+metadata:
+  name: default-stable-helm
+  project: dev-project
+spec:
+  endpoint: https://charts.helm.sh/stable
+  options: {}
+  type: Helm
+status:
+  projects:
+  - projectId: kv465ek
+    repositoryId: k53rzd2
+  webhookConfig:
+    webhookSecret: e07b5b688bfd3ce41d8d2ab4b2757efe77061ca174e70e0cde0eb80625ef4037
+    webhookURL: https://console.rafay.dev/v2/config/webhook/repository/k53rzd2

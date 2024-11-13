@@ -1,0 +1,16 @@
+apiVersion: integrations.k8smgmt.io/v3
+kind: Repository
+metadata:
+  name: default-cert-manager
+  project: dev-project
+spec:
+  endpoint: https://github.com/jetstack/cert-manager.git
+  options: {}
+  type: Git
+status:
+  projects:
+  - projectId: kv465ek
+    repositoryId: ko0l8nk
+  webhookConfig:
+    webhookSecret: 51fa2af1030c6e02509a66b6593e82f2a552f59fc17df7dd6aa0fb86717bd1ec
+    webhookURL: https://console.rafay.dev/v2/config/webhook/repository/ko0l8nk

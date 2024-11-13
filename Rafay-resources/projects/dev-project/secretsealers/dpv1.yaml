@@ -1,0 +1,8 @@
+apiVersion: integrations.k8smgmt.io/v3
+kind: SecretSealer
+metadata:
+  name: dpv1
+  project: dev-project
+spec:
+  type: KubeSeal
+  version: v-1

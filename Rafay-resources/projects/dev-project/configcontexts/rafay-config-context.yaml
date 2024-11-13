@@ -1,0 +1,45 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ConfigContext
+metadata:
+  name: rafay-config-context
+  project: dev-project
+spec:
+  envs:
+  - key: RCTL_API_KEY
+    options:
+      sensitive: true
+    value: sealed://RCTL_API_KEY
+  - key: RCTL_API_SECRET
+    options:
+      sensitive: true
+    value: sealed://RCTL_API_SECRET
+  - key: RCTL_REST_ENDPOINT
+    options: {}
+    value: console.rafay.dev
+  - key: RCTL_PROJECT
+    options: {}
+    value: dev-project
+  secret:
+    name: file://artifacts/rafay-config-context/sealed-secret.yaml
+  variables:
+  - name: aws_access_key_id
+    options:
+      override:
+        type: allowed
+      sensitive: true
+    value: sealed://variables.0
+    valueType: text
+  - name: aws_secret_access_key
+    options:
+      description: tOXv202btw4L2df0Qzbp5C/OMXllvdfULFw5+skq
+      override:
+        type: allowed
+      sensitive: true
+    value: sealed://variables.1
+    valueType: text
+  - name: aws_region
+    options:
+      override:
+        type: allowed
+    value: us-west-2
+    valueType: text

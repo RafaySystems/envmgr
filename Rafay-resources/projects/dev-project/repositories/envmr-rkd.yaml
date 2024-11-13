@@ -1,0 +1,23 @@
+apiVersion: integrations.k8smgmt.io/v3
+kind: Repository
+metadata:
+  name: envmr-rkd
+  project: dev-project
+spec:
+  agents:
+  - {}
+  credentials:
+    password: sealed://credentials.password
+    username: rkrishnadudyala
+  endpoint: https://github.com/rkrishnadudyala/envmgr1
+  options: {}
+  secret:
+    name: file://artifacts/envmr-rkd/sealed-secret.yaml
+  type: Git
+status:
+  projects:
+  - projectId: kv465ek
+    repositoryId: 2l75zqm
+  webhookConfig:
+    webhookSecret: b96b9515e9928525fbebfad506de32a05d6a3047f55efa0b2384385b42609d03
+    webhookURL: https://console.rafay.dev/v2/config/webhook/repository/2l75zqm

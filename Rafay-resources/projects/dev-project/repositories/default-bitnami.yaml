@@ -1,0 +1,16 @@
+apiVersion: integrations.k8smgmt.io/v3
+kind: Repository
+metadata:
+  name: default-bitnami
+  project: dev-project
+spec:
+  endpoint: https://charts.bitnami.com/bitnami
+  options: {}
+  type: Helm
+status:
+  projects:
+  - projectId: kv465ek
+    repositoryId: 286jd4m
+  webhookConfig:
+    webhookSecret: 17f588911409625ed24e2e7b19bd1e02e8620911745c8fcf9842abfbc55a0dad
+    webhookURL: https://console.rafay.dev/v2/config/webhook/repository/286jd4m

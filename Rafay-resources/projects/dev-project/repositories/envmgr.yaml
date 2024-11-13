@@ -1,0 +1,27 @@
+apiVersion: integrations.k8smgmt.io/v3
+kind: Repository
+metadata:
+  name: envmgr
+  project: dev-project
+spec:
+  agents:
+  - name: dev-agent
+  credentials:
+    password: sealed://credentials.password
+    username: andrew.osborne@rafay.co
+  endpoint: https://github.com/RafaySystems/envmgr
+  options:
+    provider: Github
+  secret:
+    name: file://artifacts/envmgr/sealed-secret.yaml
+  type: Git
+status:
+  agents:
+  - id: 72dex0m
+    name: dev-agent
+  projects:
+  - projectId: kv465ek
+    repositoryId: 2l75n7m
+  webhookConfig:
+    webhookSecret: 96869cd368fc681d40882f6f58740db29fa36682e7d3bd787f70dd8a11ad9490
+    webhookURL: https://console.rafay.dev/v2/config/webhook/repository/2l75n7m

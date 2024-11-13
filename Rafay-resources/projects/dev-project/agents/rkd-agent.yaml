@@ -1,0 +1,9 @@
+apiVersion: gitops.k8smgmt.io/v3
+kind: Agent
+metadata:
+  name: rkd-agent
+  project: dev-project
+spec:
+  active: true
+  type: Docker
+  version: r2.11.0

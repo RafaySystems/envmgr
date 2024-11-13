@@ -1,0 +1,46 @@
+apiVersion: infra.k8smgmt.io/v3
+kind: Cluster
+metadata:
+  name: andrew-devguide
+  project: dev-project
+spec:
+  blueprint:
+    name: minimal
+    version: latest
+  cloudCredentials: kubeflow-creds
+  config:
+    controlPlaneVersion: "1.29"
+    features:
+      enableComputeEnginePersistentDiskCSIDriver: true
+    gcpProject: qa-automation-371111
+    location:
+      config:
+        zone: us-west1-c
+      type: zonal
+    network:
+      access:
+        config:
+          controlPlaneIPRange: 172.188.0.0/28
+          disableSNAT: true
+          enableAccessControlPlaneExternalIP: true
+          enableAccessControlPlaneGlobal: true
+        type: private
+      dataPlaneV2: ADVANCED_DATAPATH
+      enableVPCNativetraffic: true
+      maxPodsPerNode: 110
+      name: default
+      subnetName: default
+    nodePools:
+    - machineConfig:
+        bootDiskSize: 100
+        bootDiskType: pd-standard
+        imageType: COS_CONTAINERD
+        machineType: e2-standard-4
+      name: default-nodepool
+      nodeVersion: "1.29"
+      size: 4
+      upgradeSettings:
+        config:
+          maxSurge: 1
+        strategy: SURGE
+  type: gke

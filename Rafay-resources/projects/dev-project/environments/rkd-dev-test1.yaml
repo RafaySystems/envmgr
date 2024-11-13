@@ -1,0 +1,58 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: Environment
+metadata:
+  name: rkd-dev-test1
+  project: dev-project
+spec:
+  agents:
+  - name: rkd-agent
+  template:
+    name: app-enviroment-template
+    version: v1-rkd
+    versionState: draft
+  variables:
+  - name: aws_region
+    options:
+      override:
+        type: allowed
+      required: true
+    value: us-west-2
+    valueType: text
+  - name: cluster_name
+    options:
+      override:
+        type: allowed
+      required: true
+    value: rkd-dev-test1
+    valueType: text
+  - name: cluster_project
+    options:
+      override:
+        type: allowed
+      required: true
+    value: dev-project
+    valueType: text
+  - name: eks_cluster_name
+    options:
+      override:
+        type: allowed
+    value: rkd-dev-test1
+    valueType: text
+  - name: eks_cluster_region
+    options:
+      override:
+        type: allowed
+    value: us-west-2
+    valueType: text
+  - name: project
+    options:
+      override:
+        type: allowed
+    value: dev-project
+    valueType: text
+  - name: eks_cluster_project
+    options:
+      override:
+        type: allowed
+    value: dev-project
+    valueType: text
