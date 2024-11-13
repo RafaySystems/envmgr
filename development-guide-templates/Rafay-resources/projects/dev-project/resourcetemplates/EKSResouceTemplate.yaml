@@ -14,7 +14,7 @@ spec:
     # Here we are associating code in repository to the resource template
     branch: dev-guide-templates
     directoryPath: development-guide-templates/terraform/eks
-    name: envmr
+    name: envmgr
   variables:
     - name: cluster_name
       valueType: text

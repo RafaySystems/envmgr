@@ -12,7 +12,7 @@ spec:
       backendType: system
   repositoryOptions:
     # Here we are associating code in repository to the resource template
-    name: envmr
+    name: envmgr
     branch: dev-guide-templates
     directoryPath: development-guide-templates/terraform/vpc
   version: v1

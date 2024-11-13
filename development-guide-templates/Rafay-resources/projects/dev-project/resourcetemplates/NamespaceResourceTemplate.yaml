@@ -14,7 +14,7 @@ spec:
   repositoryOptions:
     branch: dev-guide-templates
     directoryPath: development-guide-templates/terraform/namespace
-    name: envmr
+    name: envmgr
   variables:
     # Here we specify the project name.
     - name: project
