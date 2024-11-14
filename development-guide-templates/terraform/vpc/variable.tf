@@ -25,3 +25,14 @@ variable "tags" {
  }
 }
 
+variable "aws_access_key_id" {
+  description = "aws access key id"
+  default = ""
+  sensitive = true
+}
+
+variable "aws_secret_access_key" {
+  description = "aws secret key"
+  default = ""
+  sensitive = true
+}

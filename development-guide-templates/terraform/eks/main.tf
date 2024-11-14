@@ -1,20 +1,20 @@
 resource "rafay_cloud_credential" "aws_creds" {
   name         = var.aws_cloud_provider_name
-  project      = var.eks_cluster_project
+  project      = var.project
   description  = "description"
   type         = "cluster-provisioning"
   providertype = "AWS"
   awscredtype  = "accesskey"
-  accesskey    = var.aws_cloud_provider_access_key
-  secretkey    = var.aws_cloud_provider_secret_key
+  accesskey    = var.aws_access_key_id
+  secretkey    = var.aws_secret_access_key
 }
 
 resource "rafay_eks_cluster" "ekscluster-basic" {
   cluster {
     kind = "Cluster"
     metadata {
-      name    = var.eks_cluster_name
-      project = var.eks_cluster_project
+      name    = var.cluster_name
+      project = var.project
     }
     spec {
       type           = "eks"
@@ -28,13 +28,10 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
     apiversion = "rafay.io/v1alpha5"
     kind       = "ClusterConfig"
     metadata {
-      name    = var.eks_cluster_name
-      region  = var.eks_cluster_region
+      name    = var.cluster_name
+      region  = var.aws_region
       version = var.eks_cluster_version
-      tags = {
-        env = "dev"
-        email = var.email_tag
-      }
+      tags = var.tags
     }
     vpc {
       subnets {
@@ -83,10 +80,7 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
         app = "infra"
         dedicated = "true"
       }
-      tags = {
-        env = "dev"
-        email = var.email_tag
-      }
+      tags = var.tags
     }
   }
 }
