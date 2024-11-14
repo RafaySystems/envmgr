@@ -1,0 +1,39 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  name: app-environment-template1
+  project: dev-project
+spec:
+  agents:
+  - name: dev-agent
+  contexts:
+  - name: rafay-config-context
+  resources:
+  - kind: resourcetemplate
+    name: vpc-resource-template
+    resourceOptions:
+      version: v1
+    type: dynamic
+  - dependsOn:
+    - name: vpc-resource-template
+    kind: resourcetemplate
+    name: eks-resource-template
+    resourceOptions:
+      version: v1
+    type: dynamic
+  - dependsOn:
+    - name: eks-resource-template
+    kind: resourcetemplate
+    name: namespace-resource-template
+    resourceOptions:
+      version: v1
+    type: dynamic
+  variables:
+  - name: cluster_name
+    options:
+      override:
+        type: allowed
+      required: true
+    valueType: text
+  version: v1
+  versionState: active
