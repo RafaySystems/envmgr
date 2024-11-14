@@ -10,7 +10,6 @@ resource "random_string" "resource_code" {
 resource "local_file" "deh_yaml" {
   content = templatefile("${path.module}/templates/deh.tftpl", {
     image  = var.image
-    model  = var.model
     ingress_host = "${var.name}.${var.ingress_domain}"
     cpu_request = var.cpu_request
     memory_request = var.memory_request
