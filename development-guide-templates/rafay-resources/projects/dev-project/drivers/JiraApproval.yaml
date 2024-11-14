@@ -1,0 +1,337 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: Driver
+metadata:
+  name: system-jira-v01
+  project: catalog-templates
+spec:
+  inputs:
+    - name: inputvars
+      data:
+        variables:
+          - name: debug
+            value: "False"
+            valueType: TEXT
+            options:
+              description: "Enables the verbose in the logs"
+              override:
+                type: allowed
+          # jira connection parameters
+          - name: jira_fqdn
+            value: <jira fqdn>
+            valueType: TEXT
+            options:
+              description: "Jira FQDN"
+              override:
+                type: allowed
+          - name: jira_api_user
+            value: <api user>
+            valueType: TEXT
+            options:
+              description: "Jira API User"
+              override:
+                type: allowed
+          - name: jira_api_token
+            value: <api token>
+            valueType: TEXT
+            options:
+              description: "Jira API Key"
+              override:
+                type: allowed
+          - name: jira_approved_state
+            value: "Approved"
+            valueType: TEXT
+            options:
+              description: "Jira ticket state for approval"
+              override:
+                type: allowed
+          - name: jira_denied_state
+            value: "Denied"
+            valueType: TEXT
+            options:
+              description: "Jira ticket state for denied"
+              override:
+                type: allowed
+          - name: jira_project
+            value: "EM"
+            valueType: TEXT
+            options:
+              description: "Jira project name"
+              override:
+                type: allowed
+          # Jira ticket parameters
+          - name: short_description
+            value: "Jira ticket from Approval"
+            valueType: TEXT
+            options:
+              description: "Jira ticket text"
+              override:
+                type: allowed
+          - name: description
+            value: "Jira ticket from Approval description"
+            valueType: TEXT
+            options:
+              description: "Jira ticket description"
+              override:
+                type: allowed
+          - name: assignee
+            value: <api user>
+            valueType: TEXT
+            options:
+              description: "Jira ticket state for denied"
+              override:
+                type: allowed
+          - name: priority
+            value: "Low"
+            valueType: TEXT
+            options:
+              description: "Jira ticket priority"
+              override:
+                type: allowed
+  config:
+    type: function
+    timeoutSeconds: 300
+    pollingConfig:
+      repeat: 15s
+      until: 1h
+    function:
+      cpuLimitMilli: "50"
+      memoryLimitMi: "128"
+      language: python
+      languageVersion: "3.6"
+      maxConcurrency: 10
+      numReplicas: 1
+      source: |
+        from typing import *
+        import requests
+        from requests.auth import HTTPBasicAuth
+        import json
+        from logging import Logger
+        from python_sdk_rafay_workflow import sdk
+        import re
+        from requests.adapters import HTTPAdapter
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        class Config:
+            ### generic
+            debug: str  # true or false
+
+            ### jira connection configuration
+            jira_fqdn: str
+            jira_api_user: str 
+            jira_api_token: str 
+            jira_approved_state: str
+            jira_denied_state: str
+            jira_project: str
+
+            ### jira ticket configuration
+            short_description: str
+            description: str 
+            assignee: str
+            priority: str 
+
+            ## internal
+            assignee_id: str
+            jira_id: str
+
+        def validate_inputs(request: Dict[str, Any]) -> None:
+            # Check jira_fqdn
+            if not request.get('jira_fqdn'):
+                raise ValueError("jira_fqdn can not be empty.")
+            if not re.match(r'^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', request['jira_fqdn']):
+                raise ValueError("jira_fqdn must be a valid domain format.")
+            
+            # Check jira_api_user
+            if not request.get('jira_api_user'):
+                raise ValueError("jira_api_user can not be empty.")
+            if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', request['jira_api_user']):
+                raise ValueError("jira_api_user must be a valid email format.")
+            
+            # Check jira_api_token
+            if not request.get('jira_api_token'):
+                raise ValueError("jira_api_token can not be empty.")
+            
+            # Check jira_project
+            if not request.get('jira_project'):
+                raise ValueError("jira_project can not be empty.")
+            
+            # Check assignee
+            if not request.get('assignee'):
+                raise ValueError("assignee can not be empty.")
+            if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', request['assignee']):
+                raise ValueError("assignee must be a valid email format.")
+            
+            # Check priority
+            priority = request.get('priority')
+            if not priority:
+                raise ValueError("priority can not be empty.")
+            
+
+        def create_issue(logger: Logger, conf: Config):
+            url = "https://" + conf.jira_fqdn + "/rest/api/3/issue"
+            auth = HTTPBasicAuth(conf.jira_api_user, conf.jira_api_token)
+
+            headers = {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+
+            payload = json.dumps({
+                "fields": {
+                    "assignee": {
+                        "accountId": conf.assignee_id
+                    },
+                    "description": {
+                        "type": "doc",
+                        "version": 1,
+                        "content": [
+                            {
+                                "type": "paragraph",
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": conf.short_description,
+                                    }
+                                ],
+                            }
+                        ],
+                    },
+                    "issuetype": {
+                        "name": "Task"
+                    },
+                    "project": {
+                        "key": conf.jira_project
+                    },
+                    "priority": {
+                        "name": conf.priority
+                    },
+                    "summary": conf.description,
+                },
+            })
+
+            if conf.debug == True:
+                logger.debug("Request to the server for Jira ticket creation")
+                logger.debug(payload)
+
+            response = requests.request(
+                "POST",
+                url,
+                data=payload,
+                headers=headers,
+                auth=auth
+            )
+
+            if conf.debug == True:
+                logger.debug(f"Response from the server for the Jira ticket {conf.jira_id}")
+                logger.debug(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
+
+            if response.status_code == 201:
+                logger.info("Jira ticket created successfully")
+                return response.json()
+            else:
+                logger.error(f"Failed to create Jira ticket: {response.status_code}, {response.text}")
+                return None
+
+        def get_user(logger: Logger, conf: Config, user: str):
+            url = "https://" + conf.jira_fqdn + "/rest/api/3/user/search"
+            auth = HTTPBasicAuth(conf.jira_api_user, conf.jira_api_token)
+            headers = {
+                "Accept": "application/json"
+            }
+
+            query = {
+                'query': user
+            }
+            response = requests.request(
+                "GET",
+                url,
+                headers=headers,
+                params=query,
+                auth=auth
+            )
+
+            if conf.debug == True:
+                logger.debug(f"Response from the server for the user: {user}")
+                logger.debug(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
+
+            return json.loads(response.text)[0]['accountId']
+
+        def get_status(logger: Logger, conf: Config):
+            url = "https://" + conf.jira_fqdn + "/rest/api/3/issue/" + conf.jira_id
+            status = "Wait"
+            auth = HTTPBasicAuth(conf.jira_api_user, conf.jira_api_token)
+            headers = {
+                "Accept": "application/json"
+            }
+            response = requests.request(
+                "GET",
+                url,
+                headers=headers,
+                auth=auth
+            )
+
+            if conf.debug == True:
+                logger.debug(f"Response from the server for the ticket status: {conf.jira_id}")
+                logger.debug(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
+
+            status = json.loads(response.text)['fields']['status']['name']
+            return status
+
+        def handle(logger: Logger, request: Dict[str, Any]) -> Dict[str, Any]:
+            try:
+                conf = Config()
+                conf.debug = request['debug'] if 'debug' in request else '' 
+                conf.jira_fqdn = request['jira_fqdn'] if 'jira_fqdn' in request else '' 
+                conf.jira_api_user = request['jira_api_user'] if 'jira_api_user' in request else '' 
+                conf.jira_api_token = request['jira_api_token'] if 'jira_api_token' in request else '' 
+                conf.jira_approved_state = request['jira_approved_state'] if 'jira_approved_state' in request else ''
+                conf.jira_denied_state = request['jira_denied_state'] if 'jira_denied_state' in request else ''
+                
+                conf.short_description = request['short_description'] if 'short_description' in request else '' 
+                conf.description = request['description'] if 'description' in request else '' 
+                conf.assignee = request['assignee'] if 'assignee' in request else ''
+                conf.jira_project = request['jira_project'] if 'jira_project' in request else ''
+                conf.priority = request['priority'] if 'priority' in request else '' 
+
+                # Validate all required fields
+                validate_inputs(request)
+
+                logger.info("Checking if ticket exists")
+                counter = request['previous'].get('counter', 0) if 'previous' in request else 0
+                id = request['previous'].get('ticket_id', '') if 'previous' in request else ''
+                key = request['previous'].get('ticket_key', '') if 'previous' in request else ''
+                conf.jira_id = id
+
+                if id:
+                    status = get_status(logger, conf)
+                else:
+                    logger.info("Creating ticket")
+                    accountId = get_user(logger, conf, conf.assignee)
+                    conf.assignee_id = accountId
+
+                    ticket = create_issue(logger, conf)
+
+                    id = ticket['id']
+                    key = ticket['key']
+                    conf.jira_id = id
+                    logger.info(f"Ticket created {key}")
+                    status = get_status(logger, conf)
+            except ConnectionError as e:
+                logger.error(f"Failed to connect to the Jira server: {str(e)}")
+                raise sdk.TransientException(f"Failed to connect to the Jira server: {str(e)}")
+            except Exception as e:
+                logger.error(f"FailedException: {str(e)}")
+                raise sdk.FailedException(f"FailedException: {str(e)}")
+
+            if status == conf.jira_approved_state:
+                logger.info(f"Jira ticket no {key} with id {id} is Approved")
+                return {"status": "Resolved", "ticket_id": key, "counter": counter + 1}
+            elif status == conf.jira_denied_state:
+                logger.info(f"Jira ticket {id} is Denied")
+                raise sdk.FailedException(f"Jira ticket no {key} with id {id} is Denied", ticket_id=id, ticket_key=key)
+            else:
+                logger.info(f"Waiting for the Jira ticket {id} to be approved")
+                raise sdk.ExecuteAgainException(f"Waiting for the Jira ticket no {key} with id {id} to be approved", ticket_id=id, ticket_key=key, counter=counter + 1)

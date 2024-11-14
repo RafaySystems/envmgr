@@ -1,0 +1,33 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: vpc-resource-template
+  project: dev-project
+spec:
+  # Here we are defining provider as opentofu to use, if no providerOptions is mentioned then Rafay will use latest version
+  provider: opentofu
+  providerOptions:
+    openTofu:
+      refresh: true
+      backendType: system
+  repositoryOptions:
+    # Here we are associating code in repository to the resource template
+    name: envmgr
+    branch: dev-guide-templates
+    directoryPath: development-guide-templates/terraform/vpc
+  variables:
+    - name: vpc_name
+      valueType: text
+      value: example-vpc
+      options:
+        description: VPC name
+        override:
+          type: allowed
+    - name: vpc_cidr
+      valueType: text
+      value: 10.0.0.0/16
+      options:
+        description: CIDR block
+        override:
+          type: allowed
+  version: v1

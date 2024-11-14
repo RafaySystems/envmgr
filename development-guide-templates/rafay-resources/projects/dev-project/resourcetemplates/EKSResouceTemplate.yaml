@@ -1,0 +1,45 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: eks-resource-template
+  project: dev-project
+spec:
+  # Here we are defining provider as opentofu to use, if no providerOptions is mentioned then Rafay will use latest version 
+  provider: opentofu
+  providerOptions:
+    openTofu:
+      refresh: true
+      backendType: system
+  repositoryOptions:
+    # Here we are associating code in repository to the resource template
+    branch: dev-guide-templates
+    directoryPath: development-guide-templates/terraform/eks
+    name: envmgr
+  variables:
+    - name: cluster_name
+      valueType: text
+      value: EKSClusterName
+      options:
+        override:
+          type: allowed
+    # Here we using the output from the VPCResourceTemplate's private_subnets information and use it for the eks_public_subnets.
+    - name: eks_public_subnets
+      valueType: expression
+      value: $(resource."vpc-resource-template".output.public_subnets.value)$
+      options:
+        override:
+          type: notallowed
+    # Here we using the output from the VPCResourceTemplate's private_subnets information and use it for the eks_private_subnets.
+    - name: eks_private_subnets
+      valueType: expression
+      value: $(resource."vpc-resource-template".output.private_subnets.value)$
+      options:
+        override:
+          type: notallowed
+    - name: project
+      valueType: text
+      value: dev-project
+      options:
+        override:
+          type: allowed
+  version: v1
