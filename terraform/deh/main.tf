@@ -5,6 +5,7 @@ resource "random_string" "resource_code" {
   keepers = {
     id = "${file("deh.yaml")}"
   }
+  depends_on = [local_file.deh_yaml]
 }
 
 resource "local_file" "deh_yaml" {
