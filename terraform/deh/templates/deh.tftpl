@@ -16,6 +16,7 @@ spec:
       containers:
         - name: tgi-container
           image: ${image}
+          imagePullPolicy: ifNotPresent
           resources:
             limits:
               nvidia.com/gpu: ${gpu_limit}
