@@ -1,12 +1,12 @@
 output "vpc_name" {
- value = module.vpc.name
+  value = module.vpc.name
 }
 output "vpc_id" {
- value = module.vpc.vpc_id
+  value = module.vpc.vpc_id
 }
 output "private_subnets" {
- value = module.vpc.private_subnets
+  value = module.vpc.private_subnets
 }
 output "public_subnets" {
- value = module.vpc.public_subnets
+  value = module.vpc.public_subnets
 }

@@ -1,15 +1,15 @@
 variable "target_cluster_name" {
   description = "name of the eks cluster"
-  default = "eks-cluster-1"
+  default     = "eks-cluster-1"
 }
 
 variable "project" {
   description = "name of the project where the cluster resides"
-  type    = string
-  default = "eaas"
+  type        = string
+  default     = "eaas"
 }
 
 variable "username" {
   description = "Rafay username"
-  type    = string
+  type        = string
 }

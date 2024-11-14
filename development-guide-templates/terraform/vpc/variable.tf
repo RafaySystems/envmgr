@@ -1,13 +1,13 @@
 variable "vpc_name" {
- description = "VPC NAME"
- default     = "example-vpc"
- type        = string
+  description = "VPC NAME"
+  default     = "example-vpc"
+  type        = string
 }
 
 variable "vpc_cidr" {
- description = "CIDR block for main"
- type        = string
- default     = "10.0.0.0/16"
+  description = "CIDR block for main"
+  type        = string
+  default     = "10.0.0.0/16"
 }
 
 variable "aws_region" {
@@ -17,22 +17,22 @@ variable "aws_region" {
 }
 
 variable "tags" {
- description = "AWS Tags"
- type        = map(string)
- default = {
-   "env" = "qa"
-   "email" = "test@rafay.co"
- }
+  description = "AWS Tags"
+  type        = map(string)
+  default = {
+    "env"   = "qa"
+    "email" = "test@rafay.co"
+  }
 }
 
 variable "aws_access_key_id" {
   description = "aws access key id"
-  default = ""
-  sensitive = true
+  default     = ""
+  sensitive   = true
 }
 
 variable "aws_secret_access_key" {
   description = "aws secret key"
-  default = ""
-  sensitive = true
+  default     = ""
+  sensitive   = true
 }

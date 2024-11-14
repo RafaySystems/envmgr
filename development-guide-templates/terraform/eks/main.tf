@@ -31,7 +31,7 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
       name    = var.cluster_name
       region  = var.aws_region
       version = var.eks_cluster_version
-      tags = var.tags
+      tags    = var.tags
     }
     vpc {
       subnets {
@@ -40,7 +40,7 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
 
           content {
             name = private.value
-            id = private.value
+            id   = private.value
           }
         }
         dynamic "public" {
@@ -48,7 +48,7 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
 
           content {
             name = public.value
-            id = public.value
+            id   = public.value
           }
         }
       }
@@ -66,18 +66,18 @@ resource "rafay_eks_cluster" "ekscluster-basic" {
           auto_scaler   = true
         }
       }
-      instance_type    = var.eks_cluster_node_instance_type
-      desired_capacity = 1
-      min_size         = 1
-      max_size         = 2
-      max_pods_per_node = 50
-      version          = var.eks_cluster_version
-      volume_size      = 80
-      volume_type      = "gp3"
+      instance_type      = var.eks_cluster_node_instance_type
+      desired_capacity   = 1
+      min_size           = 1
+      max_size           = 2
+      max_pods_per_node  = 50
+      version            = var.eks_cluster_version
+      volume_size        = 80
+      volume_type        = "gp3"
       private_networking = true
-      subnets = var.eks_private_subnets
+      subnets            = var.eks_private_subnets
       labels = {
-        app = "infra"
+        app       = "infra"
         dedicated = "true"
       }
       tags = var.tags
