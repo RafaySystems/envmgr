@@ -42,15 +42,3 @@ resource "rafay_namespace" "namespace" {
   }
 }
 
-resource "rafay_group" "group" {
-  name = "${local.namespace}-group"
-}
-
-resource "rafay_groupassociation" "groupassociation" {
-  depends_on = [rafay_group.group]
-  project    = var.project
-  group      = "${local.namespace}-group"
-  namespaces = ["${local.namespace}"]
-  roles      = ["NAMESPACE_ADMIN"]
-  add_users  = ["${var.username}"]
-}
