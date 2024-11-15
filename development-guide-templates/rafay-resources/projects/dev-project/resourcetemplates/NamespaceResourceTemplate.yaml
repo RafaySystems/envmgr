@@ -1,0 +1,41 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: namespace-resource-template
+  project: dev-project
+spec:
+  # Here we are defining provider as opentofu to use, if no providerOptions is mentioned then Rafay will use latest version 
+  provider: opentofu
+  providerOptions:
+    openTofu:
+      refresh: true
+      backendType: system
+  # Here we are associating code in repository to the resource template
+  repositoryOptions:
+    branch: dev-guide-templates
+    directoryPath: development-guide-templates/terraform/namespace
+    name: envmgr
+  variables:
+    # Here we specify the project name.
+    - name: project
+      valueType: text
+      value: dev-project
+      options:
+        override:
+          type: allowed
+    # Here we using the output from the EKSResourceTemplate's eks_cluster_name information and use it for the cluster where we want namespace to be created
+    - name: target_cluster_name
+      valueType: expression
+      value: $(resource."eks-resource-template".output.eks_cluster_name.value)$
+      options:
+        required: true
+        override:
+          type: notallowed
+    # Here we are updating the roles for the specified user to have access to the namespace.
+    - name: username
+      valueType: text
+      options:
+        required: true
+        override:
+          type: allowed
+  version: v1

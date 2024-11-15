@@ -1,0 +1,42 @@
+apiVersion: eaas.envmgmt.io/v1
+kind: ConfigContext
+metadata:
+  name: rafay-config-context
+  project: dev-project
+spec:
+  envs:
+   # Here we are defining the RCTL config in config context, to be used in multiple environment templates 
+    - key: RCTL_API_KEY
+      options:
+        sensitive: true
+      value: <UPDATE_VALUE>
+    - key: RCTL_API_SECRET
+      options:
+        sensitive: true
+      value: <UPDATE_VALUE>
+    - key: RCTL_REST_ENDPOINT
+      value: <UPDATE_VALUE>
+    - key: RCTL_PROJECT
+      value: <UPDATE_VALUE>
+  variables:
+     # Here we are defining the AWS credentials in config context, to be used in multiple environment templates 
+    - name: aws_access_key_id
+      valueType: text
+      options:
+        sensitive: true
+        override:
+          type: allowed
+      value: <UPDATE_VALUE>
+    - name: aws_secret_access_key
+      valueType: text
+      options:
+        sensitive: true
+        override:
+          type: allowed
+      value: <UPDATE_VALUE>
+    - name: aws_region
+      valueType: text
+      value: us-west-2
+      options:
+        override:
+          type: allowed
