@@ -8,8 +8,3 @@ variable "project" {
   type        = string
   default     = "eaas"
 }
-
-variable "username" {
-  description = "Rafay username"
-  type        = string
-}
