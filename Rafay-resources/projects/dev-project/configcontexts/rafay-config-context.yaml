@@ -31,7 +31,6 @@ spec:
     valueType: text
   - name: aws_secret_access_key
     options:
-      description: tOXv202btw4L2df0Qzbp5C/OMXllvdfULFw5+skq
       override:
         type: allowed
       sensitive: true
