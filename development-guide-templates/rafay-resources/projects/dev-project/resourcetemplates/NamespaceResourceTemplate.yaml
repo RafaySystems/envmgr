@@ -31,11 +31,4 @@ spec:
         required: true
         override:
           type: notallowed
-    # Here we are updating the roles for the specified user to have access to the namespace.
-    - name: username
-      valueType: text
-      options:
-        required: true
-        override:
-          type: allowed
   version: v1
