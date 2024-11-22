@@ -1,8 +1,0 @@
-apiVersion: infra.k8smgmt.io/v3
-kind: Namespace
-metadata:
-  annotations:
-    rafay.dev/description: ""
-  name: test-ns
-  project: dev-project
-spec: {}
