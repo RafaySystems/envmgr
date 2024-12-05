@@ -101,6 +101,9 @@ resource "rafay_gke_cluster" "tf-example" {
               }
             }
           }
+          management {
+            auto_upgrade = false
+          }
         }
       }
     }
