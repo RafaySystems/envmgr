@@ -109,7 +109,7 @@ variable "node_pools" {
       node_size         = 1
       min_nodes         = 1
       max_nodes         = 3
-      node_version      = "1.28"
+      node_version      = "1.29"
       machine_type      = "e2-standard-4"
       image_type        = "COS_CONTAINERD"
       disk_size         = 100
