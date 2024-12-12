@@ -1,0 +1,7 @@
+##Rafay Project name
+projectName: UPDATE_EXISTING_PROJECT_NAME
+## Initial Version for Environment Manager resources.
+version: v1
+## Terraform code path 
+tfRepoPathSlurm: terraform/slurm/terraform/slurm
+tfRepoPathkubeconfig: terraform/slurm/terraform/kubeconfig-mounter

@@ -1,0 +1,48 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: slurm
+  project: {{ $glbCtx.projectName }}
+spec:
+  version: v1
+  provider: opentofu
+  providerOptions:
+    openTofu:
+      version: "1.8.2"
+      refresh: true
+      backendType: system
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathSlurm }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  contexts:
+  - name: kubeconfig-mounter-slurm
+  variables:
+  - name: namespace
+    options:
+      override:
+        type: notallowed
+    value: $(environment.name)$
+    valueType: expression
+  - name: install_slurm_operator
+    options:
+      override:
+        restrictedValues:
+        - "true"
+        - "false"
+        type: restricted
+	  required: true
+    value: "true"
+    valueType: text
+  - name: install_slurm_cluster
+    options:
+      override:
+        restrictedValues:
+        - "true"
+        - "false"
+        type: restricted
+      required: true
+    value: "true"
+    valueType: text
+  versionState: active
