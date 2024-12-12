@@ -62,3 +62,4 @@ templates:
 #  - ../terraform/jupyterhub
 #  - ../terraform/oci/101-caas-oke
 #  - ../terraform/rafay-aws-resources
+#  - ../terraform/slurm
