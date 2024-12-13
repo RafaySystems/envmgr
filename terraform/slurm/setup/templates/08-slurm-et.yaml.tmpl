@@ -25,4 +25,11 @@ spec:
     - name: kubeconfig-mounter-slurm
   agents:
   - name: {{ $glbCtx.agentName }}
+  variables:
+  - name: projectid
+    options:
+      override:
+        type: notallowed
+    value: $(environment.project.id)$
+    valueType: expression
   versionState: Active
