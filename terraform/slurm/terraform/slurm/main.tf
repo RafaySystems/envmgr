@@ -21,3 +21,7 @@ resource "helm_release" "slurm-cluster" {
   version          = "0.1.0"
   values           = [file("${path.module}/values-slurm.yaml")]
 }
+
+output "slurm_url" {
+  value = "https://console.rafay.dev/#/console/${var.projectid}/${var.cluster_name}?&namespace=${var.namespace}&command=${base64encode("exec -it -n ${var.namespace} slurm-cluster-${var.namespace}-controller-0 -c slurmctld -- /bin/sh")}&kubectl_type=namespace&edge_id=mp11wxm.private.qkonnmn.edge.rafay-edge.net"
+}
