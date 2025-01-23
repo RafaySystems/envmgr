@@ -46,7 +46,7 @@ variable "revision" {
 
 variable "domain" {
   type    = string
-  default = "hictl.dev.rafay-edge.net"
+  default = "wasabi.dev.rafay-edge.net"
 }
 
 variable "continue" {
