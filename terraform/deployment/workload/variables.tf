@@ -15,7 +15,7 @@ variable "workload_name" {
 
 variable "phase" {
   type    = string
-  default = "phase1"
+  default = "stage-2"
 }
 
 variable "catalog" {
