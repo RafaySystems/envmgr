@@ -2,7 +2,7 @@
 
 set -ex
 
-code=`wget --server-response https://$url 2>&1 | grep "HTTP/" | awk '{print $2}'`
+code=`wget --server-response http://$url 2>&1 | grep "HTTP/" | awk '{print $2}'`
 if [ $code -eq 200 ];
 then
    echo -n "false" > rollback
