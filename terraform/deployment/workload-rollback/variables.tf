@@ -25,12 +25,12 @@ variable "sanity_workload_name" {
 
 variable "phase" {
   type    = string
-  default = "phase2"
+  default = "stage-1"
 }
 
 variable "sanity_phase" {
   type    = string
-  default = "phase1"
+  default = "stage-2"
 }
 
 variable "catalog" {
