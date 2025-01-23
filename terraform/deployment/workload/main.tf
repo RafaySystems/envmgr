@@ -11,7 +11,7 @@ resource "rafay_workload" "workload" {
   spec {
     namespace = var.ns_name
     placement {
-      selector = "canary=${var.phase}"
+      selector = "release=${var.phase}"
     }
     version = "${var.revision}-${local.version}"
     artifact {
