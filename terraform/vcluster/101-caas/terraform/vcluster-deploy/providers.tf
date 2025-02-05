@@ -7,6 +7,4 @@ terraform {
   }
 }
 
-provider "rafay" {
- provider_config_file = var.rctl_config_path
-}
+provider "rafay" {}
