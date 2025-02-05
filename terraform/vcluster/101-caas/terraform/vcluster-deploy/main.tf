@@ -6,7 +6,8 @@ resource "random_string" "resource_code" {
 
 resource "local_file" "vcluster_values" {
   content = templatefile("${path.module}/templates/vcluster-values.tftpl", {
-    values = indent(4, "${var.bootstrap_data}")
+    #values = indent(4, "${var.bootstrap_data}")
+    values = ${var.bootstrap_data}
     distro = var.distro
   })
   filename = "${path.module}/${var.filename}"
