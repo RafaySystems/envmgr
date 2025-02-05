@@ -1,3 +1,7 @@
-init:
-  manifests: |-
-    ${ values }
+#init:
+  #manifests: |-
+  #  ${ values }
+
+deploy:
+  vcluster:
+     manifests: "${ values }"
