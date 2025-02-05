@@ -48,3 +48,9 @@ variable "chart_version" {
   type    = string
   default = "0.19.7"
 }
+
+variable "rctl_config_path" {
+  description = "The path to the Rafay CLI config file"
+  type        = string
+  default     = "opt/rafay"
+}
