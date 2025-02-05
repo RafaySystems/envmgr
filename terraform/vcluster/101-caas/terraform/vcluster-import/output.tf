@@ -1,6 +1,6 @@
 output "bootstrap" {
   value     = rafay_import_cluster.vcluster.bootstrap_data
-  sensitive = true
+  sensitive = false
 }
 
 output "group" {
