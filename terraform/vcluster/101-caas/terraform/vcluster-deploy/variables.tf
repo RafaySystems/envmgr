@@ -46,5 +46,5 @@ variable "repository" {
 
 variable "chart_version" {
   type    = string
-  default = "0.19.7"
+  default = "0.22.3"
 }
