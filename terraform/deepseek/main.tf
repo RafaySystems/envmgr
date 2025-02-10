@@ -27,6 +27,16 @@ locals {
   }
 }
 
+resource "null_resource" "test" {  
+  provisioner "local-exec" {
+    command = <<-EOT
+     date &&
+ls &&
+aws --version
+    EOT
+  }
+}
+
 
 # Define the required providers
 provider "aws" {
