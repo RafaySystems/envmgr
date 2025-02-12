@@ -24,6 +24,8 @@ locals {
 
   tags = {
     Blueprint = local.name
+    email = "tim@rafay.co"
+    env = "prod"
   }
 }
 
