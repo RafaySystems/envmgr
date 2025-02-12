@@ -12,6 +12,8 @@ resource "kubernetes_manifest" "gpu_nodepool" {
           labels = {
             owner = "data-engineer"
             instanceType = "gpu"
+            email = "tim@rafay.co"
+            env = "prod"
           }
         }
         spec = {
