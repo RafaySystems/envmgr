@@ -34,6 +34,11 @@ resource "kubernetes_manifest" "gpu_nodepool" {
               values   = ["g5"]
             },
             {
+              key      = "node.kubernetes.io/instance-type"
+              operator = "In"
+              values   = ["g5.2xlarge"]
+            },
+            {
               key      = "kubernetes.io/arch"
               operator = "In"
               values   = ["amd64"]
