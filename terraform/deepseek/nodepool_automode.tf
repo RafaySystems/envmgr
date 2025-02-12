@@ -31,7 +31,7 @@ resource "kubernetes_manifest" "gpu_nodepool" {
             {
               key      = "eks.amazonaws.com/instance-family"
               operator = "In"
-              values   = ["g5", "g6", "g6e", "p5", "p4"]
+              values   = ["g5"]
             },
             {
               key      = "kubernetes.io/arch"
