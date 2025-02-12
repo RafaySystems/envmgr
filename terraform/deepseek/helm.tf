@@ -18,12 +18,12 @@ resource "helm_release" "deepseek_gpu" {
         effect: "NoSchedule"
     resources:
       limits:
-        cpu: "32"
-        memory: 100G
+        cpu: "6"
+        memory: 24G
         nvidia.com/gpu: "1"
       requests:
-        cpu: "16"
-        memory: 30G
+        cpu: "4"
+        memory: 16G
         nvidia.com/gpu: "1"
     command: "vllm serve deepseek-ai/DeepSeek-R1-Distill-Llama-8B --max_model 2048"
     EOT
