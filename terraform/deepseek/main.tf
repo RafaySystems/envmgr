@@ -111,16 +111,6 @@ module "eks" {
     node_pools = ["general-purpose"]
   }
 
-  node_pools = {
-    general-purpose = {
-      min_size     = 1
-      max_size     = 2
-      desired_size = 1
-      instance_types = ["t3.medium", "t3.large"] # Specify instance types
-      capacity_type  = "ON_DEMAND" # Can also be "SPOT"
-    }
-}
-
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
