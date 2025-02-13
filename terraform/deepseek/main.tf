@@ -119,6 +119,7 @@ module "eks" {
       instance_types = ["t3.medium", "t3.large"] # Specify instance types
       capacity_type  = "ON_DEMAND" # Can also be "SPOT"
     }
+}
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
