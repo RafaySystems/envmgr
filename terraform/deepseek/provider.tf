@@ -6,7 +6,3 @@ terraform {
     }
   }
 }
-
-provider "rafay" {
-  # Configuration options
-}
