@@ -147,7 +147,7 @@ resource "rafay_import_cluster" "import_cluster" {
   depends_on = [module.eks]
   clustername           = local.name
   projectname           = var.project_name
-  blueprint             =  "Minimal"
+  blueprint             =  "default"
   #blueprint_version     = var.blueprint_version
   kubernetes_provider   = "EKS"
   provision_environment = "CLOUD"
