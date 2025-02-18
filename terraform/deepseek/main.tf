@@ -145,10 +145,10 @@ output "ecr_repository_uri_neuron" {
 
 resource "rafay_import_cluster" "import_cluster" {
   depends_on = [module.eks]
-  clustername           = var.cluster_name
+  clustername           = local.name
   projectname           = var.project_name
-  blueprint             = var.blueprint
-  blueprint_version     = var.blueprint_version
+  blueprint             =  "Minimal"
+  #blueprint_version     = var.blueprint_version
   kubernetes_provider   = "EKS"
   provision_environment = "CLOUD"
   values_path           = "values.yaml"
@@ -183,7 +183,7 @@ resource "helm_release" "v2-infra" {
 
 resource "null_resource" "delete-webhook" {
   triggers = {
-    cluster_name = var.cluster_name
+    cluster_name = local.name
     project_name = var.project_name
   }
 
