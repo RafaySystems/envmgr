@@ -200,6 +200,9 @@ resource "null_resource" "delete-webhook" {
 }
 
 resource "rafay_download_kubeconfig" "tfkubeconfig" {
+  triggers = {
+    always_run = timestamp()
+  }
   cluster            = "local.name"
   output_folder_path = "/tmp"
   filename           = "kubeconfig"
