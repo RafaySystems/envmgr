@@ -29,14 +29,10 @@ locals {
   }
 }
 
-resource "rafay_download_kubeconfig" "tfkubeconfig" {
-  cluster            = "local.name"
-  output_folder_path = "/tmp"
-  filename           = "kubeconfig"
-}
+
 
 data "rafay_download_kubeconfig" "kubeconfig_cluster" {
-  cluster = "local.name"
+  cluster = local.name
 }
 
 output "kubeconfig" {
