@@ -198,3 +198,14 @@ resource "null_resource" "delete-webhook" {
 
   depends_on = [helm_release.v2-infra]
 }
+
+resource "rafay_download_kubeconfig" "tfkubeconfig" {
+  cluster            = "local.name"
+  output_folder_path = "/tmp"
+  filename           = "kubeconfig"
+  depends_on = [helm_release.v2-infra]
+}
+
+output "kubeconfig" {
+  value = file("/tmp/kubeconfig")
+}
