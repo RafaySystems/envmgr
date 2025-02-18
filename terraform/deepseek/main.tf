@@ -206,6 +206,14 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
   depends_on = [helm_release.v2-infra]
 }
 
+#output "kubeconfig" {
+#  value = file("/tmp/kubeconfig")
+#}
+
+data "local_file" "kubeconfig" {
+  filename = "/tmp/kubeconfig"
+}
+
 output "kubeconfig" {
-  value = file("/tmp/kubeconfig")
+  value = data.local_file.kubeconfig.content
 }
