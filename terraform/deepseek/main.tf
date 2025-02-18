@@ -35,18 +35,6 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
   filename           = "kubeconfig"
 }
 
-resource "null_resource" "create_file" {
-  provisioner "local-exec" {
-    command = "ls /tmp"
-  }
-depends_on = [rafay_download_kubeconfig.tfkubeconfig]
-}
-
-data "local_file" "kubeconfig" {
-  filename = "/tmp/kubeconfig"
-depends_on = [rafay_download_kubeconfig.tfkubeconfig]
-}
-
 output "kubeconfig" {
-  value = data.local_file.kubeconfig.content
+  value = yamldecode(data.rafay_download_kubeconfig.kubeconfig_cluster.kubeconfig)
 }
