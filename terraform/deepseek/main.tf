@@ -141,3 +141,60 @@ output "ecr_repository_uri" {
 output "ecr_repository_uri_neuron" {
   value = aws_ecr_repository.neuron-ecr.repository_url
 }
+
+
+resource "rafay_import_cluster" "import_cluster" {
+  depends_on = [module.eks]
+  clustername           = var.cluster_name
+  projectname           = var.project_name
+  blueprint             = var.blueprint
+  blueprint_version     = var.blueprint_version
+  kubernetes_provider   = "EKS"
+  provision_environment = "CLOUD"
+  values_path           = "values.yaml"
+
+  lifecycle {
+    ignore_changes = [
+      bootstrap_path,
+      values_path
+    ]
+  }
+}
+resource "helm_release" "v2-infra" {
+  depends_on = [rafay_import_cluster.import_cluster]
+
+  name             = "v2-infra"
+  namespace        = "rafay-system"
+  create_namespace = true
+  repository       = "https://rafaysystems.github.io/rafay-helm-charts/"
+  chart            = "v2-infra"
+  values           = [rafay_import_cluster.import_cluster.values_data]
+  version          = "1.1.2"
+
+  lifecycle {
+    ignore_changes = [
+      # Avoid reapplying helm release
+      values,
+      # Prevent reapplying if version changes
+      version
+    ]
+  }
+}
+
+resource "null_resource" "delete-webhook" {
+  triggers = {
+    cluster_name = var.cluster_name
+    project_name = var.project_name
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "chmod +x ./delete-webhook.sh && ./delete-webhook.sh"
+    environment = {
+      CLUSTER_NAME = "${self.triggers.cluster_name}"
+      PROJECT      = "${self.triggers.project_name}"
+    }
+  }
+
+  depends_on = [helm_release.v2-infra]
+}
