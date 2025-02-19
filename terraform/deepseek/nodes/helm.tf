@@ -1,3 +1,8 @@
+data "aws_ecr_repository" "neuron-ecr" {
+  name = "${var.name}-neuron-base"
+}
+
+
 resource "helm_release" "deepseek_gpu" {
   count            = var.enable_deep_seek_gpu ? 1 : 0
   name             = "deepseek-gpu"
@@ -43,7 +48,7 @@ resource "helm_release" "deepseek_neuron" {
   values = [
     <<-EOT
     image:
-      repository: ${aws_ecr_repository.neuron-ecr.repository_url}
+      repository: ${data.aws_ecr_repository.neuron-ecr.repository_url}
       tag: 0.1
       pullPolicy: IfNotPresent
 

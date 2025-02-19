@@ -15,3 +15,8 @@ variable "enable_auto_mode_node_pool" {
   type        = bool
   default     = false
 }
+
+variable "name" {
+  type        = string
+  description = "Base name for AWS resources"
+}
