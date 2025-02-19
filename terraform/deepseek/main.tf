@@ -206,4 +206,5 @@ data "rafay_download_kubeconfig" "kubeconfig_cluster" {
 
 output "kubeconfig" {
   value = yamldecode(data.rafay_download_kubeconfig.kubeconfig_cluster.kubeconfig)
+    depends_on = [rafay_import_cluster.import_cluster]
 }
