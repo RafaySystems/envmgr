@@ -19,7 +19,7 @@ variable "enable_auto_mode_node_pool" {
 locals {
   region   = "us-west-2"
   vpc_cidr = "10.0.0.0/16"
-  name     = "eks-automode6"
+  name     = "eks-automode7"
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 
   tags = {
