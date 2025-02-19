@@ -1,9 +1,10 @@
-locals {
-  name     = "eks-automode7"
+variable "name" {
+  type        = string
+  description = "Base name for AWS resources"
 }
 
 data "rafay_download_kubeconfig" "kubeconfig_cluster" {
-  cluster = local.name
+  cluster = var.name
 }
 
 output "kubeconfig" {
