@@ -201,6 +201,7 @@ resource "null_resource" "delete-webhook" {
 
 data "rafay_download_kubeconfig" "kubeconfig_cluster" {
   cluster = local.name
+  depends_on = [rafay_import_cluster.import_cluster]
 }
 
 output "kubeconfig" {
