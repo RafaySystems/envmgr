@@ -28,7 +28,7 @@ resource "helm_release" "deepseek_gpu" {
     command: "vllm serve deepseek-ai/DeepSeek-R1-Distill-Llama-8B --max_model 2048"
     EOT
   ]
-  depends_on = [module.eks, kubernetes_manifest.gpu_nodepool]
+  #depends_on = [module.eks, kubernetes_manifest.gpu_nodepool]
 }
 
 resource "helm_release" "deepseek_neuron" {
@@ -90,5 +90,5 @@ resource "helm_release" "deepseek_neuron" {
       periodSeconds: 5
     EOT
   ]
-  depends_on = [module.eks, kubernetes_manifest.neuron_nodepool]
+  #depends_on = [module.eks, kubernetes_manifest.neuron_nodepool]
 }
