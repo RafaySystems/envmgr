@@ -196,13 +196,13 @@ resource "rafay_eks_cluster" "eks-cluster" {
             instance_role_arn = iam.value
           }
         }
-        dynamic "taints" {
-          for_each = managed_nodegroups.value.taints
-          content {
-            effect = taints.value.effect
-            key    = taints.value.key
-          }
-        }
+        # dynamic "taints" {
+        #   for_each = managed_nodegroups.value.taints
+        #   content {
+        #     effect = taints.value.effect
+        #     key    = taints.value.key
+        #   }
+        # }
         tags   = try(managed_nodegroups.value.tags, null)
         labels = try(managed_nodegroups.value.labels, null)
       }
