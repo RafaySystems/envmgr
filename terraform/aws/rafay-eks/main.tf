@@ -86,18 +86,18 @@ resource "rafay_eks_cluster" "eks-cluster" {
       cloud_provider         = var.cloud_credentials_name
       cross_account_role_arn = try(local.rolearn, null)
       cni_provider           = "aws-cni"
-      system_components_placement {
-        node_selector = var.node_selector
-        dynamic "tolerations" {
-          for_each = var.tolerations
-          content {
-            effect   = tolerations.value.effect
-            key      = tolerations.value.key
-            operator = tolerations.value.operator
-          }
+      # system_components_placement {
+      #   node_selector = var.node_selector
+      #   dynamic "tolerations" {
+      #     for_each = var.tolerations
+      #     content {
+      #       effect   = tolerations.value.effect
+      #       key      = tolerations.value.key
+      #       operator = tolerations.value.operator
+      #     }
 
-        }
-      }
+      #   }
+      # }
     }
   }
   cluster_config {
