@@ -115,13 +115,13 @@ resource "rafay_eks_cluster" "eks-cluster" {
     iam {
       service_role_arn = try(var.service_role_arn, null)
       with_oidc        = true
-      service_accounts {
-        metadata {
-          name      = "karpenter"
-          namespace = "karpenter"
-        }
-        attach_policy_arns = [resource.aws_iam_policy.karpenter_policy.arn]
-      }
+      # service_accounts {
+      #   metadata {
+      #     name      = "karpenter"
+      #     namespace = "karpenter"
+      #   }
+      #   attach_policy_arns = [resource.aws_iam_policy.karpenter_policy.arn]
+      # }
     }
     addons {
       name    = "aws-ebs-csi-driver"
