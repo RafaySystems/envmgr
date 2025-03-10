@@ -139,13 +139,13 @@ resource "rafay_eks_cluster" "eks-cluster" {
       name    = "coredns"
       version = "latest"
     }
-    identity_mappings {
-      arns {
-        arn      = resource.aws_iam_role.karpenter_role.arn
-        group    = ["system:bootstrappers", "system:nodes"]
-        username = "system:node:{{EC2PrivateDNSName}}"
-      }
-    }
+    # identity_mappings {
+    #   arns {
+    #     arn      = resource.aws_iam_role.karpenter_role.arn
+    #     group    = ["system:bootstrappers", "system:nodes"]
+    #     username = "system:node:{{EC2PrivateDNSName}}"
+    #   }
+    # }
     vpc {
       cluster_endpoints {
         private_access = true
