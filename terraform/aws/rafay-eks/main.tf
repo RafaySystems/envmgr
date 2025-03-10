@@ -1,69 +1,69 @@
-resource "aws_iam_role" "karpenter_role" {
-  name = "${var.cluster_name}-${var.role_name}"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        },
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
-  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
-    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
-    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
-  "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
-}
+# resource "aws_iam_role" "karpenter_role" {
+#   name = "${var.cluster_name}-${var.role_name}"
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
+#       {
+#         Effect = "Allow"
+#         Principal = {
+#           Service = "ec2.amazonaws.com"
+#         },
+#         Action = "sts:AssumeRole"
+#       }
+#     ]
+#   })
+#   managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+#     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+#     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+#   "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
+# }
 
-resource "aws_iam_instance_profile" "test_profile" {
-  name = "${var.cluster_name}-${var.role_name}"
-  role = aws_iam_role.karpenter_role.name
-}
+# resource "aws_iam_instance_profile" "test_profile" {
+#   name = "${var.cluster_name}-${var.role_name}"
+#   role = aws_iam_role.karpenter_role.name
+# }
 
-resource "aws_iam_policy" "karpenter_policy" {
-  name = "${var.cluster_name}-${var.policy_name}"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "ec2:CreateLaunchTemplate",
-          "ec2:CreateFleet",
-          "ec2:RunInstances",
-          "ec2:CreateTags",
-          "iam:PassRole",
-          "ec2:TerminateInstances",
-          "ec2:DescribeLaunchTemplates",
-          "ec2:DescribeInstances",
-          "ec2:DescribeSecurityGroups",
-          "ec2:DescribeSubnets",
-          "ec2:DescribeInstanceTypes",
-          "ec2:DescribeInstanceTypeOfferings",
-          "ec2:DescribeAvailabilityZones",
-          "ssm:GetParameter",
-          "eks:DescribeCluster",
-          "ec2:DescribeImages",
-          "ec2:DescribeSpotPriceHistory",
-          "ec2:DeleteLaunchTemplate",
-          "iam:GetInstanceProfile",
-          "iam:CreateInstanceProfile",
-          "iam:DeleteInstanceProfile",
-          "iam:TagInstanceProfile",
-          "iam:AddRoleToInstanceProfile",
-          "iam:RemoveRoleFromInstanceProfile",
-          "pricing:GetProducts",
-          "pricing:DescribeServices",
-          "pricing:GetAttributeValues",
-        ],
-        Resource = "*",
-        Effect   = "Allow"
-      }
-    ]
-  })
-}
+# resource "aws_iam_policy" "karpenter_policy" {
+#   name = "${var.cluster_name}-${var.policy_name}"
+#   policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
+#       {
+#         Action = [
+#           "ec2:CreateLaunchTemplate",
+#           "ec2:CreateFleet",
+#           "ec2:RunInstances",
+#           "ec2:CreateTags",
+#           "iam:PassRole",
+#           "ec2:TerminateInstances",
+#           "ec2:DescribeLaunchTemplates",
+#           "ec2:DescribeInstances",
+#           "ec2:DescribeSecurityGroups",
+#           "ec2:DescribeSubnets",
+#           "ec2:DescribeInstanceTypes",
+#           "ec2:DescribeInstanceTypeOfferings",
+#           "ec2:DescribeAvailabilityZones",
+#           "ssm:GetParameter",
+#           "eks:DescribeCluster",
+#           "ec2:DescribeImages",
+#           "ec2:DescribeSpotPriceHistory",
+#           "ec2:DeleteLaunchTemplate",
+#           "iam:GetInstanceProfile",
+#           "iam:CreateInstanceProfile",
+#           "iam:DeleteInstanceProfile",
+#           "iam:TagInstanceProfile",
+#           "iam:AddRoleToInstanceProfile",
+#           "iam:RemoveRoleFromInstanceProfile",
+#           "pricing:GetProducts",
+#           "pricing:DescribeServices",
+#           "pricing:GetAttributeValues",
+#         ],
+#         Resource = "*",
+#         Effect   = "Allow"
+#       }
+#     ]
+#   })
+# }
 
 locals {
   rolearn = var.account_id != "" && var.linked_role_arn != "" ? format("arn:aws:iam::%s:role/%s", var.account_id, var.linked_role_arn) : null
