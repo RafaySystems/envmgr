@@ -12,9 +12,9 @@ resource "null_resource" "create_secret" {
   }
 }
 
-resource "time_sleep" "wait_90_seconds" {
+resource "time_sleep" "wait_for_service_account" {
   depends_on      = [null_resource.create_secret]
-  create_duration = "90s"
+  create_duration = "240s"
 }
 
 resource "rafay_download_kubeconfig" "tfkubeconfig" {
@@ -29,7 +29,7 @@ resource "null_resource" "install_example1" {
   }
   depends_on = [
    rafay_download_kubeconfig.tfkubeconfig,
-   time_sleep.wait_90_seconds
+   time_sleep.wait_for_service_accountwait_for_service_account
 ]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
