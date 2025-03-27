@@ -10,13 +10,3 @@ variable "project" {
   description = "name of the project where the cluster resides"
   type    = string
 }
-
-variable "username" {
-  description = "Rafay username"
-  type    = string
-}
-
-variable "workload_name" {
-  type    = string
-  default = "app-example2-workload"
-}
