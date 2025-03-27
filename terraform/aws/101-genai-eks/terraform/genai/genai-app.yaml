@@ -26,6 +26,13 @@ spec:
       containers:
       - name: gen-ai
         image: registry.dev.rafay-edge.net/rafay/genai-sample-app:1.2
+        resources:
+          requests:
+            memory: "256Mi"  
+            cpu: "250m"      
+          limits:
+            memory: "256Mi"    
+            cpu: "250m" 
         ports:
         - containerPort: 80
       serviceAccountName: gen-ai
