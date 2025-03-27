@@ -1,32 +1,5 @@
-resource "random_id" "rnd" {
-  keepers = {
-    first = "${timestamp()}"
-  }
-  byte_length = 4
-}
-
 locals {
-  # Create a unique namspace name
-  #namespace = "${element(split("@",var.username),0)}-${random_id.rnd.dec}"
   namespace = var.namespace
-}
-
-resource "rafay_namespace" "namespace" {
-  metadata {
-    name    = local.namespace
-    project = var.project
-  }
-  spec {
-    drift {
-      enabled = true
-    }
-    placement {
-      labels {
-        key   = "rafay.dev/clusterName"
-        value = var.cluster_name
-      }
-    }
-  }
 }
 
 resource "null_resource" "rctl_install" {
@@ -58,10 +31,6 @@ resource "null_resource" "genai_install" {
   }
 }
 
-#resource "time_sleep" "wait_30_seconds_example1" {
-#  depends_on      = [null_resource.genai_install]
-#  create_duration = "60s"
-#}
 
 resource "rafay_workload" "workload" {
   depends_on = [rafay_namespace.namespace]
@@ -117,15 +86,3 @@ data "local_file" "gen-ai-ip-example2" {
   depends_on = [null_resource.get-gen-ai-ip-example2]
 }
 
-resource "rafay_group" "group" {
-  name        = "${local.namespace}-group"
-}
-
-resource "rafay_groupassociation" "groupassociation" {
-  depends_on = [rafay_group.group]
-  project = "${var.project}"
-  group = "${local.namespace}-group"
-  namespaces = ["${local.namespace}"]
-  roles = ["NAMESPACE_ADMIN"]
-  add_users = ["${var.username}"]
-}
