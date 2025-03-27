@@ -39,6 +39,9 @@ resource "null_resource" "install_example1" {
 
 
 resource "rafay_workload" "install_example2" {
+  depends_on = [
+   time_sleep.wait_for_service_account
+]
   metadata {
     name    = "genai2-${local.namespace}"
     project = var.project
