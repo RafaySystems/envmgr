@@ -11,7 +11,3 @@ output "public_ip_example1" {
 output "public_ip_example2" {
   value = "http://${data.local_file.gen-ai-ip-example2.content}:8000"
 }
-
-output "workload_app_example2" {
-  value = rafay_workload.workload.id
-}
