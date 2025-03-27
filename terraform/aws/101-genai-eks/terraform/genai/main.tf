@@ -14,7 +14,7 @@ resource "null_resource" "create_secret" {
 
 resource "time_sleep" "wait_for_service_account" {
   depends_on      = [null_resource.create_secret]
-  create_duration = "240s"
+  create_duration = "200s"
 }
 
 resource "rafay_download_kubeconfig" "tfkubeconfig" {
@@ -63,9 +63,9 @@ resource "rafay_workload" "install_example2" {
   }
 }
 
-resource "time_sleep" "wait_30_seconds" {
+resource "time_sleep" "wait_for_lb" {
   depends_on      = [rafay_workload.install_example2]
-  create_duration = "30s"
+  create_duration = "60s"
 }
 
 #resource "null_resource" "get-gen-ai-ip-example1" {
@@ -73,7 +73,7 @@ resource "time_sleep" "wait_30_seconds" {
 #  provisioner "local-exec" {
 #    command = "./kubectl get svc gen-ai-app-example1-lb -n ${local.namespace} --kubeconfig=/tmp/kubeconfig | awk -F' ' '{print $4}' | tail -1 | tr -d '\n' >> /tmp/gen-ai-ip-example1.txt"
 #  }
-#  depends_on = [time_sleep.wait_30_seconds]
+#  depends_on = [time_sleep.wait_for_lb]
 #}
 
 #data "local_file" "gen-ai-ip-example1" {
@@ -86,7 +86,7 @@ resource "null_resource" "get-gen-ai-ip-example2" {
   provisioner "local-exec" {
     command = "./kubectl get svc gen-ai-app-example2-lb -n ${local.namespace} --kubeconfig=/tmp/kubeconfig | awk -F' ' '{print $4}' | tail -1 | tr -d '\n' >> /tmp/gen-ai-ip-example2.txt"
   }
-  depends_on = [time_sleep.wait_30_seconds]
+  depends_on = [time_sleep.wait_for_lb]
 }
 
 data "local_file" "gen-ai-ip-example2" {
