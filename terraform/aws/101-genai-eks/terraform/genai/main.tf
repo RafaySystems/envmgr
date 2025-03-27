@@ -3,7 +3,6 @@ locals {
 }
 
 resource "null_resource" "rctl_install" {
-  depends_on = [rafay_namespace.namespace]
   triggers = {
     always_run = timestamp()
   }
@@ -33,7 +32,6 @@ resource "null_resource" "genai_install" {
 
 
 resource "rafay_workload" "workload" {
-  depends_on = [rafay_namespace.namespace]
   metadata {
     name    = "genai2-${local.namespace}"
     project = var.project
@@ -43,7 +41,7 @@ resource "rafay_workload" "workload" {
     placement {
       selector = "rafay.dev/clusterName=${var.cluster_name}"
     }
-    version = "v-${random_id.rnd.hex}"
+    version = "v1"
     artifact {
       type = "Yaml"
       artifact {
