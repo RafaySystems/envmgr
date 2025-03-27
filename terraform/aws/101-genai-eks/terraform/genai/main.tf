@@ -29,7 +29,7 @@ resource "null_resource" "install_example1" {
   }
   depends_on = [
    rafay_download_kubeconfig.tfkubeconfig,
-   time_sleep.wait_for_service_accountwait_for_service_account
+   time_sleep.wait_for_service_account
 ]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
