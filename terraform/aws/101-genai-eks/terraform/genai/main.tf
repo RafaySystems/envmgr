@@ -2,7 +2,7 @@ locals {
   namespace = var.namespace
 }
 
-resource "null_resource" "rctl_install" {
+resource "null_resource" "create_secret" {
   triggers = {
     always_run = timestamp()
   }
@@ -12,18 +12,25 @@ resource "null_resource" "rctl_install" {
   }
 }
 
+resource "time_sleep" "wait_90_seconds" {
+  depends_on      = [null_resource.create_secret]
+  create_duration = "90s"
+}
+
 resource "rafay_download_kubeconfig" "tfkubeconfig" {
-  depends_on = [null_resource.rctl_install]
   cluster            = var.cluster_name
   output_folder_path = "/tmp"
   filename           = "kubeconfig"
 }
 
-resource "null_resource" "genai_install" {
+resource "null_resource" "install_example1" {
   triggers = {
     always_run = timestamp()
   }
-  depends_on = [rafay_download_kubeconfig.tfkubeconfig]
+  depends_on = [
+   rafay_download_kubeconfig.tfkubeconfig,
+   time_sleep.wait_90_seconds
+]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
     command     = "wget \"https://dl.k8s.io/release/$(wget --output-document - --quiet https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\" && chmod +x ./kubectl && ls /tmp && ./kubectl apply -f ./genai-app.yaml -n ${local.namespace} --kubeconfig=/tmp/kubeconfig && ./kubectl expose deployment gen-ai --type=LoadBalancer --name=gen-ai-app-example1-lb -n ${local.namespace} --kubeconfig=/tmp/kubeconfig "
@@ -31,7 +38,7 @@ resource "null_resource" "genai_install" {
 }
 
 
-resource "rafay_workload" "workload" {
+resource "rafay_workload" "install_example2" {
   metadata {
     name    = "genai2-${local.namespace}"
     project = var.project
@@ -54,7 +61,7 @@ resource "rafay_workload" "workload" {
 }
 
 resource "time_sleep" "wait_30_seconds" {
-  depends_on      = [rafay_workload.workload]
+  depends_on      = [rafay_workload.install_example2]
   create_duration = "30s"
 }
 
