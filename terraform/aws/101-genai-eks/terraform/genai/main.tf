@@ -35,7 +35,7 @@ resource "null_resource" "genai_install" {
 resource "rafay_workload" "workload" {
   depends_on = [rafay_namespace.namespace]
   metadata {
-    name    = "${var.workload_name}-${local.namespace}"
+    name    = "genai2-${local.namespace}"
     project = var.project
   }
   spec {
