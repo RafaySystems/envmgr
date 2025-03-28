@@ -11,3 +11,7 @@ output "namepsace" {
 output "public_ip_example2" {
   value = "http://${data.local_file.gen-ai-ip-example2.content}:8000"
 }
+
+output "cluster_name" {
+  value =var.cluster_name
+}
