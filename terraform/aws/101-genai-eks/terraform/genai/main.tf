@@ -2,17 +2,6 @@ locals {
   namespace = var.namespace
 }
 
-resource "null_resource" "create_secret" {
-  triggers = {
-    always_run = timestamp()
-  }
-  provisioner "local-exec" {
-    interpreter = ["/bin/bash", "-c"]
-    command     = "wget \"https://s3.amazonaws.com/rafay-cli/publish/rctl-linux-amd64.tar.bz2\" && tar -xjf rctl-linux-amd64.tar.bz2 -C ./ &&  chmod +x ./rctl  &&./rctl create iam-service-account ${var.cluster_name} --name gen-ai --namespace ${local.namespace} --policy-document bedrock-policy.json -p ${var.project}"
-  }
-}
-
-
 resource "rafay_download_kubeconfig" "tfkubeconfig" {
   cluster            = var.cluster_name
   output_folder_path = "/tmp"
