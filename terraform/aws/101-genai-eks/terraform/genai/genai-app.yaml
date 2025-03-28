@@ -35,5 +35,5 @@ spec:
             cpu: "250m" 
         ports:
         - containerPort: 80
-      serviceAccountName: gen-ai
+      serviceAccountName: genai
 ---

@@ -24,7 +24,7 @@ spec:
             cpu: "250m" 
         ports:
         - containerPort: 8000
-      serviceAccountName: gen-ai
+      serviceAccountName: genai
 ---
 apiVersion: v1
 kind: Service

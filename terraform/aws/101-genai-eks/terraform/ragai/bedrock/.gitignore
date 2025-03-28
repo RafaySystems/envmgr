@@ -1,7 +1,0 @@
-.terraform/
-*.tfstate*
-
-dependencies/
-
-.venv/
-__pycache__/
