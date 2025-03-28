@@ -17,6 +17,10 @@ resource "aws_iam_openid_connect_provider" "default" {
   url             = data.aws_eks_cluster.default.identity[0].oidc[0].issuer
 }
 
+data "aws_iam_openid_connect_provider" "existing" {
+  url = data.aws_eks_cluster.default.identity[0].oidc[0].issuer
+}
+
 resource "aws_iam_role" "default" {
   name = "bedrock-irsa-role-${var.namespace}"
 
@@ -26,13 +30,13 @@ resource "aws_iam_role" "default" {
       Sid    = ""
       Effect = "Allow",
       Principal = {
-        Federated = aws_iam_openid_connect_provider.default.arn
+        Federated = data.aws_iam_openid_connect_provider.existing.arn
       },
       Action = "sts:AssumeRoleWithWebIdentity",
       Condition = {
         StringEquals = {
-            "${aws_iam_openid_connect_provider.default.url}:sub" = "system:serviceaccount:${var.namespace}:genai"
-            "${aws_iam_openid_connect_provider.default.url}:aud" = "sts.amazonaws.com"
+            "${data.aws_iam_openid_connect_provider.existing.url}:sub" = "system:serviceaccount:${var.namespace}:genai"
+            "${data.aws_iam_openid_connect_provider.existing.url}:aud" = "sts.amazonaws.com"
           }
       }
     }]
