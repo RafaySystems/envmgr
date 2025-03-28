@@ -35,7 +35,7 @@ resource "aws_iam_role" "default" {
 }
 
 resource "aws_iam_role_policy" "default" {
-  name   = "bedrock-irsa-policy-${var.namepsace}"
+  name   = "bedrock-irsa-policy-${var.namespace}"
   role   = aws_iam_role.default.id
   policy = jsonencode({
    Version = "2012-10-17"
