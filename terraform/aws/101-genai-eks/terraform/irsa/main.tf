@@ -13,7 +13,7 @@ resource "aws_iam_openid_connect_provider" "default" {
 }
 
 resource "aws_iam_role" "default" {
-  name = "bedrock-irsa-role-${var.namepsace}"
+  name = "bedrock-irsa-role-${var.namespace}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -26,7 +26,7 @@ resource "aws_iam_role" "default" {
       Action = "sts:AssumeRoleWithWebIdentity",
       Condition = {
         StringEquals = {
-            "${aws_iam_openid_connect_provider.default.url}:sub" = "system:serviceaccount:${var.namspace}:genai"
+            "${aws_iam_openid_connect_provider.default.url}:sub" = "system:serviceaccount:${var.namespace}:genai"
             "${aws_iam_openid_connect_provider.default.url}:aud" = "sts.amazonaws.com"
           }
       }
