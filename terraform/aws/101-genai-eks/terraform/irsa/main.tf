@@ -6,7 +6,12 @@ data "tls_certificate" "default" {
   url = data.aws_eks_cluster.default.identity[0].oidc[0].issuer
 }
 
+data "aws_iam_openid_connect_provider" "check_if_exists" {
+  url = data.aws_eks_cluster.default.identity[0].oidc[0].issuer
+}
+
 resource "aws_iam_openid_connect_provider" "default" {
+  count = length(data.aws_iam_openid_connect_provider.check_if_exists.id) == 0 ? 1 : 0
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.tls_certificate.default.certificates[0].sha1_fingerprint]
   url             = data.aws_eks_cluster.default.identity[0].oidc[0].issuer
