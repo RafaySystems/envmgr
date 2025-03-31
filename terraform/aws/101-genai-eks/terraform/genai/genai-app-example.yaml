@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gen-ai-app-example2
+  name: gen-ai-app-example
 spec:
   selector:
     matchLabels:
-      app: gen-ai-app-example2
+      app: gen-ai-app-example
   replicas: 1
   template:
     metadata:
       labels:
-        app: gen-ai-app-example2
+        app: gen-ai-app-example
     spec:
       containers:
-      - name: gen-ai-app-example2
+      - name: gen-ai-app-example
         image: public.ecr.aws/rafay-dev/gen-ai-sample-chat-app
         resources:
           requests:
@@ -29,10 +29,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: gen-ai-app-example2-lb
+  name: gen-ai-app-example-lb
 spec:
   selector:
-    app: gen-ai-app-example2
+    app: gen-ai-app-example
   ports:
     - protocol: TCP
       port: 8000

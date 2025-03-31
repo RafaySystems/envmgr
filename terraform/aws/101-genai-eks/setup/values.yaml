@@ -9,7 +9,7 @@ IRSAResourceTemplate: 101-genai-eks-aws-irsa
 GenAIResourceTemplate: 101-genai-eks-aws-genai
 ## Environment Manager environmentTemplate Name
 ## https://docs.rafay.dev/env_manager/templates/environment_templates/
-AIEnvironmentTemplate: eks-ai-apps
+AIEnvironmentTemplate: eks-genai-app
 ## Terraform code path 
 tfRepoPathIRSA: terraform/aws/101-genai-eks/terraform/irsa
 tfRepoPathGenAI: terraform/aws/101-genai-eks/terraform/genai
