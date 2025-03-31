@@ -81,14 +81,14 @@ spec:
     kind: resourcetemplate
     name: {{ $glbCtx.GenAIResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
-      version: v2
+      version: {{ $glbCtx.version }}
     type: dynamic
   - dependsOn:
     - name: naas-rs-tmpl
     kind: resourcetemplate
     name: {{ $glbCtx.IRSAResourceTemplate }}-{{ $glbCtx.projectName }}
     resourceOptions:
-      version: v1
+      version: {{ $glbCtx.version }}
     type: dynamic
   - kind: resourcetemplate
     name: res-gen-kubeconfig-user
