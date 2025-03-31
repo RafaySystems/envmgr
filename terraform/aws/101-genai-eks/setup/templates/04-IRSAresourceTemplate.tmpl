@@ -1,0 +1,55 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.IRSAResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  provider: opentofu
+  providerOptions:
+    openTofu:
+      backendType: system
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathIRSA }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: cluster_name
+    options:
+      override:
+        type: allowed
+    valueType: text
+  - name: namespace
+    options:
+      override:
+        type: allowed
+    valueType: text
+  - name: aws_region
+    options:
+      override:
+        type: allowed
+    valueType: text
+  - name: hserver
+    options:
+      override:
+        type: allowed
+    valueType: text
+  - name: clientkeydata
+    options:
+      override:
+        type: allowed
+    valueType: text
+  - name: clientcertificatedata
+    options:
+      override:
+        type: allowed
+    valueType: text
+  - name: certificateauthoritydata
+    options:
+      override:
+        type: allowed
+    valueType: text
+  version: {{ $glbCtx.version }}
+  versionState: draft
+  
+  

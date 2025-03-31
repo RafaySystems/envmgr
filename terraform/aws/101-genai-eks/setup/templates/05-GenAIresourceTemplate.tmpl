@@ -5,26 +5,29 @@ metadata:
   name: {{ $glbCtx.GenAIResourceTemplate }}-{{ $glbCtx.projectName }}
   project: {{ $glbCtx.projectName }}
 spec:
-  agents:
-  - name: {{ $glbCtx.agentName }}
-  contexts:
-  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
-  provider: terraform
+  provider: opentofu
   providerOptions:
-    terraform:
-      refresh: true
+    openTofu:
       backendType: system
-      version: 1.4.6
   repositoryOptions:
     branch: {{ $glbCtx.branch }}
     directoryPath: {{ $glbCtx.tfRepoPathGenAI }}
     name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
   variables:
+  - name: cluster_name
+    options:
+      override:
+        type: allowed
+    valueType: text
   - name: namespace
     options:
-      description: Name of the namespace
       override:
-        type: notallowed
-    value: $(environment.name)$
-    valueType: expression
+        type: allowed
+    valueType: text
+  - name: project
+    options:
+      override:
+        type: allowed
+    valueType: text
   version: {{ $glbCtx.version }}
+  versionState: draft

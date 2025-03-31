@@ -9,7 +9,7 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
 }
 
 
-resource "rafay_workload" "install_example2" {
+resource "rafay_workload" "install_example" {
   metadata {
     name    = "genai2-${local.namespace}"
     project = var.project
@@ -24,7 +24,7 @@ resource "rafay_workload" "install_example2" {
       type = "Yaml"
       artifact {
         paths {
-          name = "file://genai-app-example2.yaml"
+          name = "file://genai-app-example.yaml"
         }
       }
     }
@@ -32,7 +32,7 @@ resource "rafay_workload" "install_example2" {
 }
 
 resource "time_sleep" "wait_for_lb" {
-  depends_on      = [rafay_workload.install_example2]
+  depends_on      = [rafay_workload.install_example]
   create_duration = "30s"
 }
 
@@ -47,10 +47,10 @@ resource "null_resource" "download_kubectl" {
   }
 }
 
-resource "null_resource" "get-gen-ai-ip-example2" {
+resource "null_resource" "get-gen-ai-ip-example" {
   triggers  =  { always_run = "${timestamp()}" }
   provisioner "local-exec" {
-    command = "./kubectl get svc gen-ai-app-example2-lb -n ${local.namespace} --kubeconfig=/tmp/kubeconfig | awk -F' ' '{print $4}' | tail -1 | tr -d '\n' >> /tmp/gen-ai-ip-example2.txt"
+    command = "./kubectl get svc gen-ai-app-example-lb -n ${local.namespace} --kubeconfig=/tmp/kubeconfig | awk -F' ' '{print $4}' | tail -1 | tr -d '\n' >> /tmp/gen-ai-ip-example.txt"
   }
   depends_on = [
       time_sleep.wait_for_lb,
@@ -58,8 +58,8 @@ resource "null_resource" "get-gen-ai-ip-example2" {
 ]
 }
 
-data "local_file" "gen-ai-ip-example2" {
-    filename = "/tmp/gen-ai-ip-example2.txt"
-  depends_on = [null_resource.get-gen-ai-ip-example2]
+data "local_file" "gen-ai-ip-example" {
+    filename = "/tmp/gen-ai-ip-example.txt"
+  depends_on = [null_resource.get-gen-ai-ip-example]
 }
 

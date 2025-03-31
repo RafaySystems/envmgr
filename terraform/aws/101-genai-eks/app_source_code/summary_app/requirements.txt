@@ -1,6 +1,0 @@
-boto3
-faiss-cpu
-jq
-langchain
-streamlit
-transformers

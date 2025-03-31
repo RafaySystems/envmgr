@@ -1,0 +1,313 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: EnvironmentTemplate
+metadata:
+  name: {{ $glbCtx.AIEnvironmentTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}
+  contexts:
+  - data:
+      envs:
+      - key: AWS_SECRET_ACCESS_KEY
+        options:
+          mask: true
+          override:
+            type: notallowed
+          sensitive: true
+      - key: AWS_ACCESS_KEY_ID
+        options:
+          mask: true
+          override:
+            type: notallowed
+          sensitive: true
+    name: aws-credentials
+  - data:
+      envs:
+      - key: API Key
+        options:
+          description: Enter the API key of the controller
+          override:
+            selectors:
+            - resource.*.RCTL_API_KEY
+            type: allowed
+          required: true
+          sensitive: true
+      - key: Controller Endpoint
+        options:
+          description: Enter the endpoint of the controller
+          override:
+            selectors:
+            - resource.*.RCTL_REST_ENDPOINT
+            type: allowed
+          required: true
+        value: console.stage.rafay.dev
+    name: rafay-env-vars
+  iconURL: https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/2109px-Kubernetes_logo_without_workmark.svg.png
+  readme: "Developers and data scientists can request for the creation and access
+    to a new Namespace on a shared, multi-tenant \nKubernetes cluster. \n\n---\n\n##
+    What does this do behind the scenes? \nThis template will perform the following
+    activities: \n\n1. Create a new Kubernetes namespace with a randomly generated
+    name in the designated cluster in the Rafay \nproject where this template is launched
+    \n2. Ensure the namespace is configured with a default set of resource quotas
+    \n3. Create a new group for RBAC with Namespace Admin privileges to this newly
+    created namespace \n4. Add the requesting user's credentials to the new group
+    \n\n---\n\n## Defaults and Overrides \nThe new namespace will be created with
+    a default setting for resource quotas for CPU and memory. You will\nalso have
+    the option to override the default resource quotas with alternative options. See
+    the input variables\nsection below for complete details. \n\n---\n\n## Instructions\n\nOnce
+    your environment is successfully created, please logout and login to establish
+    a new session with your \nnew role. You will now have administrative privileges
+    in the new Kubernetes namespace to create, read, \nupdate and delete Kubernetes
+    resources. You can also perform the following as part of your application \ndevelopment
+    activities. \n\n- Deploy workloads to your namespace from the pre-configured application
+    catalog\n- Deploy workloads by uploading the YAML or Helm manifests \n- Deploy
+    workloads from the pre-configured Git repository\n- Use the integrated Kubernetes
+    dashboard to view the status and details of resources in your namespace \n- Securely
+    access resources in your namespace via the web based Kubectl shell\n- Download
+    a kubeconfig file to securely access resources in your namespace using your favorite
+    IDE "
+  resources:
+  - dependsOn:
+    - name: res-gen-kubeconfig-user
+    kind: resourcetemplate
+    name: naas-rs-tmpl
+    resourceOptions:
+      version: v1.0
+    type: dynamic
+  - dependsOn:
+    - name: {{ $glbCtx.IRSAResourceTemplate }}-{{ $glbCtx.projectName }}
+    kind: resourcetemplate
+    name: {{ $glbCtx.GenAIResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: v2
+    type: dynamic
+  - dependsOn:
+    - name: naas-rs-tmpl
+    kind: resourcetemplate
+    name: {{ $glbCtx.IRSAResourceTemplate }}-{{ $glbCtx.projectName }}
+    resourceOptions:
+      version: v1
+    type: dynamic
+  - kind: resourcetemplate
+    name: res-gen-kubeconfig-user
+    resourceOptions:
+      version: v1.0
+    type: dynamic
+  variables:
+  - name: Namespace
+    options:
+      description: Name of the namespace to be created
+      displayMetadata:
+        tooltip: Name of the namespace to be created
+        weight: "100"
+      override:
+        selectors:
+        - resource.*.namespace
+        type: allowed
+      required: true
+    value: $(environment.name)$
+    valueType: expression
+  - name: Project
+    options:
+      description: Project name where the namespace will be created
+      displayMetadata:
+        tooltip: Defaults to Environment launch Project name, it can be changed
+        weight: "100"
+      override:
+        selectors:
+        - resource.*.project
+        type: allowed
+      required: true
+    value: $(environment.project.name)$
+    valueType: expression
+  - name: Cluster Name
+    options:
+      description: Cluster name where the namespace will be created
+      displayMetadata:
+        tooltip: Cluster name where the namespace will be created
+        weight: "200"
+      override:
+        selectors:
+        - resource.*.cluster_name
+        type: allowed
+      required: true
+    value: <cluster-name>
+    valueType: text
+  - name: User Name
+    options:
+      description: User name of the person requesting the namespace
+      displayMetadata:
+        tooltip: User name of the person requesting the namespace
+        weight: "300"
+      override:
+        selectors:
+        - resource.naas-rs-tmpl.username
+        type: notallowed
+      required: true
+    value: $(trigger.payload.username)$
+    valueType: expression
+  - name: User Type
+    options:
+      description: User type of the person requesting the namespace
+      displayMetadata:
+        tooltip: User type of the person requesting the namespace
+        weight: "400"
+      override:
+        selectors:
+        - resource.naas-rs-tmpl.user_type
+        type: notallowed
+      required: true
+    value: $(trigger.payload.is_sso_user)$
+    valueType: expression
+  - name: Collaborator
+    options:
+      description: Collaborator email address
+      displayMetadata:
+        tooltip: Collaborator email address
+        weight: "500"
+      override:
+        selectors:
+        - resource.naas-rs-tmpl.collaborator
+        type: allowed
+    value: user_email
+    valueType: text
+  - name: Network Policy
+    options:
+      description: Create a network policy that will deny all incoming and outgoing
+        traffic from the namespace
+      displayMetadata:
+        tooltip: Create a network policy that will deny all incoming and outgoing
+          traffic from the namespace
+        weight: "600"
+      override:
+        restrictedValues:
+        - enabled
+        - disabled
+        selectors:
+        - resource.naas-rs-tmpl.network_policy
+        type: restricted
+      required: true
+    value: disabled
+    valueType: text
+  - name: Namespace Labels
+    options:
+      description: Namespace Labels
+      displayMetadata:
+        tooltip: Namespace Labels
+        weight: "700"
+      override:
+        selectors:
+        - resource.naas-rs-tmpl.namespace_labels
+        type: allowed
+    value: '{}'
+    valueType: hcl
+  - name: CPU
+    options:
+      description: Assign the amount of CPU for the namespace CPU request in milliCPU
+        (m)
+      displayMetadata:
+        tooltip: Assign the amount of CPU for the namespace CPU request in milliCPU
+          (m)
+        weight: "800"
+      override:
+        restrictedValues:
+        - 1000m
+        - 2000m
+        - 4000m
+        selectors:
+        - resource.naas-rs-tmpl.cpu
+        type: restricted
+    value: 1000m
+    valueType: text
+  - name: Memory
+    options:
+      description: Assign the amount of memory for the namespace memory request in
+        mebibytes (Mi)
+      displayMetadata:
+        tooltip: Assign the amount of memory for the namespace memory request in mebibytes
+          (Mi)
+        weight: "900"
+      override:
+        restrictedValues:
+        - 1024Mi
+        - 2048Mi
+        - 4096Mi
+        selectors:
+        - resource.naas-rs-tmpl.memory
+        type: restricted
+    value: 1024Mi
+    valueType: text
+  - name: EKS Cluster Region
+    options:
+      displayMetadata:
+        disabled: false
+        section: ""
+        sectionDescription: ""
+        tooltip: ""
+        weight: ""
+      override:
+        selectors:
+        - resource.irsa.aws_region
+        type: allowed
+    value: us-east-1
+    valueType: text
+  - name: Certificate Authority Data
+    options:
+      displayMetadata:
+        disabled: false
+        section: ""
+        sectionDescription: ""
+        tooltip: ""
+        weight: ""
+      override:
+        selectors:
+        - resource.irsa.certificateauthoritydata
+        type: notallowed
+    value: $(resource."res-gen-kubeconfig-user".output.certificateauthoritydata.value)$
+    valueType: expression
+  - name: Client Key Data
+    options:
+      displayMetadata:
+        disabled: false
+        section: ""
+        sectionDescription: ""
+        tooltip: ""
+        weight: ""
+      override:
+        selectors:
+        - resource.irsa.clientkeydata
+        type: notallowed
+    value: $(resource."res-gen-kubeconfig-user".output.clientkeydata.value)$
+    valueType: expression
+  - name: Client Certificate Data
+    options:
+      displayMetadata:
+        disabled: false
+        section: ""
+        sectionDescription: ""
+        tooltip: ""
+        weight: ""
+      override:
+        selectors:
+        - resource.irsa.clientcertificatedata
+        type: notallowed
+    value: $(resource."res-gen-kubeconfig-user".output.clientcertificatedata.value)$
+    valueType: expression
+  - name: Host Server
+    options:
+      displayMetadata:
+        disabled: false
+        section: ""
+        sectionDescription: ""
+        tooltip: ""
+        weight: ""
+      override:
+        selectors:
+        - resource.irsa.hserver
+        type: notallowed
+    value: $(resource."res-gen-kubeconfig-user".output.host.value)$
+    valueType: expression
+  version: {{ $glbCtx.version }}
+  versionState: draft
