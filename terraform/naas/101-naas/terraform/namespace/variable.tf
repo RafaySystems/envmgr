@@ -1,10 +1,10 @@
 variable "cluster_name" {
-  description = "name of the eks cluster"
-  default = "eks-cluster-1"
+  description = "name of the cluster that the namespace will be created in"
+  default = "naas-cluster-1"
 }
 
 variable "project" {
-  description = "name of the project where the cluster resides"
+  description = "Name of the project where the host cluster resides"
   type    = string
   default = "eaas"
 }
@@ -32,5 +32,6 @@ variable "memory" {
 }
 
 variable "collaborator" {
+  description = "Email address of a user who will be granted access to the environment resources"
   type = string
 }
