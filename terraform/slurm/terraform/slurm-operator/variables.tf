@@ -1,7 +1,3 @@
-variable "cluster_name" {
-  type = string
-}
-
 variable "kubeconfig_path" {
   description = "Path to the Kubernetes config file"
   default     = "kubeconfig.json"
