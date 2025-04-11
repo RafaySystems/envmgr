@@ -226,7 +226,7 @@ controller:
     #
     # -- (string)
     # Create a `PersistentVolumeClaim` with this storage class.
-    storageClass: openebs-hostpath
+    storageClass: ${storageclass}
     #
     # -- (list)
     # Create a `PersistentVolumeClaim` with these access modes.
@@ -391,7 +391,7 @@ compute:
         # - metadata:
         #     name: data
         #   spec:
-        #     storageClassName: standard
+        #     storageClassName: ${storageclass}
         #     mountPath: /mnt/data
         #     accessModes:
         #       - ReadWriteOnce
@@ -533,7 +533,7 @@ mariadb:
     persistence:
       enabled: false
       existingClaim: ""
-      storageClass: standard
+      storageClass: ${storageclass}
       labels: {}
       annotations: {}
       accessModes:
@@ -602,5 +602,4 @@ restapi:
 slurm-exporter:
   exporter:
     enabled: true
-    #secretName: ""
-    #secretName: "slurm-token-exporter"
+    secretName: "slurm-token-exporter"
