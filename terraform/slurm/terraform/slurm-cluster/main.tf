@@ -33,7 +33,7 @@ resource "null_resource" "get_edge_id" {
 
 data "local_file" "edgeid" {
     filename = "${path.module}/edgeid.txt"
-  depends_on = ["null_resource.get_edge_id"]
+  depends_on = [null_resource.get_edge_id]
 }
 
 output "slurm_url" {
