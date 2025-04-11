@@ -1,5 +1,5 @@
 resource "local_file" "slurm-cluster-values" {
-  content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
+  content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl"), {
     storageclass   = "$var.storageclass
   })
   filename        = ""${path.module}/values-slurm-cluster.yaml"
