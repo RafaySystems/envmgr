@@ -32,7 +32,7 @@ resource "helm_release" "slurm-operator" {
   create_namespace = true
   name             = "slurm-operator"
   namespace        = "slurm-operator"
-  repository       = "oci://ghcr.io/slinkyproject/charts/slurm-operator"
+  repository       = "oci://ghcr.io/slinkyproject/charts"
   chart            = "slurm-operator"
   values           = [file("${path.module}/values-operator.yaml")]
 }
