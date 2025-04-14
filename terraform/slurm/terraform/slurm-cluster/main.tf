@@ -1,10 +1,10 @@
-resource "local_file" "slurm-cluster-values" {
-  content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
-    storageclass   = var.storageclass
-  })
-  filename        = "${path.module}/values-slurm-cluster.yaml"
-  file_permission = "0644"
-}
+#resource "local_file" "slurm-cluster-values" {
+#  content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
+#    storageclass   = var.storageclass
+#  })
+#  filename        = "${path.module}/values-slurm-cluster.yaml"
+#  file_permission = "0644"
+#}
 
 resource "helm_release" "slurm-cluster" {
   depends_on = [local_file.slurm-cluster-values]
@@ -13,9 +13,21 @@ resource "helm_release" "slurm-cluster" {
   namespace        = var.namespace
   repository       = "oci://ghcr.io/slinkyproject/charts/"
   chart            = "slurm"
-  values           = [file("${path.module}/values-slurm-cluster.yaml")]
-}
+  #values           = [file("${path.module}/values-slurm-cluster.yaml")]
+  set {
+    name  = "mariadb.primary.persistence.storageClass"
+    value = var.storageclass
+  }
 
+  set {
+    name  = "controller.persistence.storageClass"
+    value = var.storageclass
+  }
+  set {
+    name  = "compute.nodesets[0].persistentVolumeClaimRetentionPolicy.whenScaled"
+    value = "Retain"
+  }
+}
 
 resource "null_resource" "get_edge_id" {
   triggers = {
