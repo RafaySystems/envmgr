@@ -1,3 +1,8 @@
+resource "local_file" "kubeconfig" {
+  filename = "/tmp/kubeconfig"
+  content  = var.kubeconfig
+}
+
 resource "local_file" "slurm-cluster-values" {
   content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
     storageclass   = var.storageclass
