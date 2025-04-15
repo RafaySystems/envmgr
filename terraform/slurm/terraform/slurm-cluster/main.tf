@@ -1,13 +1,13 @@
-#resource "local_file" "slurm-cluster-values" {
-#  content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
-#    storageclass   = var.storageclass
-#  })
-#  filename        = "${path.module}/values-slurm-cluster.yaml"
-#  file_permission = "0644"
-#}
+resource "local_file" "slurm-cluster-values" {
+  content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
+    storageclass   = var.storageclass
+  })
+  filename        = "${path.module}/values-slurm-cluster.yaml"
+  file_permission = "0644"
+}
 
 resource "helm_release" "slurm-cluster" {
-  #depends_on = [local_file.slurm-cluster-values]
+  depends_on = [local_file.slurm-cluster-values]
   create_namespace = true
   name             = "slurm-cluster-${var.namespace}"
   namespace        = var.namespace
@@ -15,19 +15,19 @@ resource "helm_release" "slurm-cluster" {
   chart            = "slurm"
   timeout          = 600
   #values           = [file("${path.module}/values-slurm-cluster.yaml")]
-  set {
-    name  = "mariadb.primary.persistence.storageClass"
-    value = var.storageclass
-  }
+  #set {
+  #  name  = "mariadb.primary.persistence.storageClass"
+  #  value = var.storageclass
+  #}
 
-  set {
-    name  = "controller.persistence.storageClass"
-    value = var.storageclass
-  }
-  set {
-    name  = "compute.nodesets[0].persistentVolumeClaimRetentionPolicy.whenScaled"
-    value = "Retain"
-  }
+  #set {
+  #  name  = "controller.persistence.storageClass"
+  #  value = var.storageclass
+  #}
+  #set {
+  #  name  = "compute.nodesets[0].persistentVolumeClaimRetentionPolicy.whenScaled"
+  #  value = "Retain"
+  #}
 }
 
 resource "null_resource" "get_edge_id" {
