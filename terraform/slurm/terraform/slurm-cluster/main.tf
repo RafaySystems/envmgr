@@ -1,8 +1,3 @@
-resource "local_file" "kubeconfig" {
-  filename = "/tmp/kubeconfig"
-  content  = var.kubeconfig
-}
-
 resource "local_file" "slurm-cluster-values" {
   content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
     storageclass   = var.storageclass
@@ -44,7 +39,7 @@ resource "null_resource" "slurm_cluster" {
 	  tar -xvf helm-v3.17.0-linux-amd64.tar.gz &&
       cd linux-amd64/ &&
       chmod +x ./helm &&
-      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=var.namespace  --create-namespace  --set mariadb.primary.persistence.storageClass=var.storageclass --set controller.persistence.storageClass=var.storageclass --set compute.nodesets[0].persistentVolumeClaimRetentionPolicy.whenScaled=Retain --timeout 5m --kubeconfig=kubeconfig.json
+      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=var.namespace  --create-namespace  --set mariadb.primary.persistence.storageClass=var.storageclass --set controller.persistence.storageClass=var.storageclass --set compute.nodesets[0].persistentVolumeClaimRetentionPolicy.whenScaled=Retain --timeout 5m --kubeconfig=/tmp/kubeconfig
     EOT
   }
 }
