@@ -1,3 +1,9 @@
+resource "rafay_download_kubeconfig" "tfkubeconfig" {
+  cluster            = var.cluster_name
+  output_folder_path = "/tmp"
+  filename           = "kubeconfig"
+}
+
 resource "local_file" "slurm-cluster-values" {
   content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
     storageclass   = var.storageclass
