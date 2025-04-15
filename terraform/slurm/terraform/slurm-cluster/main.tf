@@ -6,14 +6,14 @@ resource "local_file" "slurm-cluster-values" {
   file_permission = "0644"
 }
 
-resource "helm_release" "slurm-cluster" {
-  depends_on = [local_file.slurm-cluster-values]
-  create_namespace = true
-  name             = "slurm-cluster-${var.namespace}"
-  namespace        = var.namespace
-  repository       = "oci://ghcr.io/slinkyproject/charts/"
-  chart            = "slurm"
-  timeout          = 600
+#resource "helm_release" "slurm-cluster" {
+#  depends_on = [local_file.slurm-cluster-values]
+#  create_namespace = true
+#  name             = "slurm-cluster-${var.namespace}"
+#  namespace        = var.namespace
+#  repository       = "oci://ghcr.io/slinkyproject/charts/"
+#  chart            = "slurm"
+#  timeout          = 600
   #values           = [file("${path.module}/values-slurm-cluster.yaml")]
   #set {
   #  name  = "mariadb.primary.persistence.storageClass"
@@ -28,6 +28,20 @@ resource "helm_release" "slurm-cluster" {
   #  name  = "compute.nodesets[0].persistentVolumeClaimRetentionPolicy.whenScaled"
   #  value = "Retain"
   #}
+#}
+
+
+# null_resource is used here rather hthen helm provider as chart fails to deploy successfully when the helm provdider is used
+resource "null_resource" "slurm_cluster" {  
+  provisioner "local-exec" {
+    command = <<-EOT
+      wget "https://get.helm.sh/helm-v3.17.0-linux-amd64.tar.gz" &&
+	  tar -xvf helm-v3.17.0-linux-amd64.tar.gz &&
+      cd linux-amd64/ &&
+      chmod +x ./helm &&
+      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=var.namespace  --create-namespace  --set mariadb.primary.persistence.storageClass=var.storageclass --set controller.persistence.storageClass=var.storageclass --set compute.nodesets[0].persistentVolumeClaimRetentionPolicy.whenScaled=Retain --timeout 5m --kubeconfig=/tmp/kubeconfig
+    EOT
+  }
 }
 
 resource "null_resource" "get_edge_id" {
