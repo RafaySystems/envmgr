@@ -7,7 +7,7 @@
 #}
 
 resource "helm_release" "slurm-cluster" {
-  depends_on = [local_file.slurm-cluster-values]
+  #depends_on = [local_file.slurm-cluster-values]
   create_namespace = true
   name             = "slurm-cluster-${var.namespace}"
   namespace        = var.namespace
