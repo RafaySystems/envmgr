@@ -13,6 +13,7 @@ resource "helm_release" "slurm-cluster" {
   namespace        = var.namespace
   repository       = "oci://ghcr.io/slinkyproject/charts/"
   chart            = "slurm"
+  timeout          = 600
   #values           = [file("${path.module}/values-slurm-cluster.yaml")]
   set {
     name  = "mariadb.primary.persistence.storageClass"
