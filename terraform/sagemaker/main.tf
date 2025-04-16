@@ -39,7 +39,7 @@ resource "aws_iam_policy" "sagemaker_user_policy" {
 }
 
 resource "aws_iam_user_policy_attachment" "user_policy_attachment" {
-  user       =  local.sanitized_username
+  user       =  var.username
   policy_arn = aws_iam_policy.sagemaker_user_policy.arn 
 }
 
