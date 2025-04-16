@@ -7,7 +7,7 @@ locals {
 }
 
 resource "aws_iam_policy" "sagemaker_user_policy" {
-  name        = "SageMakerUserPolicy- ${local.sanitized_username}"
+  name        = "SageMakerUserPolicy-${local.sanitized_username}"
   description = "Policy for SageMaker Users"
 
   policy = jsonencode({
