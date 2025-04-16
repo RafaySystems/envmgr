@@ -58,5 +58,5 @@ resource "aws_sagemaker_user_profile" "sagemaker_user_profile" {
 }
 
 output "user_url" {
-  value = "https://${var.region}.console.aws.amazon.com/sagemaker/home?region=${var.region#/studio/${var.domain_id}/user/${local.sanitized_username}"
+  value = "https://${var.region}.console.aws.amazon.com/sagemaker/home?region=${var.region}/studio/${var.domain_id}/user/${local.sanitized_username}"
 }
