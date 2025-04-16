@@ -2,8 +2,12 @@ provider "aws" {
   region = var.region
 }
 
+locals {
+  sanitized_username = replace(var.username, "@", "_")
+}
+
 resource "aws_iam_policy" "sagemaker_user_policy" {
-  name        = "SageMakerUserPolicy- ${var.username}"
+  name        = "SageMakerUserPolicy- ${local.sanitized_username}"
   description = "Policy for SageMaker Users"
 
   policy = jsonencode({
@@ -35,13 +39,13 @@ resource "aws_iam_policy" "sagemaker_user_policy" {
 }
 
 resource "aws_iam_user_policy_attachment" "user_policy_attachment" {
-  user       =  replace(var.username, "@", "_") 
+  user       =  local.sanitized_username
   policy_arn = aws_iam_policy.sagemaker_user_policy.arn 
 }
 
 
 resource "aws_sagemaker_user_profile" "sagemaker_user_profile" {
-  user_profile_name =  replace(var.username, "@", "_")
+  user_profile_name =  local.sanitized_username
   domain_id         = var.domain_id
   
   user_settings {
