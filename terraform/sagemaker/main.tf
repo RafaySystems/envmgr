@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 locals {
-  sanitized_username = replace(var.username, "@", "_")
+  sanitized_username = split("@", var.username)[0]
 }
 
 resource "aws_iam_policy" "sagemaker_user_policy" {
