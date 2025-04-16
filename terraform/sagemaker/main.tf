@@ -35,13 +35,13 @@ resource "aws_iam_policy" "sagemaker_user_policy" {
 }
 
 resource "aws_iam_user_policy_attachment" "user_policy_attachment" {
-  user       = var.username  
+  user       =  replace(var.username, "@", "_") 
   policy_arn = aws_iam_policy.sagemaker_user_policy.arn 
 }
 
 
 resource "aws_sagemaker_user_profile" "sagemaker_user_profile" {
-  user_profile_name = var.username
+  user_profile_name =  replace(var.username, "@", "_")
   domain_id         = var.domain_id
   
   user_settings {
