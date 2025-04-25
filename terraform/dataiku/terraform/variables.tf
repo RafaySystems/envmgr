@@ -9,7 +9,13 @@ variable "remote_user" {
   default     = "ubuntu"
 }
 
-variable "private_key_path" {
-  description = "Path to the private SSH key"
+variable "ssh_private_key" {
+  description = "Contents of the private SSH key"
+  type        = string
+  sensitive   = true
+}
+
+variable "dataiku_license" {
+  description = "Dataiku License"
   type        = string
 }
