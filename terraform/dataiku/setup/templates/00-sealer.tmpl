@@ -1,0 +1,9 @@
+{{ $glbCtx := . }}
+apiVersion: integrations.k8smgmt.io/v3
+kind: SecretSealer
+metadata:
+  name: eaas-sealer-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  type: KubeSeal
+  version: {{ $glbCtx.version }}

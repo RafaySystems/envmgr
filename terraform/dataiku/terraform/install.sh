@@ -1,0 +1,1 @@
+echo "Hello from Terraform on a custom instance!" > /tmp/test

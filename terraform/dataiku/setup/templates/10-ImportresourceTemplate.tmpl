@@ -1,0 +1,51 @@
+{{ $glbCtx := . }}
+apiVersion: eaas.envmgmt.io/v1
+kind: ResourceTemplate
+metadata:
+  name: {{ $glbCtx.ImportResourceTemplate }}-{{ $glbCtx.projectName }}
+  project: {{ $glbCtx.projectName }}
+spec:
+  agents:
+  - name: {{ $glbCtx.agentName }}
+  contexts:
+  - name: {{ $glbCtx.RafayConfigContext }}-{{ $glbCtx.projectName }}
+  provider: terraform
+  providerOptions:
+    terraform:
+      refresh: true
+      backendType: system
+      version: 1.4.6
+  repositoryOptions:
+    branch: {{ $glbCtx.branch }}
+    directoryPath: {{ $glbCtx.tfRepoPathImport }}
+    name: {{ $glbCtx.repoName }}-{{ $glbCtx.projectName }}
+  variables:
+  - name: cluster_name
+    options:
+      description: Rafay Cluster Name
+      required: true
+    value: $(environment.name)$
+    valueType: expression
+  - name: projectname
+    options:
+      description: Rafay Project Name
+      required: true
+    value: $(environment.name)$
+    valueType: expression
+  - name: location
+    options:
+      description: Rafay Cluster Location
+      override:
+        type: allowed
+      required: true
+    value: sanjose-us
+    valueType: text
+  - name: blueprint
+    options:
+      description: Rafay Blueprint
+      override:
+        type: allowed
+      required: true
+    value: minimal
+    valueType: text
+  version: {{ $glbCtx.version }}
