@@ -30,10 +30,10 @@ data_dir=$parent_dir/dss_data
 postgres_parent_dir=/data/pgsql
 postgres_port=5431
 
-dss_public_host=141.148.161.93
-ssl_cert_path=/home/ubuntu/certs/localhost.crt
-ssl_key_path=/home/ubuntu/certs/localhost.key
-root_ca_path=/home/ubuntu/certs/rootCA.cert.pem
+dss_public_host=ec2-54-191-155-39.us-west-2.compute.amazonaws.com
+ssl_cert_path=/home/ec2-user/ssl/mysite.crt
+ssl_key_path=/home/ec2-user/ssl/mysite.key
+root_ca_path=/home/ec2-user/my-ca/certs/rootCA.cert.pem
 
 # 1) Pre-installation tasks
 #  - Stop dataiku (in case this script is not being run for the first time)
