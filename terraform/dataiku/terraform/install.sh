@@ -23,7 +23,7 @@ sudo -u $dssuser -- /home/dataiku/dss_data/bin/dss start
 sudo -u $dssuser -- /home/dataiku/dss_data/bin/dss stop
 #
 # Create a system service, using the command shown by the previous step
- sudo "/home/dataiku/dataiku-dss-VERSION/scripts/install/install-boot.sh" "/home/dataiku/dss_data" dataiku
+ sudo -i "$install_dir/scripts/install/install-boot.sh" "/home/dataiku/dss_data" dataiku
 #
 # Start the system service
  sudo systemctl start dataiku
