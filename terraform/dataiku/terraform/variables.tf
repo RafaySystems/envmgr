@@ -17,5 +17,5 @@ variable "ssh_private_key" {
 
 variable "dataiku_license" {
   description = "Dataiku License"
-  type        = map(string)
+  type        = string
 }
