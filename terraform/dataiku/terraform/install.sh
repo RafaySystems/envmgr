@@ -5,6 +5,7 @@ parent_dir=/home/dataiku
 install_dir=$parent_dir/dataiku-dss-$dss_version
 data_dir=$parent_dir/dss_data
 
+sudo sed -i "s/^#\$nrconf{restart} = 'i';/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 $install_dir/scripts/install/install-deps.sh -yes -with-r -with-chrome
 
 # Run installer, with data directory $HOME/dss_data and base port 10000
