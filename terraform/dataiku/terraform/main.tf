@@ -37,7 +37,7 @@ resource "null_resource" "create_remote_license_file" {
   depends_on = [null_resource.remote_exec_prereqs]
   provisioner "remote-exec" {
     inline = [
-      "echo '${var.dataiku_license}' > /home/dataiku/license.json"
+      "sudo echo '${var.dataiku_license}' > /home/dataiku/license.json"
     ]
 
     connection {
