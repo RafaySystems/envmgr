@@ -53,7 +53,7 @@ resource "null_resource" "apply_iptables_update" {
     connection {
       host        = var.remote_host
       user        = var.remote_user
-      private_key = var.private_key
+      private_key = var.ssh_private_key
     }
   }
 }
