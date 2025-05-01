@@ -4,6 +4,11 @@ resource "oci_core_instance" "ubuntu_vm" {
   shape               = var.instance_shape
   display_name        = "ubuntu-2204-instance-tim"
 
+  shape_config {
+    ocpus         = 2
+    memory_in_gbs = 24
+  }
+
   create_vnic_details {
     subnet_id        = var.subnet_id
     assign_public_ip = true
