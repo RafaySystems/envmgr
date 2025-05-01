@@ -13,3 +13,9 @@ variable "subnet_id" {
 variable "instance_shape" {
   default = "VM.Standard3.Flex"
 }
+
+variable "ssh_public_key" {
+  default = <<EOF
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDArCqS9QWsOYG+CpQD/tXk0mGwUs1yVEOaCC+CRyyU6uoZ3BDv5jscCtRczc4gczNpuSt3tmajxqgA4xG7pDPTXR3vpGjBf8E8UWB1VgPOugNhcMcZ2RWkZm3jsbmAilmXpHJSzn2hA+5Lu7WYEHccViqTAMH/JEv86NU+7bqABYtG8/70UrFvCz8vco4vlEyW6mvqEZcUTxHwGHXLF4dOZgOn3h5ZBJ9oCMynX/I8yZGK0gj5EmOJzscKoqTSTdpGKXVi7FiKzYUoN7L18FwqUX92EpzbqyvRrlnldRvZAg2t04P8ZktHL8kApF+5lyRd8Dlj/WPJ7/qzgSVtrKy3 ssh-key-2022-12-06
+EOF
+}
