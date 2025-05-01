@@ -37,12 +37,6 @@ data "oci_core_images" "ubuntu_2204" {
   sort_order = "DESC"
 }
 
-output "instance_public_ip" {
-  value = oci_core_instance.ubuntu_vm.public_ip
-  description = "The public IP address of the Ubuntu instance"
-}
-
-
 resource "null_resource" "apply_iptables_update" {
   depends_on = [oci_core_instance.ubuntu_vm]
   provisioner "remote-exec" {
