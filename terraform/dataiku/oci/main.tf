@@ -51,7 +51,7 @@ resource "null_resource" "apply_iptables_update" {
     ]
 
     connection {
-      host        = var.remote_host
+      host        = oci_core_instance.ubuntu_vm.public_ip
       user        = var.remote_user
       private_key = var.ssh_private_key
     }
