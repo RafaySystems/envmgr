@@ -41,7 +41,7 @@ resource "null_resource" "apply_iptables_update" {
   depends_on = [oci_core_instance.ubuntu_vm]
   provisioner "remote-exec" {
     inline = [
-        "sudo iptables -F ; iptables -t nat -F; netfilter-persistent save"
+        "sudo su; iptables -F ; iptables -t nat -F; netfilter-persistent save"
     ]
 
     connection {
