@@ -42,7 +42,8 @@ resource "null_resource" "apply_iptables_update" {
   provisioner "remote-exec" {
     inline = [
         "sudo su",
-        "iptables -F ; iptables -t nat -F; netfilter-persistent save"
+        "iptables -F ; iptables -t nat -F; netfilter-persistent save",
+  "exit"
     ]
 
     connection {
