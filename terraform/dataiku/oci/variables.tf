@@ -4,12 +4,6 @@ variable "subnet_id" {}
 variable "instance_shape" {}
 variable "ssh_public_key" {}
 
-variable "remote_host" {
-  description = "Public IP or DNS of the remote server"
-  type        = string
-  default     = "dummy"
-}
-
 variable "remote_user" {
   description = "SSH username (e.g., ubuntu, root)"
   type        = string
