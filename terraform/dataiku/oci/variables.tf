@@ -7,6 +7,7 @@ variable "ssh_public_key" {}
 variable "remote_host" {
   description = "Public IP or DNS of the remote server"
   type        = string
+  default     = "dummy"
 }
 
 variable "remote_user" {
