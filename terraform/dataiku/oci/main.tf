@@ -1,8 +1,15 @@
+# Generate a random string
+resource "random_string" "suffix" {
+  length  = 6
+  upper   = false
+  special = false
+}
+
 resource "oci_core_instance" "ubuntu_vm" {
   availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
   compartment_id      = var.compartment_ocid
   shape               = var.instance_shape
-  display_name        = "ubuntu-2204-instance-tim"
+  display_name        = "dataiku-${random_string.suffix.result}"
 
   shape_config {
     ocpus         = 2
