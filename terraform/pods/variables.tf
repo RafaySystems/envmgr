@@ -1,7 +1,6 @@
 variable "remote_host" {
   description = "Public IP or DNS of the remote server"
   type        = string
-  default     = "137.131.3.90"
 }
 
 variable "remote_user" {
