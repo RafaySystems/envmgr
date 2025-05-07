@@ -58,15 +58,15 @@ resource "null_resource" "create_pod" {
   }
 }
 
-#resource "null_resource" "destroy_pod" {
-#  depends_on = [local_file.ssh_key]
-#
-#  triggers = {
-#    always_run = timestamp()
-#  }
-#
-#  provisioner "local-exec" {
-#    when    = destroy
-#    command = "ssh -o StrictHostKeyChecking=no -i ${local_file.ssh_key.filename} ${var.remote_user}@${var.remote_host} 'sudo docker rm -f ${local.pod_name} || true'"
-#  }
-#}
+resource "null_resource" "destroy_pod" {
+  depends_on = [null_resource.create_pod]
+
+  triggers = {
+    pod_name = local.pod_name
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "ssh -o StrictHostKeyChecking=no -i ${local_file.ssh_key.filename} ${var.remote_user}@${var.remote_host} 'sudo docker rm -f ${local.pod_name} || true'"
+  }
+}
