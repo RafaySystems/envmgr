@@ -13,3 +13,7 @@ output "ssh_port" {
 output "ip" {
   value = var.remote_host
 }
+
+output "ssh_private_key" {
+  value = var.ssh_private_key
+}
