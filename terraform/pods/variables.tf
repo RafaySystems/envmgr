@@ -12,5 +12,4 @@ variable "remote_user" {
 variable "ssh_private_key" {
   description = "Contents of the private SSH key"
   type        = string
-  sensitive   = true
 }
