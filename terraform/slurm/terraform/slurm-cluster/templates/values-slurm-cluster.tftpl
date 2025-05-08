@@ -1,57 +1,224 @@
-mariadb:
-  primary:
-    persistence:
-      storageClass: ${storageclass}
-
-controller:
-  persistence:
-    storageClass: ${storageclass}
-
-compute:
-  nodesets:
-    - persistentVolumeClaimRetentionPolicy:
-        whenScaled: Retain
+debug:
+  enabled: false
+  localOperator: true
 
 nameOverride: ""
 fullnameOverride: ""
 namespaceOverride: ""
-
 imagePullSecrets: []
-
+imagePullPolicy: IfNotPresent
 priorityClassName: ""
 
-operator:
+jwt:
+  hs256:
+    existingSecret: ""
+
+slurm:
+  auth:
+    existingSecret: ""
+  extraSlurmdbdConf: |-
+    CommitDelay=1
+    DebugLevel=info
+    LogTimeFormat=iso8601_ms
+    HashPlugin=hash/k12
+    ArchiveDir=/tmp
+  extraSlurmConf: |-
+    MaxNodeCount=1024
+    ReturnToService=2
+    EnforcePartLimits=NO
+    SchedulerType=sched/backfill
+    SchedulerParameters=defer_batch
+    SelectType=select/cons_tres
+    SelectTypeParameters=CR_Core_Memory
+    SlurmctldParameters=enable_configless,enable_stepmgr
+    SlurmdParameters=contain_spank
+    CommunicationParameters=block_null_hash
+    LaunchParameters=enable_nss_slurm,use_interactive_step,ulimit_pam_adopt
+    PrologFlags=Contain
+    HashPlugin=hash/k12
+    SlurmctldDebug=info
+    SlurmSchedLogLevel=1
+    SlurmdDebug=info
+    LogTimeFormat=iso8601_ms
+  configFiles: {}
+  prologScripts: {}
+  epilogScripts: {}
+
+authcred:
+  imagePullPolicy: IfNotPresent
+  image:
+    repository: ghcr.io/slinkyproject/sackd
+    tag: 24.11-ubuntu24.04
+  resources: {}
+
+controller:
   enabled: true
   replicas: 1
   imagePullPolicy: IfNotPresent
   image:
-    repository: ghcr.io/slinkyproject/slurm-operator
-    tag: ""
-  serviceAccount:
-    create: true
-    name: ""
+    repository: ghcr.io/slinkyproject/slurmctld
+    tag: 24.11-ubuntu24.04
+  priorityClassName: ""
   affinity: {}
   resources: {}
-  clusterWorkers: 1
-  nodesetWorkers: 1
-  logLevel: info
+  persistence:
+    existingClaim: ""
+    annotations: {}
+    labels: {}
+    storageClass: ${storageclass}
+    accessModes:
+      - ReadWriteOnce
+    size: 4Gi
+    selector: {}
 
-webhook:
+compute:
+  imagePullPolicy: IfNotPresent
+  image:
+    repository: ghcr.io/slinkyproject/slurmd
+    tag: 24.11-ubuntu24.04
+  nodesets:
+    - name: debug
+      enabled: true
+      replicas: 1
+      imagePullPolicy: IfNotPresent
+      image:
+        repository: ""
+        tag: ""
+      priorityClassName: ""
+      resources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+      nodeSelector:
+        kubernetes.io/os: linux
+      affinity: {}
+      updateStrategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 20%
+      persistentVolumeClaimRetentionPolicy:
+        whenDeleted: Retain
+        whenScaled: Retain
+      volumeClaimTemplates: []
+      partition:
+        enabled: true
+        config: >-
+          State=UP
+          MaxTime=UNLIMITED
+      nodeGres: ""
+      nodeFeatures: []
+      nodeWeight: 1
+  partitions:
+    - name: all
+      enabled: true
+      nodesets:
+        - ALL
+      config: >-
+        State=UP
+        Default=YES
+        MaxTime=UNLIMITED
+
+accounting:
   enabled: true
   replicas: 1
   imagePullPolicy: IfNotPresent
   image:
-    repository: ghcr.io/slinkyproject/slurm-operator-webhook
-    tag: ""
-  serviceAccount:
-    create: true
-    name: ""
+    repository: ghcr.io/slinkyproject/slurmdbd
+    tag: 24.11-ubuntu24.04
   affinity: {}
   resources: {}
-  logLevel: info
+  external:
+    enabled: false
+    host: ""
+    port: 6819
 
-certManager:
+mariadb:
   enabled: true
-  secretName: slurm-operator-webhook-ca
-  duration: 43800h0m0s
-  renewBefore: 8760h0m0s
+  auth:
+    username: slurm
+    database: slurm_acct_db
+    existingSecret: "slurm-mariadb-passwords"
+  tls:
+    enabled: false
+  tde:
+    enabled: false
+  primary:
+    configuration: |-
+      [mysqld]
+      skip-name-resolve
+      explicit_defaults_for_timestamp
+      basedir=/opt/bitnami/mariadb
+      datadir=/bitnami/mariadb/data
+      plugin_dir=/opt/bitnami/mariadb/plugin
+      port={{ .Values.primary.containerPorts.mysql }}
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      tmpdir=/opt/bitnami/mariadb/tmp
+      innodb_buffer_pool_size=4096M
+      innodb_lock_wait_timeout=900
+      innodb_log_file_size=1024M
+      max_allowed_packet=16M
+      bind-address=*
+      pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+      log-error=/opt/bitnami/mariadb/logs/mysqld.log
+      character-set-server=UTF8
+      collation-server=utf8_general_ci
+      slow_query_log=0
+      long_query_time=10.0
+      binlog_expire_logs_seconds=2592000
+      {{- if .Values.tls.enabled }}
+      ssl_cert=/opt/bitnami/mariadb/certs/{{ .Values.tls.certFilename }}
+      ssl_key=/opt/bitnami/mariadb/certs/{{ .Values.tls.certKeyFilename }}
+      {{- if (include "mariadb.tlsCACert" .) }}
+      ssl_ca={{ include "mariadb.tlsCACert" . }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.tde.enabled }}
+      plugin_load_add=file_key_management
+      file_key_management_filename=/opt/bitnami/mariadb/tde/{{ .Values.tde.encryptedKeyFilename }}
+      file_key_management_filekey=FILE:/opt/bitnami/mariadb/tde/{{ .Values.tde.randomKeyFilename }}
+      file_key_management_encryption_algorithm={{ .Values.tde.fileKeyManagementEncryptionAlgorithm }}
+      innodb_encrypt_tables={{ .Values.tde.innodbEncryptTables }}
+      innodb_encrypt_log={{ .Values.tde.innodbEncryptLog }}
+      innodb_encrypt_temporary_tables={{ .Values.tde.innodbEncryptTemporaryTables }}
+      innodb_encryption_threads={{ .Values.tde.innodbEncryptionThreads }}
+      encrypt_tmp_disk_tables={{ .Values.tde.encryptTmpDiskTables }}
+      encrypt_tmp_files={{ .Values.tde.encryptTmpTiles }}
+      encrypt_binlog={{ .Values.tde.encryptBINLOG }}
+      aria_encrypt_tables={{ .Values.tde.ariaEncryptTables }}
+      {{- end }}
+
+      [client]
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      default-character-set=UTF8
+      plugin_dir=/opt/bitnami/mariadb/plugin
+
+      [manager]
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+    persistence:
+      enabled: true
+      existingClaim: ""
+      storageClass: ${storageclass}
+      labels: {}
+      annotations: {}
+      accessModes:
+        - ReadWriteOnce
+      size: 8Gi
+      selector: {}
+    priorityClassName: ""
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+  affinity: {}
+  resources: {}
+
+restapi:
+  enabled: true
+  replicas: 1
+  imagePullPolicy: IfNotPresent
+  image:
+    repository: ghcr.io/slinkyproject/slurmrestd
+    tag: 24.11-ubuntu24.04
