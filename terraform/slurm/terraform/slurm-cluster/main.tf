@@ -8,7 +8,7 @@ resource "local_file" "slurm-cluster-values" {
   content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
     storageclass   = var.storageclass
   })
-  filename        = "${path.module}/values-slurm-cluster.yaml"
+  filename        = "/tmp/values-slurm-cluster.yaml"
   file_permission = "0644"
 }
 
@@ -45,7 +45,7 @@ resource "null_resource" "slurm_cluster" {
       tar -xvf helm-v3.17.0-linux-amd64.tar.gz &&
       cd linux-amd64/ &&
       chmod +x ./helm &&
-      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=${var.namespace}  --create-namespace --values="${path.module}/values-slurm-cluster.yaml" --timeout 5m --kubeconfig=/tmp/kubeconfig
+      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=${var.namespace}  --create-namespace --values="/tmp/values-slurm-cluster.yaml" --timeout 5m --kubeconfig=/tmp/kubeconfig
     EOT
   }
   depends_on = [local_file.slurm-cluster-values]
