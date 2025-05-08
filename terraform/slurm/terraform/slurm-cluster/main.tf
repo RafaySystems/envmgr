@@ -41,11 +41,11 @@ resource "local_file" "slurm-cluster-values" {
 resource "null_resource" "slurm_cluster" {  
   provisioner "local-exec" {
     command = <<-EOT
+ls ${path.module} &&
       wget "https://get.helm.sh/helm-v3.17.0-linux-amd64.tar.gz" &&
 	  tar -xvf helm-v3.17.0-linux-amd64.tar.gz &&
       cd linux-amd64/ &&
       chmod +x ./helm &&
-ls &&
       ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=${var.namespace}  --create-namespace  --set mariadb.primary.persistence.storageClass=${var.storageclass} --set controller.persistence.storageClass=${var.storageclass} --set compute.nodesets[0].persistentVolumeClaimRetentionPolicy.whenScaled=Retain --values="${path.module}/values-slurm-cluster.yaml" --timeout 5m --kubeconfig=/tmp/kubeconfig
     EOT
   }
