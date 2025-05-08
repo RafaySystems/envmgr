@@ -45,43 +45,7 @@ resource "null_resource" "slurm_cluster" {
       tar -xvf helm-v3.17.0-linux-amd64.tar.gz &&
       cd linux-amd64/ &&
       chmod +x ./helm &&
-      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=${var.namespace}  --create-namespace \
-  --set mariadb.primary.persistence.storageClass=${var.storageclass} \
-  --set controller.persistence.storageClass=${var.storageclass} \
-  --set compute.nodesets[0].persistentVolumeClaimRetentionPolicy.whenScaled=Retain \  
-  --set nameOverride="" \
-  --set fullnameOverride="" \
-  --set namespaceOverride="" \
-  --set imagePullSecrets={} \
-  --set priorityClassName="" \
-  --set operator.enabled=true \
-  --set operator.replicas=1 \
-  --set operator.imagePullPolicy=IfNotPresent \
-  --set operator.image.repository=ghcr.io/slinkyproject/slurm-operator \
-  --set operator.image.tag="" \
-  --set operator.serviceAccount.create=true \
-  --set operator.serviceAccount.name="" \
-  --set operator.affinity={} \
-  --set operator.resources={} \
-  --set operator.clusterWorkers=1 \
-  --set operator.nodesetWorkers=1 \
-  --set operator.logLevel=info \
-  --set webhook.enabled=true \
-  --set webhook.replicas=1 \
-  --set webhook.imagePullPolicy=IfNotPresent \
-  --set webhook.image.repository=ghcr.io/slinkyproject/slurm-operator-webhook \
-  --set webhook.image.tag="" \
-  --set webhook.serviceAccount.create=true \
-  --set webhook.serviceAccount.name="" \
-  --set webhook.affinity={} \
-  --set webhook.resources={} \
-  --set webhook.logLevel=info \
-  --set certManager.enabled=true \
-  --set certManager.secretName=slurm-operator-webhook-ca \
-  --set certManager.duration=43800h0m0s \
-  --set certManager.renewBefore=8760h0m0s \ 
-  --timeout 5m\
-  --kubeconfig=/tmp/kubeconfig
+      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=${var.namespace}  --create-namespace --set mariadb.primary.persistence.storageClass=${var.storageclass} --set controller.persistence.storageClass=${var.storageclass} --set compute.nodesets[0].persistentVolumeClaimRetentionPolicy.whenScaled=Retain --set nameOverride="" --set fullnameOverride="" --set namespaceOverride="" --set imagePullSecrets={} --set priorityClassName="" --set operator.enabled=true --set operator.replicas=1 --set operator.imagePullPolicy=IfNotPresent --set operator.image.repository=ghcr.io/slinkyproject/slurm-operator --set operator.image.tag="" --set operator.serviceAccount.create=true --set operator.serviceAccount.name="" --set operator.affinity={} --set operator.resources={} --set operator.clusterWorkers=1 --set operator.nodesetWorkers=1 --set operator.logLevel=info --set webhook.enabled=true --set webhook.replicas=1 --set webhook.imagePullPolicy=IfNotPresent --set webhook.image.repository=ghcr.io/slinkyproject/slurm-operator-webhook --set webhook.image.tag="" --set webhook.serviceAccount.create=true --set webhook.serviceAccount.name="" --set webhook.affinity={} --set webhook.resources={} --set webhook.logLevel=info --set certManager.enabled=true --set certManager.secretName=slurm-operator-webhook-ca --set certManager.duration=43800h0m0s --set certManager.renewBefore=8760h0m0s --timeout 5m --kubeconfig=/tmp/kubeconfig
     EOT
   }
 }
