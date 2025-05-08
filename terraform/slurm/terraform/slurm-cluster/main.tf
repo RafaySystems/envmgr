@@ -45,9 +45,10 @@ resource "null_resource" "slurm_cluster" {
       tar -xvf helm-v3.17.0-linux-amd64.tar.gz &&
       cd linux-amd64/ &&
       chmod +x ./helm &&
-      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=${var.namespace}  --create-namespace --set mariadb.primary.persistence.storageClass=${var.storageclass} --set controller.persistence.storageClass=${var.storageclass} --set compute.nodesets[0].persistentVolumeClaimRetentionPolicy.whenScaled=Retain --timeout 5m --kubeconfig=/tmp/kubeconfig
+      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=${var.namespace}  --create-namespace --values="${path.module}/values-slurm-cluster.yaml" --timeout 5m --kubeconfig=/tmp/kubeconfig
     EOT
   }
+  depends_on = [local_file.slurm-cluster-values]
 }
 
 resource "null_resource" "get_edge_id" {
