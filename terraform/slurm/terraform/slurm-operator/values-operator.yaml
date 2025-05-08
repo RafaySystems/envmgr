@@ -25,24 +25,6 @@ imagePullSecrets: []
 
 #
 # -- (string)
-# Set the image pull policy.
-imagePullPolicy: IfNotPresent
-
-#
-# Image configurations.
-image:
-  #
-  # -- (string)
-  # Sets the image repository to use.
-  repository: ghcr.io/slinkyproject/slurm-operator
-  #
-  # -- (string)
-  # Sets the image tag to use.
-  # @default -- The Release appVersion.
-  tag: ""
-
-#
-# -- (string)
 # Set the priority class to use.
 # Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
 priorityClassName: ""
@@ -58,6 +40,22 @@ operator:
   # -- (integer)
   # Set the number of replicas to deploy.
   replicas: 1
+  #
+  # -- (string)
+  # Set the image pull policy.
+  imagePullPolicy: IfNotPresent
+  #
+  # Image configurations.
+  image:
+    #
+    # -- (string)
+    # Sets the image repository to use.
+    repository: ghcr.io/slinkyproject/slurm-operator
+    #
+    # -- (string)
+    # Sets the image tag to use.
+    # @default -- The chart Version.
+    tag: ""
   #
   # Service account configurations.
   serviceAccount:
@@ -109,6 +107,22 @@ webhook:
   # -- (integer)
   # Set the number of replicas to deploy.
   replicas: 1
+  #
+  # -- (string)
+  # Set the image pull policy.
+  imagePullPolicy: IfNotPresent
+  #
+  # Image configurations.
+  image:
+    #
+    # -- (string)
+    # Sets the image repository to use.
+    repository: ghcr.io/slinkyproject/slurm-operator-webhook
+    #
+    # -- (string)
+    # Sets the image tag to use.
+    # @default -- The chart Version.
+    tag: ""
   #
   # Service account configurations.
   serviceAccount:
