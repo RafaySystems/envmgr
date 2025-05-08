@@ -11,3 +11,47 @@ compute:
   nodesets:
     - persistentVolumeClaimRetentionPolicy:
         whenScaled: Retain
+
+nameOverride: ""
+fullnameOverride: ""
+namespaceOverride: ""
+
+imagePullSecrets: []
+
+priorityClassName: ""
+
+operator:
+  enabled: true
+  replicas: 1
+  imagePullPolicy: IfNotPresent
+  image:
+    repository: ghcr.io/slinkyproject/slurm-operator
+    tag: ""
+  serviceAccount:
+    create: true
+    name: ""
+  affinity: {}
+  resources: {}
+  clusterWorkers: 1
+  nodesetWorkers: 1
+  logLevel: info
+
+webhook:
+  enabled: true
+  replicas: 1
+  imagePullPolicy: IfNotPresent
+  image:
+    repository: ghcr.io/slinkyproject/slurm-operator-webhook
+    tag: ""
+  serviceAccount:
+    create: true
+    name: ""
+  affinity: {}
+  resources: {}
+  logLevel: info
+
+certManager:
+  enabled: true
+  secretName: slurm-operator-webhook-ca
+  duration: 43800h0m0s
+  renewBefore: 8760h0m0s
