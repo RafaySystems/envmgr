@@ -40,11 +40,11 @@ data "vsphere_storage_policy" "policy" {
   name  = var.vsphere_storage_policy
 }
 
-resource "vsphere_folder" "folder_controlplane" {
-  path          = var.vsphere_folder_controlplane
-  type          = "vm"
-  datacenter_id = data.vsphere_datacenter.datacenter.id
-}
+#resource "vsphere_folder" "folder_controlplane" {
+#  path          = var.vsphere_folder_controlplane
+#  type          = "vm"
+#  datacenter_id = data.vsphere_datacenter.datacenter.id
+#}
 
 resource "vsphere_virtual_machine" "controlplane" {
   # https://github.com/hashicorp/terraform-provider-vsphere/issues/1902
