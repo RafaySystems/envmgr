@@ -1,3 +1,13 @@
+resource "random_integer" "example" {
+  min = 1
+  max = 100
+}
+
+locals {
+  username = split("@", var.em_username)[0]
+  randomnumber   =  random_integer.example.result
+}
+
 data "vsphere_datacenter" "datacenter" {
   name = var.vsphere_datacenter
 }
@@ -49,7 +59,7 @@ resource "vsphere_virtual_machine" "controlplane" {
       hv_mode
     ]
   }
-  name                 = "${var.controlplane_vm_prefix}-${var.em_username}"
+  name                 = "${var.controlplane_vm_prefix}-${var.username}-${var.randomnumber}"
   guest_id             = data.vsphere_virtual_machine.vm_template.guest_id
   firmware             = data.vsphere_virtual_machine.vm_template.firmware
   num_cpus             = var.controlplane_vm_cpu
