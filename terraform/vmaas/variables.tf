@@ -1,13 +1,3 @@
-variable "controlplane_vm_count" {
-  description = "Number of controlplane VMs to create"
-  type        = number
-  default     = 1
-  validation {
-    condition     = var.controlplane_vm_count >= 1
-    error_message = "Must be 1 or more."
-  }
-}
-
 variable "controlplane_vm_cpu" {
   description = "Number of CPUs per controlplane VM"
   type        = number
@@ -26,20 +16,8 @@ variable "vm_disk_os_size_controlplane" {
   default     = 50
 }
 
-variable "vm_disk_os_size_worker" {
-  description = "Minimum size of the worker OS disk [GiB]"
-  type        = number
-  default     = 50
-}
-
 variable "vm_disk_data_size_controlplane" {
   description = "Size of the controlplane DATA disk [GiB]"
-  type        = number
-  default     = 30
-}
-
-variable "vm_disk_data_size_worker" {
-  description = "Size of the worker DATA disk [GiB]"
   type        = number
   default     = 30
 }
@@ -82,11 +60,6 @@ variable "vsphere_network_controlplane" {
 variable "vsphere_datastore" {
   description = "Datastore where virtual machines will reside"
   default = "ssd-001858"
-}
-
-variable "vsphere_folder_controlplane" {
-  description = "vSphere folder where the controlplane virtual machines will be organized"
-  default = "controlplane-folder"
 }
 
 variable "vsphere_vm_template" {

@@ -40,12 +40,6 @@ data "vsphere_storage_policy" "policy" {
   name  = var.vsphere_storage_policy
 }
 
-#resource "vsphere_folder" "folder_controlplane" {
-#  path          = var.vsphere_folder_controlplane
-#  type          = "vm"
-#  datacenter_id = data.vsphere_datacenter.datacenter.id
-#}
-
 resource "vsphere_virtual_machine" "controlplane" {
   # https://github.com/hashicorp/terraform-provider-vsphere/issues/1902
   # ignoring these fields due to the above issue and its causing the vm to restart
@@ -55,8 +49,6 @@ resource "vsphere_virtual_machine" "controlplane" {
       hv_mode
     ]
   }
-  count                = var.controlplane_vm_count
-  #folder               = vsphere_folder.folder_controlplane.path
   name                 = "${var.controlplane_vm_prefix}-${var.em_username}"
   guest_id             = data.vsphere_virtual_machine.vm_template.guest_id
   firmware             = data.vsphere_virtual_machine.vm_template.firmware
