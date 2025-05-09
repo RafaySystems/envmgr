@@ -59,7 +59,7 @@ resource "vsphere_virtual_machine" "controlplane" {
       hv_mode
     ]
   }
-  name                 = "${var.controlplane_vm_prefix}-${var.username}-${var.randomnumber}"
+  name                 = "${var.controlplane_vm_prefix}-${local.username}-${local.randomnumber}"
   guest_id             = data.vsphere_virtual_machine.vm_template.guest_id
   firmware             = data.vsphere_virtual_machine.vm_template.firmware
   num_cpus             = var.controlplane_vm_cpu
