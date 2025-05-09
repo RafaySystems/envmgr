@@ -56,7 +56,7 @@ resource "vsphere_virtual_machine" "controlplane" {
     ]
   }
   count                = var.controlplane_vm_count
-  folder               = vsphere_folder.folder_controlplane.path
+  #folder               = vsphere_folder.folder_controlplane.path
   name                 = "${var.controlplane_vm_prefix}-${var.em_username}"
   guest_id             = data.vsphere_virtual_machine.vm_template.guest_id
   firmware             = data.vsphere_virtual_machine.vm_template.firmware
