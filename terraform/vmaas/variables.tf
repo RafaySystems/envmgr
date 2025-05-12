@@ -93,3 +93,7 @@ variable "em_username" {
   description = "EM username"
   default = "em_user"
 }
+
+variable "authorized-key" {
+  description = "Public SSH Key"
+}

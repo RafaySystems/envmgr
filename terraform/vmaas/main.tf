@@ -50,6 +50,26 @@ data "vsphere_storage_policy" "policy" {
   name  = var.vsphere_storage_policy
 }
 
+data "cloudinit_config" "controlplane" {
+  gzip          = true
+  base64_encode = true
+  part {
+    content_type = "text/cloud-config"
+    content      = <<-EOF
+      #cloud-config
+      hostname: ${var.controlplane_vm_prefix}-${local.username}-${local.randomnumber}
+      users:
+        - name: ${var.vm_username}
+          passwd: '$6$rounds=4096$23GLKxe5CyPc1$fL5FgZCbCgw30ZHwqDt8hoO07m6isstJlxUIwvHBcSLVGzjdiR1Z1zA2yKGtR6EIv5LHflJuedbaiLUqU5Wfj0'
+          sudo: ALL=(ALL) NOPASSWD:ALL
+          lock_passwd: false
+          shell: /bin/bash
+          ssh-authorized-keys:
+            - ${var.authorized-key}
+      EOF
+  }
+}
+
 resource "vsphere_virtual_machine" "controlplane" {
   # https://github.com/hashicorp/terraform-provider-vsphere/issues/1902
   # ignoring these fields due to the above issue and its causing the vm to restart
@@ -95,5 +115,9 @@ resource "vsphere_virtual_machine" "controlplane" {
   }
   clone {
     template_uuid = data.vsphere_virtual_machine.vm_template.id
+  }
+   extra_config = {
+    "guestinfo.userdata"           = data.cloudinit_config.controlplane.rendered
+    "guestinfo.userdata.encoding"  = "gzip+base64"
   }
 }
