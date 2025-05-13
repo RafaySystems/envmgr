@@ -1,23 +1,23 @@
-variable "controlplane_vm_cpu" {
-  description = "Number of CPUs per controlplane VM"
+variable "vm_cpu" {
+  description = "Number of CPUs per VM"
   type        = number
   default     = 4
 }
 
-variable "controlplane_vm_memory" {
-  description = "Amount of memory [GiB] per controlplane VM"
+variable "vm_memory" {
+  description = "Amount of memory [GiB] per VM"
   type        = number
   default     = 16
 }
 
-variable "vm_disk_os_size_controlplane" {
-  description = "Minimum size of  controlplane OS disk [GiB]"
+variable "vm_disk_os_size" {
+  description = "Minimum size of OS disk [GiB]"
   type        = number
   default     = 50
 }
 
-variable "vm_disk_data_size_controlplane" {
-  description = "Size of the controlplane DATA disk [GiB]"
+variable "vm_disk_data_size" {
+  description = "Size of the DATA disk [GiB]"
   type        = number
   default     = 30
 }
@@ -52,8 +52,8 @@ variable "vsphere_compute_cluster" {
   default = "Cluster1"
 }
 
-variable "vsphere_network_controlplane" {
-  description = "Network to connect the controlplane virtual machines within vSphere"
+variable "vsphere_network" {
+  description = "Network to connect the virtual machines within vSphere"
   default = "rafay"
 }
 
@@ -67,8 +67,8 @@ variable "vsphere_vm_template" {
   default = "ubuntutemplate1"
 }
 
-variable "controlplane_vm_prefix" {
-  description = "Prefix for control plane virtual machine names"
+variable "vm_prefix" {
+  description = "Prefix for virtual machine names"
   default = "rafay-paas"
 }
 
@@ -94,6 +94,6 @@ variable "em_username" {
   default = "em_user"
 }
 
-variable "authorized-key" {
+variable "vm_ssh_public_key" {
   description = "Public SSH Key"
 }

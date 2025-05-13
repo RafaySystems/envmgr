@@ -22,8 +22,8 @@ data "vsphere_datastore" "datastore" {
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
-data "vsphere_network" "network_controlplane" {
-  name          = var.vsphere_network_controlplane
+data "vsphere_network" "network" {
+  name          = var.vsphere_network
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
@@ -50,14 +50,14 @@ data "vsphere_storage_policy" "policy" {
   name  = var.vsphere_storage_policy
 }
 
-data "cloudinit_config" "controlplane" {
+data "cloudinit_config" "virtual_machine" {
   gzip          = true
   base64_encode = true
   part {
     content_type = "text/cloud-config"
     content      = <<-EOF
       #cloud-config
-      hostname: ${var.controlplane_vm_prefix}-${local.username}-${local.randomnumber}
+      hostname: ${var.vm_prefix}-${local.username}-${local.randomnumber}
       users:
         - name: ${var.vm_username}
           passwd: '$6$rounds=4096$23GLKxe5CyPc1$fL5FgZCbCgw30ZHwqDt8hoO07m6isstJlxUIwvHBcSLVGzjdiR1Z1zA2yKGtR6EIv5LHflJuedbaiLUqU5Wfj0'
@@ -65,12 +65,12 @@ data "cloudinit_config" "controlplane" {
           lock_passwd: false
           shell: /bin/bash
           ssh-authorized-keys:
-            - ${var.authorized-key}
+            - ${var.vm_ssh_public_key}
       EOF
   }
 }
 
-resource "vsphere_virtual_machine" "controlplane" {
+resource "vsphere_virtual_machine" "virtual_machine" {
   # https://github.com/hashicorp/terraform-provider-vsphere/issues/1902
   # ignoring these fields due to the above issue and its causing the vm to restart
   lifecycle {
@@ -79,12 +79,12 @@ resource "vsphere_virtual_machine" "controlplane" {
       hv_mode
     ]
   }
-  name                 = "${var.controlplane_vm_prefix}-${local.username}-${local.randomnumber}"
+  name                 = "${var.vm_prefix}-${local.username}-${local.randomnumber}"
   guest_id             = data.vsphere_virtual_machine.vm_template.guest_id
   firmware             = data.vsphere_virtual_machine.vm_template.firmware
-  num_cpus             = var.controlplane_vm_cpu
-  num_cores_per_socket = var.controlplane_vm_cpu
-  memory               = var.controlplane_vm_memory * 1024
+  num_cpus             = var.vm_cpu
+  num_cores_per_socket = var.vm_cpu
+  memory               = var.vm_memory * 1024
   nested_hv_enabled    = true
   vvtd_enabled         = true
   enable_disk_uuid     = true
@@ -98,26 +98,26 @@ resource "vsphere_virtual_machine" "controlplane" {
   disk {
     unit_number      = 0
     label            = "os"
-    size             = max(data.vsphere_virtual_machine.vm_template.disks.0.size, var.vm_disk_os_size_controlplane)
+    size             = max(data.vsphere_virtual_machine.vm_template.disks.0.size, var.vm_disk_os_size)
     eagerly_scrub    = data.vsphere_virtual_machine.vm_template.disks.0.eagerly_scrub
     thin_provisioned = true
   }
   disk {
     unit_number      = 1
     label            = "data"
-    size             = var.vm_disk_data_size_controlplane
+    size             = var.vm_disk_data_size
     eagerly_scrub    = data.vsphere_virtual_machine.vm_template.disks.0.eagerly_scrub
     thin_provisioned = true
   }
   network_interface {
-    network_id  = data.vsphere_network.network_controlplane.id
+    network_id  = data.vsphere_network.network.id
     adapter_type = data.vsphere_virtual_machine.vm_template.network_interface_types.0
   }
   clone {
     template_uuid = data.vsphere_virtual_machine.vm_template.id
   }
    extra_config = {
-    "guestinfo.userdata"           = data.cloudinit_config.controlplane.rendered
+    "guestinfo.userdata"           = data.cloudinit_config.virtual_machine.rendered
     "guestinfo.userdata.encoding"  = "gzip+base64"
   }
 }
