@@ -61,8 +61,6 @@ data "cloudinit_config" "virtual_machine" {
       users:
         - name: ${var.vm_username}
           passwd: 'password'
-          ssh_pwauth: false
-          disable_root: true
           sudo: ALL=(ALL) NOPASSWD:ALL
           lock_passwd: false
           shell: /bin/bash
