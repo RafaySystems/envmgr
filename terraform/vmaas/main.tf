@@ -60,7 +60,8 @@ data "cloudinit_config" "virtual_machine" {
       hostname: ${var.vm_prefix}-${local.username}-${local.randomnumber}
       users:
         - name: ${var.vm_username}
-          passwd: 'password'
+          passwd: '$6$rounds=4096$23GLKxe5CyPc1$fL5FgZCbCgw30ZHwqDt8hoO07m6isstJlxUIwvHBcSLVGzjdiR1Z1zA2yKGtR6EIv5LHflJuedbaiLUqU5Wfj0'
+          ssh_pwauth: false
           sudo: ALL=(ALL) NOPASSWD:ALL
           lock_passwd: false
           shell: /bin/bash
