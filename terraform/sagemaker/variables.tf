@@ -28,3 +28,11 @@ default = [
     "ml.r6id.4xlarge", "ml.r6id.8xlarge", "ml.r6id.12xlarge", "ml.r6id.16xlarge", "ml.r6id.24xlarge", "ml.r6id.32xlarge"
   ]
 }
+
+variable "idle_timeout_in_minutes" {
+  description = "The time that SageMaker waits after the application becomes idle before shutting it down"
+  type        = string
+  default = "60"
+}
+
+
