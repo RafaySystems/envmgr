@@ -22,4 +22,9 @@ variable "execution_role_arn" {
   default = "arn:aws:iam::679196758854:role/service-role/AmazonSageMaker-ExecutionRole-20250404T164231"
 }
 
-
+ variable hidden_instance_types {
+default = [
+    "ml.c6id.16xlarge", "ml.c6id.24xlarge", "ml.c6id.32xlarge", "ml.r6id.large", "ml.r6id.xlarge", "ml.r6id.2xlarge",
+    "ml.r6id.4xlarge", "ml.r6id.8xlarge", "ml.r6id.12xlarge", "ml.r6id.16xlarge", "ml.r6id.24xlarge", "ml.r6id.32xlarge"
+  ]
+}
