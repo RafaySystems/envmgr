@@ -58,6 +58,8 @@ resource "aws_sagemaker_user_profile" "sagemaker_user_profile" {
       app_lifecycle_management {
         idle_settings {
           idle_timeout_in_minutes = var.idle_timeout_in_minutes
+          max_idle_timeout_in_minutes = "600"
+          min_idle_timeout_in_minutes = "60"
         }
       }
     }
