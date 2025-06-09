@@ -6,13 +6,6 @@ locals {
   sanitized_username = split("@", var.username)[0]
 }
 
-locals {
-  hidden_instance_types = [
-    "ml.c6id.16xlarge", "ml.c6id.24xlarge", "ml.c6id.32xlarge", "ml.r6id.large", "ml.r6id.xlarge", "ml.r6id.2xlarge",
-    "ml.r6id.4xlarge", "ml.r6id.8xlarge", "ml.r6id.12xlarge", "ml.r6id.16xlarge", "ml.r6id.24xlarge", "ml.r6id.32xlarge"
-  ]
-}
-
 resource "aws_iam_policy" "sagemaker_user_policy" {
   name        = "SageMakerUserPolicy-${local.sanitized_username}"
   description = "Policy for SageMaker Users"
@@ -59,7 +52,14 @@ resource "aws_sagemaker_user_profile" "sagemaker_user_profile" {
   
     execution_role    = var.execution_role_arn
     studio_web_portal_settings {
-    hidden_instance_types = local.hidden_instance_types
+    hidden_instance_types = var.hidden_instance_types
+    }
+    jupyter_lab_app_settings{
+      app_lifecycle_management {
+        idle_settings {
+          idle_timeout_in_minutes = var.idle_timeout_in_minutes
+        }
+      }
     }
   }
   tags = {
