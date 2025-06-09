@@ -6,6 +6,18 @@ locals {
   sanitized_username = split("@", var.username)[0]
 }
 
+data "aws_ec2_instance_type_offerings" "available_instance_types" {
+  location_type = "region"  # Options: "region" or "availability-zone"
+}
+
+locals {
+  # Define the instance type you want to allow
+  allowed_instance_type = "ml.t3.medium"
+
+  # Filter out the allowed instance type from the list of all available types
+  hidden_instance_types = [for instance_type in data.aws_ec2_instance_type_offerings.available_instance_types.instance_types : instance_type if instance_type != local.allowed_instance_type]
+}
+
 resource "aws_iam_policy" "sagemaker_user_policy" {
   name        = "SageMakerUserPolicy-${local.sanitized_username}"
   description = "Policy for SageMaker Users"
@@ -51,6 +63,9 @@ resource "aws_sagemaker_user_profile" "sagemaker_user_profile" {
   user_settings {
   
     execution_role    = var.execution_role_arn
+    studio_web_portal_settings {
+    hidden_instance_types = local.hidden_instance_types
+    }
   }
   tags = {
     "studiouserid"  = var.username
