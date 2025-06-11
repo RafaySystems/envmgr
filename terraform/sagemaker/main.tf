@@ -57,6 +57,7 @@ resource "aws_sagemaker_user_profile" "sagemaker_user_profile" {
     jupyter_lab_app_settings{
       app_lifecycle_management {
         idle_settings {
+          lifecycle_management  = "ENABLED"
           idle_timeout_in_minutes = var.idle_timeout_in_minutes
           max_idle_timeout_in_minutes = "600"
           min_idle_timeout_in_minutes = "60"
