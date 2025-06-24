@@ -35,4 +35,8 @@ resource "helm_release" "slurm-operator" {
   repository       = "oci://ghcr.io/slinkyproject/charts"
   chart            = "slurm-operator"
   values           = [file("${path.module}/values-operator.yaml")]
+
+  depends_on = [
+    helm_release.cert_manager
+  ]
 }
