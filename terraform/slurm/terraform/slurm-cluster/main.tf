@@ -12,44 +12,24 @@ resource "local_file" "slurm-cluster-values" {
   file_permission = "0644"
 }
 
-#resource "helm_release" "slurm-cluster" {
-#  depends_on = [local_file.slurm-cluster-values]
-#  create_namespace = true
-#  name             = "slurm-cluster-${var.namespace}"
-#  namespace        = var.namespace
-#  repository       = "oci://ghcr.io/slinkyproject/charts/"
-#  chart            = "slurm"
-#  timeout          = 600
-  #values           = [file("${path.module}/values-slurm-cluster.yaml")]
-  #set {
-  #  name  = "mariadb.primary.persistence.storageClass"
-  #  value = var.storageclass
-  #}
+resource "helm_release" "slurm_cluster" {
+  name             = "slurm"
+  namespace        = var.namespace
+  create_namespace = true
 
-  #set {
-  #  name  = "controller.persistence.storageClass"
-  #  value = var.storageclass
-  #}
-  #set {
-  #  name  = "compute.nodesets[0].persistentVolumeClaimRetentionPolicy.whenScaled"
-  #  value = "Retain"
-  #}
-#}
+  repository       = "oci://ghcr.io/slinkyproject/charts"
+  chart            = "slurm"
+  version          = "0.3.0"
 
+  values = [
+    file("/tmp/values-slurm-cluster.yaml")  # Replace with ${path.module}/... for portability
+  ]
 
-# null_resource is used here rather hthen helm provider as chart fails to deploy successfully when the helm provdider is used
-resource "null_resource" "slurm_cluster" {  
-  provisioner "local-exec" {
-    command = <<-EOT
-      wget "https://get.helm.sh/helm-v3.17.0-linux-amd64.tar.gz" &&
-      tar -xvf helm-v3.17.0-linux-amd64.tar.gz &&
-      cd linux-amd64/ &&
-      chmod +x ./helm &&
-      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=${var.namespace} --version=0.3.0  --create-namespace --values="/tmp/values-slurm-cluster.yaml" --timeout 5m --kubeconfig=/tmp/kubeconfig
-    EOT
-  }
-  depends_on = [local_file.slurm-cluster-values]
+  timeout = 300  # 5 minutes (in seconds)
+
+  depends_on = [helm_release.slurm_operator] # Optional if slurm-operator is required first
 }
+
 
 resource "null_resource" "get_edge_id" {
   triggers = {
