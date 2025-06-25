@@ -12,18 +12,21 @@ resource "local_file" "slurm-cluster-values" {
   file_permission = "0644"
 }
 
-# null_resource is used here rather than helm provider as chart fails to deploy successfully when the helm provdider is used
-resource "null_resource" "slurm_cluster" {  
-  provisioner "local-exec" {
-    command = <<-EOT
-      wget "https://get.helm.sh/helm-v3.17.0-linux-amd64.tar.gz" &&
-      tar -xvf helm-v3.17.0-linux-amd64.tar.gz &&
-      cd linux-amd64/ &&
-      chmod +x ./helm &&
-      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=${var.namespace} --version=0.3.0  --create-namespace --values="/tmp/values-slurm-cluster.yaml" --timeout 5m --kubeconfig=/tmp/kubeconfig
-    EOT
-  }
-  depends_on = [local_file.slurm-cluster-values]
+resource "helm_release" "slurm_cluster" {
+  name             = "slurm"
+  namespace        = var.namespace
+  create_namespace = true
+
+  repository       = "oci://ghcr.io/slinkyproject/charts"
+  chart            = "slurm"
+  version          = "0.3.0"
+
+  values = [
+    local_file.slurm_cluster_values.filename
+  ]
+
+  timeout = 300
+  depends_on = [local_file.slurm_cluster_values]
 }
 
 resource "null_resource" "get_edge_id" {
