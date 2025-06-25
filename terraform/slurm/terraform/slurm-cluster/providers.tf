@@ -17,33 +17,14 @@ terraform {
 #  }
 #}
 
-provider "http" {}
-
-provider "local" {}
-
-# Download kubeconfig.json from URL
-data "http" "kubeconfig" {
-  url = var.kubeconfig_url
-}
-
-# Save it to a local file
-resource "local_file" "kubeconfig_file" {
-  filename = "${path.module}/kubeconfig.json"
-  content  = data.http.kubeconfig.body
-}
-
-# Wait for the file to exist (optional safety using null_resource)
-resource "null_resource" "wait_for_kubeconfig" {
-  depends_on = [local_file.kubeconfig_file]
-}
-
-# Use the kubeconfig in the Helm provider
 provider "helm" {
   kubernetes {
-    config_path = local_file.kubeconfig_file.filename
+    host                   = var.hserver
+    client_certificate     = base64decode(var.clientcertificatedata)
+    client_key             = base64decode(var.clientkeydata)
+    cluster_ca_certificate = base64decode(var.certificateauthoritydata)
   }
 }
-
 
 provider "rafay" {
   provider_config_file = var.rctl_config_path
