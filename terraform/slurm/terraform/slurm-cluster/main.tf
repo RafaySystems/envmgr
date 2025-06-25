@@ -21,7 +21,15 @@ resource "helm_release" "slurm_cluster" {
   chart            = "slurm"
   version          = "0.3.0"
 
-  values = [local_file.slurm_cluster_values.filename]
+  set {
+    name  = "mariadb.primary.persistence.storageClass"
+    value = var.storageclass
+  }
+
+  set {
+  name  = "controller.persistence.storageClass"
+  value = var.storageclass
+  }
 
   timeout = 300
   depends_on = [local_file.slurm_cluster_values]
