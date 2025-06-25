@@ -8,7 +8,7 @@ resource "local_file" "slurm-cluster-values" {
   content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
     storageclass   = var.storageclass
   })
-  filename        = "/tmp/values-slurm-cluster.yaml"
+  filename        = "/${path.module}/values-slurm-cluster.yaml"
   file_permission = "0644"
 }
 
@@ -22,7 +22,7 @@ resource "helm_release" "slurm_cluster" {
   version          = "0.3.0"
 
   values = [
-    file("/tmp/values-slurm-cluster.yaml")  # Replace with ${path.module}/... for portability
+    file("/${path.module}/values-slurm-cluster.yaml")  # Replace with ${path.module}/... for portability
   ]
 
   timeout = 300  # 5 minutes (in seconds)
