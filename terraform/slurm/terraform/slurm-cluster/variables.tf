@@ -14,9 +14,8 @@ variable "storageclass" {
   type = string
 }
 
-variable "kubeconfig_path" {
-  description = "Path to the Kubernetes config file"
-  default     = "kubeconfig.json"
+variable "kubeconfig_url" {
+  description = "URL to the kubeconfig file"
 }
 
 variable "rctl_config_path" {
