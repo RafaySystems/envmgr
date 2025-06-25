@@ -45,7 +45,7 @@ resource "null_resource" "slurm_cluster" {
       tar -xvf helm-v3.17.0-linux-amd64.tar.gz &&
       cd linux-amd64/ &&
       chmod +x ./helm &&
-      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=${var.namespace} --version=0.4.0  --create-namespace --values="/tmp/values-slurm-cluster.yaml" --timeout 5m --kubeconfig=/tmp/kubeconfig
+      ./helm install slurm oci://ghcr.io/slinkyproject/charts/slurm  --namespace=${var.namespace} --version=0.3.0  --create-namespace --timeout 5m --kubeconfig=/tmp/kubeconfig
     EOT
   }
   depends_on = [local_file.slurm-cluster-values]
