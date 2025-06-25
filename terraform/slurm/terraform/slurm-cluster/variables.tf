@@ -22,4 +22,5 @@ variable "kubeconfig_path" {
 variable "rctl_config_path" {
   description = "The path to the Rafay CLI config file"
   type        = string
+  default     = "opt/rafay"
 }
