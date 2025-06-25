@@ -21,7 +21,7 @@ resource "helm_release" "slurm_cluster" {
   chart            = "slurm"
   version          = "0.3.0"
 
-  values = [file("/tmp/values-slurm-cluster.yaml")]
+  values = [local_file.slurm_cluster_values.filename]
 
   timeout = 300
   depends_on = [local_file.slurm_cluster_values]
