@@ -22,12 +22,10 @@ resource "helm_release" "slurm_cluster" {
   version          = "0.3.0"
 
   values = [
-    file("/${path.module}/values-slurm-cluster.yaml")  # Replace with ${path.module}/... for portability
+    file("${path.module}/values-slurm-cluster.yaml")
   ]
 
-  timeout = 300  # 5 minutes (in seconds)
-
-  depends_on = [helm_release.slurm_operator] # Optional if slurm-operator is required first
+  timeout = 300  
 }
 
 
