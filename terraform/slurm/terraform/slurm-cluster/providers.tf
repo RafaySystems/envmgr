@@ -42,7 +42,6 @@ provider "helm" {
   kubernetes {
     config_path = local_file.kubeconfig_file.filename
   }
-  depends_on = [null_resource.wait_for_kubeconfig]
 }
 
 
