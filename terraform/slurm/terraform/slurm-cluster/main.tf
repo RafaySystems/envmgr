@@ -55,21 +55,36 @@ resource "helm_release" "slurm_cluster" {
 #}
 
 resource "null_resource" "get_slurm_login_ip" {
+  depends_on = [helm_release.slurm_cluster]
   provisioner "local-exec" {
     command = <<EOT
-SLURM_LOGIN_IP="$(kubectl --kubeconfig /tmp/kubeconfig get services -n slurm -l app.kubernetes.io/instance=slurm,app.kubernetes.io/name=login -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')"
+mkdir -p /tmp/kubectl-bin
+curl -Lo /tmp/kubectl-bin/kubectl "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x /tmp/kubectl-bin/kubectl
+
+SLURM_LOGIN_IP="$(/tmp/kubectl-bin/kubectl --kubeconfig /tmp/kubeconfig get services -n slurm -l app.kubernetes.io/instance=slurm,app.kubernetes.io/name=login -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')"
 echo "Slurm Login IP is: $SLURM_LOGIN_IP"
-# Optional: write to a file for later use
+
+# Optional: Save to file
 echo "$SLURM_LOGIN_IP" > slurm_login_ip.txt
 EOT
     interpreter = ["/bin/bash", "-c"]
   }
 }
 
-output "slurm_url" {
-  value = "https://console.rafay.dev/#/console/${var.projectid}/${var.cluster_name}?&namespace=${var.namespace}&command=${base64encode("exec -it -n ${var.namespace} slurm-controller-0 -c slurmctld -- /bin/sh")}&kubectl_type=namespace&edge_id=${data.local_file.edgeid.content}"
+data "local_file" "slurm_login_ip" {
+    filename = "${path.module}/slurm_login_ip.txt"
+  depends_on = [null_resource.get_slurm_login_ip]
 }
 
-output "slurm_url_a" {
-  value = "https://acme.paas.rafay.dev/#/console/${var.projectid}/${var.cluster_name}?&namespace=${var.namespace}&command=${base64encode("exec -it -n ${var.namespace} slurm-controller-0 -c slurmctld -- /bin/sh")}&kubectl_type=namespace&edge_id=${data.local_file.edgeid.content}"
+output "slurm_access" {
+  value = "ssh -p 2222 root@${data.local_file.slurm_login_ip.content} "
 }
+
+#output "slurm_url" {
+#  value = "https://console.rafay.dev/#/console/${var.projectid}/${var.cluster_name}?&namespace=${var.namespace}&command=${base64encode("exec -it -n ${var.namespace} slurm-controller-0 -c slurmctld -- /bin/sh")}&kubectl_type=namespace&edge_id=${data.local_file.edgeid.content}"
+#}
+
+#output "slurm_url_a" {
+#  value = "https://acme.paas.rafay.dev/#/console/${var.projectid}/${var.cluster_name}?&namespace=${var.namespace}&command=${base64encode("exec -it -n ${var.namespace} slurm-controller-0 -c slurmctld -- /bin/sh")}&kubectl_type=namespace&edge_id=${data.local_file.edgeid.content}"
+#}
