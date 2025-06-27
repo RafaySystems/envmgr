@@ -66,16 +66,19 @@ resource "helm_release" "slurm_cluster" {
 
 resource "null_resource" "get_slurm_login_ip" {
   depends_on = [helm_release.slurm_cluster]
+
   provisioner "local-exec" {
     command = <<EOT
+set -e  # Exit immediately on error
+
 mkdir -p /tmp/kubectl-bin
-wget -O /tmp/kubectl-bin/kubectl "https://dl.k8s.io/release/$(wget -qO- https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+wget -qO /tmp/kubectl-bin/kubectl "https://dl.k8s.io/release/$(wget -qO- https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x /tmp/kubectl-bin/kubectl
 
-SLURM_LOGIN_IP="$(/tmp/kubectl-bin/kubectl --kubeconfig /tmp/kubeconfig get services -n slurm -l app.kubernetes.io/instance=slurm,app.kubernetes.io/name=login -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')"
+SLURM_LOGIN_IP="$(/tmp/kubectl-bin/kubectl --kubeconfig /tmp/kubeconfig get services -n ${var.namespace} -l app.kubernetes.io/instance=slurm,app.kubernetes.io/name=login -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')"
+
 echo "Slurm Login IP is: $SLURM_LOGIN_IP"
 
-# Optional: Save to file
 echo "$SLURM_LOGIN_IP" > slurm_login_ip.txt
 EOT
     interpreter = ["/bin/bash", "-c"]
