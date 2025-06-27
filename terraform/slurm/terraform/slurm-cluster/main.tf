@@ -4,14 +4,14 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
   filename           = "kubeconfig"
 }
 
-resource "local_file" "slurm_cluster_values" {
-  content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
-    storageclass   = var.storageclass
-    ssh_pub_key   = var.ssh_pub_key
-  })
-  filename        = "/tmp/values-slurm-cluster.yaml"
-  file_permission = "0644"
-}
+#resource "local_file" "slurm_cluster_values" {
+#  content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
+#    storageclass   = var.storageclass
+#    ssh_pub_key   = var.ssh_pub_key
+#  })
+#  filename        = "/tmp/values-slurm-cluster.yaml"
+#  file_permission = "0644"
+#}
 
 resource "helm_release" "slurm_cluster" {
   name             = "slurm"
@@ -30,6 +30,16 @@ resource "helm_release" "slurm_cluster" {
   set {
   name  = "controller.persistence.storageClass"
   value = var.storageclass
+  }
+
+  set {
+    name  = "login.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "login.rootSshAuthorizedKeys[0]"
+    value = var.ssh_pub_key
   }
 
   timeout = 300
