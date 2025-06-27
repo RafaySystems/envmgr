@@ -43,7 +43,6 @@ resource "helm_release" "slurm_cluster" {
   }
 
   timeout = 300
-  depends_on = [local_file.slurm_cluster_values]
 }
 
 #resource "null_resource" "get_edge_id" {
