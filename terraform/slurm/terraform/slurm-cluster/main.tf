@@ -69,7 +69,7 @@ resource "null_resource" "get_slurm_login_ip" {
   provisioner "local-exec" {
     command = <<EOT
 mkdir -p /tmp/kubectl-bin
-curl -Lo /tmp/kubectl-bin/kubectl "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+wget -O /tmp/kubectl-bin/kubectl "https://dl.k8s.io/release/$(wget -qO- https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x /tmp/kubectl-bin/kubectl
 
 SLURM_LOGIN_IP="$(/tmp/kubectl-bin/kubectl --kubeconfig /tmp/kubeconfig get services -n slurm -l app.kubernetes.io/instance=slurm,app.kubernetes.io/name=login -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')"
