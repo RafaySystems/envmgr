@@ -7,6 +7,7 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
 resource "local_file" "slurm_cluster_values" {
   content = templatefile("${path.module}/templates/values-slurm-cluster.tftpl", {
     storageclass   = var.storageclass
+    ssh_pub_key   = var.ssh_pub_key
   })
   filename        = "/tmp/values-slurm-cluster.yaml"
   file_permission = "0644"
