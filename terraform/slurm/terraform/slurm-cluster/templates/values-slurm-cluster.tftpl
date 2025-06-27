@@ -307,7 +307,7 @@ login:
   #
   # -- (bool)
   # Enables login nodes.
-  enabled: false
+  enabled: true
   #
   # -- (integer)
   # Set the number of replicas to deploy.
@@ -347,8 +347,8 @@ login:
   #
   # -- (list)
   # The `/root/.ssh/authorized_keys` file to write, represented as a list.
-  rootSshAuthorizedKeys: []
-    # - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx user@example.com
+  rootSshAuthorizedKeys:
+     - ${ssh_pub_key}
   #
   # -- (map)
   # The `/etc/ssh/sshd_config` file to use, represented as a map.
