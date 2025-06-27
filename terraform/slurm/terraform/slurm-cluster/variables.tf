@@ -14,6 +14,10 @@ variable "storageclass" {
   type = string
 }
 
+variable "ssh_pub_key" {
+  type = string
+}
+
 variable "hserver" {
   description = "Kubeconfig server"
   type        = string
@@ -32,10 +36,4 @@ variable "clientkeydata" {
 variable "certificateauthoritydata" {
   description = "Kubeconfig certificate-authority-data"
   type        = string
-}
-
-variable "rctl_config_path" {
-  description = "The path to the Rafay CLI config file"
-  type        = string
-  default     = "opt/rafay"
 }
