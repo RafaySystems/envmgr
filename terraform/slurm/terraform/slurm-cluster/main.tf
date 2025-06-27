@@ -35,23 +35,35 @@ resource "helm_release" "slurm_cluster" {
   depends_on = [local_file.slurm_cluster_values]
 }
 
-resource "null_resource" "get_edge_id" {
-  triggers = {
-    always_run = timestamp()
-  }
-  provisioner "local-exec" {
-    interpreter = ["/bin/bash", "-c"]
-    command     = "chmod +x ./rctl.sh; ./rctl.sh"
-    environment = {
-      cluster_name = var.cluster_name
-      rctlconfig = var.rctl_config_path
-    }
-  }
-}
+#resource "null_resource" "get_edge_id" {
+#  triggers = {
+#    always_run = timestamp()
+#  }
+#  provisioner "local-exec" {
+#    interpreter = ["/bin/bash", "-c"]
+#    command     = "chmod +x ./rctl.sh; ./rctl.sh"
+#    environment = {
+#      cluster_name = var.cluster_name
+#      rctlconfig = var.rctl_config_path
+#    }
+#  }
+#}
 
-data "local_file" "edgeid" {
-    filename = "${path.module}/edgeid.txt"
-  depends_on = [null_resource.get_edge_id]
+#data "local_file" "edgeid" {
+#    filename = "${path.module}/edgeid.txt"
+#  depends_on = [null_resource.get_edge_id]
+#}
+
+resource "null_resource" "get_slurm_login_ip" {
+  provisioner "local-exec" {
+    command = <<EOT
+SLURM_LOGIN_IP="$(kubectl --kubeconfig /tmp/kubeconfig get services -n slurm -l app.kubernetes.io/instance=slurm,app.kubernetes.io/name=login -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')"
+echo "Slurm Login IP is: $SLURM_LOGIN_IP"
+# Optional: write to a file for later use
+echo "$SLURM_LOGIN_IP" > slurm_login_ip.txt
+EOT
+    interpreter = ["/bin/bash", "-c"]
+  }
 }
 
 output "slurm_url" {
