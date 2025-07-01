@@ -13,10 +13,37 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
 #  file_permission = "0644"
 #}
 
+resource "kubernetes_namespace" "slurm_cluster_namespace" {
+  metadata {
+    name = var.namespace
+  }
+}
+
+resource "kubernetes_persistent_volume_claim" "slinky_data" {
+  depends_on = [kubernetes_namespace.slurm_cluster_namespace]
+  metadata {
+    name      = "slinky_shared_data"
+    namespace = var.namespace
+  }
+
+  spec {
+    access_modes = ["ReadWriteMany"]
+
+    resources {
+      requests = {
+        storage = "10Gi"
+      }
+    }
+
+    storage_class_name = var.storageclass
+  }
+}
+
 resource "helm_release" "slurm_cluster" {
+  depends_on = [kubernetes_persistent_volume_claim.slinky_data]
   name             = "slurm"
   namespace        = var.namespace
-  create_namespace = true
+  #create_namespace = true
 
   repository       = "oci://ghcr.io/slinkyproject/charts"
   chart            = "slurm"
@@ -40,6 +67,36 @@ resource "helm_release" "slurm_cluster" {
   set {
     name  = "login.rootSshAuthorizedKeys[0]"
     value = var.ssh_pub_key
+  }
+
+  set {
+    name  = "compute.mounts[0].name"
+    value = "slinky_shared_data"
+  }
+
+  set {
+    name  = "compute.mounts[0].mountPath"
+    value = "/shared"
+  }
+
+  set {
+    name  = "compute.mounts[0].pvc"
+    value = "slinky-data"
+  }
+
+  set {
+    name  = "login.mounts[0].name"
+    value = "slinky_shared_data"
+  }
+
+  set {
+    name  = "login.mounts[0].mountPath"
+    value = "/shared"
+  }
+
+  set {
+    name  = "login.mounts[0].pvc"
+    value = "slinky-data"
   }
 
   timeout = 300
