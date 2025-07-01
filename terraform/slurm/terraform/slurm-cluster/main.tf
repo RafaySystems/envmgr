@@ -27,7 +27,7 @@ resource "kubernetes_persistent_volume_claim" "slinky_data" {
   }
 
   spec {
-    access_modes = ["ReadWriteMany"]
+    access_modes = ["ReadWriteOnce"]
 
     resources {
       requests = {
