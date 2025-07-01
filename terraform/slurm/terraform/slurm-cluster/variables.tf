@@ -14,6 +14,10 @@ variable "storageclass" {
   type = string
 }
 
+variable "compute_replicas" {
+  type = string
+}
+
 variable "ssh_pub_key" {
   type = string
 }
