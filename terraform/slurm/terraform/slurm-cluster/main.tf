@@ -60,7 +60,7 @@ resource "helm_release" "slurm_cluster" {
   }
 
   set {
-   name  = "compute.replicas"
+   name  = "compute.nodesets.replicas"
     value = var.compute_replicas
   }
 
