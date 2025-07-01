@@ -95,22 +95,22 @@ resource "helm_release" "slurm_cluster" {
   }
 
   set {
-    name  = "compute.extraVolumes[0].name"
+    name  = "compute.nodesets.extraVolumes[0].name"
     value = "slinky-shared"
   }
 
   set {
-    name  = "compute.extraVolumes[0].persistentVolumeClaim.claimName"
+    name  = "compute.nodesets.extraVolumes[0].persistentVolumeClaim.claimName"
     value = "slinky-shared-pvc"
   }
 
   set {
-    name  = "compute.extraVolumeMounts[0].name"
+    name  = "compute.nodesets.extraVolumeMounts[0].name"
     value = "slinky-shared"
   }
 
   set {
-    name  = "compute.extraVolumeMounts[0].mountPath"
+    name  = "compute.nodesets.extraVolumeMounts[0].mountPath"
     value = "/shared"
   }
 
