@@ -26,6 +26,13 @@ provider "helm" {
   }
 }
 
+provider "kubernetes" {
+  host                   = var.hserver
+  client_certificate     = base64decode(var.clientcertificatedata)
+  client_key             = base64decode(var.clientkeydata)
+  cluster_ca_certificate = base64decode(var.certificateauthoritydata)
+}
+
 #provider "rafay" {
 #  provider_config_file = var.rctl_config_path
 #}
