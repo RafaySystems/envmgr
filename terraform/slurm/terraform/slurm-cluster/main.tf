@@ -40,7 +40,7 @@ resource "kubernetes_persistent_volume_claim" "slinky_data" {
 }
 
 resource "helm_release" "slurm_cluster" {
-  depends_on = [kubernetes_persistent_volume_claim.slinky_data]
+ # depends_on = [kubernetes_persistent_volume_claim.slinky_data]
   name             = "slurm"
   namespace        = var.namespace
   #create_namespace = true
