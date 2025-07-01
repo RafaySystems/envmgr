@@ -60,6 +60,11 @@ resource "helm_release" "slurm_cluster" {
   }
 
   set {
+   name  = "compute.replicas"
+    value = var.compute_replicas
+  }
+
+  set {
     name  = "login.enabled"
     value = "true"
   }
