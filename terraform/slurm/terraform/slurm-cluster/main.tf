@@ -22,7 +22,7 @@ resource "kubernetes_namespace" "slurm_cluster_namespace" {
 resource "kubernetes_persistent_volume_claim" "slinky_data" {
   depends_on = [kubernetes_namespace.slurm_cluster_namespace]
   metadata {
-    name      = "slinky_shared_data"
+    name      = "slinky-shared-data"
     namespace = var.namespace
   }
 
@@ -71,7 +71,7 @@ resource "helm_release" "slurm_cluster" {
 
   set {
     name  = "compute.mounts[0].name"
-    value = "slinky_shared_data"
+    value = "slinky-shared-data"
   }
 
   set {
@@ -81,7 +81,7 @@ resource "helm_release" "slurm_cluster" {
 
   set {
     name  = "compute.mounts[0].pvc"
-    value = "slinky-data"
+    value = "slinky-shared-data"
   }
 
   set {
@@ -96,7 +96,7 @@ resource "helm_release" "slurm_cluster" {
 
   set {
     name  = "login.mounts[0].pvc"
-    value = "slinky-data"
+    value = "slinky-shared-data"
   }
 
   timeout = 300
