@@ -22,7 +22,7 @@ resource "kubernetes_namespace" "slurm_cluster_namespace" {
 resource "kubernetes_persistent_volume_claim" "slinky_data" {
   depends_on = [kubernetes_namespace.slurm_cluster_namespace]
   metadata {
-    name      = "slinky-shared-data"
+    name      = "slinky-shared-pvc"
     namespace = var.namespace
   }
 
@@ -69,34 +69,44 @@ resource "helm_release" "slurm_cluster" {
     value = var.ssh_pub_key
   }
 
-  set {
-    name  = "compute.mounts[0].name"
-    value = "slinky-shared-data"
+    set {
+    name  = "login.extraVolumes[0].name"
+    value = "slinky-shared"
   }
 
   set {
-    name  = "compute.mounts[0].mountPath"
+    name  = "login.extraVolumes[0].persistentVolumeClaim.claimName"
+    value = "slinky-shared-pvc"
+  }
+
+  set {
+    name  = "login.extraVolumeMounts[0].name"
+    value = "slinky-shared"
+  }
+
+  set {
+    name  = "login.extraVolumeMounts[0].mountPath"
     value = "/shared"
   }
 
   set {
-    name  = "compute.mounts[0].pvc"
-    value = "slinky-shared-data"
+    name  = "compute.extraVolumes[0].name"
+    value = "slinky-shared"
   }
 
   set {
-    name  = "login.mounts[0].name"
-    value = "slinky_shared_data"
+    name  = "compute.extraVolumes[0].persistentVolumeClaim.claimName"
+    value = "slinky-shared-pvc"
   }
 
   set {
-    name  = "login.mounts[0].mountPath"
+    name  = "compute.extraVolumeMounts[0].name"
+    value = "slinky-shared"
+  }
+
+  set {
+    name  = "compute.extraVolumeMounts[0].mountPath"
     value = "/shared"
-  }
-
-  set {
-    name  = "login.mounts[0].pvc"
-    value = "slinky-shared-data"
   }
 
   timeout = 300
