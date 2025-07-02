@@ -90,6 +90,21 @@ resource "helm_release" "slurm_cluster" {
   }
 
   set {
+    name  = "compute.nodesets[0].image.repository"
+    value = "ghcr.io/slinkyproject/slurm-node"
+  }
+
+  set {
+    name  = "compute.nodesets[0].image.tag"
+    value = "25.05-ubuntu24.04"
+  }
+
+  set {
+    name  = "compute.nodesets[0].image.pullPolicy"
+    value = "IfNotPresent"
+  }
+
+  set {
     name  = "compute.nodesets[0].name"
     value = "default"
   }
