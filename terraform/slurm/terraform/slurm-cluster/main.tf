@@ -60,7 +60,7 @@ resource "helm_release" "slurm_cluster" {
   }
 
   set {
-   name  = "compute.nodesets.replicas"
+   name  = "compute.nodesets[0].replicas"
     value = var.compute_replicas
   }
 
@@ -95,22 +95,22 @@ resource "helm_release" "slurm_cluster" {
   }
 
   set {
-    name  = "compute.nodesets.extraVolumes[0].name"
+    name  = "compute.nodesets[0].extraVolumes[0].name"
     value = "slinky-shared"
   }
 
   set {
-    name  = "compute.nodesets.extraVolumes[0].persistentVolumeClaim.claimName"
+    name  = "compute.nodesets[0].extraVolumes[0].persistentVolumeClaim.claimName"
     value = "slinky-shared-pvc"
   }
 
   set {
-    name  = "compute.nodesets.extraVolumeMounts[0].name"
+    name  = "compute.nodesets[0].extraVolumeMounts[0].name"
     value = "slinky-shared"
   }
 
   set {
-    name  = "compute.nodesets.extraVolumeMounts[0].mountPath"
+    name  = "compute.nodesets[0].extraVolumeMounts[0].mountPath"
     value = "/shared"
   }
 
