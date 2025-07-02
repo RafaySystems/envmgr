@@ -60,11 +60,6 @@ resource "helm_release" "slurm_cluster" {
   }
 
   set {
-   name  = "compute.nodesets[0].replicas"
-    value = var.compute_replicas
-  }
-
-  set {
     name  = "login.enabled"
     value = "true"
   }
@@ -92,6 +87,16 @@ resource "helm_release" "slurm_cluster" {
   set {
     name  = "login.extraVolumeMounts[0].mountPath"
     value = "/shared"
+  }
+
+  set {
+    name  = "compute.nodesets[0].name"
+    value = "default"
+  }
+
+  set {
+   name  = "compute.nodesets[0].replicas"
+    value = var.compute_replicas
   }
 
   set {
