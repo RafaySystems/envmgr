@@ -95,6 +95,11 @@ resource "helm_release" "slurm_cluster" {
   }
 
   set {
+    name  = "compute.nodesets[0].enabled"
+    value = "true"
+  }
+
+  set {
    name  = "compute.nodesets[0].replicas"
     value = var.compute_replicas
   }
