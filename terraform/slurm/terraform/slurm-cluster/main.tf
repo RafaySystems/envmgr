@@ -124,6 +124,11 @@ resource "helm_release" "slurm_cluster" {
     value = "/shared"
   }
 
+  set {
+    name  = "compute.nodesets[0].partition.enabled"
+    value = "true"
+  }
+
   timeout = 300
 }
 
