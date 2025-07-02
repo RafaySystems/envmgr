@@ -19,15 +19,32 @@ resource "kubernetes_namespace" "slurm_cluster_namespace" {
   }
 }
 
+#resource "kubernetes_persistent_volume_claim" "slinky_data" {
+#  depends_on = [kubernetes_namespace.slurm_cluster_namespace]
+#  metadata {
+#    name      = "slinky-shared-pvc"
+#    namespace = var.namespace
+#  }
+#  spec {
+#    access_modes = ["ReadWriteOnce"]
+#    resources {
+#      requests = {
+#        storage = "10Gi"
+#      }
+#    }
+#
+#    storage_class_name = var.storageclass
+# }
+#}
+
 resource "kubernetes_persistent_volume_claim" "slinky_data" {
-  depends_on = [kubernetes_namespace.slurm_cluster_namespace]
   metadata {
     name      = "slinky-shared-pvc"
-    namespace = var.namespace
+    namespace = var.namespace 
   }
 
   spec {
-    access_modes = ["ReadWriteOnce"]
+    access_modes = ["ReadWriteMany"]
 
     resources {
       requests = {
@@ -35,7 +52,7 @@ resource "kubernetes_persistent_volume_claim" "slinky_data" {
       }
     }
 
-    storage_class_name = var.storageclass
+    storage_class_name = "efs-sc" 
   }
 }
 
