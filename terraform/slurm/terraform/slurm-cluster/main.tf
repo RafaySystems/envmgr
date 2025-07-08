@@ -217,7 +217,7 @@ data "local_file" "slurm_login_ip" {
 }
 
 output "slurm_access" {
-  value = "ssh -p 2222 root@${data.local_file.slurm_login_ip.content} -i <path to private key>"
+  value = "ssh -p 2222 root@${data.local_file.slurm_login_ip.content} -o TCPKeepAlive=yes -o ServerAliveInterval=30 -i <path to private key>"
 }
 
 #output "slurm_url" {
