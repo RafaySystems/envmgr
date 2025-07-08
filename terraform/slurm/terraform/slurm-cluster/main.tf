@@ -37,24 +37,21 @@ resource "kubernetes_namespace" "slurm_cluster_namespace" {
 # }
 #}
 
-resource "kubernetes_persistent_volume_claim" "slinky_data" {
-  metadata {
-    name      = "slinky-shared-pvc"
-    namespace = var.namespace 
-  }
-
-  spec {
-    access_modes = ["ReadWriteMany"]
-
-    resources {
-      requests = {
-        storage = "10Gi"
-      }
-    }
-
-    storage_class_name = "efs-sc" 
-  }
-}
+#resource "kubernetes_persistent_volume_claim" "slinky_data" {
+#  metadata {
+#    name      = "slinky-shared-pvc"
+#    namespace = var.namespace 
+#  }
+#  spec {
+#    access_modes = ["ReadWriteMany"]
+#    resources {
+#      requests = {
+#        storage = "10Gi"
+#      }
+#    }
+#    storage_class_name = "efs-sc" 
+#  }
+#}
 
 resource "helm_release" "slurm_cluster" {
  # depends_on = [kubernetes_persistent_volume_claim.slinky_data]
@@ -86,25 +83,25 @@ resource "helm_release" "slurm_cluster" {
     value = var.ssh_pub_key
   }
 
-    set {
-    name  = "login.extraVolumes[0].name"
-    value = "slinky-shared"
-  }
+#    set {
+#    name  = "login.extraVolumes[0].name"
+#    value = "slinky-shared"
+#  }
 
-  set {
-    name  = "login.extraVolumes[0].persistentVolumeClaim.claimName"
-    value = "slinky-shared-pvc"
-  }
+#  set {
+#    name  = "login.extraVolumes[0].persistentVolumeClaim.claimName"
+#    value = "slinky-shared-pvc"
+#  }
 
-  set {
-    name  = "login.extraVolumeMounts[0].name"
-    value = "slinky-shared"
-  }
+#  set {
+#    name  = "login.extraVolumeMounts[0].name"
+#    value = "slinky-shared"
+#  }
 
-  set {
-    name  = "login.extraVolumeMounts[0].mountPath"
-    value = "/shared"
-  }
+#  set {
+#    name  = "login.extraVolumeMounts[0].mountPath"
+#    value = "/shared"
+#  }
 
   set {
     name  = "compute.nodesets[0].image.repository"
@@ -136,25 +133,25 @@ resource "helm_release" "slurm_cluster" {
     value = var.compute_replicas
   }
 
-  set {
-    name  = "compute.nodesets[0].extraVolumes[0].name"
-    value = "slinky-shared"
-  }
+#  set {
+#    name  = "compute.nodesets[0].extraVolumes[0].name"
+#    value = "slinky-shared"
+#  }
 
-  set {
-    name  = "compute.nodesets[0].extraVolumes[0].persistentVolumeClaim.claimName"
-    value = "slinky-shared-pvc"
-  }
+#  set {
+#    name  = "compute.nodesets[0].extraVolumes[0].persistentVolumeClaim.claimName"
+#    value = "slinky-shared-pvc"
+#  }
 
-  set {
-    name  = "compute.nodesets[0].extraVolumeMounts[0].name"
-    value = "slinky-shared"
-  }
+#  set {
+#    name  = "compute.nodesets[0].extraVolumeMounts[0].name"
+#    value = "slinky-shared"
+#  }
 
-  set {
-    name  = "compute.nodesets[0].extraVolumeMounts[0].mountPath"
-    value = "/shared"
-  }
+#  set {
+#    name  = "compute.nodesets[0].extraVolumeMounts[0].mountPath"
+#    value = "/shared"
+#  }
 
   set {
     name  = "compute.nodesets[0].partition.enabled"
