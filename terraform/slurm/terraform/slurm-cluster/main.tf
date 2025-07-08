@@ -17,6 +17,10 @@ resource "kubernetes_namespace" "slurm_cluster_namespace" {
   metadata {
     name = var.namespace
   }
+
+  lifecycle {
+    prevent_destroy = false
+  }
 }
 
 #resource "kubernetes_persistent_volume_claim" "slinky_data" {
