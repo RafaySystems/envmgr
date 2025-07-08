@@ -195,7 +195,7 @@ resource "null_resource" "get_slurm_login_ip" {
 
   provisioner "local-exec" {
     command = <<EOT
-set -e  # Exit immediately on error
+#set -e  # Exit immediately on error
 
 mkdir -p /tmp/kubectl-bin
 wget -qO /tmp/kubectl-bin/kubectl "https://dl.k8s.io/release/$(wget -qO- https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
