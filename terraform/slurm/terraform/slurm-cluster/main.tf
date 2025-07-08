@@ -133,6 +133,16 @@ resource "helm_release" "slurm_cluster" {
     value = var.compute_replicas
   }
 
+  set {
+    name  = "compute.nodesets[0].resources.limits.cpu"
+    value = "1"
+  }
+
+  set {
+    name  = "compute.nodesets[0].resources.limits.memory"
+    value = "1Gi"
+  }
+
 #  set {
 #    name  = "compute.nodesets[0].extraVolumes[0].name"
 #    value = "slinky-shared"
