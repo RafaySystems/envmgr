@@ -17,11 +17,10 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
 #  metadata {
 #    name = var.namespace
 #  }
-
-  lifecycle {
-    prevent_destroy = false
-  }
-}
+#  lifecycle {
+#   prevent_destroy = false
+#  }
+#}
 
 #resource "kubernetes_persistent_volume_claim" "slinky_data" {
 #  depends_on = [kubernetes_namespace.slurm_cluster_namespace]
