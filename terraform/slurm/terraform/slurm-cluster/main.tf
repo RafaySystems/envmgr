@@ -201,10 +201,24 @@ resource "null_resource" "get_slurm_login_ip" {
     command = <<EOT
 #set -e  # Exit immediately on error
 
-mkdir -p /tmp/kubectl-bin
-wget -qO /tmp/kubectl-bin/kubectl "https://dl.k8s.io/release/$(wget -qO- https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-chmod +x /tmp/kubectl-bin/kubectl
+#mkdir -p /tmp/kubectl-bin
+#wget -qO /tmp/kubectl-bin/kubectl "https://dl.k8s.io/release/$(wget -qO- https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+#chmod +x /tmp/kubectl-bin/kubectl
 
+# Create directory
+mkdir -p /tmp/kubectl-bin
+
+# Get latest stable version
+KUBECTL_VERSION=$(wget -qO- https://dl.k8s.io/release/stable.txt)
+
+# Define the download URL
+KUBECTL_URL="https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
+
+# Download with up to 5 retries and a delay between retries
+wget --tries=5 --wait=2 -qO /tmp/kubectl-bin/kubectl "$KUBECTL_URL"
+
+# Make it executable
+chmod +x /tmp/kubectl-bin/kubectl
 SLURM_LOGIN_IP="$(/tmp/kubectl-bin/kubectl --kubeconfig /tmp/kubeconfig get services -n ${var.namespace} -l app.kubernetes.io/instance=slurm,app.kubernetes.io/name=login -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')"
 
 echo "Slurm Login IP is: $SLURM_LOGIN_IP"
