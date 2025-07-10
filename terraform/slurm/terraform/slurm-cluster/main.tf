@@ -207,7 +207,7 @@ resource "null_resource" "get_slurm_login_ip" {
 mkdir -p /tmp/kubectl-bin
 
 KUBECTL_VERSION=$(wget -qO- https://dl.k8s.io/release/stable.txt)
-KUBECTL_URL="https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
+KUBECTL_URL="https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"
 
 wget --tries=5 --wait=2 -qO /tmp/kubectl-bin/kubectl "$KUBECTL_URL"
 chmod +x /tmp/kubectl-bin/kubectl
