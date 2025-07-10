@@ -13,10 +13,10 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
 #  file_permission = "0644"
 #}
 
-resource "kubernetes_namespace" "slurm_cluster_namespace" {
-  metadata {
-    name = var.namespace
-  }
+#resource "kubernetes_namespace" "slurm_cluster_namespace" {
+#  metadata {
+#    name = var.namespace
+#  }
 
   lifecycle {
     prevent_destroy = false
@@ -61,7 +61,7 @@ resource "helm_release" "slurm_cluster" {
  # depends_on = [kubernetes_persistent_volume_claim.slinky_data]
   name             = "slurm"
   namespace        = var.namespace
-  #create_namespace = true
+  create_namespace = true
 
   repository       = "oci://ghcr.io/slinkyproject/charts"
   chart            = "slurm"
@@ -205,10 +205,12 @@ resource "null_resource" "get_slurm_login_ip" {
 #wget -qO /tmp/kubectl-bin/kubectl "https://dl.k8s.io/release/$(wget -qO- https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 #chmod +x /tmp/kubectl-bin/kubectl
 
-KUBECTL_VERSION=$(wget -qO- https://dl.k8s.io/release/stable.txt)
-KUBECTL_URL="https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
+mkdir -p /tmp/kubectl-bin
 
-wget --tries=5 --wait=2 -qO /tmp/kubectl-bin/kubectl "$KUBECTL_URL"
+KUBECTL_VERSION=$(wget -qO- https://dl.k8s.io/release/stable.txt)
+KUBECTL_URL="https://dl.k8s.io/release/\${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
+
+wget --tries=5 --wait=2 -qO /tmp/kubectl-bin/kubectl "\${KUBECTL_URL}"
 chmod +x /tmp/kubectl-bin/kubectl
 
 SLURM_LOGIN_IP="$(/tmp/kubectl-bin/kubectl --kubeconfig /tmp/kubeconfig get services -n ${var.namespace} -l app.kubernetes.io/instance=slurm,app.kubernetes.io/name=login -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')"
