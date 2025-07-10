@@ -40,8 +40,8 @@ variable "namespace_quotas" {
       services_load_balancers  = "2"
       services_node_ports      = "2"
       storage_requests         = "50Gi"
-      gpu_requests             = ""
-      gpu_limits               = ""
+      gpu_requests             = "1"
+      gpu_limits               = "1"
     }
     medium = {
       cpu_requests             = "1000m"
@@ -56,8 +56,8 @@ variable "namespace_quotas" {
       services_load_balancers  = "4"
       services_node_ports      = "4"
       storage_requests         = "100Gi"
-      gpu_requests             = ""
-      gpu_limits               = ""
+      gpu_requests             = "2"
+      gpu_limits               = "2"
     }
     large = {
       cpu_requests             = "4000m"
@@ -72,8 +72,8 @@ variable "namespace_quotas" {
       services_load_balancers  = "8"
       services_node_ports      = "8"
       storage_requests         = "200Gi"
-      gpu_requests             = ""
-      gpu_limits               = ""
+      gpu_requests             = "3"
+      gpu_limits               = "3"
     }
     small_with_gpu = {
       cpu_requests             = "500m"
