@@ -1,3 +1,3 @@
-output "group" {
-  value = resource.rafay_group.group-dev.name
+output "namespace" {
+  value = local.namespace
 }
