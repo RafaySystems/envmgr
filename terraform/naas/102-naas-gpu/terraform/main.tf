@@ -51,7 +51,7 @@ resource "rafay_namespace" "namespace" {
 }
 
 resource "rafay_group" "group-dev" {
-  name = var.group
+  name = local.namespace
 }
 
 resource "rafay_groupassociation" "groupassociation" {
