@@ -1,6 +1,22 @@
+resource "random_id" "rnd" {
+  keepers = {
+    first = var.cluster_name
+  }
+  byte_length = 4
+}
+
+locals {
+  # Create a unique namspace name
+  namespace1 = "${element(split("@",var.username),0)}-${random_id.rnd.dec}"
+  namespace2 = replace(local.namespace1,"+","-")
+  namespace3 = replace(local.namespace2,".","-")
+  namespace4 = replace(local.namespace3,"+","-")
+  namespace = lower(local.namespace4)
+}
+
 resource "rafay_namespace" "namespace" {
   metadata {
-    name        = var.namespace
+    name        = local.namespace
     project     = var.project
     labels      = var.labels
     annotations = var.annotations
@@ -43,5 +59,5 @@ resource "rafay_groupassociation" "groupassociation" {
   group      = resource.rafay_group.group-dev.name
   namespaces = [rafay_namespace.namespace.metadata[0].name]
   roles      = ["NAMESPACE_ADMIN"]
-  add_users  = [var.user]
+  add_users  = [var.username]
 }
