@@ -61,3 +61,7 @@ resource "rafay_groupassociation" "groupassociation" {
   roles      = ["NAMESPACE_ADMIN"]
   add_users  = [var.username]
 }
+
+data "rafay_download_kubeconfig" "kubeconfig_cluster" {
+  cluster = var.cluster_name
+}
