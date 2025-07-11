@@ -122,10 +122,6 @@ variable "namespace_quotas" {
   }
 }
 
-variable "group" {
-  type = string
-}
-
 variable "username" {
   type = string
 }
