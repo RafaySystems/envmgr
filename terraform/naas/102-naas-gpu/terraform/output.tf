@@ -8,5 +8,5 @@ output "kubeconfig" {
 }
 
 output "ztka" {
-  value = "https://console.rafay.dev/#/console/${var.projectid}/${var.cluster_name}?&namespace=${local.namespace}"
+  value = "https://${var.RCTL_REST_ENDPOINT}/#/console/${var.projectid}/${var.cluster_name}?&namespace=${local.namespace}"
 }
