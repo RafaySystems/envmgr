@@ -8,5 +8,5 @@ output "kubeconfig" {
 }
 
 output "ztka" {
-  value = "https://${var.RCTL_REST_ENDPOINT}/#/console/${var.projectid}/${var.cluster_name}?&namespace=${local.namespace}"
+  value = "https://${data.external.env.result.value}/#/console/${var.projectid}/${var.cluster_name}?&namespace=${local.namespace}"
 }
