@@ -66,3 +66,7 @@ data "rafay_download_kubeconfig" "kubeconfig_cluster" {
   #cluster = var.cluster_name
   username = var.username
 }
+
+data "external" "env" {
+  program = ["sh", "-c", "echo '{\"value\": \"'\"$RCTL_REST_ENDPOINT\"'\"}'"]
+}
