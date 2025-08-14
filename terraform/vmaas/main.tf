@@ -80,7 +80,7 @@ resource "vsphere_virtual_machine" "virtual_machine" {
       hv_mode
     ]
   }
-  name                 = "${var.vm_prefix}-${local.username}-${local.randomnumber}"
+  name                 = var.vm_name
   guest_id             = data.vsphere_virtual_machine.vm_template.guest_id
   firmware             = data.vsphere_virtual_machine.vm_template.firmware
   num_cpus             = var.vm_cpu
