@@ -113,3 +113,8 @@ variable "vm_password" {
   type        = string
   sensitive   = true
 }
+
+variable "vm_domain" {
+  description = "The domain of the VM"
+  type        = string
+}

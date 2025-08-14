@@ -120,6 +120,7 @@ resource "vsphere_virtual_machine" "virtual_machine" {
     customize {
       linux_options {
         host_name = var.vm_name
+        domain    = var.vm_domain
       }
     }
   }
