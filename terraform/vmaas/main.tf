@@ -57,10 +57,10 @@ data "cloudinit_config" "virtual_machine" {
     content_type = "text/cloud-config"
     content      = <<-EOF
       #cloud-config
-      hostname: ${var.vm_prefix}-${local.username}-${local.randomnumber}
+      hostname: ${var.vm_name}
       users:
         - name: ${var.vm_username}
-          passwd: '$6$rounds=4096$23GLKxe5CyPc1$fL5FgZCbCgw30ZHwqDt8hoO07m6isstJlxUIwvHBcSLVGzjdiR1Z1zA2yKGtR6EIv5LHflJuedbaiLUqU5Wfj0'
+          plain_text_passwd: ${var.vm_password} != "" ? var.vm_password : "ubuntu"
           ssh_pwauth: false
           sudo: ALL=(ALL) NOPASSWD:ALL
           lock_passwd: false

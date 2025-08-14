@@ -102,3 +102,14 @@ variable "vsphere_vm_folder" {
   description = "The vSphere folder to use for VM deployment. Set to an empty string to use the default cluster folder."
   type        = string
 }
+
+variable "vm_name" {
+  description = "The name of the VM"
+  type        = string
+}
+
+variable "vm_password" {
+  description = "The password of the VM"
+  type        = string
+  sensitive   = true
+}
