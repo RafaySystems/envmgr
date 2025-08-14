@@ -123,10 +123,11 @@ resource "vsphere_virtual_machine" "virtual_machine" {
         domain    = var.vm_domain
       }
       network_interface {
+      }
     }
-  }
-  extra_config = {
-    "guestinfo.userdata"          = data.cloudinit_config.virtual_machine.rendered
-    "guestinfo.userdata.encoding" = "gzip+base64"
+    extra_config = {
+      "guestinfo.userdata"          = data.cloudinit_config.virtual_machine.rendered
+      "guestinfo.userdata.encoding" = "gzip+base64"
+    }
   }
 }
