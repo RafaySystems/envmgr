@@ -4,8 +4,8 @@ resource "random_integer" "example" {
 }
 
 locals {
-  username = split("@", var.em_username)[0]
-  randomnumber   =  random_integer.example.result
+  username     = split("@", var.em_username)[0]
+  randomnumber = random_integer.example.result
 }
 
 data "vsphere_datacenter" "datacenter" {
@@ -34,7 +34,7 @@ data "vsphere_virtual_machine" "vm_template" {
 }
 
 data "vsphere_resource_pool" "pool" {
-  name  = var.vsphere_resource_pool
+  name          = var.vsphere_resource_pool
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
@@ -90,12 +90,13 @@ resource "vsphere_virtual_machine" "virtual_machine" {
   vvtd_enabled         = true
   enable_disk_uuid     = true
   #Using compute_cluster resource pool in the absence of permission.
-  resource_pool_id     = data.vsphere_compute_cluster.compute_cluster.resource_pool_id
+  resource_pool_id = data.vsphere_compute_cluster.compute_cluster.resource_pool_id
   #Use data.vsphere_resource_pool.pool.id for resource_pool_id (example below line) line instead above line in case you have resource pool and permission configured else you will get Error: error cloning virtual machine: ServerFaultCode: Permission to perform this operation was denied. Error
   #resource_pool_id    = data.vsphere_resource_pool.pool.id 
-  datastore_id         = data.vsphere_datastore.datastore.id
-  scsi_type            = data.vsphere_virtual_machine.vm_template.scsi_type
+  datastore_id      = data.vsphere_datastore.datastore.id
+  scsi_type         = data.vsphere_virtual_machine.vm_template.scsi_type
   storage_policy_id = local.storage_policy_enabled && length(data.vsphere_storage_policy.policy) > 0 ? data.vsphere_storage_policy.policy[0].id : null
+  folder            = var.vsphere_vm_folder != "" ? var.vsphere_vm_folder : null
   disk {
     unit_number      = 0
     label            = "os"
@@ -111,14 +112,14 @@ resource "vsphere_virtual_machine" "virtual_machine" {
     thin_provisioned = true
   }
   network_interface {
-    network_id  = data.vsphere_network.network.id
+    network_id   = data.vsphere_network.network.id
     adapter_type = data.vsphere_virtual_machine.vm_template.network_interface_types.0
   }
   clone {
     template_uuid = data.vsphere_virtual_machine.vm_template.id
   }
-   extra_config = {
-    "guestinfo.userdata"           = data.cloudinit_config.virtual_machine.rendered
-    "guestinfo.userdata.encoding"  = "gzip+base64"
+  extra_config = {
+    "guestinfo.userdata"          = data.cloudinit_config.virtual_machine.rendered
+    "guestinfo.userdata.encoding" = "gzip+base64"
   }
 }
