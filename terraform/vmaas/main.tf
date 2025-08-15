@@ -121,14 +121,14 @@ resource "vsphere_virtual_machine" "virtual_machine" {
   }
   clone {
     template_uuid = data.vsphere_virtual_machine.vm_template.id
-    customize {
-      linux_options {
-        host_name = var.vm_name
-        domain    = var.vm_domain
-      }
-      network_interface {
-      }
-    }
+    # customize {
+    #   linux_options {
+    #     host_name = var.vm_name
+    #     domain    = var.vm_domain
+    #   }
+    #   network_interface {
+    #   }
+    # }
   }
   extra_config = {
     "guestinfo.userdata"          = data.cloudinit_config.virtual_machine.rendered
