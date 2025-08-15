@@ -108,11 +108,11 @@ variable "vm_name" {
   type        = string
 }
 
-variable "vm_password" {
-  description = "The password of the VM"
-  type        = string
-  sensitive   = true
-}
+# variable "vm_password" {
+#   description = "The password of the VM"
+#   type        = string
+#   sensitive   = true
+# }
 
 variable "vm_domain" {
   description = "The domain of the VM"
