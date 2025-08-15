@@ -67,6 +67,8 @@ data "cloudinit_config" "virtual_machine" {
           shell: /bin/bash
           ssh_authorized_keys:
           - ${var.vm_ssh_public_key}
+      packages:
+        - bzip2
       EOF
   }
 }
