@@ -61,12 +61,12 @@ data "cloudinit_config" "virtual_machine" {
       users:
         - name: ${var.vm_username}
           plain_text_passwd: ${var.vm_password} != "" ? var.vm_password : "ubuntu"
-          ssh_pwauth: false
+          ssh_pwauth: true
           sudo: ALL=(ALL) NOPASSWD:ALL
           lock_passwd: false
           shell: /bin/bash
-          ssh-authorized-keys:
-            - ${var.vm_ssh_public_key}
+          ssh_authorized_keys:
+          - ${var.vm_ssh_public_key}
       EOF
   }
 }
