@@ -112,9 +112,10 @@ resource "vsphere_virtual_machine" "virtual_machine" {
     thin_provisioned = true
   }
   network_interface {
-    network_id      = data.vsphere_network.network.id
-    adapter_type    = data.vsphere_virtual_machine.vm_template.network_interface_types.0
-    start_connected = true
+    network_id = data.vsphere_network.network.id
+    #adapter_type    = data.vsphere_virtual_machine.vm_template.network_interface_types.0
+    adapter_type = "vmxnet3"
+
   }
   clone {
     template_uuid = data.vsphere_virtual_machine.vm_template.id
