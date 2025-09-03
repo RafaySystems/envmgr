@@ -172,7 +172,7 @@ resource "helm_release" "slurm_cluster" {
   }
 
   set {
-    name  = "exporter.secretName"
+    name  = "slurm-exporter.exporter.secretName"
     value = ""
   }
 
