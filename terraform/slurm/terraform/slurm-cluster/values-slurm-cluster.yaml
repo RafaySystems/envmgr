@@ -969,7 +969,7 @@ slurm-exporter:
   enabled: true
   exporter:
     enabled: true
-    secretName: "slurm-token-exporter"
+    secretName: ""
     affinity: {}
       # podAffinity:
       #   requiredDuringSchedulingIgnoredDuringExecution:
@@ -980,3 +980,4 @@ slurm-exporter:
       #             operator: In
       #             values:
       #               - slurmrestd
+
