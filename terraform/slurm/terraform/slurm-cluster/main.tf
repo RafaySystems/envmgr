@@ -172,8 +172,8 @@ resource "helm_release" "slurm_cluster" {
   }
 
   set {
-    name  = "slurm-exporter.exporter.secretName"
-    value = ""
+    name  = "slurm-exporter.enabled"
+    value = "false"
   }
 
   timeout = 300
