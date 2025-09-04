@@ -244,7 +244,7 @@ data "local_file" "slurm_login_ip" {
 }
 
 output "slurm_access" {
-  value = "ssh -p ${data.local_file.slurm_login_ip.content} root@${var.public_ip} -o TCPKeepAlive=yes -o ServerAliveInterval=30 -i <path to private key>"
+  value = "ssh -p ${data.local_file.slurm_login_ip.content}root@${var.public_ip} -o TCPKeepAlive=yes -o ServerAliveInterval=30 -i <path to private key>"
 }
 
 #output "slurm_url" {
