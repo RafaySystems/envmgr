@@ -86,6 +86,11 @@ resource "helm_release" "slurm_cluster" {
     value = var.ssh_pub_key
   }
 
+  set {
+    name  = "login.service.type"
+    value = "NodePort"
+  }
+
 #    set {
 #    name  = "login.extraVolumes[0].name"
 #    value = "slinky-shared"
@@ -173,7 +178,7 @@ resource "helm_release" "slurm_cluster" {
 
   set {
     name  = "slurm-exporter.enabled"
-    value = "false"
+    value = "true"
   }
 
   timeout = 300
