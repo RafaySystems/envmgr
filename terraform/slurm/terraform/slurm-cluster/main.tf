@@ -56,6 +56,12 @@ resource "rafay_download_kubeconfig" "tfkubeconfig" {
 #  }
 #}
 
+# Generate a random NodePort in Kubernetes valid range
+resource "random_integer" "slurm_nodeport" {
+  min = 30000
+  max = 32767
+}
+
 resource "helm_release" "slurm_cluster" {
  # depends_on = [kubernetes_persistent_volume_claim.slinky_data]
   name             = "slurm"
@@ -89,6 +95,11 @@ resource "helm_release" "slurm_cluster" {
   set {
     name  = "login.service.type"
     value = "NodePort"
+  }
+
+  set {
+    name  = "login.serviceNodePort"
+    value = random_integer.slurm_nodeport.result
   }
 
 #    set {
