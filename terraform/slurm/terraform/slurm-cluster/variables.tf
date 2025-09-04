@@ -22,6 +22,10 @@ variable "ssh_pub_key" {
   type = string
 }
 
+variable "public_ip" {
+  type = string
+}
+
 variable "hserver" {
   description = "Kubeconfig server"
   type        = string
