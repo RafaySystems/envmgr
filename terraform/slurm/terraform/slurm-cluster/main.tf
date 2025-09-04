@@ -214,11 +214,14 @@ mkdir -p /tmp/kubectl-bin
 wget --tries=5 -qO /tmp/kubectl-bin/kubectl "https://dl.k8s.io/release/$(wget -qO- https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x /tmp/kubectl-bin/kubectl
 
-SLURM_LOGIN_IP="$(/tmp/kubectl-bin/kubectl --kubeconfig /tmp/kubeconfig get services -n ${var.namespace} -l app.kubernetes.io/instance=slurm,app.kubernetes.io/name=login -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')"
+#SLURM_LOGIN_IP="$(/tmp/kubectl-bin/kubectl --kubeconfig /tmp/kubeconfig get services -n ${var.namespace} -l app.kubernetes.io/instance=slurm,app.kubernetes.io/name=login -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')"
+#echo "Slurm Login IP is: $SLURM_LOGIN_IP"
+#echo "$SLURM_LOGIN_IP" > slurm_login_ip.txt
 
-echo "Slurm Login IP is: $SLURM_LOGIN_IP"
+SLURM_LOGIN_PORT="$(/tmp/kubectl-bin/kubectl --kubeconfig /tmp/kubeconfig get services -n ${var.namespace} -l app.kubernetes.io/instance=slurm,app.kubernetes.io/name=login -o jsonpath='{.spec.ports[0].nodePort}')"
+echo "Slurm Login PORT is: $SLURM_LOGIN_PORT"
+echo "$SLURM_LOGIN_PORT" > slurm_login_ip.txt
 
-echo "$SLURM_LOGIN_IP" > slurm_login_ip.txt
 EOT
     interpreter = ["/bin/bash", "-c"]
   }
@@ -230,7 +233,7 @@ data "local_file" "slurm_login_ip" {
 }
 
 output "slurm_access" {
-  value = "ssh -p 2222 root@${data.local_file.slurm_login_ip.content} -o TCPKeepAlive=yes -o ServerAliveInterval=30 -i <path to private key>"
+  value = "ssh -p ${data.local_file.slurm_login_ip.content} root@${var.public_ip} -o TCPKeepAlive=yes -o ServerAliveInterval=30 -i <path to private key>"
 }
 
 #output "slurm_url" {
