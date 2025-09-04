@@ -243,8 +243,12 @@ data "local_file" "slurm_login_ip" {
   depends_on = [null_resource.get_slurm_login_ip]
 }
 
-output "slurm_access" {
+output "slurm_ssh" {
   value = "ssh -p ${replace(replace(trimspace(data.local_file.slurm_login_ip.content), "\n", ""), " ", "")} root@${var.public_ip} -o TCPKeepAlive=yes -o ServerAliveInterval=30 -i <path to private key>"
+}
+
+output "slurm_scp" {
+  value = "scp -v -O -P ${replace(replace(trimspace(data.local_file.slurm_login_ip.content), "\n", ""), " ", "")} -i <path to private key> root@${var.public_ip}:/root/"
 }
 
 #output "slurm_url" {
