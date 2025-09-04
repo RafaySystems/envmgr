@@ -229,7 +229,7 @@ chmod +x /tmp/kubectl-bin/kubectl
 #echo "Slurm Login IP is: $SLURM_LOGIN_IP"
 #echo "$SLURM_LOGIN_IP" > slurm_login_ip.txt
 
-SLURM_LOGIN_PORT="$(/tmp/kubectl-bin/kubectl --kubeconfig /tmp/kubeconfig get services -n ${var.namespace} -l app.kubernetes.io/instance=slurm,app.kubernetes.io/name=login -o jsonpath='{.spec.ports[0].nodePort}')"
+SLURM_LOGIN_PORT="$(/tmp/kubectl-bin/kubectl --kubeconfig /tmp/kubeconfig get services slurm-login -n ${var.namespace} -o jsonpath='{.spec.ports[0].nodePort}')"
 echo "Slurm Login PORT is: $SLURM_LOGIN_PORT"
 echo "$SLURM_LOGIN_PORT" > slurm_login_ip.txt
 
