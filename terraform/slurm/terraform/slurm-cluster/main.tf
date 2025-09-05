@@ -248,7 +248,7 @@ output "slurm_ssh" {
 }
 
 output "slurm_scp" {
-  value = "scp -v -O -P ${replace(replace(trimspace(data.local_file.slurm_login_ip.content), "\n", ""), " ", "")} -i <path to private key> root@${var.public_ip}:/root/"
+  value = "scp -v -O -P ${replace(replace(trimspace(data.local_file.slurm_login_ip.content), "\n", ""), " ", "")} -i <path to private key> <path to file> root@${var.public_ip}:/root/"
 }
 
 #output "slurm_url" {
