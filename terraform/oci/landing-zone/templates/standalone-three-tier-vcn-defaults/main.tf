@@ -34,14 +34,6 @@ variable "service_label" {
   type        = string
 }
 
-# Write the private key to a local file
-resource "local_file" "private_key" {
-  content              = var.private_key_text
-  filename             = "${path.module}/.oci/temp_private_key.pem"
-  file_permission      = "0600"
-  directory_permission = "0700"
-}
-
 locals {
   # Split lines, filter out empty and comment lines
   config_lines = [
@@ -71,7 +63,7 @@ module "core_lz" {
     tenancy_ocid         = lookup(local.config_kv_map, "tenancy", null)
     user_ocid            = lookup(local.config_kv_map, "user", null)
     fingerprint          = lookup(local.config_kv_map, "fingerprint", null)
-    private_key_path     = local_file.private_key.filename
+    private_key     = var.private_key_text
     private_key_password = var.private_key_password
     region               = lookup(local.config_kv_map, "region", null)
     service_label        = var.service_label
