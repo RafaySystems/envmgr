@@ -17,7 +17,7 @@ variable "oci_config_raw" {
   type        = string
 }
 
-variable "private_key_text" {
+variable "private_key" {
   description = "Raw contents of the OCI API private key"
   type        = string
   sensitive   = true
@@ -57,7 +57,7 @@ provider "oci" {
   tenancy_ocid     = local.config_kv_map["tenancy"]
   user_ocid        = local.config_kv_map["user"]
   fingerprint      = local.config_kv_map["fingerprint"]
-  private_key      = var.private_key_text
+  private_key      = var.private_key
   region           = local.config_kv_map["region"]
 }
 
@@ -78,7 +78,7 @@ module "core_lz" {
     user_ocid            = lookup(local.config_kv_map, "user", null)
     fingerprint          = lookup(local.config_kv_map, "fingerprint", null)
 #	private_key_path     = local_file.private_key_file.filename
-    private_key          = var.private_key_text
+    private_key          = var.private_key
     private_key_password = var.private_key_password
     region               = lookup(local.config_kv_map, "region", null)
     service_label        = var.service_label

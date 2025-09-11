@@ -7,7 +7,7 @@ provider "oci" {
   user_ocid            = var.user_ocid
   fingerprint          = var.fingerprint
 #  private_key_path     = var.private_key_path
-private_key     = var.private_key_text
+private_key     = var.private_key
   private_key_password = var.private_key_password
   ignore_defined_tags  = ["Oracle-Tags.CreatedBy", "Oracle-Tags.CreatedOn"]
 }
@@ -19,7 +19,7 @@ provider "oci" {
   user_ocid            = var.user_ocid
   fingerprint          = var.fingerprint
 #  private_key_path     = var.private_key_path
-private_key     = var.private_key_text
+private_key     = var.private_key
   private_key_password = var.private_key_password
   ignore_defined_tags  = ["Oracle-Tags.CreatedBy", "Oracle-Tags.CreatedOn"]
 }
@@ -31,7 +31,7 @@ provider "oci" {
   user_ocid            = var.user_ocid
   fingerprint          = var.fingerprint
 #  private_key_path     = var.private_key_path
-private_key     = var.private_key_text
+private_key     = var.private_key
   private_key_password = var.private_key_password
   ignore_defined_tags  = ["Oracle-Tags.CreatedBy", "Oracle-Tags.CreatedOn"]
 }
