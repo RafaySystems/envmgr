@@ -73,9 +73,6 @@ output "region" {
   value = local.region
 }
 
-output "private_key_path" {
-  value = local.private_key_path
-}
 
 
 module "core_lz" {
