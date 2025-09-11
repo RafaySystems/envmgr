@@ -77,9 +77,6 @@ output "private_key_path" {
   value = local.private_key_path
 }
 
-output "private_key_path" {
-  value = local.private_key_path
-}
 
 module "core_lz" {
     source = "../../"
