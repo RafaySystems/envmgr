@@ -67,12 +67,12 @@ module "core_lz" {
     # ------------------------------------------------------
     # ----- Environment
     # ------------------------------------------------------
- #   tenancy_ocid         = lookup(local.config_kv_map, "tenancy", null)
+    tenancy_ocid         = lookup(local.config_kv_map, "tenancy", null)
  #   user_ocid            = lookup(local.config_kv_map, "user", null)
  #   fingerprint          = lookup(local.config_kv_map, "fingerprint", null)
  #   private_key     = var.private_key_text
  #   private_key_password = var.private_key_password
- #   region               = lookup(local.config_kv_map, "region", null)
+    region               = lookup(local.config_kv_map, "region", null)
     service_label        = var.service_label
 
     # ------------------------------------------------------
