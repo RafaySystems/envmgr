@@ -57,21 +57,6 @@ locals {
   }
  }
 
-output "user_ocid" {
-  value = local.user_ocid
-}
-
-output "fingerprint" {
-  value = local.fingerprint
-}
-
-output "tenancy_ocid" {
-  value = local.tenancy_ocid
-}
-
-output "region" {
-  value = local.region
-}
 
 
 
