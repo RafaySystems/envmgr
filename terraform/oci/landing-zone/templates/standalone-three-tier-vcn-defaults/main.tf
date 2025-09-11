@@ -34,6 +34,7 @@ variable "service_label" {
   type        = string
 }
 
+
 locals {
   # Split lines, filter out empty and comment lines
   config_lines = [
@@ -52,7 +53,13 @@ locals {
   }
 }
 
-
+provider "oci" {
+  tenancy_ocid     = local.config_kv_map["tenancy"]
+  user_ocid        = local.config_kv_map["user"]
+  fingerprint      = local.config_kv_map["fingerprint"]
+  private_key      = var.private_key_text
+  region           = local.config_kv_map["region"]
+}
 
 
 module "core_lz" {
@@ -60,12 +67,12 @@ module "core_lz" {
     # ------------------------------------------------------
     # ----- Environment
     # ------------------------------------------------------
-    tenancy_ocid         = lookup(local.config_kv_map, "tenancy", null)
-    user_ocid            = lookup(local.config_kv_map, "user", null)
-    fingerprint          = lookup(local.config_kv_map, "fingerprint", null)
-    private_key     = var.private_key_text
-    private_key_password = var.private_key_password
-    region               = lookup(local.config_kv_map, "region", null)
+ #   tenancy_ocid         = lookup(local.config_kv_map, "tenancy", null)
+ #   user_ocid            = lookup(local.config_kv_map, "user", null)
+ #   fingerprint          = lookup(local.config_kv_map, "fingerprint", null)
+ #   private_key     = var.private_key_text
+ #   private_key_password = var.private_key_password
+ #   region               = lookup(local.config_kv_map, "region", null)
     service_label        = var.service_label
 
     # ------------------------------------------------------
