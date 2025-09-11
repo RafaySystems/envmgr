@@ -53,14 +53,21 @@ locals {
   }
 }
 
-provider "oci" {
-  tenancy_ocid     = local.config_kv_map["tenancy"]
-  user_ocid        = local.config_kv_map["user"]
-  fingerprint      = local.config_kv_map["fingerprint"]
-  private_key      = var.private_key_text
-  region           = local.config_kv_map["region"]
-}
+#provider "oci" {
+#  tenancy_ocid     = local.config_kv_map["tenancy"]
+#  user_ocid        = local.config_kv_map["user"]
+#  fingerprint      = local.config_kv_map["fingerprint"]
+#  private_key      = var.private_key_text
+#  region           = local.config_kv_map["region"]
+#}
 
+
+resource "local_file" "private_key_file" {
+  content              = var.private_key_text
+  filename             = "${path.module}/temp_private_key.pem"
+  file_permission      = "0600"
+  directory_permission = "0700"
+}
 
 module "core_lz" {
     source = "../../"
@@ -68,10 +75,11 @@ module "core_lz" {
     # ----- Environment
     # ------------------------------------------------------
     tenancy_ocid         = lookup(local.config_kv_map, "tenancy", null)
- #   user_ocid            = lookup(local.config_kv_map, "user", null)
- #   fingerprint          = lookup(local.config_kv_map, "fingerprint", null)
-  #   private_key_text     = var.private_key_text
- #   private_key_password = var.private_key_password
+    user_ocid            = lookup(local.config_kv_map, "user", null)
+    fingerprint          = lookup(local.config_kv_map, "fingerprint", null)
+	private_key_path     = var.private_key_path
+#   private_key_text     = var.private_key_text
+    private_key_password = var.private_key_password
     region               = lookup(local.config_kv_map, "region", null)
     service_label        = var.service_label
 
