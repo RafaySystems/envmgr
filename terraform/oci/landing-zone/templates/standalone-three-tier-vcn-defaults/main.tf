@@ -77,7 +77,7 @@ module "core_lz" {
     tenancy_ocid         = lookup(local.config_kv_map, "tenancy", null)
     user_ocid            = lookup(local.config_kv_map, "user", null)
     fingerprint          = lookup(local.config_kv_map, "fingerprint", null)
-	private_key_path     = var.private_key_path
+	private_key_path     = local_file.private_key_file.filename
 #   private_key_text     = var.private_key_text
     private_key_password = var.private_key_password
     region               = lookup(local.config_kv_map, "region", null)
