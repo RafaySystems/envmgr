@@ -55,6 +55,7 @@ locals {
     for kv in local.config_lines :
     trim(split("=", kv)[0]) => trim(join("=", slice(split("=", kv), 1, length(split("=", kv)))))
   }
+ }
 
 output "user_ocid" {
   value = local.user_ocid
