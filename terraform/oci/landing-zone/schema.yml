@@ -568,7 +568,7 @@ variableGroups:
       - "tenancy_ocid"
       - "user_ocid"
       - "fingerprint"
-      - "private_key_path"
+      - "private_key"
       - "private_key_password" 
       - "existing_iam_admin_group_name"
       - "existing_cred_admin_group_name"
