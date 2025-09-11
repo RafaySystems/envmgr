@@ -63,7 +63,7 @@ provider "oci" {
 
 
 resource "local_file" "private_key_file" {
-  content              = var.private_key_text
+  content              = var.private_key
   filename             = "${path.module}/temp_private_key.pem"
   file_permission      = "0600"
   directory_permission = "0700"
