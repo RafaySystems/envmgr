@@ -46,16 +46,19 @@ locals {
   # Split lines, filter out empty and comment lines
   config_lines = [
     for line in split("\n", var.oci_config_raw) :
-    trim(line)
-    if trim(line) != "" && !startswith(trim(line), "#") && !startswith(trim(line), "[")
+    trim(line, " \t\n\r")
+    if trim(line, " \t\n\r") != "" &&
+       !startswith(trim(line, " \t\n\r"), "#") &&
+       !startswith(trim(line, " \t\n\r"), "[")
   ]
 
   # Convert lines into a map of key = value
   config_kv_map = {
     for kv in local.config_lines :
-    trim(split("=", kv)[0]) => trim(join("=", slice(split("=", kv), 1, length(split("=", kv)))))
+    trim(split("=", kv)[0], " \t\n\r") =>
+    trim(join("=", slice(split("=", kv), 1, length(split("=", kv)))), " \t\n\r")
   }
- }
+}
 
 
 
