@@ -113,3 +113,13 @@ module "core_lz" {
     # ------------------------------------------------------
     create_budget = true # Deploys a default budget.
 }
+
+
+output "oci_service_label" {
+  description = "Service Label"
+  value       = var.service_label
+}
+output "oci_resource_search_url" {
+  description = "Oracle Cloud search URL for service label in the specified region"
+  value       = "https://cloud.oracle.com/search/resources?q=${var.service_label}&region=${lookup(local.config_kv_map, "region", null)}"
+}
