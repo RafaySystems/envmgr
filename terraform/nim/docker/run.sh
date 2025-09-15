@@ -20,6 +20,7 @@ CPU_REQUESTS="${CPU_REQUESTS:-2}"
 MEMORY_REQUESTS="${MEMORY_REQUESTS:-24Gi}"
 MODEL_NAME="${MODEL_NAME:?MODEL_NAME is required}"
 NODE_SELECTOR="${NODE_SELECTOR:?NODE_SELECTOR is required}"
+ENV_VARS="${ENV_VARS}"
 
 # -------- Model Info --------
 # Example:
@@ -126,8 +127,77 @@ export ngc_secret="${NAME}-ngc-secret"
 export ngc_api_secret="${NAME}-ngc-api-secret"
 export ingress_host="${NAMESPACE}.${DOMAIN}"
 export node_selector="$NODE_SELECTOR"
+export enable_cache="$ENABLE_CACHE"
+export cache_engine="$CACHE_ENGINE"
+export cache_storage_class_name="$CACHE_STORAGE_CLASS_NAME"
+export cache_storage_size="$CACHE_STORAGE_SIZE"
 
-envsubst <<'EOF' | kubectl apply -f -
+# Convert JSON array to Bash array
+IFS=$'\n' read -r -d '' -a env_var_list < <(echo "$ENV_VARS" | jq -r '.[]' && printf '\0')
+
+# Build YAML-formatted env block with correct newlines
+env_block=""
+for var in "${env_var_list[@]}"; do
+  key="${var%%=*}"
+  val="${var#*=}"
+  env_block+="  - name: ${key}\n    value: \"${val}\"\n"
+done
+
+# Export env_block
+export env_block
+
+if [[ "$enable_cache" == "true" ]]; then
+  storage_block=$(cat <<EOF
+  storage:
+    nimCache:
+      name: ${name}
+EOF
+)
+
+# Create the NIMCache manifest
+cat <<EOF > nimcache.yaml
+apiVersion: apps.nvidia.com/v1alpha1
+kind: NIMCache
+metadata:
+  name: ${name}
+spec:
+  source:
+    ngc:
+      modelPuller: ${image}
+      pullSecret: ${ngc_secret}
+      authSecret: ${ngc_api_secret}
+      model:
+        engine: ${cache_engine}
+        tensorParallelism: "${gpu_limit}"
+  storage:
+    pvc:
+      create: true
+      storageClass: ${cache_storage_class_name}
+      size: "${cache_storage_size}"
+      volumeAccessMode: ReadWriteMany
+  resources: {}
+EOF
+
+cat nimcache.yaml
+
+# Apply the manifest using kubectl
+kubectl apply -f nimcache.yaml
+
+else
+  storage_block=$(cat <<EOF
+  storage:
+    pvc:
+      create: true
+      storageClass: ${storage_class_name}
+      size: ${storage_size}
+      volumeAccessMode: ReadWriteOnce
+EOF
+)
+fi
+export storage_block
+
+# Run envsubst to expand variables including $env_block with real newlines
+envsubst <<EOF > manifest.yaml
 apiVersion: apps.nvidia.com/v1alpha1
 kind: NIMService
 metadata:
@@ -144,12 +214,7 @@ spec:
       - ${ngc_secret}
   authSecret: ${ngc_api_secret}
   replicas: 1
-  storage:
-    pvc:
-      create: true
-      storageClass: ${storage_class_name}
-      size: ${storage_size}
-      volumeAccessMode: ReadWriteOnce
+$storage_block
   resources:
     limits:
       nvidia.com/gpu: ${gpu_limit}
@@ -159,6 +224,8 @@ spec:
       nvidia.com/gpu: ${gpu_requests}
       cpu: ${cpu_requests}
       memory: ${memory_requests}
+  env:
+$(echo -e "$env_block")
   expose:
     service:
       type: ClusterIP
@@ -182,6 +249,9 @@ spec:
         - hosts:
           - ${ingress_host}
 EOF
+
+cat manifest.yaml
+kubectl apply -f manifest.yaml
 
 # -------- Wait for Nim Service to be Ready --------
 echo "Waiting for deployment to be ready..."
