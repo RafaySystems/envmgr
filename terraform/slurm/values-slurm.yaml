@@ -1,0 +1,50 @@
+mariadb:
+  primary:
+    persistence:
+      storageClass: ${STORAGECLASS}
+
+controller:
+  persistence:
+    storageClass: ${STORAGECLASS}
+
+login:
+  enabled: true
+  rootSshAuthorizedKeys:
+    - ${SSH_PUB_KEY}
+  service:
+    type: NodePort
+  serviceNodePort: ${NODE_PORT}
+  extraVolumeMounts:
+    - name: data
+      mountPath: /mnt/data
+  extraVolumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: data
+
+compute:
+  nodesets:
+    - name: compute-node-set
+      enabled: true
+      replicas: ${COMPUTE_REPLICAS}
+      image:
+        repository: ${COMPUTE_REPOSITORY}
+        tag: ${COMPUTE_TAG}
+        pullPolicy: IfNotPresent
+      resources:
+        limits:
+          cpu: "1"
+          memory: 1Gi
+          nvidia.com/gpu: 1
+      partition:
+        enabled: true
+      extraVolumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data
+      extraVolumeMounts:
+        - name: data
+          mountPath: /mnt/data
+
+slurm-exporter:
+  enabled: true

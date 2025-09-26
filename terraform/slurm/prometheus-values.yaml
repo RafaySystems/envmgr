@@ -1,0 +1,72 @@
+prometheus:
+  prometheusSpec:
+    # Scrape your Slurm exporter
+    additionalScrapeConfigs:
+      - job_name: "slurm"
+        metrics_path: /metrics
+        static_configs:
+          - targets:
+              - slurm-exporter.tim-slurm1.svc.cluster.local:8080
+
+    # Optional: persistent storage
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 5Gi
+
+
+grafana:
+  enabled: true
+  adminUser: admin
+  adminPassword: prom-operator
+
+  # Disable the built-in Prometheus datasource
+  defaultDashboardsEnabled: false
+  sidecar:
+    datasources:
+      enabled: false
+
+  # Provision only your Prometheus datasource
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          url: http://slurm-monitoring-kube-prom-prometheus.tim-slurm1.svc.cluster.local:9090
+          isDefault: true
+          uid: prometheus
+  service:
+    type: ClusterIP
+    port: 8000
+
+  ingress:
+    enabled: true
+    spec:
+      ingressClassName: nginx
+      rules:
+        - host: ${ingress_host}
+          http:
+            paths:
+              - backend:
+                  service:
+                    port:
+                      number: 8000
+                path: /
+                pathType: Prefix
+      tls:
+        - hosts:
+            - ${ingress_host}    
+
+alertmanager:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: false
+
+nodeExporter:
+  enabled: false
