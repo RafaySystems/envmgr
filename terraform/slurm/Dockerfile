@@ -30,8 +30,8 @@ COPY pvc.yaml /helm/pvc.yaml
 
 # Copy the Helm values file into the image
 COPY values-slurm.yaml /helm/values-slurm.yaml
-COPY values-slurm.yaml /helm/prometheus-values.yaml
-COPY values-slurm.yaml /helm/slinky-dashboard.json
+COPY prometheus-values.yaml /helm/prometheus-values.yaml
+COPY slinky-dashboard.json /helm/slinky-dashboard.json
 
 # Make sure the script is executable
 RUN chmod +x /usr/local/bin/run.sh

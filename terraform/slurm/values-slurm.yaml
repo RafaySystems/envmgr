@@ -33,9 +33,9 @@ compute:
         pullPolicy: IfNotPresent
       resources:
         limits:
-          cpu: "1"
-          memory: 1Gi
-          nvidia.com/gpu: 1
+          cpu: ${CPUS}
+          memory: ${MEMORY}
+          nvidia.com/gpu: ${GPUS}
       partition:
         enabled: true
       extraVolumes:
@@ -45,6 +45,7 @@ compute:
       extraVolumeMounts:
         - name: data
           mountPath: /mnt/data
+${NODE_SELECTOR_BLOCK}
 
 slurm-exporter:
   enabled: true

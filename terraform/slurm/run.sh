@@ -9,6 +9,9 @@ NAMESPACE="${NAMESPACE}"
 STORAGECLASS="${STORAGE_CLASS_NAME}"
 SSH_PUB_KEY="${SSH_PUB_KEY}"
 COMPUTE_REPLICAS="${COMPUTE_REPLICAS}"
+CPUS="${CPUS}"
+MEMORY="${MEMORY}"
+GPUS="${GPUS}"
 COMPUTE_TAG="${COMPUTE_TAG}"
 SHAREDSTORAGE_CLASS="${SHARED_STORAGE_CLASS_NAME}"
 SHARED_STORAGE_SIZE="${SHARED_STORAGE_SIZE}"
@@ -16,6 +19,19 @@ INGRESS_DOMAIN="${DOMAIN:-example.com}"
 CHART_VERSION="0.3.0"
 
 INGRESS_HOST="${NAMESPACE}.${INGRESS_DOMAIN}"
+
+NODE_SELECTOR_KEY="${NODE_SELECTOR_KEY}"
+NODE_SELECTOR_VALUE="${NODE_SELECTOR_VALUE}"
+
+if [[ -n "$NODE_SELECTOR_KEY" && -n "$NODE_SELECTOR_VALUE" ]]; then
+  # Indent 6 spaces to match the nodeset level in your YAML
+  NODE_SELECTOR_BLOCK="      nodeSelector:
+        $NODE_SELECTOR_KEY: $NODE_SELECTOR_VALUE"
+else
+  NODE_SELECTOR_BLOCK=""
+fi
+
+export NODE_SELECTOR_BLOCK
 
 # Setup kubeconfig file
 export KUBECONFIG=~/kubeconfig.yaml
@@ -25,6 +41,14 @@ chmod 600 "$KUBECONFIG"
 if [ "${ACTION}" == "destroy" ]; then
 
     echo "Running destroy commands..."
+	
+	# Uninstall Slurm Helm chart
+	helm uninstall slurm -n ${NAMESPACE}
+
+	# Uninstall Prometheus / monitoring Helm chart
+	helm uninstall slurm-monitoring-${NAMESPACE} -n ${NAMESPACE}
+	
+	# Delete the namespace entirely
 	kubectl delete namespace ${NAMESPACE} &
 	
 	echo "Waiting for namespace ${NAMESPACE} to be deleted..."
@@ -47,10 +71,7 @@ elif [ "${ACTION}" == "deploy" ]; then
 	# -----------------------------
 	NODE_PORT=$((RANDOM % 2767 + 30000))
 	echo "Slurm NodePort selected: $NODE_PORT"
-	
-	GRAFANA_NODE_PORT=$((RANDOM % 2767 + 30000))
-	echo "Grafana NodePort selected: $GRAFANA_NODE_PORT"
-	
+		
 	# -----------------------------
 	# Create Namespace
 	# -----------------------------
@@ -70,11 +91,11 @@ elif [ "${ACTION}" == "deploy" ]; then
 	# -----------------------------
 	echo "Installing slurm Helm chart..."
 
-	envsubst < /helm/values-slurm.yaml > /tmp/values-slurm.yaml
+	STORAGECLASS="${STORAGECLASS}" envsubst < /helm/values-slurm.yaml > /tmp/values-slurm.yaml
 	
 	cat /tmp/values-slurm.yaml
 
-	helm upgrade --install slurm oci://ghcr.io/slinkyproject/charts/slurm \
+	helm install slurm oci://ghcr.io/slinkyproject/charts/slurm \
 	  --namespace "$NAMESPACE" \
 	  --version "$CHART_VERSION" \
 	  --wait \
@@ -88,7 +109,7 @@ elif [ "${ACTION}" == "deploy" ]; then
 
 	ACTUAL_NODE_PORT=$(kubectl get svc slurm-login -n "$NAMESPACE" -o jsonpath='{.spec.ports[0].nodePort}')
 	echo "Slurm Login NodePort: $ACTUAL_NODE_PORT"
-	
+		
 	# -----------------------------
 	# Install slinky dashboard configmap
 	# -----------------------------
@@ -101,11 +122,18 @@ elif [ "${ACTION}" == "deploy" ]; then
 	# -----------------------------
 	echo "Installing Prometheus Helm chart..."
 	
-	envsubst < /helm/prometheus-values.yaml > /tmp/prometheus-values.yaml
+	# Add the Prometheus Community Helm repo
+	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+	# Update all Helm repos
+	helm repo update
 	
+	INGRESS_HOST="${NAMESPACE}.${INGRESS_DOMAIN}" envsubst < /helm/prometheus-values.yaml > /tmp/prometheus-values.yaml
+	
+	echo "Prometheus Values: "
 	cat /tmp/prometheus-values.yaml
 	  
-	  helm install --install slurm-monitoring prometheus-community/kube-prometheus-stack \
+	  helm install slurm-monitoring-${NAMESPACE} prometheus-community/kube-prometheus-stack \
 	  --namespace "$NAMESPACE" \
 	  --wait \
 	  --timeout 5m \
@@ -119,6 +147,7 @@ elif [ "${ACTION}" == "deploy" ]; then
 	SSH_CMD="ssh -p $ACTUAL_NODE_PORT root@$PUBLIC_IP -o TCPKeepAlive=yes -o ServerAliveInterval=30 -i <path to private key>"
 	SCP_SCRIPT="scp -v -O -P $ACTUAL_NODE_PORT -i <path to private key> <path to data file> root@$PUBLIC_IP:/root"
 	SCP_DATA="scp -v -O -P $ACTUAL_NODE_PORT -i <path to private key> <path to script file> root@$PUBLIC_IP:/mnt/data"
+	Monitoring_URL="https://${INGRESS_HOST}/d/edrg5th9t1edcb/slinky-slurm?orgId=1&from=now-1h&to=now&timezone=browser&refresh=5s"
 
 	echo ""
 	echo "============================"
@@ -133,6 +162,9 @@ elif [ "${ACTION}" == "deploy" ]; then
 	echo "SCP Data Example:"
 	echo "$SCP_DATA"
 	echo ""
+	echo "Monitoring URL:"
+	echo "$Monitoring_URL"
+	echo ""
 
 
 	
@@ -144,7 +176,8 @@ json_content=$(cat <<EOF
 {
   "SSH": "$SSH_CMD",
   "SCP_DATA": "$SCP_DATA",
-  "SCP_SCRIPT": "$SCP_SCRIPT"
+  "SCP_SCRIPT": "$SCP_SCRIPT",
+  "MONITORING_URL": "$Monitoring_URL"
 }
 EOF
 )
