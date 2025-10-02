@@ -1,5 +1,7 @@
 prometheus:
   prometheusSpec:
+    service:
+      name: slurm-monitoring-prometheus
     # Scrape your Slurm exporter
     additionalScrapeConfigs:
       - job_name: "slurm"
@@ -16,48 +18,7 @@ prometheus:
           resources:
             requests:
               storage: 5Gi
-
-
-grafana:
-  enabled: true
-  adminUser: admin
-  adminPassword: admin
-
-  # Disable the built-in Prometheus datasource
-  defaultDashboardsEnabled: false
-  sidecar:
-    datasources:
-      enabled: false
-
-  # Provision only your Prometheus datasource
-  datasources:
-    datasources.yaml:
-      apiVersion: 1
-      datasources:
-        - name: Prometheus
-          type: prometheus
-          access: proxy
-          url: http://slurm-monitoring-tim-slurm-prometheus.${NAMESPACE}.svc.cluster.local:9090
-          isDefault: true
-          uid: prometheus
-  service:
-    type: ClusterIP
-    port: 8000
-    
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      nginx.ingress.kubernetes.io/rewrite-target: /
-    ingressClassName: nginx
-    hosts:
-      - ${INGRESS_HOST}
-    paths:
-      - /
-    tls:
-      - hosts:
-          - ${INGRESS_HOST}
- 
+              
 alertmanager:
   enabled: false
 
@@ -65,4 +26,7 @@ kubeStateMetrics:
   enabled: false
 
 nodeExporter:
+  enabled: false
+
+grafana:
   enabled: false

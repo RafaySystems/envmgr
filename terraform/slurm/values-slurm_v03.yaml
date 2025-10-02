@@ -1,0 +1,55 @@
+mariadb:
+  primary:
+    image:
+      repository: bitnamilegacy/mariadb
+      tag: 11.4.7-debian-12-r2
+      pullPolicy: IfNotPresent
+    persistence:
+      storageClass: ${STORAGECLASS}
+
+controller:
+  persistence:
+    storageClass: ${STORAGECLASS}
+
+login:
+  enabled: true
+  rootSshAuthorizedKeys:
+    - ${SSH_PUB_KEY}
+  service:
+    type: NodePort
+  serviceNodePort: ${NODE_PORT}
+  extraVolumeMounts:
+    - name: data
+      mountPath: /mnt/data
+  extraVolumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: data
+
+compute:
+  nodesets:
+    - name: compute-node-set
+      enabled: true
+      replicas: ${COMPUTE_REPLICAS}
+      image:
+        repository: ${COMPUTE_REPOSITORY}
+        tag: ${COMPUTE_TAG}
+        pullPolicy: IfNotPresent
+      resources:
+        limits:
+          cpu: ${CPUS}
+          memory: ${MEMORY}
+          nvidia.com/gpu: ${GPUS}
+      partition:
+        enabled: true
+      extraVolumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data
+      extraVolumeMounts:
+        - name: data
+          mountPath: /mnt/data
+${NODE_SELECTOR_BLOCK}
+
+slurm-exporter:
+  enabled: true

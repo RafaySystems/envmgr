@@ -1,0 +1,39 @@
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: ${PROMETHEUS_URL}
+        isDefault: true
+        uid: prometheus
+
+# Grafana service
+service:
+  type: ClusterIP
+  port: 8000
+
+# Admin credentials
+adminUser: admin
+adminPassword: admin
+defaultDashboardsEnabled: false
+sidecar:
+  dashboards:
+    enabled: true    
+
+# Ingress (top-level in v12+)
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - ${INGRESS_HOST}
+  paths:
+    - /
+  tls:
+    - hosts:
+        - ${INGRESS_HOST}
+      secretName: grafana-tls

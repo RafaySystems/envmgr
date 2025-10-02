@@ -31,6 +31,7 @@ COPY pvc.yaml /helm/pvc.yaml
 # Copy the Helm values file into the image
 COPY values-slurm.yaml /helm/values-slurm.yaml
 COPY prometheus-values.yaml /helm/prometheus-values.yaml
+COPY grafana-values.yaml /helm/grafana-values.yaml
 COPY slinky-dashboard.json /helm/slinky-dashboard.json
 
 # Make sure the script is executable

@@ -15,10 +15,11 @@ GPUS="${GPUS}"
 COMPUTE_TAG="${COMPUTE_TAG}"
 SHAREDSTORAGE_CLASS="${SHARED_STORAGE_CLASS_NAME}"
 SHARED_STORAGE_SIZE="${SHARED_STORAGE_SIZE}"
-INGRESS_DOMAIN="${DOMAIN:-example.com}"
-CHART_VERSION="0.3.0"
+INGRESS_DOMAIN="${DOMAIN}"
+CHART_VERSION="0.4.0"
 
 INGRESS_HOST="${NAMESPACE}.${INGRESS_DOMAIN}"
+export INGRESS_HOST
 
 NODE_SELECTOR_KEY="${NODE_SELECTOR_KEY}"
 NODE_SELECTOR_VALUE="${NODE_SELECTOR_VALUE}"
@@ -101,13 +102,30 @@ elif [ "${ACTION}" == "deploy" ]; then
 	  --wait \
 	  --timeout 5m \
 	  -f /tmp/values-slurm.yaml
+	  
+kubectl apply -n "$NAMESPACE" -f - <<EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: slurm-login-nodeport
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/instance: slurm-login-slinky
+    app.kubernetes.io/name: login
+  ports:
+    - port: 22
+      targetPort: 22
+      nodePort: $NODE_PORT
+EOF
+
 
 	# -----------------------------
 	# Get actual NodePort (if needed, confirm it)
 	# -----------------------------
 	echo "Getting assigned NodePort from Kubernetes..."
 
-	ACTUAL_NODE_PORT=$(kubectl get svc slurm-login -n "$NAMESPACE" -o jsonpath='{.spec.ports[0].nodePort}')
+	ACTUAL_NODE_PORT=$(kubectl get svc slurm-login-nodeport -n "$NAMESPACE" -o jsonpath='{.spec.ports[0].nodePort}')
 	echo "Slurm Login NodePort: $ACTUAL_NODE_PORT"
 		
 	# -----------------------------
@@ -118,9 +136,10 @@ elif [ "${ACTION}" == "deploy" ]; then
 	kubectl -n "$NAMESPACE" create configmap slurm-dashboard --from-file=/helm/slinky-dashboard.json
 	
 	# -----------------------------
-	# Install Prometheus Helm chart
+	# Install Prometheus
 	# -----------------------------
-	echo "Installing Prometheus Helm chart..."
+
+	echo "Installing Prometheus..."
 	
 	# Add the Prometheus Community Helm repo
 	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -128,18 +147,49 @@ elif [ "${ACTION}" == "deploy" ]; then
 	# Update all Helm repos
 	helm repo update
 	
-	INGRESS_HOST="${NAMESPACE}.${INGRESS_DOMAIN}" envsubst < /helm/prometheus-values.yaml > /tmp/prometheus-values.yaml
+	envsubst < /helm/prometheus-values.yaml > /tmp/prometheus-values.yaml
 	
 	echo "Prometheus Values: "
 	cat /tmp/prometheus-values.yaml
 	  
-	  helm install slurm-monitoring-${NAMESPACE} prometheus-community/kube-prometheus-stack \
+	
+	helm install "slurm-monitoring-${NAMESPACE}" prometheus-community/kube-prometheus-stack \
 	  --namespace "$NAMESPACE" \
 	  --wait \
 	  --timeout 5m \
 	  -f /tmp/prometheus-values.yaml
 
+	# ---- Detect the Prometheus service ----
+	PROMETHEUS_SERVICE=$(kubectl get svc -n "$NAMESPACE" --no-headers | awk '/slurm-monitoring-.*-prometheus/ && /9090/ {print $1; exit}')
 
+	PROMETHEUS_URL="http://${PROMETHEUS_SERVICE}.${NAMESPACE}.svc.cluster.local:9090"
+	echo "Detected Prometheus URL: $PROMETHEUS_URL"
+
+	export PROMETHEUS_URL
+
+	# -----------------------------
+	# Install Grafana
+	# -----------------------------
+	
+	helm repo add grafana https://grafana.github.io/helm-charts 2>/dev/null || true
+	helm repo update
+	
+	envsubst < /helm/grafana-values.yaml > /tmp/grafana-values.yaml
+	
+	echo "Grafana Values: "
+	cat /tmp/grafana-values.yaml
+	
+	echo "Installing Grafana..."
+	helm install "slurm-grafana-${NAMESPACE}" grafana/grafana \
+	  --namespace "$NAMESPACE" \
+	  --wait \
+	  --timeout 5m \
+	  -f /tmp/grafana-values.yaml
+
+	echo "Prometheus and Grafana installation completed!"
+	echo "Grafana should have Prometheus datasource configured at $PROMETHEUS_URL"
+	
+	
 	# -----------------------------
 	# Output SSH and SCP instructions
 	# -----------------------------
@@ -177,7 +227,9 @@ json_content=$(cat <<EOF
   "SSH": "$SSH_CMD",
   "SCP_DATA": "$SCP_DATA",
   "SCP_SCRIPT": "$SCP_SCRIPT",
-  "MONITORING_URL": "$Monitoring_URL"
+  "MONITORING_URL": "$Monitoring_URL",
+  "MONITORING_USER": "admin",
+  "MONITORING_PASSWORD": "admin"
 }
 EOF
 )
