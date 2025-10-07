@@ -1,3 +1,9 @@
+#accounting:
+#  enabled: true
+#configFiles:
+#  gres.conf: |
+#    AutoDetect=nvml
+#    Name=gpu Type=nvml
 mariadb:
   primary:
     persistence:
