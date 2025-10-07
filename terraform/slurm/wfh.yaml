@@ -1,7 +1,7 @@
 ﻿apiVersion: eaas.envmgmt.io/v1
 kind: WorkflowHandler
 metadata:
-  name: slurm-cluster-v04
+  name: slurm-cluster
   project: system-catalog
 spec:
   config:
