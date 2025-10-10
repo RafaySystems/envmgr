@@ -4,14 +4,59 @@
 #  gres.conf: |
 #    AutoDetect=nvml
 #    Name=gpu Type=nvml
-mariadb:
-  primary:
-    persistence:
-      storageClass: ${STORAGECLASS}
+accounting:
+  slurmdbd:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+  initconf:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+#mariadb:
+#  primary:
+#    persistence:
+#      storageClass: ${STORAGECLASS}
 
 controller:
+  slurmctld:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+        
   persistence:
     storageClass: ${STORAGECLASS}
+    
+  reconfigure:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+  logfile:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
         
 loginsets:
   slinky:
@@ -24,7 +69,13 @@ loginsets:
       env: []
       securityContext:
         privileged: false
-      resources: {}
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
       volumeMounts:
         - name: data
           mountPath: /mnt/data
@@ -100,10 +151,13 @@ nodesets:
         tag: latest
       # -- The container resource limits and requests.
       # Ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-requests-and-limits-of-pod-and-container
-      resources: {}
-        # limits:
-        #   cpu: 500m
-        #   memory: 100Mi
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
     # -- Extra configuration added to the `--conf` argument.
     # Ref: https://slurm.schedmd.com/slurm.conf.html#SECTION_NODE-CONFIGURATION
     extraConf: null
@@ -161,3 +215,23 @@ ${NODE_SELECTOR_BLOCK}
 
 slurm-exporter:
   enabled: true
+  exporter:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+
+
+restapi:
+  slurmrestd:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi

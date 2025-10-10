@@ -76,9 +76,10 @@ elif [ "${ACTION}" == "deploy" ]; then
 	# -----------------------------
 	# Create Namespace
 	# -----------------------------
+	
 	echo "Creating Namespace..."
 	kubectl create namespace ${NAMESPACE}
-	
+		
 	# -----------------------------
 	# Create PVC
 	# -----------------------------

@@ -25,10 +25,8 @@ RUN HELM_VERSION="v3.12.3" && \
 # Copy shell script into the container
 COPY run.sh /usr/local/bin/run.sh
 
-# Copy PVC spec file into the image
+# Copy files into the image
 COPY pvc.yaml /helm/pvc.yaml
-
-# Copy the Helm values file into the image
 COPY values-slurm.yaml /helm/values-slurm.yaml
 COPY prometheus-values.yaml /helm/prometheus-values.yaml
 COPY grafana-values.yaml /helm/grafana-values.yaml
