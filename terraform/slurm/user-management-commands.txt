@@ -1,0 +1,86 @@
+﻿################################################
+Create User Script
+################################################
+
+
+cat << 'EOF' > /usr/local/bin/create-slurm-user
+#!/bin/bash
+USERNAME=""
+PASSWORD=""
+SLURM_GID=401
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --username) USERNAME="$2"; shift 2;;
+        --password) PASSWORD="$2"; shift 2;;
+        -h|--help) echo "Usage: $0 --username <username> --password <password>"; exit 0;;
+        *) echo "Unknown option: $1"; echo "Usage: $0 --username <username> --password <password>"; exit 1;;
+    esac
+done
+if [[ -z "$USERNAME" || -z "$PASSWORD" ]]; then
+    echo "Error: --username and --password are required"; exit 1
+fi
+groupadd -g $SLURM_GID slurm 2>/dev/null || true
+UID_MIN=$(awk '/^UID_MIN/ {print $2}' /etc/login.defs)
+UID_MAX=$(awk '/^UID_MAX/ {print $2}' /etc/login.defs)
+NEXT_UID=$(awk -F: -v min=$UID_MIN -v max=$UID_MAX '{if($3>=min && $3<=max) print $3}' /etc/passwd | sort -n | tail -1)
+if [ -z "$NEXT_UID" ]; then NEXT_UID=$UID_MIN; else NEXT_UID=$((NEXT_UID + 1)); [ $NEXT_UID -gt $UID_MAX ] && { echo "Error: No available UID"; exit 1; }; fi
+id -u "$USERNAME" &>/dev/null || useradd -m -u $NEXT_UID -g $SLURM_GID -s /bin/bash "$USERNAME"
+echo "${USERNAME}:${PASSWORD}" | chpasswd --crypt-method=SHA512
+mkdir -p /mnt/users/home/$USERNAME
+chmod 700 /mnt/users/home/$USERNAME
+grep "^$USERNAME:" /etc/passwd >> /mnt/users/passwd
+grep "^$USERNAME:" /etc/shadow >> /mnt/users/shadow
+grep "^slurm:" /etc/group >> /mnt/users/group
+echo "User $USERNAME created with UID $NEXT_UID and added to PVC"
+EOF
+chmod +x /usr/local/bin/create-slurm-user
+
+
+################################################
+Create User Script Execution
+################################################
+
+create-slurm-user --username slurmuser2 --password SimplePass123
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+################################################
+View User Script
+################################################
+
+echo -n '#!/bin/bash '; echo 'SLURM_GID=$(getent group slurm | cut -d: -f3); awk -F: -v gid=$SLURM_GID '\''($4==gid){print $1}'\'' /etc/passwd; getent group slurm | awk -F: '\''{split($4,a,","); for(i in a) print a[i]}'\''' > /usr/local/bin/list-slurm-users && chmod +x /usr/local/bin/list-slurm-users
+
+
+################################################
+View User Script Execution
+################################################
+
+list-slurm-users
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+################################################
+Delete User Script 
+################################################
+
+tee /usr/local/bin/delete-slurm-user >/dev/null <<'EOF' && chmod +x /usr/local/bin/delete-slurm-user
+#!/bin/bash
+# delete-slurm-user --username <name>
+set -e
+if [ "$EUID" -ne 0 ]; then echo "Must run as root"; exit 1; fi
+while [[ $# -gt 0 ]]; do case $1 in --username) USERNAME="$2"; shift 2;; *) shift;; esac; done
+if [ -z "$USERNAME" ]; then echo "Usage: delete-slurm-user --username <name>"; exit 1; fi
+SLURM_GID=401
+if id "$USERNAME" &>/dev/null; then userdel -r "$USERNAME"; echo "Deleted system user $USERNAME"; else echo "User $USERNAME does not exist"; fi
+USER_HOME="/mnt/users/home/$USERNAME"
+[ -d "$USER_HOME" ] && rm -rf "$USER_HOME" && echo "Deleted home directory $USER_HOME"
+for file in /mnt/users/passwd /mnt/users/shadow /mnt/users/group; do [ -f "$file" ] && sed -i "/^$USERNAME:/d" "$file"; done
+echo "Removed $USERNAME from /mnt/users files"
+EOF
+
+################################################
+Delete User Script Execution
+################################################
+
+delete-slurm-user --username slurmuser1

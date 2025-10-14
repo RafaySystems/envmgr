@@ -26,7 +26,8 @@ RUN HELM_VERSION="v3.12.3" && \
 COPY run.sh /usr/local/bin/run.sh
 
 # Copy files into the image
-COPY pvc.yaml /helm/pvc.yaml
+COPY pvc-data.yaml /helm/pvc-data.yaml
+COPY pvc-users.yaml /helm/pvc-users.yaml
 COPY values-slurm.yaml /helm/values-slurm.yaml
 COPY prometheus-values.yaml /helm/prometheus-values.yaml
 COPY grafana-values.yaml /helm/grafana-values.yaml

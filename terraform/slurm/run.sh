@@ -14,9 +14,11 @@ MEMORY="${MEMORY}"
 GPUS="${GPUS}"
 COMPUTE_TAG="${COMPUTE_TAG}"
 SHAREDSTORAGE_CLASS="${SHARED_STORAGE_CLASS_NAME}"
+export SHAREDSTORAGE_CLASS
 SHARED_STORAGE_SIZE="${SHARED_STORAGE_SIZE}"
 INGRESS_DOMAIN="${DOMAIN}"
 CHART_VERSION="0.4.0"
+
 
 INGRESS_HOST="${NAMESPACE}.${INGRESS_DOMAIN}"
 export INGRESS_HOST
@@ -34,6 +36,7 @@ fi
 
 export NODE_SELECTOR_BLOCK
 
+
 # Setup kubeconfig file
 export KUBECONFIG=~/kubeconfig.yaml
 echo "$VAR_kubeconfig" >> ~/kubeconfig.yaml
@@ -45,6 +48,9 @@ if [ "${ACTION}" == "destroy" ]; then
 	
 	# Uninstall Slurm Helm chart
 	helm uninstall slurm -n ${NAMESPACE}
+	
+	# Uninstall Grafana Helm chart
+	helm uninstall slurm-grafana-${NAMESPACE} -n ${NAMESPACE}
 
 	# Uninstall Prometheus / monitoring Helm chart
 	helm uninstall slurm-monitoring-${NAMESPACE} -n ${NAMESPACE}
@@ -81,12 +87,17 @@ elif [ "${ACTION}" == "deploy" ]; then
 	kubectl create namespace ${NAMESPACE}
 		
 	# -----------------------------
-	# Create PVC
+	# Create PVCs
 	# -----------------------------
-	echo "Creating PVC..."
-	SHAREDSTORAGE_CLASS="${SHARED_STORAGE_CLASS_NAME}" envsubst < /helm/pvc.yaml > /tmp/pvc.yaml
-	cat /tmp/pvc.yaml
-	kubectl apply -f /tmp/pvc.yaml
+	echo "Creating Data PVC..."
+	envsubst < /helm/pvc-data.yaml > /tmp/pvc-data.yaml
+	cat /tmp/pvc-data.yaml
+	kubectl apply -f /tmp/pvc-data.yaml
+	
+	echo "Creating Users PVC..."
+	envsubst < /helm/pvc-users.yaml > /tmp/pvc-users.yaml
+	cat /tmp/pvc-users.yaml
+	kubectl apply -f /tmp/pvc-users.yaml
 
 	# -----------------------------
 	# Install slurm Helm chart

@@ -69,6 +69,9 @@ loginsets:
       env: []
       securityContext:
         privileged: false
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 401
       resources:
         requests:
           cpu: 100m
@@ -79,14 +82,58 @@ loginsets:
       volumeMounts:
         - name: data
           mountPath: /mnt/data
+        - name: users
+          mountPath: /mnt/users
+      lifecycle:
+        postStart:
+          exec:
+            command:
+              - sh
+              - -c
+              - |
+                echo "[INFO] === Starting postStart setup ==="
+
+                # Ensure PVC directories exist
+                chmod 700 /mnt/users
+
+                chown root:401 /mnt/data
+                chmod 770 /mnt/data
+
+                echo "[INFO] Directories prepared."
+                
+                echo "[INFO] Merging PVC users into system..."
+                for file in passwd group shadow; do
+                  if [ -f /mnt/users/$file ]; then
+                    echo "[INFO] Merging /mnt/users/$file -> /etc/$file"
+                    grep -v '^#' /mnt/users/$file >> /etc/$file
+                  fi
+                done
+
+                # Ensure permissions are correct
+                chmod 644 /etc/passwd /etc/group
+                chmod 600 /etc/shadow
+
+                # Create home directories if missing
+                if [ -f /mnt/users/passwd ]; then
+                  awk -F: '{print $6}' /mnt/users/passwd | while read home; do
+                    [ -n "$home" ] && mkdir -p "$home" && chmod 700 "$home"
+                  done
+                fi
+
+                echo "[INFO] User merge complete."
+
+
+
     rootSshAuthorizedKeys: |
       ${SSH_PUB_KEY}
-    extraSshdConfig: null
+    extraSshdConfig: |
+      PasswordAuthentication yes
+      UsePAM yes
     sssdConf: |
       [sssd]
       config_file_version = 2
       services = nss,pam
-      domains = DEFAULT
+      domains = localusers
 
       [nss]
       filter_groups = root,slurm
@@ -94,16 +141,14 @@ loginsets:
 
       [pam]
 
-      [domain/DEFAULT]
-      auth_provider = ldap
-      id_provider = ldap
-      ldap_uri = ldap://ldap.example.com
-      ldap_search_base = dc=example,dc=com
-      ldap_user_search_base = ou=Users,dc=example,dc=com
-      ldap_group_search_base = ou=Groups,dc=example,dc=com
+      [domain/localusers]
+      id_provider = files
+      auth_provider = files
+      enumerate = true
+      cache_credentials = false
+      override_homedir = /home/%u
     metadata: {}
     podSpec:
-      initContainers: []
       nodeSelector:
         kubernetes.io/os: linux
       affinity: {}
@@ -112,7 +157,10 @@ loginsets:
         - name: data
           persistentVolumeClaim:
             claimName: data
-
+        - name: users
+          persistentVolumeClaim:
+            claimName: users        
+        
 # Slurm NodeSet (slurmd) configurations.
 nodesets:
   # Sample NodeSet.
