@@ -1,32 +1,28 @@
-prometheus:
-  prometheusSpec:
-    service:
-      name: slurm-monitoring-prometheus
-    # Scrape your Slurm exporter
-    additionalScrapeConfigs:
-      - job_name: "slurm"
-        metrics_path: /metrics
-        static_configs:
-          - targets:
-              - slurm-exporter.${NAMESPACE}.svc.cluster.local:8080
-
-    # Optional: persistent storage
-    storageSpec:
-      volumeClaimTemplate:
-        spec:
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 5Gi
-              
+# slurm-prometheus-values.yaml
 alertmanager:
   enabled: false
 
-kubeStateMetrics:
+prometheus-pushgateway:
   enabled: false
-
-nodeExporter:
+  
+prometheus-node-exporter:
   enabled: false
-
-grafana:
-  enabled: false
+  
+server:
+  service:
+    type: ClusterIP
+    port: 9090
+  persistentVolume:
+    enabled: true
+    size: 5Gi
+    accessModes:
+      - ReadWriteOnce
+  retention: 7d
+  
+# extraScrapeConfigs is at the root level
+extraScrapeConfigs: |-
+  - job_name: "slurm"
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - slurm-exporter.${NAMESPACE}.svc.cluster.local:8080

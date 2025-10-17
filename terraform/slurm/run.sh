@@ -155,8 +155,6 @@ EOF
 	
 	# Add the Prometheus Community Helm repo
 	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-
-	# Update all Helm repos
 	helm repo update
 	
 	envsubst < /helm/prometheus-values.yaml > /tmp/prometheus-values.yaml
@@ -164,17 +162,16 @@ EOF
 	echo "Prometheus Values: "
 	cat /tmp/prometheus-values.yaml
 	  
-	
-	helm install "slurm-monitoring-${NAMESPACE}" prometheus-community/kube-prometheus-stack \
+	helm install "slurm-monitoring-${NAMESPACE}" prometheus-community/prometheus \
 	  --namespace "$NAMESPACE" \
 	  --wait \
 	  --timeout 5m \
 	  -f /tmp/prometheus-values.yaml
 
 	# ---- Detect the Prometheus service ----
-	PROMETHEUS_SERVICE=$(kubectl get svc -n "$NAMESPACE" --no-headers | awk '/slurm-monitoring-.*-prometheus/ && /9090/ {print $1; exit}')
-
-	PROMETHEUS_URL="http://${PROMETHEUS_SERVICE}.${NAMESPACE}.svc.cluster.local:9090"
+	PROMETHEUS_SERVICE=$(kubectl get svc -n "slurmc4" --no-headers | awk '/slurm-monitoring-.*-prometheus/ {print $1; exit}')
+	
+	PROMETHEUS_URL="http://${PROMETHEUS_SERVICE}.${NAMESPACE}.svc.cluster.local:80"
 	echo "Detected Prometheus URL: $PROMETHEUS_URL"
 
 	export PROMETHEUS_URL
