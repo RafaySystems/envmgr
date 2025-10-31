@@ -1,30 +1,3 @@
-controller:
-
-
-restapi:
-
-
-slurm-exporter:
-
-
-accounting:
-
-
-loginsets:
-  slinky:
-
-
-nodesets:
-  slinky:
-    podSpec:
-${NODE_SELECTOR_BLOCK_6SPACE}
-
-#accounting:
-#  enabled: true
-#configFiles:
-#  gres.conf: |
-#    AutoDetect=nvml
-#    Name=gpu Type=nvml
 configFiles:
   plugstack.conf: |
     include /usr/share/pyxis/*
