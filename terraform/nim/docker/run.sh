@@ -12,14 +12,15 @@ NGC_API_KEY="${NGC_API_KEY:?NGC_API_KEY is required}"
 INGRESS_DOMAIN="${DOMAIN:-example.com}"
 STORAGE_SIZE="${STORAGE_SIZE:-10Gi}"
 STORAGE_CLASS_NAME="${STORAGE_CLASS_NAME:-openebs-hostpath}"
-GPU_LIMIT="${GPU_LIMIT:-1}"
-CPU_LIMIT="${CPU_LIMIT:-4}"
-MEMORY_LIMIT="${MEMORY_LIMIT:-24Gi}"
-GPU_REQUESTS="${GPU_REQUESTS:-1}"
-CPU_REQUESTS="${CPU_REQUESTS:-2}"
-MEMORY_REQUESTS="${MEMORY_REQUESTS:-24Gi}"
+GPU_LIMIT="${GPU_LIMIT}"
+CPU_LIMIT="${CPU_LIMIT}m"
+MEMORY_LIMIT="${MEMORY_LIMIT}Mi"
+GPU_REQUESTS="${GPU_LIMIT}"
+CPU_REQUESTS="${CPU_LIMIT}"
+MEMORY_REQUESTS="${MEMORY_LIMIT}"
 MODEL_NAME="${MODEL_NAME:?MODEL_NAME is required}"
-NODE_SELECTOR="${NODE_SELECTOR:?NODE_SELECTOR is required}"
+NODE_SELECTOR="${NODE_SELECTOR}"
+DEVICE_DETAILS="${DEVICE_DETAILS}"
 ENV_VARS="${ENV_VARS}"
 
 # -------- Model Info --------
@@ -196,6 +197,40 @@ EOF
 fi
 export storage_block
 
+if [[ -n "${DEVICE_DETAILS:-}" ]]; then
+  # Extract all hostnames into an array using jq
+  if HOSTNAMES_JSON=$(echo "${DEVICE_DETAILS}" | jq -r '.[].hostname' 2>/dev/null); then
+    readarray -t DEVICE_HOSTNAMES <<< "${HOSTNAMES_JSON}"
+  else
+    echo "Error: DEVICE_DETAILS is not valid JSON" >&2
+    DEVICE_HOSTNAMES=()
+  fi
+
+  if (( ${#DEVICE_HOSTNAMES[@]} > 0 )); then
+    NODE_SELECTOR_BLOCK=$(cat <<EOF
+  nodeSelector:
+    kubernetes.io/hostname: ${DEVICE_HOSTNAMES[0]}
+EOF
+)
+
+  else
+    echo "Warning: DEVICE_DETAILS provided, but no hostnames found." >&2
+    NODE_SELECTOR_BLOCK=""
+  fi
+
+elif [[ -n "${NODE_SELECTOR:-}" ]]; then
+  # Fallback: plain string NODE_SELECTOR (already key:value)
+  NODE_SELECTOR_BLOCK=$(cat <<EOF
+  nodeSelector:
+    ${NODE_SELECTOR}
+EOF
+)
+else
+  NODE_SELECTOR_BLOCK=""
+fi
+
+export NODE_SELECTOR_BLOCK
+
 # Run envsubst to expand variables including $env_block with real newlines
 envsubst <<EOF > manifest.yaml
 apiVersion: apps.nvidia.com/v1alpha1
@@ -204,8 +239,7 @@ metadata:
   name: ${name}
   namespace: ${namespace}
 spec:
-  nodeSelector:
-    nvidia.com/gpu.product: ${node_selector}
+$NODE_SELECTOR_BLOCK
   image:
     repository: ${image}
     tag: ${image_tag}
