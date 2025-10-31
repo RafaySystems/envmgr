@@ -1,10 +1,37 @@
+controller:
+
+
+restapi:
+
+
+slurm-exporter:
+
+
+accounting:
+
+
+loginsets:
+  slinky:
+
+
+nodesets:
+  slinky:
+    podSpec:
+${NODE_SELECTOR_BLOCK_6SPACE}
+
 #accounting:
 #  enabled: true
 #configFiles:
 #  gres.conf: |
 #    AutoDetect=nvml
 #    Name=gpu Type=nvml
+configFiles:
+  plugstack.conf: |
+    include /usr/share/pyxis/*
+
 accounting:
+  podSpec:
+${NODE_SELECTOR_BLOCK_4SPACE}
   slurmdbd:
     resources:
       requests:
@@ -28,6 +55,8 @@ accounting:
 #      storageClass: ${STORAGECLASS}
 
 controller:
+  podSpec:
+${NODE_SELECTOR_BLOCK_4SPACE}
   slurmctld:
     resources:
       requests:
@@ -64,11 +93,11 @@ loginsets:
     replicas: 1
     login:
       image:
-        repository: ghcr.io/slinkyproject/login
-        tag: 25.05-ubuntu24.04
+        repository: ghcr.io/slinkyproject/login-pyxis
+        tag: 25.05.4-ubuntu24.04
       env: []
       securityContext:
-        privileged: false
+        privileged: true
         runAsUser: 0
         runAsGroup: 0
         fsGroup: 401
@@ -149,8 +178,7 @@ loginsets:
       override_homedir = /home/%u
     metadata: {}
     podSpec:
-      nodeSelector:
-        kubernetes.io/os: linux
+${NODE_SELECTOR_BLOCK_6SPACE}
       affinity: {}
       tolerations: []
       volumes:
@@ -245,7 +273,7 @@ nodesets:
       initContainers: []
       # -- (map[string]string) Node label selector for pod assignment.
       # Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
-${NODE_SELECTOR_BLOCK}
+${NODE_SELECTOR_BLOCK_6SPACE}
       # -- Affinity for pod assignment.
       # Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
       affinity: {}
@@ -260,10 +288,56 @@ ${NODE_SELECTOR_BLOCK}
         - name: data
           persistentVolumeClaim:
             claimName: data
+  pyxis:
+    enabled: true
+    replicas: ${COMPUTE_REPLICAS}  
+    slurmd:
+      image:
+        repository: ghcr.io/slinkyproject/slurmd-pyxis
+        tag: 25.05.4-ubuntu24.04
+      args: []
+      resources:
+        limits:
+          cpu: ${CPUS}
+          memory: ${MEMORY}
+          nvidia.com/gpu: ${GPUS}
+      volumeMounts:
+        - name: data
+          mountPath: /mnt/data
+    logfile:
+      image:
+        repository: docker.io/library/alpine
+        tag: latest
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+    extraConf: null
+    extraConfMap: {}
+    partition:
+      enabled: true
+      config: null
+      configMap: {}
+    useResourceLimits: true
+    metadata: {}
+    podSpec:
+      initContainers: []
+${NODE_SELECTOR_BLOCK_6SPACE}
+      affinity: {}
+      tolerations: []
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data
+
 
 slurm-exporter:
   enabled: true
   exporter:
+${NODE_SELECTOR_BLOCK_4SPACE}
     resources:
       requests:
         cpu: 100m
@@ -275,6 +349,8 @@ slurm-exporter:
 
 
 restapi:
+  podSpec:
+${NODE_SELECTOR_BLOCK_4SPACE}
   slurmrestd:
     resources:
       requests:

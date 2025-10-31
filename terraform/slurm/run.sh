@@ -9,32 +9,67 @@ NAMESPACE="${NAMESPACE}"
 STORAGECLASS="${STORAGE_CLASS_NAME}"
 SSH_PUB_KEY="${SSH_PUB_KEY}"
 COMPUTE_REPLICAS="${COMPUTE_REPLICAS}"
-CPUS="${CPUS}"
-MEMORY="${MEMORY}"
+CPUS="${CPUS}m"
+MEMORY="${MEMORY}Mi"
 GPUS="${GPUS}"
 COMPUTE_TAG="${COMPUTE_TAG}"
 SHAREDSTORAGE_CLASS="${SHARED_STORAGE_CLASS_NAME}"
 export SHAREDSTORAGE_CLASS
 SHARED_STORAGE_SIZE="${SHARED_STORAGE_SIZE}"
 INGRESS_DOMAIN="${DOMAIN}"
+NODE_SELECTOR="${NODE_SELECTOR}"
+DEVICE_DETAILS="${DEVICE_DETAILS}"
 CHART_VERSION="0.4.0"
 
 
 INGRESS_HOST="${NAMESPACE}.${INGRESS_DOMAIN}"
 export INGRESS_HOST
 
-NODE_SELECTOR_KEY="${NODE_SELECTOR_KEY}"
-NODE_SELECTOR_VALUE="${NODE_SELECTOR_VALUE}"
+if [[ -n "${DEVICE_DETAILS:-}" ]]; then
+  # Extract all hostnames into an array using jq
+  if HOSTNAMES_JSON=$(echo "${DEVICE_DETAILS}" | jq -r '.[].hostname' 2>/dev/null); then
+    readarray -t DEVICE_HOSTNAMES <<< "${HOSTNAMES_JSON}"
+  else
+    echo "Error: DEVICE_DETAILS is not valid JSON" >&2
+    DEVICE_HOSTNAMES=()
+  fi
 
-if [[ -n "$NODE_SELECTOR_KEY" && -n "$NODE_SELECTOR_VALUE" ]]; then
-  # Indent 6 spaces to match the nodeset level in your YAML
-  NODE_SELECTOR_BLOCK="      nodeSelector:
-        $NODE_SELECTOR_KEY: $NODE_SELECTOR_VALUE"
+  if (( ${#DEVICE_HOSTNAMES[@]} > 0 )); then
+    NODE_SELECTOR_BLOCK_6SPACE=$(cat <<EOF
+      nodeSelector:
+        kubernetes.io/hostname: ${DEVICE_HOSTNAMES[0]}
+EOF
+)
+    NODE_SELECTOR_BLOCK_4SPACE=$(cat <<EOF
+    nodeSelector:
+      kubernetes.io/hostname: ${DEVICE_HOSTNAMES[0]}
+EOF
+)
+  else
+    echo "Warning: DEVICE_DETAILS provided, but no hostnames found." >&2
+    NODE_SELECTOR_BLOCK_6SPACE=""
+    NODE_SELECTOR_BLOCK_4SPACE=""
+  fi
+
+elif [[ -n "${NODE_SELECTOR:-}" ]]; then
+  # Fallback: plain string NODE_SELECTOR (already key:value)
+  NODE_SELECTOR_BLOCK_6SPACE=$(cat <<EOF
+      nodeSelector:
+        ${NODE_SELECTOR}
+EOF
+)
+  NODE_SELECTOR_BLOCK_4SPACE=$(cat <<EOF
+    nodeSelector:
+      ${NODE_SELECTOR}
+EOF
+)
 else
-  NODE_SELECTOR_BLOCK=""
+  NODE_SELECTOR_BLOCK_6SPACE=""
+  NODE_SELECTOR_BLOCK_4SPACE=""
 fi
 
-export NODE_SELECTOR_BLOCK
+export NODE_SELECTOR_BLOCK_6SPACE
+export NODE_SELECTOR_BLOCK_4SPACE
 
 
 # Setup kubeconfig file
@@ -169,7 +204,7 @@ EOF
 	  -f /tmp/prometheus-values.yaml
 
 	# ---- Detect the Prometheus service ----
-	PROMETHEUS_SERVICE=$(kubectl get svc -n "slurmc4" --no-headers | awk '/slurm-monitoring-.*-prometheus/ {print $1; exit}')
+	PROMETHEUS_SERVICE=$(kubectl get svc -n ${NAMESPACE} --no-headers | awk '/slurm-monitoring-.*-prometheus/ {print $1; exit}')
 	
 	PROMETHEUS_URL="http://${PROMETHEUS_SERVICE}.${NAMESPACE}.svc.cluster.local:80"
 	echo "Detected Prometheus URL: $PROMETHEUS_URL"
