@@ -1,0 +1,823 @@
+{
+    "apiVersion": "paas.envmgmt.io/v1",
+    "kind": "ServiceProfile",
+    "metadata": {
+        "name": "nim-nvidia-nemotron-nano-9b-v2",
+        "description": "NIM Service for nvidia/nvidia-nemotron-nano-9b-v2 model, a NVIDIA High‑efficiency LLM with hybrid Transformer‑Mamba design, excelling in reasoning and agentic tasks.",
+        "labels": {
+            "paas.envmgmt.io/inventory": "pod",
+            "paas.envmgmt.io/inventory.config": "[\r\n  {\r\n      \"type\": \"match\",\r\n      \"keyInVariable\": \"Node Type\",\r\n      \"keyInDevice\": \"tags.node_type\"\r\n  },\r\n  {\r\n      \"type\": \"capacity\",\r\n      \"keyInVariable\": \"CPU\",\r\n      \"keyInCapacity\": \"requiredCPU\"\r\n  },\r\n  {\r\n      \"type\": \"capacity\",\r\n      \"keyInVariable\": \"Memory\",\r\n      \"keyInCapacity\": \"requiredMemoryMB\"\r\n  },\r\n  {\r\n      \"type\": \"capacity\",\r\n      \"keyInVariable\": \"GPU Count\",\r\n      \"keyInCapacity\": \"requiredGPU\"\r\n  }\r\n]"
+        },
+        "project": "system-catalog",
+        "modifiedAt": "2025-10-31T15:07:55.109485Z",
+        "createdAt": "2025-10-22T07:31:26.341647Z",
+        "displayName": "nvidia/nvidia-nemotron-nano-9b-v2",
+        "createdBy": {
+            "id": "wg29ek0",
+            "username": "default-admin@rafay.co"
+        }
+    },
+    "spec": {
+        "isComputeRequired": true,
+        "environmentTemplate": {
+            "name": "nim",
+            "version": "v4"
+        },
+        "variables": [
+            {
+                "name": "Cache Engine",
+                "valueType": "text",
+                "value": "tensorrt_llm",
+                "options": {
+                    "override": {
+                        "type": "restricted",
+                        "restrictedValues": [
+                            "tensorrt_llm",
+                            "vllm",
+                            "tensorrt",
+                            "onnx"
+                        ]
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "Cache Storage Class",
+                "valueType": "text",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "Cache Storage Size",
+                "valueType": "text",
+                "value": "50Gi",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "CPU",
+                "valueType": "text",
+                "value": "2000",
+                "options": {
+                    "description": "cpu_limit",
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "dropdownValues": [
+                            {
+                                "label": "2",
+                                "text": "",
+                                "value": "2000"
+                            },
+                            {
+                                "label": "4",
+                                "text": "",
+                                "value": "4000"
+                            },
+                            {
+                                "label": "8",
+                                "text": "",
+                                "value": "8000"
+                            }
+                        ],
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "type": "dropdown",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "Device Details",
+                "valueType": "text",
+                "value": "[]",
+                "options": {
+                    "description": "Inventory device details. Should be a JSON array of DeviceDetail objects.",
+                    "override": {
+                        "type": "notallowed"
+                    }
+                }
+            },
+            {
+                "name": "Domain Name",
+                "valueType": "text",
+                "value": "paas.demo.gorafay.net",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "Enable NIM Cache",
+                "valueType": "text",
+                "value": "false",
+                "options": {
+                    "override": {
+                        "type": "restricted",
+                        "restrictedValues": [
+                            "true",
+                            "false"
+                        ]
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "Environment Variables",
+                "valueType": "text",
+                "value": "[]",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    }
+                }
+            },
+            {
+                "name": "GPU Count",
+                "valueType": "text",
+                "value": "1",
+                "options": {
+                    "description": "gpu_limit",
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "dropdownValues": [
+                            {
+                                "label": "1",
+                                "text": "",
+                                "value": "1"
+                            },
+                            {
+                                "label": "2",
+                                "text": "",
+                                "value": "2"
+                            },
+                            {
+                                "label": "3",
+                                "text": "",
+                                "value": "3"
+                            },
+                            {
+                                "label": "4",
+                                "text": "",
+                                "value": "4"
+                            },
+                            {
+                                "label": "5",
+                                "text": "",
+                                "value": "5"
+                            },
+                            {
+                                "label": "6",
+                                "text": "",
+                                "value": "6"
+                            },
+                            {
+                                "label": "7",
+                                "text": "",
+                                "value": "7"
+                            },
+                            {
+                                "label": "8",
+                                "text": "",
+                                "value": "8"
+                            }
+                        ],
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "type": "dropdown",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "Host Cluster Name",
+                "valueType": "text",
+                "value": "acme-host-cluster",
+                "options": {
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "Memory",
+                "valueType": "text",
+                "value": "8192",
+                "options": {
+                    "description": "memory_limit",
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "dropdownValues": [
+                            {
+                                "label": "8Gi",
+                                "text": "",
+                                "value": "8192"
+                            },
+                            {
+                                "label": "16Gi",
+                                "text": "",
+                                "value": "16384"
+                            },
+                            {
+                                "label": "32Gi",
+                                "text": "",
+                                "value": "32768"
+                            }
+                        ],
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "type": "dropdown",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "Model Details",
+                "valueType": "text",
+                "value": "[{\"name\": \"nvidia/llama-3.2-nv-embedqa-1b-v2\",\"image\": \"nvcr.io/nim/nvidia/llama-3.2-nv-embedqa-1b-v2\",\"tag\": \"latest\",\"type\": \"embedded\"},{\"name\": \"nvidia/nv-embedqa-mistral-7b-v2\",\"image\": \"nvcr.io/nim/nvidia/nv-embedqa-mistral-7b-v2\",\"tag\": \"1.0.1\",\"type\": \"embedded\"},{\"name\": \"meta/llama3-8b-instruct\",\"image\": \"nvcr.io/nim/meta/llama3-8b-instruct\",\"tag\": \"1.0.0\",\"type\": \"generic\"},{\"name\": \"mistralai/mistral-7b-instruct-v0.3\",\"image\": \"nvcr.io/nim/mistralai/mistral-7b-instruct-v0.3\",\"tag\": \"latest\",\"type\": \"generic\"}]",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "Model Name",
+                "valueType": "text",
+                "value": "mistralai/mistral-7b-instruct-v0.3",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "NGC API Key",
+                "valueType": "text",
+                "value": "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",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "Node Selector",
+                "valueType": "text",
+                "value": "NVIDIA-L4",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "Node Type",
+                "valueType": "text",
+                "value": "A40",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    }
+                }
+            },
+            {
+                "name": "Storage Class Name",
+                "valueType": "text",
+                "value": "openebs-hostpath",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": ""
+                    }
+                }
+            },
+            {
+                "name": "Storage Size",
+                "valueType": "text",
+                "value": "10Gi",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": ""
+                    }
+                }
+            }
+        ],
+        "sharing": {
+            "shareMode": "None"
+        },
+        "output": [
+            {
+                "name": "Curl_Command",
+                "options": {
+                    "displayMetadata": {
+                        "label": "Curl Command",
+                        "valueType": "text",
+                        "weight": null
+                    }
+                }
+            },
+            {
+                "name": "URL",
+                "options": {
+                    "displayMetadata": {
+                        "label": "URL",
+                        "valueType": "text",
+                        "weight": null
+                    }
+                }
+            }
+        ],
+        "iconURL": "https://assets.ngc.nvidia.com/products/api-catalog/images/llama-3_3-nemotron-super-49b-v1_5.jpg",
+        "readme": "NIM Service for nvidia/nvidia-nemotron-nano-9b-v2 model, a NVIDIA High‑efficiency LLM with hybrid Transformer‑Mamba design, excelling in reasoning and agentic tasks.",
+        "serviceType": "nimservices",
+        "envVars": [
+            {
+                "key": "Controller Endpoint",
+                "value": "acme.paas.rafay.dev",
+                "options": {
+                    "description": "Enter the endpoint of the controller",
+                    "override": {
+                        "type": "notallowed"
+                    }
+                }
+            },
+            {
+                "key": "API Key",
+                "options": {
+                    "description": "Enter the API key of the controller",
+                    "sensitive": true,
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "mask": true
+                }
+            }
+        ],
+        "systemCatalog": true
+    },
+    "status": {
+        "entityOverrides": [
+            {
+                "variables": [
+                    {
+                        "name": "CPU",
+                        "valueType": "text",
+                        "value": "2000",
+                        "options": {
+                            "description": "cpu_limit",
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "dropdownValues": [
+                                    {
+                                        "label": "2",
+                                        "text": "",
+                                        "value": "2000"
+                                    },
+                                    {
+                                        "label": "4",
+                                        "text": "",
+                                        "value": "4000"
+                                    },
+                                    {
+                                        "label": "8",
+                                        "text": "",
+                                        "value": "8000"
+                                    }
+                                ],
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "type": "dropdown",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "Cache Engine",
+                        "valueType": "text",
+                        "value": "tensorrt_llm",
+                        "options": {
+                            "override": {
+                                "type": "restricted",
+                                "restrictedValues": [
+                                    "tensorrt_llm",
+                                    "vllm",
+                                    "tensorrt",
+                                    "onnx"
+                                ]
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "Cache Storage Class",
+                        "valueType": "text",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "Cache Storage Size",
+                        "valueType": "text",
+                        "value": "50Gi",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "Domain Name",
+                        "valueType": "text",
+                        "value": "paas.demo.gorafay.net",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "Enable NIM Cache",
+                        "valueType": "text",
+                        "value": "false",
+                        "options": {
+                            "override": {
+                                "type": "restricted",
+                                "restrictedValues": [
+                                    "true",
+                                    "false"
+                                ]
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "Environment Variables",
+                        "valueType": "text",
+                        "value": "[]",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            }
+                        }
+                    },
+                    {
+                        "name": "GPU Count",
+                        "valueType": "text",
+                        "value": "1",
+                        "options": {
+                            "description": "gpu_limit",
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "dropdownValues": [
+                                    {
+                                        "label": "1",
+                                        "text": "",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "label": "2",
+                                        "text": "",
+                                        "value": "2"
+                                    },
+                                    {
+                                        "label": "3",
+                                        "text": "",
+                                        "value": "3"
+                                    },
+                                    {
+                                        "label": "4",
+                                        "text": "",
+                                        "value": "4"
+                                    },
+                                    {
+                                        "label": "5",
+                                        "text": "",
+                                        "value": "5"
+                                    },
+                                    {
+                                        "label": "6",
+                                        "text": "",
+                                        "value": "6"
+                                    },
+                                    {
+                                        "label": "7",
+                                        "text": "",
+                                        "value": "7"
+                                    },
+                                    {
+                                        "label": "8",
+                                        "text": "",
+                                        "value": "8"
+                                    }
+                                ],
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "type": "dropdown",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "Memory",
+                        "valueType": "text",
+                        "value": "8192",
+                        "options": {
+                            "description": "memory_limit",
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "dropdownValues": [
+                                    {
+                                        "label": "8Gi",
+                                        "text": "",
+                                        "value": "8192"
+                                    },
+                                    {
+                                        "label": "16Gi",
+                                        "text": "",
+                                        "value": "16384"
+                                    },
+                                    {
+                                        "label": "32Gi",
+                                        "text": "",
+                                        "value": "32768"
+                                    }
+                                ],
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "type": "dropdown",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "Model Details",
+                        "valueType": "text",
+                        "value": "[{\"name\": \"nvidia/llama-3.2-nv-embedqa-1b-v2\",\"image\": \"nvcr.io/nim/nvidia/llama-3.2-nv-embedqa-1b-v2\",\"tag\": \"latest\",\"type\": \"embedded\"},{\"name\": \"nvidia/nv-embedqa-mistral-7b-v2\",\"image\": \"nvcr.io/nim/nvidia/nv-embedqa-mistral-7b-v2\",\"tag\": \"1.0.1\",\"type\": \"embedded\"},{\"name\": \"meta/llama3-8b-instruct\",\"image\": \"nvcr.io/nim/meta/llama3-8b-instruct\",\"tag\": \"1.0.0\",\"type\": \"generic\"},{\"name\": \"mistralai/mistral-7b-instruct-v0.3\",\"image\": \"nvcr.io/nim/mistralai/mistral-7b-instruct-v0.3\",\"tag\": \"latest\",\"type\": \"generic\"}]",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "Model Name",
+                        "valueType": "text",
+                        "value": "mistralai/mistral-7b-instruct-v0.3",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "NGC API Key",
+                        "valueType": "text",
+                        "value": "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",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "Node Selector",
+                        "valueType": "text",
+                        "value": "NVIDIA-L4",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "Node Type",
+                        "valueType": "text",
+                        "value": "A40",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Storage Class Name",
+                        "valueType": "text",
+                        "value": "openebs-hostpath",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "weight": ""
+                            }
+                        }
+                    },
+                    {
+                        "name": "Storage Size",
+                        "valueType": "text",
+                        "value": "10Gi",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "disabled": false,
+                                "section": "",
+                                "sectionDescription": "",
+                                "tooltip": "",
+                                "weight": ""
+                            }
+                        }
+                    }
+                ]
+            }
+        ],
+        "globalSettings": {
+            "agents": [
+                "phoenixnap-agent",
+                "k8s-agent-paas"
+            ],
+            "billing": {},
+            "quota": {}
+        }
+    }
+}
