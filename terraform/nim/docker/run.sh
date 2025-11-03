@@ -197,6 +197,8 @@ EOF
 fi
 export storage_block
 
+# --- Node Selector block---
+
 if [[ -n "${DEVICE_DETAILS:-}" ]]; then
   # Extract all hostnames into an array using jq
   if HOSTNAMES_JSON=$(echo "${DEVICE_DETAILS}" | jq -r '.[].hostname' 2>/dev/null); then
@@ -231,8 +233,31 @@ fi
 
 export NODE_SELECTOR_BLOCK
 
-# Run envsubst to expand variables including $env_block with real newlines
-envsubst <<EOF > manifest.yaml
+# --- Ingress annotations block for API token protection ---
+
+# --- Generate or use existing API token ---
+API_TOKEN=$(openssl rand -hex 16)
+echo "Generated new API token: ${API_TOKEN}"
+export API_TOKEN
+
+if [[ -n "${API_TOKEN:-}" ]]; then
+  INGRESS_ANNOTATIONS_BLOCK=$(cat <<EOF
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: "/"
+        nginx.ingress.kubernetes.io/configuration-snippet: |
+          if (\$http_authorization != "Bearer ${API_TOKEN}") {
+            return 403;
+          }
+EOF
+)
+else
+  echo "Warning: API_TOKEN not set. Ingress will not enforce auth." >&2
+  INGRESS_ANNOTATIONS_BLOCK=""
+fi
+
+export INGRESS_ANNOTATIONS_BLOCK
+
+cat <<EOF > manifest.yaml
 apiVersion: apps.nvidia.com/v1alpha1
 kind: NIMService
 metadata:
@@ -266,6 +291,7 @@ $(echo -e "$env_block")
       port: 8000
     ingress:
       enabled: true
+$INGRESS_ANNOTATIONS_BLOCK
       spec:
         ingressClassName: nginx
         rules:
@@ -298,7 +324,14 @@ if [ "$IMAGE_TYPE" == "generic" ]; then
     url="https://${ingress_host}/v1/chat/completions"
     
     # Define the curl command for the generic model
-curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" -H 'Accept: application/json' -H 'Content-Type: application/json' -d '{\\\"model\\\": \\\"$MODEL_NAME\\\", \\\"messages\\\": [{\\\"content\\\": \\\"What should I do for a 4 day vacation at Cape Hatteras National Seashore?\\\", \\\"role\\\": \\\"user\\\"}], \\\"top_p\\\": 1, \\\"n\\\": 1, \\\"max_tokens\\\": 1024, \\\"stream\\\": false, \\\"frequency_penalty\\\": 0.0, \\\"stop\\\": [\\\"STOP\\\"]}'"
+#curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" -H 'Accept: application/json' -H 'Content-Type: application/json' -d '{\\\"model\\\": \\\"$MODEL_NAME\\\", \\\"messages\\\": [{\\\"content\\\": \\\"What should I do for a 4 day vacation at Cape Hatteras National Seashore?\\\", \\\"role\\\": \\\"user\\\"}], \\\"top_p\\\": 1, \\\"n\\\": 1, \\\"max_tokens\\\": 1024, \\\"stream\\\": false, \\\"frequency_penalty\\\": 0.0, \\\"stop\\\": [\\\"STOP\\\"]}'"
+
+	curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" \
+  -H 'Accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -H \"Authorization: Bearer $API_TOKEN\" \
+  -d '{\\\"model\\\": \\\"$MODEL_NAME\\\", \\\"messages\\\": [{\\\"content\\\": \\\"What should I do for a 4 day vacation at Cape Hatteras National Seashore?\\\", \\\"role\\\": \\\"user\\\"}], \\\"top_p\\\": 1, \\\"n\\\": 1, \\\"max_tokens\\\": 1024, \\\"stream\\\": false, \\\"frequency_penalty\\\": 0.0, \\\"stop\\\": [\\\"STOP\\\"]}'"
+
 
 
 elif [ "$IMAGE_TYPE" == "embedded" ]; then
@@ -306,7 +339,13 @@ elif [ "$IMAGE_TYPE" == "embedded" ]; then
     url="https://${ingress_host}/v1/embeddings"
     
     # Define the curl command for the embedded model
-    curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" -H 'accept: application/json' -H 'Content-Type: application/json' -d '{\\\"input\\\": [\\\"Test message\\\"], \\\"model\\\": \\\"$MODEL_NAME\\\", \\\"input_type\\\": \\\"query\\\"}'"
+    #curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" -H 'accept: application/json' -H 'Content-Type: application/json' -d '{\\\"input\\\": [\\\"Test message\\\"], \\\"model\\\": \\\"$MODEL_NAME\\\", \\\"input_type\\\": \\\"query\\\"}'"
+	curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -H \\\"Authorization: Bearer $API_TOKEN\\\" \
+  -d '{\\\"input\\\": [\\\"Test message\\\"], \\\"model\\\": \\\"$MODEL_NAME\\\", \\\"input_type\\\": \\\"query\\\"}'"
+
 
 else
     # Default behavior if no specific IMAGE_TYPE matches

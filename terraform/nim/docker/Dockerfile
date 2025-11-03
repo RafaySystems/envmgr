@@ -8,6 +8,9 @@ RUN apk add --no-cache curl bash git jq
 # Install envsubst (part of gettext)
 RUN apk add --no-cache gettext
 
+# Install OpenSSL
+RUN apk add --no-cache openssl
+
 RUN set -e && \
     KUBECTL_VERSION=$(curl -sL https://dl.k8s.io/release/stable.txt | tr -d '\r\n') && \
     echo "Kubectl version: '${KUBECTL_VERSION}'" && \
