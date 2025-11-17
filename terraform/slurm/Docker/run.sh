@@ -25,7 +25,7 @@ CHART_VERSION="0.4.0"
 INGRESS_HOST="${NAMESPACE}.${INGRESS_DOMAIN}"
 export INGRESS_HOST
 
-if [[ -n "${DEVICE_DETAILS:-}" ]]; then
+if [[ -n "${DEVICE_DETAILS:-}" && "${DEVICE_DETAILS}" != "[]" && "${DEVICE_DETAILS}" != "null" ]]; then
   # Extract all hostnames into an array using jq
   if HOSTNAMES_JSON=$(echo "${DEVICE_DETAILS}" | jq -r '.[].hostname' 2>/dev/null); then
     readarray -t DEVICE_HOSTNAMES <<< "${HOSTNAMES_JSON}"
