@@ -166,6 +166,10 @@ ${NODE_SELECTOR_BLOCK_6SPACE}
 nodesets:
   # Sample NodeSet.
   slinky:
+    updateStrategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 25%
     # -- Enable use of this NodeSet.
     enabled: true
     # -- Number of replicas to deploy.
@@ -262,6 +266,10 @@ ${NODE_SELECTOR_BLOCK_6SPACE}
           persistentVolumeClaim:
             claimName: data
   pyxis:
+    updateStrategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 25%
     enabled: true
     replicas: ${COMPUTE_REPLICAS}  
     slurmd:
