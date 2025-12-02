@@ -4,29 +4,127 @@ echo "starting script..."
 set -euo pipefail
 
 # -------- Input Variables --------
-PUBLIC_IP="${PUBLIC_IP}"
 NAMESPACE="${NAMESPACE}"
 STORAGECLASS="${STORAGE_CLASS_NAME}"
 SSH_PUB_KEY="${SSH_PUB_KEY}"
-COMPUTE_REPLICAS="${COMPUTE_REPLICAS}"
-CPUS="${CPUS}m"
-MEMORY="${MEMORY}Mi"
-GPUS="${GPUS}"
+#COMPUTE_REPLICAS="${COMPUTE_REPLICAS}"
+#CPUS="${CPUS}m"
+#MEMORY="${MEMORY}Mi"
+#GPUS="${GPUS}"
 COMPUTE_TAG="${COMPUTE_TAG}"
+COMPUTE_REPOSITORY="${COMPUTE_REPOSITORY}"
 SHAREDSTORAGE_CLASS="${SHARED_STORAGE_CLASS_NAME}"
 export SHAREDSTORAGE_CLASS
 SHARED_STORAGE_SIZE="${SHARED_STORAGE_SIZE}"
 INGRESS_DOMAIN="${DOMAIN}"
 NODE_SELECTOR="${NODE_SELECTOR}"
 DEVICE_DETAILS="${DEVICE_DETAILS}"
-CHART_VERSION="0.4.0"
+#CHART_VERSION="0.4.0"
+CHART_VERSION="1.0.0"
+
+# Setup kubeconfig file
+export KUBECONFIG=~/kubeconfig.yaml
+echo "$VAR_kubeconfig" >> ~/kubeconfig.yaml
+chmod 600 "$KUBECONFIG"
+
+
+
+if [ "${ACTION}" == "destroy" ]; then
+
+    echo "Running destroy commands..."
+	
+	# Uninstall Slurm Helm chart
+	helm uninstall slurm -n ${NAMESPACE}
+	
+	# Uninstall Grafana Helm chart
+	helm uninstall slurm-grafana-${NAMESPACE} -n ${NAMESPACE}
+
+	# Uninstall Prometheus / monitoring Helm chart
+	helm uninstall slurm-monitoring-${NAMESPACE} -n ${NAMESPACE}
+	
+	# Delete the namespace entirely
+	kubectl delete namespace ${NAMESPACE} &
+	
+	echo "Waiting for namespace ${NAMESPACE} to be deleted..."
+
+	# Loop until namespace no longer exists
+	while kubectl get namespace "${NAMESPACE}" > /dev/null 2>&1; do
+		echo "Namespace ${NAMESPACE} still exists... waiting 5 seconds"
+		sleep 5
+	done
+	
+echo "Namespace '$NAMESPACE' has been deleted."
+
+
+elif [ "${ACTION}" == "deploy" ]; then
+
+    echo "Starting deployment..."
+	
+	# Check if prereqs are installed
+
+# Check if a namespace exists
+ns_exists() {
+    kubectl get ns "$1" >/dev/null 2>&1
+}
+
+# Check if a Helm release exists in an optional namespace
+helm_release_exists() {
+    local release=$1
+    local namespace=$2
+    helm status "$release" -n "$namespace" >/dev/null 2>&1
+}
+
+echo "=== Checking Cert Manager installation ==="
+
+if helm_release_exists "cert-manager" "cert-manager"; then
+    echo "[OK] cert-manager already installed."
+else
+    echo "[INFO] Installing cert-manager..."
+
+    helm repo add jetstack https://charts.jetstack.io
+    helm repo update
+
+    helm install cert-manager jetstack/cert-manager \
+        --set 'crds.enabled=true' \
+        --namespace cert-manager --create-namespace
+fi
+
+
+echo "=== Checking Slurm Operator installation ==="
+
+if helm_release_exists "slurm-operator" "slinky"; then
+    echo "[OK] slurm-operator already installed."
+else
+    echo "[INFO] Installing slurm-operator CRDs and operator..."
+
+    helm install slurm-operator-crds oci://ghcr.io/slinkyproject/charts/slurm-operator-crds --version "$CHART_VERSION" 
+
+    helm install slurm-operator oci://ghcr.io/slinkyproject/charts/slurm-operator \
+        --namespace=slinky --create-namespace --version "$CHART_VERSION" 
+fi
+
+echo "=== Prereq components verified/installed successfully ==="
 
 
 INGRESS_HOST="${NAMESPACE}.${INGRESS_DOMAIN}"
 export INGRESS_HOST
 
+# Calculate number of Nodes and GPUs per node
+COMPUTE_REPLICAS=$(echo "$DEVICE_DETAILS" | jq 'length')
+export COMPUTE_REPLICAS
+echo "Total hosts: $COMPUTE_REPLICAS"
+
+GPUS=$(echo "$DEVICE_DETAILS" | jq '.[0].gpus | length')
+export GPUS
+echo "Node GPU count: $GPUS"
+
+
+# Extract hostnames + public IP
 if [[ -n "${DEVICE_DETAILS:-}" && "${DEVICE_DETAILS}" != "[]" && "${DEVICE_DETAILS}" != "null" ]]; then
-  # Extract all hostnames into an array using jq
+
+  #
+  # Extract all hostnames
+  #
   if HOSTNAMES_JSON=$(echo "${DEVICE_DETAILS}" | jq -r '.[].hostname' 2>/dev/null); then
     readarray -t DEVICE_HOSTNAMES <<< "${HOSTNAMES_JSON}"
   else
@@ -34,6 +132,24 @@ if [[ -n "${DEVICE_DETAILS:-}" && "${DEVICE_DETAILS}" != "[]" && "${DEVICE_DETAI
     DEVICE_HOSTNAMES=()
   fi
 
+  #
+  # Extract public IP (tags.public_ip or fallback to ipAddress)
+  #
+  if PUBLIC_IP=$(echo "${DEVICE_DETAILS}" | jq -r '.[0].tags.public_ip // .[0].ipAddress // empty' 2>/dev/null); then
+    if [[ -z "${PUBLIC_IP}" || "${PUBLIC_IP}" == "null" ]]; then
+      echo "Warning: No public IP found in DEVICE_DETAILS" >&2
+      PUBLIC_IP=""
+    fi
+  else
+    echo "Error: Could not parse public IP from DEVICE_DETAILS" >&2
+    PUBLIC_IP=""
+  fi
+
+  export PUBLIC_IP
+
+  #
+  # Build nodeSelector blocks
+  #
   if (( ${#DEVICE_HOSTNAMES[@]} > 0 )); then
     NODE_SELECTOR_BLOCK_6SPACE=$(cat <<EOF
       nodeSelector:
@@ -71,42 +187,144 @@ fi
 export NODE_SELECTOR_BLOCK_6SPACE
 export NODE_SELECTOR_BLOCK_4SPACE
 
-
-# Setup kubeconfig file
-export KUBECONFIG=~/kubeconfig.yaml
-echo "$VAR_kubeconfig" >> ~/kubeconfig.yaml
-chmod 600 "$KUBECONFIG"
-
-if [ "${ACTION}" == "destroy" ]; then
-
-    echo "Running destroy commands..."
-	
-	# Uninstall Slurm Helm chart
-	helm uninstall slurm -n ${NAMESPACE}
-	
-	# Uninstall Grafana Helm chart
-	helm uninstall slurm-grafana-${NAMESPACE} -n ${NAMESPACE}
-
-	# Uninstall Prometheus / monitoring Helm chart
-	helm uninstall slurm-monitoring-${NAMESPACE} -n ${NAMESPACE}
-	
-	# Delete the namespace entirely
-	kubectl delete namespace ${NAMESPACE} &
-	
-	echo "Waiting for namespace ${NAMESPACE} to be deleted..."
-
-	# Loop until namespace no longer exists
-	while kubectl get namespace "${NAMESPACE}" > /dev/null 2>&1; do
-		echo "Namespace ${NAMESPACE} still exists... waiting 5 seconds"
-		sleep 5
-	done
-	
-echo "Namespace '$NAMESPACE' has been deleted."
+###############################################
+# Build prologScripts block
+###############################################
+if [[ -n "${PROLOG_SCRIPTS:-}" && "${PROLOG_SCRIPTS}" != "null" ]]; then
+  # Indent all lines by 2 spaces
+  PROLOG_BLOCK=$(cat <<EOF
+prologScripts:
+$(printf '%s\n' "$PROLOG_SCRIPTS" | sed 's/^/  /')
+EOF
+)
+else
+  PROLOG_BLOCK=""
+fi
 
 
-elif [ "${ACTION}" == "deploy" ]; then
+###############################################
+# Build epilogScripts block
+###############################################
+if [[ -n "${EPILOG_SCRIPTS:-}" && "${EPILOG_SCRIPTS}" != "null" ]]; then
+  EPILOG_BLOCK=$(cat <<EOF
+epilogScripts:
+$(printf '%s\n' "$EPILOG_SCRIPTS" | sed 's/^/  /')
+EOF
+)
+else
+  EPILOG_BLOCK=""
+fi
 
-    echo "Starting deployment..."
+
+export PROLOG_BLOCK
+export EPILOG_BLOCK
+
+###############################################
+# Build volumeMounts block if prolog/epilog exist
+###############################################
+
+VOLUME_MOUNTS_BLOCK=""
+
+# Always include the base mount
+BASE_MOUNT=$(cat <<EOF
+      - name: data
+        mountPath: /mnt/data
+EOF
+)
+
+# Build prolog mount if needed
+if [[ -n "${PROLOG_BLOCK:-}" ]]; then
+  PROLOG_MOUNT=$(cat <<EOF
+      - name: prolog-scripts
+        mountPath: /etc/slurm/prolog.d
+        readOnly: true
+EOF
+)
+else
+  PROLOG_MOUNT=""
+fi
+
+# Build epilog mount if needed
+if [[ -n "${EPILOG_BLOCK:-}" ]]; then
+  EPILOG_MOUNT=$(cat <<EOF
+      - name: epilog-scripts
+        mountPath: /etc/slurm/epilog.d
+        readOnly: true
+EOF
+)
+else
+  EPILOG_MOUNT=""
+fi
+
+
+# Combine into main block only if any are non-empty
+if [[ -n "$PROLOG_MOUNT" || -n "$EPILOG_MOUNT" ]]; then
+  VOLUME_MOUNTS_BLOCK=$(cat <<EOF
+      volumeMounts:
+$BASE_MOUNT
+$PROLOG_MOUNT
+$EPILOG_MOUNT
+EOF
+)
+else
+  VOLUME_MOUNTS_BLOCK=""
+fi
+
+export VOLUME_MOUNTS_BLOCK
+
+###############################################
+# Build volumes block if prolog/epilog exist
+###############################################
+
+VOLUMES_BLOCK=""
+
+# Base persistent volume
+BASE_VOLUME=$(cat <<EOF
+      - name: data
+        persistentVolumeClaim:
+          claimName: data
+EOF
+)
+
+# Prolog configMap volume
+if [[ -n "${PROLOG_BLOCK:-}" ]]; then
+  PROLOG_VOLUME=$(cat <<EOF
+      - name: prolog-scripts
+        configMap:
+          name: slurm-prolog-scripts
+EOF
+)
+else
+  PROLOG_VOLUME=""
+fi
+
+# Epilog configMap volume
+if [[ -n "${EPILOG_BLOCK:-}" ]]; then
+  EPILOG_VOLUME=$(cat <<EOF
+      - name: epilog-scripts
+        configMap:
+          name: slurm-epilog-scripts
+EOF
+)
+else
+  EPILOG_VOLUME=""
+fi
+
+
+# Build final block if any non-base volumes exist
+if [[ -n "$PROLOG_VOLUME" || -n "$EPILOG_VOLUME" ]]; then
+  VOLUMES_BLOCK=$(cat <<EOF
+      volumes:
+$BASE_VOLUME
+$PROLOG_VOLUME
+$EPILOG_VOLUME
+EOF
+)
+else
+  VOLUMES_BLOCK=""
+fi
+
+export VOLUMES_BLOCK
 	
 	# -----------------------------
 	# Generate random NodePorts (between 30000-32767)

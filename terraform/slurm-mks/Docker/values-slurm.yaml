@@ -166,6 +166,14 @@ ${NODE_SELECTOR_BLOCK_6SPACE}
 nodesets:
   # Sample NodeSet.
   slinky:
+    updateStrategy:
+      # -- The strategy type. Can be one of: RollingUpdate; OnDelete.
+      type: RollingUpdate
+      # The RollingUpdate configuration. Ignored unless `type=RollingUpdate`.
+      rollingUpdate:
+        # -- Maximum number of pods that can be unavailable during update.
+        # Can be an absolute number (ex: 5) or a percentage (ex: 25%).
+        maxUnavailable: 25%
     # -- Enable use of this NodeSet.
     enabled: true
     # -- Number of replicas to deploy.
@@ -185,12 +193,10 @@ nodesets:
       # Ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-requests-and-limits-of-pod-and-container
       resources:
         limits:
-          cpu: ${CPUS}
-          memory: ${MEMORY}
+          #cpu: ${CPUS}
+          #memory: ${MEMORY}
           nvidia.com/gpu: ${GPUS}
-      volumeMounts:
-        - name: data
-          mountPath: /mnt/data
+${VOLUME_MOUNTS_BLOCK}
     # LogFile sidecar configurations.
     logfile:
       # -- The image to use, `${repository}:${tag}`.
@@ -253,15 +259,16 @@ ${NODE_SELECTOR_BLOCK_6SPACE}
       # -- Tolerations for pod assignment.
       # Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
       tolerations: []
-        # - key: nvidia.com/gpu
-        #   effect: NoSchedule
-      # -- List of volumes to use.
-      # Ref: https://kubernetes.io/docs/concepts/storage/volumes/
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: data
+${VOLUMES_BLOCK}
   pyxis:
+    updateStrategy:
+      # -- The strategy type. Can be one of: RollingUpdate; OnDelete.
+      type: RollingUpdate
+      # The RollingUpdate configuration. Ignored unless `type=RollingUpdate`.
+      rollingUpdate:
+        # -- Maximum number of pods that can be unavailable during update.
+        # Can be an absolute number (ex: 5) or a percentage (ex: 25%).
+        maxUnavailable: 25%
     enabled: true
     replicas: ${COMPUTE_REPLICAS}  
     slurmd:
@@ -271,12 +278,10 @@ ${NODE_SELECTOR_BLOCK_6SPACE}
       args: []
       resources:
         limits:
-          cpu: ${CPUS}
-          memory: ${MEMORY}
+          #cpu: ${CPUS}
+          #memory: ${MEMORY}
           nvidia.com/gpu: ${GPUS}
-      volumeMounts:
-        - name: data
-          mountPath: /mnt/data
+${VOLUME_MOUNTS_BLOCK}
     logfile:
       image:
         repository: docker.io/library/alpine
@@ -301,10 +306,7 @@ ${NODE_SELECTOR_BLOCK_6SPACE}
 ${NODE_SELECTOR_BLOCK_6SPACE}
       affinity: {}
       tolerations: []
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: data
+${VOLUMES_BLOCK}
 
 
 slurm-exporter:
@@ -332,3 +334,6 @@ ${NODE_SELECTOR_BLOCK_4SPACE}
       limits:
         cpu: 500m
         memory: 512Mi
+
+${PROLOG_BLOCK}
+${EPILOG_BLOCK}
