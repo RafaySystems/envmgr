@@ -67,7 +67,7 @@ loginsets:
     login:
       image:
         repository: ghcr.io/slinkyproject/login-pyxis
-        tag: 25.05.4-ubuntu24.04
+        tag: 25.11.0-ubuntu24.04
       env: []
       securityContext:
         privileged: true
