@@ -145,7 +145,7 @@
             {
                 "name": "Compute Node Image Tag",
                 "valueType": "text",
-                "value": "25.05-ubuntu24.04",
+                "value": "25.11.0-ubuntu24.04",
                 "options": {
                     "override": {
                         "type": "notallowed"
