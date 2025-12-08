@@ -14,8 +14,8 @@
     "spec": {
         "isComputeRequired": true,
         "environmentTemplate": {
-            "name": "km-nim",
-            "version": "v2"
+            "name": "nim",
+            "version": "v1"
         },
         "variables": [
             {
