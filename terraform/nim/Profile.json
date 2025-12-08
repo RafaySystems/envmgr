@@ -172,7 +172,7 @@
             {
                 "name": "Host Cluster Name",
                 "valueType": "text",
-                "value": "telus-shared-cluster1",
+                "value": "paas-demo-cluster",
                 "options": {
                     "override": {
                         "type": "allowed"
@@ -255,7 +255,7 @@
             {
                 "name": "NGC API Key",
                 "valueType": "text",
-                "value": "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",
+                "value": "",
                 "options": {
                     "override": {
                         "type": "allowed"
