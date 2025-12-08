@@ -13,8 +13,8 @@ INGRESS_DOMAIN="${DOMAIN:-example.com}"
 STORAGE_SIZE="${STORAGE_SIZE:-10Gi}"
 STORAGE_CLASS_NAME="${STORAGE_CLASS_NAME:-openebs-hostpath}"
 GPU_LIMIT="${GPU_LIMIT}"
-CPU_LIMIT="${CPU_LIMIT}m"
-MEMORY_LIMIT="${MEMORY_LIMIT}Mi"
+CPU_LIMIT="${CPU_LIMIT}"
+MEMORY_LIMIT="${MEMORY_LIMIT}"
 GPU_REQUESTS="${GPU_LIMIT}"
 CPU_REQUESTS="${CPU_LIMIT}"
 MEMORY_REQUESTS="${MEMORY_LIMIT}"
@@ -346,6 +346,17 @@ elif [ "$IMAGE_TYPE" == "embedded" ]; then
   -H \\\"Authorization: Bearer $API_TOKEN\\\" \
   -d '{\\\"input\\\": [\\\"Test message\\\"], \\\"model\\\": \\\"$MODEL_NAME\\\", \\\"input_type\\\": \\\"query\\\"}'"
 
+elif [ "$IMAGE_TYPE" == "image-to-text" ]; then
+    # Define the URL for another model
+    url="https://${ingress_host}/v1/chat/completions"
+
+    # Define the curl command for the embedded model
+    #curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" -H 'accept: application/json' -H 'Content-Type: application/json' -d '{\\\"input\\\": [\\\"Test message\\\"], \\\"model\\\": \\\"$MODEL_NAME\\\", \\\"input_type\\\": \\\"query\\\"}'"
+	curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -H \\\"Authorization: Bearer $API_TOKEN\\\" \
+  -d '{\\\"model\\\": \\\"$MODEL_NAME\\\", \\\"messages\\\": [{\\\"role\\\": \\\"user\\\",\\\"content\\\": [{\\\"type\\\": \\\"text\\\",\\\"text\\\": \\\"What is in this image?\\\"},{\\\"type\\\": \\\"image_url\\\",\\\"image_url\\\":{\\\"url\\\": \\\"https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg\\\"}}]}],\\\"max_tokens\\\": 1024}'"
 
 else
     # Default behavior if no specific IMAGE_TYPE matches
