@@ -3,12 +3,7 @@
     "kind": "ServiceProfile",
     "metadata": {
         "name": "nemotron-nano-12b-v2-vl",
-        "project": "system-catalog",
-        "modifiedAt": "2025-12-08T06:08:23.355266Z",
-        "createdAt": "2025-12-08T05:56:27.001077Z",
-        "createdBy": {
-            "id": "7dkgjkx",
-            "username": "kutumba@rafay.co"
+        "project": "system-catalog"
         }
     },
     "spec": {
