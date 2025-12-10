@@ -22,6 +22,13 @@ MODEL_NAME="${MODEL_NAME:?MODEL_NAME is required}"
 NODE_SELECTOR="${NODE_SELECTOR}"
 DEVICE_DETAILS="${DEVICE_DETAILS}"
 ENV_VARS="${ENV_VARS}"
+ENABLE_CACHE="$ENABLE_CACHE:-false"
+CACHE_ENGINE="$CACHE_ENGINE"
+CACHE_STORAGE_CLASS_NAME="$CACHE_STORAGE_CLASS_NAME"
+CACHE_STORAGE_SIZE="$CACHE_STORAGE_SIZE"
+CACHE_STORAGE_ACCESS_MODE="$CACHE_STORAGE_ACCESS_MODE:-ReadWriteOnce"
+SERVICE_PORT="$SERVICE_PORT:-8000"
+GRPC_PORT="$GRPC_PORT"
 
 # -------- Model Info --------
 # Example:
@@ -45,7 +52,7 @@ chmod 600 "$KUBECONFIG"
 if [ "${ACTION}" == "destroy" ]; then
     echo "Running destroy commands..."
 	kubectl delete namespace ${NAMESPACE} &
-	
+
 	echo "Waiting for namespace ${NAMESPACE} to be deleted..."
 
 	# Loop until namespace no longer exists
@@ -53,13 +60,13 @@ if [ "${ACTION}" == "destroy" ]; then
 		echo "Namespace ${NAMESPACE} still exists... waiting 5 seconds"
 		sleep 5
 	done
-	
+
 echo "Namespace '$NAMESPACE' has been deleted."
 
 
 elif [ "${ACTION}" == "deploy" ]; then
     echo "Starting deployment..."
-	
+
 	# -------- Create Namespace --------
 	echo "Creating namespace: $NAMESPACE"
 	kubectl create namespace "$NAMESPACE"
@@ -132,6 +139,9 @@ export enable_cache="$ENABLE_CACHE"
 export cache_engine="$CACHE_ENGINE"
 export cache_storage_class_name="$CACHE_STORAGE_CLASS_NAME"
 export cache_storage_size="$CACHE_STORAGE_SIZE"
+export cache_storage_access_mode="$CACHE_STORAGE_ACCESS_MODE"
+export service_port="$SERVICE_PORT"
+export grpc_port="$GRPC_PORT"
 
 # Convert JSON array to Bash array
 IFS=$'\n' read -r -d '' -a env_var_list < <(echo "$ENV_VARS" | jq -r '.[]' && printf '\0')
@@ -147,6 +157,30 @@ done
 # Export env_block
 export env_block
 
+# Build YAML-formatted service block
+if [[ "$grpc_port" == "" ]]; then
+  ingress_service_port="${service_port}"
+  service_block=$(cat <<EOF
+  service:
+    type: ClusterIP
+    port: ${service_port}
+EOF
+)
+else
+  ingress_service_port="${grpc_port}"
+  service_block=$(cat <<EOF
+  service:
+    type: ClusterIP
+    port: ${service_port}
+    grpcPort: ${grpc_port}
+EOF
+)
+fi
+
+# Export env_block
+export service_block
+export ingress_service_port
+
 if [[ "$enable_cache" == "true" ]]; then
   storage_block=$(cat <<EOF
   storage:
@@ -161,6 +195,7 @@ apiVersion: apps.nvidia.com/v1alpha1
 kind: NIMCache
 metadata:
   name: ${name}
+  namespace: ${namespace}
 spec:
   source:
     ngc:
@@ -175,7 +210,7 @@ spec:
       create: true
       storageClass: ${cache_storage_class_name}
       size: "${cache_storage_size}"
-      volumeAccessMode: ReadWriteMany
+      volumeAccessMode: "${cache_storage_access_mode}"
   resources: {}
 EOF
 
@@ -240,19 +275,27 @@ API_TOKEN=$(openssl rand -hex 16)
 echo "Generated new API token: ${API_TOKEN}"
 export API_TOKEN
 
-if [[ -n "${API_TOKEN:-}" ]]; then
-  INGRESS_ANNOTATIONS_BLOCK=$(cat <<EOF
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: "/"
-        nginx.ingress.kubernetes.io/configuration-snippet: |
-          if (\$http_authorization != "Bearer ${API_TOKEN}") {
-            return 403;
-          }
+if [[ "$grpc_port" == "" ]]; then
+  if [[ -n "${API_TOKEN:-}" ]]; then
+    INGRESS_ANNOTATIONS_BLOCK=$(cat <<EOF
+        annotations:
+          nginx.ingress.kubernetes.io/rewrite-target: "/"
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            if (\$http_authorization != "Bearer ${API_TOKEN}") {
+              return 403;
+            }
 EOF
 )
+  else
+    echo "Warning: API_TOKEN not set. Ingress will not enforce auth." >&2
+    INGRESS_ANNOTATIONS_BLOCK=""
+  fi
 else
-  echo "Warning: API_TOKEN not set. Ingress will not enforce auth." >&2
-  INGRESS_ANNOTATIONS_BLOCK=""
+    INGRESS_ANNOTATIONS_BLOCK=$(cat <<EOF
+        annotations:
+          nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+EOF
+)
 fi
 
 export INGRESS_ANNOTATIONS_BLOCK
@@ -286,9 +329,7 @@ $storage_block
   env:
 $(echo -e "$env_block")
   expose:
-    service:
-      type: ClusterIP
-      port: 8000
+$service_block
     ingress:
       enabled: true
 $INGRESS_ANNOTATIONS_BLOCK
@@ -302,7 +343,7 @@ $INGRESS_ANNOTATIONS_BLOCK
                   service:
                     name: ${name}
                     port:
-                      number: 8000
+                      number: $ingress_service_port
                 path: /
                 pathType: Prefix
         tls:
@@ -318,28 +359,23 @@ echo "Waiting for deployment to be ready..."
 kubectl wait --for=condition=Ready --timeout=3600s nimservice/"$NAME" -n "$NAMESPACE"
 
 
-# Conditional logic based on the IMAGE_TYPE variable
+# Conditional logic based on the IMAGE_TYPE variable output
 if [ "$IMAGE_TYPE" == "generic" ]; then
-    # Define the URL for the first model
-    url="https://${ingress_host}/v1/chat/completions"
-    
-    # Define the curl command for the generic model
-#curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" -H 'Accept: application/json' -H 'Content-Type: application/json' -d '{\\\"model\\\": \\\"$MODEL_NAME\\\", \\\"messages\\\": [{\\\"content\\\": \\\"What should I do for a 4 day vacation at Cape Hatteras National Seashore?\\\", \\\"role\\\": \\\"user\\\"}], \\\"top_p\\\": 1, \\\"n\\\": 1, \\\"max_tokens\\\": 1024, \\\"stream\\\": false, \\\"frequency_penalty\\\": 0.0, \\\"stop\\\": [\\\"STOP\\\"]}'"
-
+  # Define the URL for the first model
+  url="https://${ingress_host}/v1/chat/completions"
+  api_key="$API_TOKEN"
+  # Define the curl command for the generic model
 	curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" \
   -H 'Accept: application/json' \
   -H 'Content-Type: application/json' \
   -H \"Authorization: Bearer $API_TOKEN\" \
   -d '{\\\"model\\\": \\\"$MODEL_NAME\\\", \\\"messages\\\": [{\\\"content\\\": \\\"What should I do for a 4 day vacation at Cape Hatteras National Seashore?\\\", \\\"role\\\": \\\"user\\\"}], \\\"top_p\\\": 1, \\\"n\\\": 1, \\\"max_tokens\\\": 1024, \\\"stream\\\": false, \\\"frequency_penalty\\\": 0.0, \\\"stop\\\": [\\\"STOP\\\"]}'"
 
-
-
 elif [ "$IMAGE_TYPE" == "embedded" ]; then
-    # Define the URL for another model
-    url="https://${ingress_host}/v1/embeddings"
-    
-    # Define the curl command for the embedded model
-    #curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" -H 'accept: application/json' -H 'Content-Type: application/json' -d '{\\\"input\\\": [\\\"Test message\\\"], \\\"model\\\": \\\"$MODEL_NAME\\\", \\\"input_type\\\": \\\"query\\\"}'"
+  # Define the URL for another model
+  url="https://${ingress_host}/v1/embeddings"
+  api_key="$API_TOKEN"
+  # Define the curl command for the embedded model
 	curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
@@ -347,25 +383,44 @@ elif [ "$IMAGE_TYPE" == "embedded" ]; then
   -d '{\\\"input\\\": [\\\"Test message\\\"], \\\"model\\\": \\\"$MODEL_NAME\\\", \\\"input_type\\\": \\\"query\\\"}'"
 
 elif [ "$IMAGE_TYPE" == "image-to-text" ]; then
-    # Define the URL for another model
-    url="https://${ingress_host}/v1/chat/completions"
-
-    # Define the curl command for the embedded model
-    #curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" -H 'accept: application/json' -H 'Content-Type: application/json' -d '{\\\"input\\\": [\\\"Test message\\\"], \\\"model\\\": \\\"$MODEL_NAME\\\", \\\"input_type\\\": \\\"query\\\"}'"
+  # Define the URL for image-to-text model
+  url="https://${ingress_host}/v1/chat/completions"
+  api_key="$API_TOKEN"
+  # Define the curl command for the image-to-text model
 	curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -H \\\"Authorization: Bearer $API_TOKEN\\\" \
   -d '{\\\"model\\\": \\\"$MODEL_NAME\\\", \\\"messages\\\": [{\\\"role\\\": \\\"user\\\",\\\"content\\\": [{\\\"type\\\": \\\"text\\\",\\\"text\\\": \\\"What is in this image?\\\"},{\\\"type\\\": \\\"image_url\\\",\\\"image_url\\\":{\\\"url\\\": \\\"https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg\\\"}}]}],\\\"max_tokens\\\": 1024}'"
 
+elif [ "$IMAGE_TYPE" == "text-to-image" ]; then
+  # Define the URL for text-to-image model
+  url="https://${ingress_host}/v1/infer"
+  api_key="$API_TOKEN"
+  # Define the curl command for the text-to-image model
+	curlcommand="curl -X \\\"POST\\\" \\\"$url\\\" \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -H \\\"Authorization: Bearer $API_TOKEN\\\" \
+  -d '{\\\"prompt\\\": [\\\"A simple coffee shop interior\\\"], \\\"mode\\\": \\\"base\\\", \\\"seed\\\": \\\"0\\\", \\\"steps\\\": \\\"30\\\"}' \
+  | jq -r '.artifacts[0].base64' | base64 --decode > image.jpg"
+
+elif [ "$IMAGE_TYPE" == "streaming" ]; then
+  # Define the URL for another model
+  url="${ingress_host}"
+  api_key="$API_TOKEN"
+  # Define the curl command for the text-to-image model
+	curlcommand="Streaming model with GRPC endpoint ${ingress_host}"
+
 else
-    # Default behavior if no specific IMAGE_TYPE matches
-    curlcommand="Invalid IMAGE_TYPE specified."
+  # Default behavior if no specific IMAGE_TYPE matches
+  curlcommand="Invalid IMAGE_TYPE specified."
 fi
+
 
 # Output the response
 echo "$curlcommand"
-	
+
 	# Output file name
 	output_file="output.json"
 
@@ -373,6 +428,7 @@ echo "$curlcommand"
 json_content=$(cat <<EOF
 {
   "URL": "$url",
+  "API Key": "$api_key",
   "Curl_Command": "$curlcommand"
 }
 EOF
@@ -384,7 +440,7 @@ EOF
 	# Confirm creation
 	echo "JSON file '$output_file' created with content:"
 	cat "$output_file"
-	
+
 	AUTH_TOKEN=$DRIVER_UPLOAD_TOKEN
 	API_ENDPOINT=$DRIVER_UPLOAD_URL
 
@@ -393,12 +449,12 @@ EOF
 		curl  \
 		 -X POST \
 		 -k -F "content=@output.json" -H "X-Engine-Helper-Token: $AUTH_TOKEN" --max-time 60 \
-		   --retry 3 --retry-all-errors $API_ENDPOINT     
+		   --retry 3 --retry-all-errors $API_ENDPOINT
 	else
 		curl  \
 		 -X POST \
 		 -F "content=@output.json" -H "X-Engine-Helper-Token: $AUTH_TOKEN" --max-time 60 \
-		  --retry 3 --retry-all-errors  $API_ENDPOINT     
+		  --retry 3 --retry-all-errors  $API_ENDPOINT
 	fi
 
 else
