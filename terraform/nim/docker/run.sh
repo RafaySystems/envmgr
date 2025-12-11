@@ -166,18 +166,18 @@ export env_block
 if [[ "$grpc_port" == "" ]]; then
   ingress_service_port="${service_port}"
   service_block=$(cat <<EOF
-  service:
-    type: ClusterIP
-    port: ${service_port}
+    service:
+      type: ClusterIP
+      port: ${service_port}
 EOF
 )
 else
   ingress_service_port="${grpc_port}"
   service_block=$(cat <<EOF
-  service:
-    type: ClusterIP
-    port: ${service_port}
-    grpcPort: ${grpc_port}
+    service:
+      type: ClusterIP
+      port: ${service_port}
+      grpcPort: ${grpc_port}
 EOF
 )
 fi
@@ -281,15 +281,14 @@ echo "Generated new API token: ${API_TOKEN}"
 export API_TOKEN
 
 if [[ "$grpc_port" == "" ]]; then
-  echo "No GRPC API_TOKEN ${API_TOKEN}"
   if [[ -n "${API_TOKEN:-}" ]]; then
     INGRESS_ANNOTATIONS_BLOCK=$(cat <<EOF
-        annotations:
-          nginx.ingress.kubernetes.io/rewrite-target: "/"
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            if (\$http_authorization != "Bearer ${API_TOKEN}") {
-              return 403;
-            }
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: "/"
+        nginx.ingress.kubernetes.io/configuration-snippet: |
+          if (\$http_authorization != "Bearer ${API_TOKEN}") {
+            return 403;
+          }
 EOF
 )
   else
@@ -297,23 +296,22 @@ EOF
     INGRESS_ANNOTATIONS_BLOCK=""
   fi
 else
-  echo "Enable GRPC API_TOKEN ${API_TOKEN}"
   if [[ -n "${API_TOKEN:-}" ]]; then
     INGRESS_ANNOTATIONS_BLOCK=$(cat <<EOF
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
-          nginx.ingress.kubernetes.io/rewrite-target: "/"
-          nginx.ingress.kubernetes.io/configuration-snippet: |
-            if (\$http_authorization != "Bearer ${API_TOKEN}") {
-              return 403;
-            }
+      annotations:
+        nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+        nginx.ingress.kubernetes.io/rewrite-target: "/"
+        nginx.ingress.kubernetes.io/configuration-snippet: |
+          if (\$http_authorization != "Bearer ${API_TOKEN}") {
+            return 403;
+          }
 EOF
 )
   else
     echo "Warning: API_TOKEN not set. Ingress will not enforce auth." >&2
     INGRESS_ANNOTATIONS_BLOCK=$(cat <<EOF
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+      annotations:
+        nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
 EOF
 )
   fi
