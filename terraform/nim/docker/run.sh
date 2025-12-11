@@ -380,7 +380,7 @@ kubectl wait --for=condition=Ready --timeout=3600s nimservice/"$NAME" -n "$NAMES
 
 # Conditional logic based on the IMAGE_TYPE variable output
 if [ "$IMAGE_TYPE" == "generic" ]; then
-  # Define the URL for the first model
+  # Define the URL for the generic model
   url="https://${ingress_host}/v1/chat/completions"
   api_key="$API_TOKEN"
   # Define the curl command for the generic model
@@ -391,7 +391,7 @@ if [ "$IMAGE_TYPE" == "generic" ]; then
   -d '{\\\"model\\\": \\\"$MODEL_NAME\\\", \\\"messages\\\": [{\\\"content\\\": \\\"What should I do for a 4 day vacation at Cape Hatteras National Seashore?\\\", \\\"role\\\": \\\"user\\\"}], \\\"top_p\\\": 1, \\\"n\\\": 1, \\\"max_tokens\\\": 1024, \\\"stream\\\": false, \\\"frequency_penalty\\\": 0.0, \\\"stop\\\": [\\\"STOP\\\"]}'"
 
 elif [ "$IMAGE_TYPE" == "embedded" ]; then
-  # Define the URL for another model
+  # Define the URL for embedded model
   url="https://${ingress_host}/v1/embeddings"
   api_key="$API_TOKEN"
   # Define the curl command for the embedded model
@@ -421,14 +421,14 @@ elif [ "$IMAGE_TYPE" == "text-to-image" ]; then
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -H \\\"Authorization: Bearer $API_TOKEN\\\" \
-  -d '{\\\"prompt\\\": [\\\"A simple coffee shop interior\\\"], \\\"mode\\\": \\\"base\\\", \\\"seed\\\": \\\"0\\\", \\\"steps\\\": \\\"30\\\"}' \
+  -d '{\\\"prompt\\\": \\\"A simple coffee shop interior\\\", \\\"mode\\\": \\\"base\\\", \\\"seed\\\": \\\"0\\\", \\\"steps\\\": \\\"30\\\"}' \
   | jq -r '.artifacts[0].base64' | base64 --decode > image.jpg"
 
 elif [ "$IMAGE_TYPE" == "streaming" ]; then
-  # Define the URL for another model
+  # Define the URL for streaming model
   url="${ingress_host}"
   api_key="$API_TOKEN"
-  # Define the curl command for the text-to-image model
+  # Define the curl command for the streaming model
 	curlcommand="Streaming model with GRPC endpoint ${ingress_host}"
 
 else
