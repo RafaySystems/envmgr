@@ -22,13 +22,13 @@ MODEL_NAME="${MODEL_NAME:?MODEL_NAME is required}"
 NODE_SELECTOR="${NODE_SELECTOR}"
 DEVICE_DETAILS="${DEVICE_DETAILS}"
 ENV_VARS="${ENV_VARS}"
-ENABLE_CACHE="$ENABLE_CACHE:-false"
-CACHE_ENGINE="$CACHE_ENGINE"
-CACHE_STORAGE_CLASS_NAME="$CACHE_STORAGE_CLASS_NAME"
-CACHE_STORAGE_SIZE="$CACHE_STORAGE_SIZE"
-CACHE_STORAGE_ACCESS_MODE="$CACHE_STORAGE_ACCESS_MODE:-ReadWriteOnce"
-SERVICE_PORT="$SERVICE_PORT:-8000"
-GRPC_PORT="$GRPC_PORT"
+ENABLE_CACHE="${ENABLE_CACHE:-false}"
+CACHE_ENGINE="${CACHE_ENGINE}"
+CACHE_STORAGE_CLASS_NAME="${CACHE_STORAGE_CLASS_NAME}"
+CACHE_STORAGE_SIZE="${CACHE_STORAGE_SIZE}"
+CACHE_STORAGE_ACCESS_MODE="${CACHE_STORAGE_ACCESS_MODE:-ReadWriteOnce}"
+SERVICE_PORT="${SERVICE_PORT:-8000}"
+GRPC_PORT="${GRPC_PORT}"
 
 # -------- Model Info --------
 # Example:
@@ -291,11 +291,25 @@ EOF
     INGRESS_ANNOTATIONS_BLOCK=""
   fi
 else
+  if [[ -n "${API_TOKEN:-}" ]]; then
+    INGRESS_ANNOTATIONS_BLOCK=$(cat <<EOF
+        annotations:
+          nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+          nginx.ingress.kubernetes.io/rewrite-target: "/"
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            if (\$http_authorization != "Bearer ${API_TOKEN}") {
+              return 403;
+            }
+EOF
+)
+  else
+    echo "Warning: API_TOKEN not set. Ingress will not enforce auth." >&2
     INGRESS_ANNOTATIONS_BLOCK=$(cat <<EOF
         annotations:
           nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
 EOF
 )
+  fi
 fi
 
 export INGRESS_ANNOTATIONS_BLOCK
