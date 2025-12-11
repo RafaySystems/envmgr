@@ -22,12 +22,12 @@ MODEL_NAME="${MODEL_NAME:?MODEL_NAME is required}"
 NODE_SELECTOR="${NODE_SELECTOR}"
 DEVICE_DETAILS="${DEVICE_DETAILS}"
 ENV_VARS="${ENV_VARS}"
-ENABLE_CACHE="${ENABLE_CACHE:-false}"
+ENABLE_CACHE="${ENABLE_CACHE}"
 CACHE_ENGINE="${CACHE_ENGINE}"
 CACHE_STORAGE_CLASS_NAME="${CACHE_STORAGE_CLASS_NAME}"
 CACHE_STORAGE_SIZE="${CACHE_STORAGE_SIZE}"
-CACHE_STORAGE_ACCESS_MODE="${CACHE_STORAGE_ACCESS_MODE:-ReadWriteOnce}"
-SERVICE_PORT="${SERVICE_PORT:-8000}"
+CACHE_STORAGE_ACCESS_MODE="${CACHE_STORAGE_ACCESS_MODE}"
+SERVICE_PORT="${SERVICE_PORT}"
 GRPC_PORT="${GRPC_PORT}"
 
 # -------- Model Info --------
@@ -69,7 +69,12 @@ elif [ "${ACTION}" == "deploy" ]; then
 
 	# -------- Create Namespace --------
 	echo "Creating namespace: $NAMESPACE"
-	kubectl create namespace "$NAMESPACE"
+  cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: $NAMESPACE
+EOF
 
 	# -------- Create Docker Secret --------
 	echo "Creating Docker registry secret"
@@ -276,6 +281,7 @@ echo "Generated new API token: ${API_TOKEN}"
 export API_TOKEN
 
 if [[ "$grpc_port" == "" ]]; then
+  echo "No GRPC API_TOKEN ${API_TOKEN}"
   if [[ -n "${API_TOKEN:-}" ]]; then
     INGRESS_ANNOTATIONS_BLOCK=$(cat <<EOF
         annotations:
@@ -291,6 +297,7 @@ EOF
     INGRESS_ANNOTATIONS_BLOCK=""
   fi
 else
+  echo "Enable GRPC API_TOKEN ${API_TOKEN}"
   if [[ -n "${API_TOKEN:-}" ]]; then
     INGRESS_ANNOTATIONS_BLOCK=$(cat <<EOF
         annotations:
