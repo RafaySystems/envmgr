@@ -2,126 +2,149 @@
     "apiVersion": "paas.envmgmt.io/v1",
     "kind": "ComputeProfile",
     "metadata": {
-        "name": "slurm-cluster-template",
+        "name": "mks-oneclick-slurm",
+        "description": "This template will deploy a SLURM cluster.  The user will be provided remote access to the SLURM cluster using SSH to run SLURM  commands.",
         "labels": {
-            "paas.envmgmt.io/inventory": "pod",
-            "paas.envmgmt.io/inventory.config": "[\n  {\n      \"type\": \"match\",\n      \"keyInVariable\": \"Node Type\",\n      \"keyInDevice\": \"tags.node_type\"\n  },\n  {\n      \"type\": \"capacity\",\n      \"keyInVariable\": \"Compute Node CPUs\",\n      \"keyInCapacity\": \"requiredCPU\"\n  },\n  {\n      \"type\": \"capacity\",\n      \"keyInVariable\": \"Compute Node Memory\",\n      \"keyInCapacity\": \"requiredMemoryMB\"\n  },\n  {\n      \"type\": \"capacity\",\n      \"keyInVariable\": \"Compute Node GPUs\",\n      \"keyInCapacity\": \"requiredGPU\"\n  }\n]"
+            "paas.envmgmt.io/compute_type": "cluster",
+            "paas.envmgmt.io/inventory": "mks",
+            "paas.envmgmt.io/inventory.config": "[\n  {\n      \"type\": \"match\",\n      \"keyInVariable\": \"GPU Type\",\n      \"keyInDevice\": \"tags.gpu_type\"\n  },\n  {\n      \"type\": \"capacity\",\n      \"keyInVariable\": \"No Of Nodes\",\n      \"keyInCapacity\": \"requiredNoofNodes\"\n  }\n          \n]"
         },
-        "project": "system-catalog",
-        "modifiedAt": "2025-10-31T14:58:31.159265Z",
-        "createdAt": "2025-10-03T15:20:02.980161Z",
-        "displayName": "Slurm on Kubernetes",
-        "createdBy": {
-            "id": "wg29ek0",
-            "username": "default-admin@rafay.co"
-        }
+        "project": "system-catalog"
     },
     "spec": {
         "type": "Compute",
         "allocationType": "Dedicated",
         "scalabilityType": "Fixed",
         "environmentTemplate": {
-            "name": "slurm-cluster",
-            "version": "v1"
+            "name": "mks-oneclick-slurm",
+            "version": "v1.0"
         },
         "variables": [
             {
-                "name": "Compute Node CPUs",
-                "valueType": "text",
-                "value": "2000",
+                "name": "Action",
+                "valueType": "expression",
+                "value": "#{trigger.payload.action}#",
                 "options": {
-                    "description": "The number of CPUs per compute node",
+                    "description": "Action - Internal",
                     "override": {
-                        "type": "allowed"
+                        "type": "notallowed"
                     },
                     "displayMetadata": {
-                        "alias": "Number of CPUs per Compute Node",
                         "disabled": false,
-                        "dropdownValues": [
-                            {
-                                "label": "2",
-                                "value": "2000"
-                            },
-                            {
-                                "label": "4",
-                                "value": "4000"
-                            },
-                            {
-                                "label": "6",
-                                "value": "6000"
-                            },
-                            {
-                                "label": "8",
-                                "value": "8000"
-                            },
-                            {
-                                "label": "10",
-                                "value": "10000"
-                            }
-                        ],
-                        "section": "Compute Node Configuration",
+                        "section": "Other",
                         "sectionDescription": "",
-                        "tooltip": "The number of CPUs to be assigned to each compute node.",
-                        "type": "dropdown",
-                        "weight": "3"
+                        "tooltip": "",
+                        "weight": "70600"
                     }
                 }
             },
             {
-                "name": "Compute Node GPUs",
+                "name": "Allocate Public IP to Master Nodes",
                 "valueType": "text",
-                "value": "0",
+                "value": "false",
                 "options": {
-                    "description": "The number of GPUs per compute node",
                     "override": {
-                        "type": "allowed"
+                        "type": "notallowed"
                     },
                     "displayMetadata": {
-                        "alias": "Number of GPUs per Compute Node",
                         "disabled": false,
-                        "dropdownValues": [
-                            {
-                                "label": "1",
-                                "value": "1"
-                            },
-                            {
-                                "label": "2",
-                                "value": "2"
-                            },
-                            {
-                                "label": "3",
-                                "value": "3"
-                            },
-                            {
-                                "label": "4",
-                                "value": "4"
-                            },
-                            {
-                                "label": "5",
-                                "value": "5"
-                            },
-                            {
-                                "label": "6",
-                                "value": "6"
-                            },
-                            {
-                                "label": "7",
-                                "value": "7"
-                            },
-                            {
-                                "label": "8",
-                                "value": "8"
-                            },
-                            {
-                                "label": "0",
-                                "value": "0"
-                            }
-                        ],
-                        "section": "Compute Node Configuration",
+                        "section": "Node",
                         "sectionDescription": "",
-                        "tooltip": "The number of GPUs to be assigned to each compute node.",
-                        "type": "dropdown",
-                        "weight": "2"
+                        "tooltip": "",
+                        "weight": "30125"
+                    }
+                }
+            },
+            {
+                "name": "Allocate Public IP to Worker Nodes",
+                "valueType": "text",
+                "value": "false",
+                "options": {
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "Node",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "30145"
+                    }
+                }
+            },
+            {
+                "name": "Blueprint Name",
+                "valueType": "text",
+                "value": "slurm-prereqs",
+                "options": {
+                    "description": "Enter the name of the blueprint assigned to the cluster.",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "section": "Cluster",
+                        "weight": "10095"
+                    }
+                }
+            },
+            {
+                "name": "Blueprint Version",
+                "valueType": "text",
+                "value": "vast-3",
+                "options": {
+                    "description": "Specify the version of the blueprint for the cluster. For system blueprints, use \"latest\" as the version.",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "section": "Cluster",
+                        "weight": "10096"
+                    }
+                }
+            },
+            {
+                "name": "Cluster Kubernetes Version",
+                "valueType": "text",
+                "value": "v1.31.4",
+                "options": {
+                    "description": "Select the Kubernetes version for the cluster",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "section": "Cluster",
+                        "weight": "10030"
+                    }
+                }
+            },
+            {
+                "name": "Cluster Name",
+                "valueType": "expression",
+                "value": "$(environment.labels.computeName)$",
+                "options": {
+                    "description": "Enter the name of the Kubernetes cluster",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "section": "Cluster",
+                        "weight": "10010"
+                    }
+                }
+            },
+            {
+                "name": "CNI Provider",
+                "valueType": "text",
+                "value": "Calico-3.26.1",
+                "options": {
+                    "description": "Enter the network information",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "section": "CNI",
+                        "tooltip": "Enter the network information. Supported plugins include Calico(3.28.1,3.26.1)  and Cilium(1.15.7,1.14.1)",
+                        "weight": "20100"
                     }
                 }
             },
@@ -132,13 +155,6 @@
                 "options": {
                     "override": {
                         "type": "notallowed"
-                    },
-                    "displayMetadata": {
-                        "disabled": false,
-                        "section": "",
-                        "sectionDescription": "",
-                        "tooltip": "",
-                        "weight": ""
                     }
                 }
             },
@@ -149,59 +165,6 @@
                 "options": {
                     "override": {
                         "type": "notallowed"
-                    },
-                    "displayMetadata": {
-                        "disabled": false,
-                        "section": "",
-                        "sectionDescription": "",
-                        "tooltip": "",
-                        "weight": ""
-                    }
-                }
-            },
-            {
-                "name": "Compute Node Memory",
-                "valueType": "text",
-                "value": "8192",
-                "options": {
-                    "description": "The amount of memory per compute node",
-                    "override": {
-                        "type": "allowed"
-                    },
-                    "displayMetadata": {
-                        "alias": "Amount of Memory per Compute Node",
-                        "disabled": false,
-                        "dropdownValues": [
-                            {
-                                "label": "8Gi",
-                                "value": "8192"
-                            },
-                            {
-                                "label": "16Gi",
-                                "value": "16384"
-                            },
-                            {
-                                "label": "32Gi",
-                                "value": "32768"
-                            },
-                            {
-                                "label": "64Gi",
-                                "value": "65536"
-                            },
-                            {
-                                "label": "128Gi",
-                                "value": "131072"
-                            },
-                            {
-                                "label": "256Gi",
-                                "value": "262144"
-                            }
-                        ],
-                        "section": "Compute Node Configuration",
-                        "sectionDescription": "",
-                        "tooltip": "The amount of memory to assign to each compute node instance",
-                        "type": "dropdown",
-                        "weight": "4"
                     }
                 }
             },
@@ -209,26 +172,42 @@
                 "name": "Compute Node Selector",
                 "valueType": "text",
                 "options": {
-                    "description": "The compute node selector",
+                    "override": {
+                        "type": "notallowed"
+                    }
+                }
+            },
+            {
+                "name": "Device Detail Flag",
+                "valueType": "text",
+                "value": "true",
+                "options": {
                     "override": {
                         "type": "notallowed"
                     },
                     "displayMetadata": {
                         "disabled": false,
-                        "section": "",
+                        "section": "Other",
                         "sectionDescription": "",
                         "tooltip": "",
-                        "weight": ""
+                        "weight": "71000"
                     }
                 }
             },
             {
-                "name": "Device Details",
+                "name": "device_details",
                 "valueType": "json",
                 "value": "[]",
                 "options": {
                     "override": {
                         "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "Other",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "71100"
                     }
                 }
             },
@@ -239,81 +218,62 @@
                 "options": {
                     "override": {
                         "type": "notallowed"
-                    },
-                    "displayMetadata": {
-                        "disabled": false,
-                        "section": "",
-                        "sectionDescription": "",
-                        "tooltip": "",
-                        "weight": ""
                     }
                 }
             },
             {
-                "name": "Host Cluster Name",
-                "valueType": "text",
-                "value": "acme-host-cluster",
-                "options": {
-                    "override": {
-                        "type": "notallowed"
-                    },
-                    "displayMetadata": {
-                        "disabled": false,
-                        "section": "",
-                        "sectionDescription": "",
-                        "tooltip": "",
-                        "weight": ""
-                    }
-                }
-            },
-            {
-                "name": "Host Cluster Public IP",
-                "valueType": "text",
-                "value": "129.146.84.248",
-                "options": {
-                    "override": {
-                        "type": "notallowed"
-                    },
-                    "displayMetadata": {
-                        "disabled": false,
-                        "section": "",
-                        "sectionDescription": "",
-                        "tooltip": "",
-                        "weight": ""
-                    }
-                }
-            },
-            {
-                "name": "Node Type",
-                "valueType": "text",
-                "value": "A40",
+                "name": "Epilog Scripts",
+                "valueType": "json",
+                "value": "00-epilog-a.sh: |\r\n  #!/usr/bin/env bash\r\n  echo \"A\"\r\n\r\n01-epilog-b.sh: |\r\n  #!/usr/bin/env bash\r\n  echo \"B\"",
                 "options": {
                     "override": {
                         "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "section": "Advanced",
+                        "tooltip": "The epilog scripts that will be added to the compute nodes.",
+                        "weight": "3"
                     }
                 }
             },
             {
-                "name": "Shared Storageclass Name",
+                "name": "Extra Args",
+                "valueType": "json",
+                "value": "{\n\"kubelet_extra_args\": {\n    \"cpu-manager-reconcile-period\": \"20s\",\n    \"max-pods\": \"200\"\n},\n  \"platform_k8s_upgrade\": false\n}",
+                "options": {
+                    "description": "Configure Kubelet arguments to fine tune node-level configuration in your cluster",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "Node",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "30210"
+                    }
+                }
+            },
+            {
+                "name": "Extra Cloud init args",
                 "valueType": "text",
-                "value": "ceph-filesystem",
                 "options": {
                     "override": {
                         "type": "notallowed"
                     },
                     "displayMetadata": {
                         "disabled": false,
-                        "section": "",
+                        "section": "Other",
                         "sectionDescription": "",
                         "tooltip": "",
-                        "weight": ""
+                        "weight": "70900"
                     }
                 }
             },
             {
-                "name": "Shared Volume Size",
+                "name": "GPU Type",
                 "valueType": "text",
-                "value": "10Gi",
+                "value": "H200",
                 "options": {
                     "override": {
                         "type": "allowed"
@@ -322,28 +282,147 @@
                         "disabled": false,
                         "dropdownValues": [
                             {
-                                "label": "10Gi",
-                                "value": "10Gi"
+                                "label": "A40",
+                                "text": "",
+                                "value": "A40"
                             },
                             {
-                                "label": "100Gi",
-                                "value": "100Gi"
+                                "label": "H100",
+                                "text": "",
+                                "value": "H100"
                             },
                             {
-                                "label": "1000Gi",
-                                "value": "1000Gi"
+                                "label": "H200",
+                                "text": "",
+                                "value": "H200"
                             }
                         ],
-                        "section": "Shared Data Volume",
+                        "section": "Infrastructure",
                         "sectionDescription": "",
-                        "tooltip": "The amount of storage that will be configured as a shared volume between the compute nodes and login node",
+                        "tooltip": "",
                         "type": "dropdown",
-                        "weight": ""
+                        "weight": "1"
                     }
                 }
             },
             {
-                "name": "Slurm Compute Replica Count",
+                "name": "HA Enabled",
+                "valueType": "text",
+                "value": "false",
+                "options": {
+                    "description": "HA Enabled?",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "Cluster",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "10040"
+                    }
+                }
+            },
+            {
+                "name": "Installer Certificate TTL",
+                "valueType": "text",
+                "value": "365",
+                "options": {
+                    "description": "Configure the validity period of the Conjurer Installer certificate",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "Cluster",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "10070"
+                    }
+                }
+            },
+            {
+                "name": "Is Master dedicated",
+                "valueType": "text",
+                "value": "false",
+                "options": {
+                    "description": "Is Master dedicated?",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "Cluster",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "10050"
+                    }
+                }
+            },
+            {
+                "name": "Kubernetes Upgrade",
+                "valueType": "json",
+                "value": "{\n  \"strategy\":\"sequential\",\n  \"params\":{\"worker_concurrency\":\"50%\"}\n}",
+                "options": {
+                    "description": "Enter the upgrade strategy for the cluster",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "section": "Cluster",
+                        "weight": "10080"
+                    }
+                }
+            },
+            {
+                "name": "Labels",
+                "valueType": "json",
+                "value": "{\n  \"env\": \"dev\",\n  \"team\": \"development\"\n}",
+                "options": {
+                    "description": "Cluster Labels",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "Cluster",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "10060"
+                    }
+                }
+            },
+            {
+                "name": "Master Node SKU",
+                "valueType": "text",
+                "options": {
+                    "description": "Select Master Node SKU",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "section": "Node",
+                        "weight": "30110"
+                    }
+                }
+            },
+            {
+                "name": "Master Nodes",
+                "valueType": "text",
+                "value": "1",
+                "options": {
+                    "description": "No of Master Nodes",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "section": "Node",
+                        "weight": "30120"
+                    }
+                }
+            },
+            {
+                "name": "No Of Nodes",
                 "valueType": "text",
                 "value": "1",
                 "options": {
@@ -351,63 +430,263 @@
                         "type": "allowed"
                     },
                     "displayMetadata": {
-                        "alias": "The number of Compute Nodes",
                         "disabled": false,
                         "dropdownValues": [
                             {
                                 "label": "1",
+                                "text": "",
                                 "value": "1"
                             },
                             {
                                 "label": "2",
+                                "text": "",
                                 "value": "2"
                             },
                             {
                                 "label": "3",
+                                "text": "",
                                 "value": "3"
                             },
                             {
                                 "label": "4",
+                                "text": "",
                                 "value": "4"
                             },
                             {
                                 "label": "5",
+                                "text": "",
                                 "value": "5"
                             },
                             {
                                 "label": "6",
+                                "text": "",
                                 "value": "6"
                             },
                             {
                                 "label": "7",
+                                "text": "",
                                 "value": "7"
                             },
                             {
                                 "label": "8",
+                                "text": "",
                                 "value": "8"
                             }
                         ],
-                        "section": "Compute Node Configuration",
+                        "section": "Infrastructure",
                         "sectionDescription": "",
-                        "tooltip": "The number of compute nodes to deploy in the cluster",
+                        "tooltip": "The number of SLURM compute nodes to deploy.",
                         "type": "dropdown",
-                        "weight": "1"
+                        "weight": "2"
                     }
                 }
             },
             {
-                "name": "SSH Public Key",
+                "name": "Node OS",
+                "valueType": "text",
+                "value": "Ubuntu22.04",
+                "options": {
+                    "description": "Select the OS for the nodes",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "Node",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "30100"
+                    }
+                }
+            },
+            {
+                "name": "Pod Network Cidr range",
+                "valueType": "text",
+                "value": "10.244.0.0/16",
+                "options": {
+                    "description": "Pod Network Cidr range",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "CNI",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "20200"
+                    }
+                }
+            },
+            {
+                "name": "Project Name",
+                "valueType": "expression",
+                "value": "$(environment.labels.requestProjectName)$",
+                "options": {
+                    "description": "Enter the project for the Cluster",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "alias": "",
+                        "disabled": false,
+                        "section": "Cluster",
+                        "weight": "10020"
+                    }
+                }
+            },
+            {
+                "name": "Prolog Scripts",
+                "valueType": "json",
+                "value": "00-prolog-a.sh: |\r\n  #!/usr/bin/env bash\r\n  echo \"A\"\r\n\r\n01-prolog-b.sh: |\r\n  #!/usr/bin/env bash\r\n  echo \"B\"",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "section": "Advanced",
+                        "tooltip": "The prolog scripts that will be added to the compute nodes.",
+                        "weight": "2"
+                    }
+                }
+            },
+            {
+                "name": "Proxy Config",
+                "valueType": "json",
+                "value": "{}",
+                "options": {
+                    "description": "Configure Proxy if your infrastructure uses an Outbound Proxy",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "section": "Cluster",
+                        "weight": "10090"
+                    }
+                }
+            },
+            {
+                "name": "Public Key",
+                "valueType": "text",
+                "options": {
+                    "description": "Public key to access the nodes",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "Node",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "30200"
+                    }
+                }
+            },
+            {
+                "name": "Self Hosted Controller",
+                "valueType": "text",
+                "value": "true",
+                "options": {
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "Other",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "70800"
+                    }
+                }
+            },
+            {
+                "name": "Self Signed Controller",
+                "valueType": "text",
+                "value": "false",
+                "options": {
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "Other",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "70700"
+                    }
+                }
+            },
+            {
+                "name": "Service Cidr range",
+                "valueType": "text",
+                "value": "10.96.0.0/12",
+                "options": {
+                    "description": "Service Cidr range",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "disabled": false,
+                        "section": "CNI",
+                        "sectionDescription": "",
+                        "tooltip": "",
+                        "weight": "20210"
+                    }
+                }
+            },
+            {
+                "name": "Shared Storageclass Name",
+                "valueType": "text",
+                "value": "vast-sc",
+                "options": {
+                    "override": {
+                        "type": "notallowed"
+                    }
+                }
+            },
+            {
+                "name": "Shared Volume Size",
+                "valueType": "text",
+                "value": "100Gi",
+                "options": {
+                    "override": {
+                        "type": "allowed"
+                    },
+                    "displayMetadata": {
+                        "dropdownValues": [
+                            {
+                                "label": "100Gi",
+                                "text": "",
+                                "value": "100Gi"
+                            },
+                            {
+                                "label": "500Gi",
+                                "text": "",
+                                "value": "500Gi"
+                            },
+                            {
+                                "label": "1000Gi",
+                                "text": "",
+                                "value": "1000Gi"
+                            }
+                        ],
+                        "section": "Infrastructure",
+                        "tooltip": "The amount of storage that will be configured as a shared volume between the compute nodes and login node",
+                        "type": "dropdown",
+                        "weight": "3"
+                    }
+                }
+            },
+            {
+                "name": "Slurm SSH Public Key",
                 "valueType": "text",
                 "options": {
                     "override": {
                         "type": "allowed"
                     },
                     "displayMetadata": {
-                        "disabled": false,
-                        "section": "Login Node Configuration",
-                        "sectionDescription": "",
-                        "tooltip": "The SSH public key that will be assingned to the login node.  This key will be used with the associated private key to SSH into the login node.  The login node will be used to run your Slurm commands.",
-                        "weight": ""
+                        "section": "Access",
+                        "tooltip": "The SSH public key that will be assigned to the login node.  This key will be used with the associated private key to SSH into the login node.  The login node will be used to run your SLURM commands.",
+                        "weight": "1"
                     }
                 }
             },
@@ -418,13 +697,54 @@
                 "options": {
                     "override": {
                         "type": "notallowed"
+                    }
+                }
+            },
+            {
+                "name": "System Components Placement",
+                "valueType": "json",
+                "value": "{\n\"node_selector\": {},\n  \"tolerations\": []\n}",
+                "options": {
+                    "description": "Enter node selectors and tolerations for the cluster",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "section": "Cluster",
+                        "tooltip": "{ \"node_selector\": {},   \"tolerations\": [] }",
+                        "weight": "10085"
+                    }
+                }
+            },
+            {
+                "name": "Username",
+                "valueType": "expression",
+                "value": "$(trigger.payload.username)$",
+                "options": {
+                    "description": "Generate Cluster kubeconfig file with this user's RBAC permission",
+                    "override": {
+                        "type": "notallowed"
                     },
                     "displayMetadata": {
                         "disabled": false,
-                        "section": "",
+                        "section": "Other",
                         "sectionDescription": "",
                         "tooltip": "",
-                        "weight": ""
+                        "weight": "70400"
+                    }
+                }
+            },
+            {
+                "name": "Worker Node SKU",
+                "valueType": "text",
+                "options": {
+                    "description": "Select Worker Node SKU",
+                    "override": {
+                        "type": "notallowed"
+                    },
+                    "displayMetadata": {
+                        "section": "Node",
+                        "weight": "30130"
                     }
                 }
             }
@@ -438,7 +758,7 @@
                 "options": {
                     "displayMetadata": {
                         "label": "SCP to Login Node",
-                        "section": "Step 1 (Copy Slurm Script to Login Node)",
+                        "section": "Access",
                         "tooltip": "Use this to upload/download SLURM files to the login node",
                         "valueType": "text",
                         "weight": "1"
@@ -450,7 +770,7 @@
                 "options": {
                     "displayMetadata": {
                         "label": "SSH to Login Node",
-                        "section": "Step 3 (SSH into Login Node and Run Script)",
+                        "section": "Access",
                         "tooltip": "Use this for SSH access to the Login Node",
                         "valueType": "text",
                         "weight": "3"
@@ -462,7 +782,7 @@
                 "options": {
                     "displayMetadata": {
                         "label": "SCP to Shared Data Volume",
-                        "section": "Step 2 (Copy Data to Shared Drive)",
+                        "section": "Access",
                         "tooltip": "Use this to upload/download data files, your code and SLURM log files. This volume will be accessible to all compute nodes in the SLURM cluster.",
                         "valueType": "text",
                         "weight": "2"
@@ -475,8 +795,9 @@
                     "displayMetadata": {
                         "label": "Monitoring URL",
                         "section": "Monitoring",
+                        "tooltip": "The URL to access the SLURM cluster monitoring dashboards.",
                         "valueType": "text",
-                        "weight": "1"
+                        "weight": "4"
                     }
                 }
             },
@@ -486,8 +807,9 @@
                     "displayMetadata": {
                         "label": "Monitoring Username",
                         "section": "Monitoring",
+                        "tooltip": "The username to access the SLURM monitoring dashboards.",
                         "valueType": "text",
-                        "weight": "2"
+                        "weight": "5"
                     }
                 }
             },
@@ -497,24 +819,29 @@
                     "displayMetadata": {
                         "label": "Monitoring Password",
                         "section": "Monitoring",
+                        "tooltip": "The password to access the SLURM monitoring dashboards.",
                         "valueType": "text",
-                        "weight": "3"
+                        "weight": "6"
                     }
                 }
             }
         ],
         "iconURL": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Slurm_logo.svg",
-        "readme": "This will create a Namespace on the host Kubernetes cluster and deploy a Slurm Cluster into the namespace. The user will be provided remote access to the Slurm Cluster using SSH to run Slurm commands",
+        "readme": "This template will deploy a SLURM cluster.  The user will be provided remote access to the SLURM cluster using SSH to run SLURM  commands.",
+        "extraConfig": {
+            "billableParameters": "[\r\n  {\r\n    \"name\": \"noofnodes\",\r\n    \"type\": \"jsonpath\",\r\n    \"value\": \"$.spec.variables[?(@.name == 'No Of Nodes')].value\"\r\n  },\r\n  {\r\n    \"name\": \"gputype\",\r\n    \"type\": \"jsonpath\",\r\n    \"isLabel\": true,\r\n    \"value\": \"$.spec.variables[?(@.name == 'GPU Type')].value\"\r\n  }\r\n]"
+        },
         "systemCatalog": true,
         "envVars": [
             {
                 "key": "Controller Endpoint",
-                "value": "acme.paas.rafay.dev",
+                "value": "console.rafay.buzzhpc.ai",
                 "options": {
-                    "description": "Enter the endpoint of the controller",
+                    "description": "Select the endpoint of the controller",
                     "override": {
                         "type": "notallowed"
-                    }
+                    },
+                    "required": true
                 }
             },
             {
@@ -525,192 +852,56 @@
                     "override": {
                         "type": "notallowed"
                     },
+                    "required": true,
                     "mask": true
                 }
             }
         ],
-        "computeType": "slurm"
+        "computeType": "slurm",
+        "actionOverrides": {
+            "Other Actions": {
+                "variables": [
+                    {
+                        "name": "actions",
+                        "valueType": "unspecified",
+                        "value": "{}",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "jsonSchema": "{\n  \"dependencies\": {},\n  \"description\": \"K8S Node Actions\",\n  \"properties\": {\n    \"actionextra\": {\n      \"default\": \"\",\n      \"description\": \"Actions(drain, cordon, uncordon, add-labels \\u0026 remove-labels, add-annotation \\u0026 remove-annotation, remove-node)\",\n      \"enum\": [\n        \"\",\n        \"drain\",\n        \"cordon\",\n        \"uncordon\",\n        \"add-labels\",\n        \"remove-labels\",\n        \"add-annotation\",\n        \"remove-annotation\",\n        \"mig-config\",\n        \"remove-node\"\n      ],\n      \"title\": \"Available Actions\",\n      \"type\": \"string\"\n    },\n    \"annotation\": {\n      \"description\": \"Annotation to add/remove\",\n      \"title\": \"Annotation\",\n      \"type\": \"string\"\n    },\n    \"labels\": {\n      \"description\": \"Labels to add/remove\",\n      \"title\": \"Labels\",\n      \"type\": \"string\"\n    },\n    \"mig-config\": {\n      \"description\": \"Mig configurations\",\n      \"title\": \"MIG Config\",\n      \"type\": \"string\"\n    },\n    \"mig-profile\": {\n      \"description\": \"Mig Profile to be configured\",\n      \"title\": \"MIG Profile Name\",\n      \"type\": \"string\"\n    },\n    \"node\": {\n      \"description\": \"Node Name - list of nodes comma separated \",\n      \"title\": \"Node Name\",\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\n    \"actionextra\",\n    \"node\"\n  ],\n  \"title\": \"Action\",\n  \"type\": \"object\"\n}",
+                                "type": "jsonSchema"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
     },
     "status": {
         "entityOverrides": [
             {
                 "variables": [
                     {
-                        "name": "Compute Node CPUs",
-                        "valueType": "text",
-                        "value": "2000",
+                        "name": "Epilog Scripts",
+                        "valueType": "json",
+                        "value": "00-epilog-a.sh: |\r\n  #!/usr/bin/env bash\r\n  echo \"A\"\r\n\r\n01-epilog-b.sh: |\r\n  #!/usr/bin/env bash\r\n  echo \"B\"",
                         "options": {
-                            "description": "The number of CPUs per compute node",
                             "override": {
                                 "type": "allowed"
                             },
                             "displayMetadata": {
-                                "alias": "Number of CPUs per Compute Node",
-                                "disabled": false,
-                                "dropdownValues": [
-                                    {
-                                        "label": "2",
-                                        "value": "2000"
-                                    },
-                                    {
-                                        "label": "4",
-                                        "value": "4000"
-                                    },
-                                    {
-                                        "label": "6",
-                                        "value": "6000"
-                                    },
-                                    {
-                                        "label": "8",
-                                        "value": "8000"
-                                    },
-                                    {
-                                        "label": "10",
-                                        "value": "10000"
-                                    }
-                                ],
-                                "section": "Compute Node Configuration",
-                                "sectionDescription": "",
-                                "tooltip": "The number of CPUs to be assigned to each compute node.",
-                                "type": "dropdown",
+                                "section": "Advanced",
+                                "tooltip": "The epilog scripts that will be added to the compute nodes.",
                                 "weight": "3"
                             }
                         }
                     },
                     {
-                        "name": "Compute Node GPUs",
+                        "name": "GPU Type",
                         "valueType": "text",
-                        "value": "0",
-                        "options": {
-                            "description": "The number of GPUs per compute node",
-                            "override": {
-                                "type": "allowed"
-                            },
-                            "displayMetadata": {
-                                "alias": "Number of GPUs per Compute Node",
-                                "disabled": false,
-                                "dropdownValues": [
-                                    {
-                                        "label": "1",
-                                        "value": "1"
-                                    },
-                                    {
-                                        "label": "2",
-                                        "value": "2"
-                                    },
-                                    {
-                                        "label": "3",
-                                        "value": "3"
-                                    },
-                                    {
-                                        "label": "4",
-                                        "value": "4"
-                                    },
-                                    {
-                                        "label": "5",
-                                        "value": "5"
-                                    },
-                                    {
-                                        "label": "6",
-                                        "value": "6"
-                                    },
-                                    {
-                                        "label": "7",
-                                        "value": "7"
-                                    },
-                                    {
-                                        "label": "8",
-                                        "value": "8"
-                                    },
-                                    {
-                                        "label": "0",
-                                        "value": "0"
-                                    }
-                                ],
-                                "section": "Compute Node Configuration",
-                                "sectionDescription": "",
-                                "tooltip": "The number of GPUs to be assigned to each compute node.",
-                                "type": "dropdown",
-                                "weight": "2"
-                            }
-                        }
-                    },
-                    {
-                        "name": "Compute Node Memory",
-                        "valueType": "text",
-                        "value": "8192",
-                        "options": {
-                            "description": "The amount of memory per compute node",
-                            "override": {
-                                "type": "allowed"
-                            },
-                            "displayMetadata": {
-                                "alias": "Amount of Memory per Compute Node",
-                                "disabled": false,
-                                "dropdownValues": [
-                                    {
-                                        "label": "8Gi",
-                                        "value": "8192"
-                                    },
-                                    {
-                                        "label": "16Gi",
-                                        "value": "16384"
-                                    },
-                                    {
-                                        "label": "32Gi",
-                                        "value": "32768"
-                                    },
-                                    {
-                                        "label": "64Gi",
-                                        "value": "65536"
-                                    },
-                                    {
-                                        "label": "128Gi",
-                                        "value": "131072"
-                                    },
-                                    {
-                                        "label": "256Gi",
-                                        "value": "262144"
-                                    }
-                                ],
-                                "section": "Compute Node Configuration",
-                                "sectionDescription": "",
-                                "tooltip": "The amount of memory to assign to each compute node instance",
-                                "type": "dropdown",
-                                "weight": "4"
-                            }
-                        }
-                    },
-                    {
-                        "name": "Node Type",
-                        "valueType": "text",
-                        "value": "A40",
-                        "options": {
-                            "override": {
-                                "type": "allowed"
-                            }
-                        }
-                    },
-                    {
-                        "name": "SSH Public Key",
-                        "valueType": "text",
-                        "options": {
-                            "override": {
-                                "type": "allowed"
-                            },
-                            "displayMetadata": {
-                                "disabled": false,
-                                "section": "Login Node Configuration",
-                                "sectionDescription": "",
-                                "tooltip": "The SSH public key that will be assingned to the login node.  This key will be used with the associated private key to SSH into the login node.  The login node will be used to run your Slurm commands.",
-                                "weight": ""
-                            }
-                        }
-                    },
-                    {
-                        "name": "Shared Volume Size",
-                        "valueType": "text",
-                        "value": "10Gi",
+                        "value": "H200",
                         "options": {
                             "override": {
                                 "type": "allowed"
@@ -719,28 +910,31 @@
                                 "disabled": false,
                                 "dropdownValues": [
                                     {
-                                        "label": "10Gi",
-                                        "value": "10Gi"
+                                        "label": "A40",
+                                        "text": "",
+                                        "value": "A40"
                                     },
                                     {
-                                        "label": "100Gi",
-                                        "value": "100Gi"
+                                        "label": "H100",
+                                        "text": "",
+                                        "value": "H100"
                                     },
                                     {
-                                        "label": "1000Gi",
-                                        "value": "1000Gi"
+                                        "label": "H200",
+                                        "text": "",
+                                        "value": "H200"
                                     }
                                 ],
-                                "section": "Shared Data Volume",
+                                "section": "Infrastructure",
                                 "sectionDescription": "",
-                                "tooltip": "The amount of storage that will be configured as a shared volume between the compute nodes and login node",
+                                "tooltip": "",
                                 "type": "dropdown",
-                                "weight": ""
+                                "weight": "1"
                             }
                         }
                     },
                     {
-                        "name": "Slurm Compute Replica Count",
+                        "name": "No Of Nodes",
                         "valueType": "text",
                         "value": "1",
                         "options": {
@@ -748,46 +942,115 @@
                                 "type": "allowed"
                             },
                             "displayMetadata": {
-                                "alias": "The number of Compute Nodes",
                                 "disabled": false,
                                 "dropdownValues": [
                                     {
                                         "label": "1",
+                                        "text": "",
                                         "value": "1"
                                     },
                                     {
                                         "label": "2",
+                                        "text": "",
                                         "value": "2"
                                     },
                                     {
                                         "label": "3",
+                                        "text": "",
                                         "value": "3"
                                     },
                                     {
                                         "label": "4",
+                                        "text": "",
                                         "value": "4"
                                     },
                                     {
                                         "label": "5",
+                                        "text": "",
                                         "value": "5"
                                     },
                                     {
                                         "label": "6",
+                                        "text": "",
                                         "value": "6"
                                     },
                                     {
                                         "label": "7",
+                                        "text": "",
                                         "value": "7"
                                     },
                                     {
                                         "label": "8",
+                                        "text": "",
                                         "value": "8"
                                     }
                                 ],
-                                "section": "Compute Node Configuration",
+                                "section": "Infrastructure",
                                 "sectionDescription": "",
-                                "tooltip": "The number of compute nodes to deploy in the cluster",
+                                "tooltip": "The number of SLURM compute nodes to deploy.",
                                 "type": "dropdown",
+                                "weight": "2"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Prolog Scripts",
+                        "valueType": "json",
+                        "value": "00-prolog-a.sh: |\r\n  #!/usr/bin/env bash\r\n  echo \"A\"\r\n\r\n01-prolog-b.sh: |\r\n  #!/usr/bin/env bash\r\n  echo \"B\"",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "section": "Advanced",
+                                "tooltip": "The prolog scripts that will be added to the compute nodes.",
+                                "weight": "2"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Shared Volume Size",
+                        "valueType": "text",
+                        "value": "100Gi",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "dropdownValues": [
+                                    {
+                                        "label": "100Gi",
+                                        "text": "",
+                                        "value": "100Gi"
+                                    },
+                                    {
+                                        "label": "500Gi",
+                                        "text": "",
+                                        "value": "500Gi"
+                                    },
+                                    {
+                                        "label": "1000Gi",
+                                        "text": "",
+                                        "value": "1000Gi"
+                                    }
+                                ],
+                                "section": "Infrastructure",
+                                "tooltip": "The amount of storage that will be configured as a shared volume between the compute nodes and login node",
+                                "type": "dropdown",
+                                "weight": "3"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Slurm SSH Public Key",
+                        "valueType": "text",
+                        "options": {
+                            "override": {
+                                "type": "allowed"
+                            },
+                            "displayMetadata": {
+                                "section": "Access",
+                                "tooltip": "The SSH public key that will be assigned to the login node.  This key will be used with the associated private key to SSH into the login node.  The login node will be used to run your SLURM commands.",
                                 "weight": "1"
                             }
                         }
@@ -797,11 +1060,36 @@
         ],
         "globalSettings": {
             "agents": [
-                "phoenixnap-agent",
-                "k8s-agent-paas"
+                "paas-agent"
             ],
             "billing": {},
             "quota": {}
-        }
+        },
+        "actions": [
+            {
+                "name": "Other Actions",
+                "context": {
+                    "name": "system-mks-oneclick-action",
+                    "data": {
+                        "variables": [
+                            {
+                                "name": "actions",
+                                "valueType": "json",
+                                "value": "{}",
+                                "options": {
+                                    "override": {
+                                        "type": "allowed"
+                                    },
+                                    "displayMetadata": {
+                                        "jsonSchema": "{\n  \"dependencies\": {},\n  \"description\": \"K8S Node Actions\",\n  \"properties\": {\n    \"actionextra\": {\n      \"default\": \"\",\n      \"description\": \"Actions(drain, cordon, uncordon, add-labels \\u0026 remove-labels, add-annotation \\u0026 remove-annotation, remove-node)\",\n      \"enum\": [\n        \"\",\n        \"drain\",\n        \"cordon\",\n        \"uncordon\",\n        \"add-labels\",\n        \"remove-labels\",\n        \"add-annotation\",\n        \"remove-annotation\",\n        \"mig-config\",\n        \"remove-node\"\n      ],\n      \"title\": \"Available Actions\",\n      \"type\": \"string\"\n    },\n    \"annotation\": {\n      \"description\": \"Annotation to add/remove\",\n      \"title\": \"Annotation\",\n      \"type\": \"string\"\n    },\n    \"labels\": {\n      \"description\": \"Labels to add/remove\",\n      \"title\": \"Labels\",\n      \"type\": \"string\"\n    },\n    \"mig-config\": {\n      \"description\": \"Mig configurations\",\n      \"title\": \"MIG Config\",\n      \"type\": \"string\"\n    },\n    \"mig-profile\": {\n      \"description\": \"Mig Profile to be configured\",\n      \"title\": \"MIG Profile Name\",\n      \"type\": \"string\"\n    },\n    \"node\": {\n      \"description\": \"Node Name - list of nodes comma separated \",\n      \"title\": \"Node Name\",\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\n    \"actionextra\",\n    \"node\"\n  ],\n  \"title\": \"Action\",\n  \"type\": \"object\"\n}",
+                                        "type": "jsonSchema"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
     }
 }
