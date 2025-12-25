@@ -1,0 +1,37 @@
+## environment
+hostenv: console.stage.rafay.dev
+
+# API key
+apikey: UPDATE_API_KEY
+
+# org name
+org: UPDATE_ORG_NAME
+
+## project name
+project: templates
+
+## repository name
+repositoryname: rafay-repository
+
+sharingtemplates: true
+
+templates:
+  - terraform/naas/101-naas
+  - terraform/aws/101-caas-eks
+  - terraform/aws/101-caas-ecs
+  - terraform/aws/101-genai-ecs
+  - terraform/aws/101-genai-eks
+  - terraform/aws/101-kubeflow-eks
+  - terraform/aws/101-naas-eks
+  - terraform/aws/101-vpc-ec2
+  - terraform/aws/101-vpc-ecs
+  - terraform/aws/101-waas-eks
+  - terraform/azure/101-vnet-instance
+  - terraform/gcp/101-caas-gke
+  - terraform/gcp/101-vpc-instance
+  - terraform/mks/101-caas-pnap
+  - terraform/oci/101-caas-oke
+  - terraform/vcluster/101-caas
+  - terraform/vmware/101-caas-vmware
+  - terraform/waas/101-waas
+  
