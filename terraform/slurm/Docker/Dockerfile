@@ -1,31 +1,38 @@
 FROM alpine:3.19
 
-RUN apk add --no-cache curl bash git
+# BuildKit-provided args
+ARG TARGETARCH
 
-# Install required packages, now includes jq
-RUN apk add --no-cache curl bash git jq
+# Install required packages
+RUN apk add --no-cache \
+    curl \
+    bash \
+    git \
+    jq \
+    gettext
 
-# Install envsubst (part of gettext)
-RUN apk add --no-cache gettext
-
+# Install kubectl (multi-arch)
 RUN set -e && \
     KUBECTL_VERSION=$(curl -sL https://dl.k8s.io/release/stable.txt | tr -d '\r\n') && \
-    echo "Kubectl version: '${KUBECTL_VERSION}'" && \
-    curl -LO https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+    echo "Installing kubectl ${KUBECTL_VERSION} for ${TARGETARCH}" && \
+    curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl" && \
     install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
     rm kubectl
 
-RUN HELM_VERSION="v3.12.3" && \
-    curl -LO https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz && \
-    tar -zxvf helm-${HELM_VERSION}-linux-amd64.tar.gz && \
-    mv linux-amd64/helm /usr/local/bin/helm && \
+# Install helm (multi-arch)
+RUN set -e && \
+    HELM_VERSION="v3.12.3" && \
+    echo "Installing helm ${HELM_VERSION} for ${TARGETARCH}" && \
+    curl -LO "https://get.helm.sh/helm-${HELM_VERSION}-linux-${TARGETARCH}.tar.gz" && \
+    tar -zxvf "helm-${HELM_VERSION}-linux-${TARGETARCH}.tar.gz" && \
+    mv "linux-${TARGETARCH}/helm" /usr/local/bin/helm && \
     chmod +x /usr/local/bin/helm && \
-    rm -rf linux-amd64 helm-${HELM_VERSION}-linux-amd64.tar.gz
+    rm -rf "linux-${TARGETARCH}" "helm-${HELM_VERSION}-linux-${TARGETARCH}.tar.gz"
 
 # Copy shell script into the container
 COPY run.sh /usr/local/bin/run.sh
 
-# Copy files into the image
+# Copy Helm and config files
 COPY pvc-data.yaml /helm/pvc-data.yaml
 COPY pvc-users.yaml /helm/pvc-users.yaml
 COPY values-slurm.yaml /helm/values-slurm.yaml

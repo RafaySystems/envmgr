@@ -31,6 +31,9 @@ controller:
   podSpec:
 ${NODE_SELECTOR_BLOCK_4SPACE}
   slurmctld:
+    image:
+      repository: ghcr.io/slinkyproject/slurmctld
+      tag: 25.11-ubuntu24.04
     resources:
       requests:
         cpu: 100m
@@ -43,6 +46,9 @@ ${NODE_SELECTOR_BLOCK_4SPACE}
     storageClass: ${STORAGECLASS}
     
   reconfigure:
+    image:
+      repository: ghcr.io/slinkyproject/slurmctld
+      tag: 25.11-ubuntu24.04  
     resources:
       requests:
         cpu: 100m
@@ -179,8 +185,8 @@ nodesets:
       # -- The image to use, `${repository}:${tag}`.
       # Ref: https://kubernetes.io/docs/concepts/containers/images/#image-names
       image:
-        repository: ${COMPUTE_REPOSITORY}
-        tag: ${COMPUTE_TAG}
+        repository: ghcr.io/slinkyproject/slurmd
+        tag: 25.11.0-ubuntu24.04
       # -- Arguments passed to the image.
       # Ref: https://slurm.schedmd.com/slurmd.html#SECTION_OPTIONS
       args: []
@@ -275,7 +281,7 @@ ${NODE_SELECTOR_BLOCK_6SPACE}
     slurmd:
       image:
         repository: ghcr.io/slinkyproject/slurmd-pyxis
-        tag: 25.05.4-ubuntu24.04
+        tag: 25.11.0-ubuntu24.04
       args: []
       resources:
         limits:
